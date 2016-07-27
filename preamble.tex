@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{report}
+\documentclass[a4paper,10pt,twoside,openright]{book}
 
 \bibliographystyle{plain}
 
@@ -9,12 +9,77 @@
 \usepackage{amsmath,amsthm,amssymb,stmaryrd}
 \usepackage{url}
 \usepackage[pdftex, all]{xy}
+\usepackage{environ} % for data type decl environment, since align* doesn't play nice
+\usepackage{xifthen} % for data type decl hackery, detect optional parameters
+
+% TODOs
+\newcommand{\todoi}[1]{\todo[inline]{#1}}
+
+% Agda-style syntax highlighting
+\newcommand{\AgdaKeyword}[1]{\textcolor[HTML]{CD6600}{\mathbf{#1}}}
+\newcommand{\AgdaDatatype}[1]{\textcolor[HTML]{0033CD}{#1}}
+\newcommand{\AgdaInductiveConstructor}[1]{\textcolor[HTML]{008B00}{#1}}
+\newcommand{\AgdaPrimitiveType}[1]{\textcolor[HTML]{0000CD}{#1}}
+\newcommand{\AgdaFunction}[1]{\textcolor[HTML]{0000CD}{#1}}
+
+% Keywords
+\newcommand{\data}{\AgdaKeyword{data}}
+\newcommand{\where}{\AgdaKeyword{where}}
 
 % Universes
-\newcommand{\Type}{\mathsf{Type}}
+\newcommand{\Set}{\AgdaPrimitiveType{\mathsf{Set}}}
+\newcommand{\Type}{\AgdaPrimitiveType{\mathsf{Type}}}
 
-% Natural numbers
-\newcommand{\Nat}{\mathbb{N}}
-\newcommand{\natzero}{\mathsf{zero}}
-\newcommand{\natsucc}{\mathsf{succ}}
+% Data type declaration environment and commands
+\newcommand{\sortname}[1]{&\data\ #1}
+\newcommand{\sortnamety}[2]{\sortname{#1} : #2}
+\newcommand{\constr}[2]{&\ \ \ \ #1 : #2}
 
+\NewEnviron{datatype}[2]{%
+  \begin{align*}
+    \ifthenelse{\equal{#2}{}}{\sortname{#1}}{\sortnamety{#1}{#2}}\ \where \\
+    \BODY
+  \end{align*}}
+
+\NewEnviron{sorts}{%
+  \begin{align*}
+    \BODY
+  \end{align*}}
+
+
+% Naturals
+\newcommand{\natty}{\AgdaDatatype{\mathbb{N}}}
+\newcommand{\natzero}{\AgdaInductiveConstructor{\mathsf{zero}}}
+\newcommand{\natsucc}{\AgdaInductiveConstructor{\mathsf{succ}}}
+
+% Interval type
+\newcommand{\intty}{\AgdaDatatype{\mathsf{I}}}
+\newcommand{\intzero}{\AgdaInductiveConstructor{\mathsf{zero}}}
+\newcommand{\intone}{\AgdaInductiveConstructor{\mathsf{one}}}
+\newcommand{\intseg}{\AgdaInductiveConstructor{\mathsf{seg}}}
+
+% Quotient type
+\newcommand{\quotty}[2]{#1 \AgdaDatatype{/} #2}
+\newcommand{\quotproj}[1]{\AgdaInductiveConstructor{[}\,#1\,\AgdaInductiveConstructor{]}}
+\newcommand{\quoteq}{\AgdaInductiveConstructor{q}}
+
+% Coequaliser
+\newcommand{\coeqty}[2]{\AgdaDatatype{\mathsf{coeq}}\ #1\ #2}
+\newcommand{\coeqproj}{\AgdaInductiveConstructor{c}}
+\newcommand{\coeqeq}{\AgdaInductiveConstructor{\mathsf{eq}}}
+
+% Syntax of type theory
+
+\newcommand{\ttconty}{\AgdaDatatype{\mathsf{Con}}}
+\newcommand{\tttyty}{\AgdaDatatype{\mathsf{Ty}}}
+
+\newcommand{\ttnil}{\AgdaInductiveConstructor{\epsilon}}
+\newcommand{\ttcons}[2]{#1 \AgdaInductiveConstructor{,} #2}
+
+\newcommand{\ttzero}{\AgdaInductiveConstructor{`0}}
+\newcommand{\ttone}{\AgdaInductiveConstructor{`1}}
+\newcommand{\ttpi}{\AgdaInductiveConstructor{`\Pi}}
+
+\newcommand{\tttmty}{\AgdaDatatype{\mathsf{Tm}}}
+\newcommand{\ttapp}{\AgdaInductiveConstructor{\mathsf{app}}}
+\newcommand{\ttlam}{\AgdaInductiveConstructor{\mathsf{lam}}}

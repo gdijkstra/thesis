@@ -1,0 +1,124 @@
+\chapter{Quotient inductive types}
+
+\section{Examples}
+
+\subsection{Interval type}
+
+\begin{datatype}{\intty}{\Set}
+  \constr{\intzero}{\intty} \\
+  \constr{\intone}{\intty} \\
+  \constr{\intseg}{\intzero = \intone}
+\end{datatype}
+
+\subsection{Quotients and colimits}
+
+\begin{datatype}{\quotty{A}{R}}{\Set}
+  \constr{\quotproj{\_}}{A \to \quotty{A}{R}} \\
+  \constr{\quoteq}{(x\ y : A) \to R\ x\ y \to \quotproj{x} = \quotproj{y}}
+\end{datatype}
+
+\begin{datatype}{\coeqty{f}{g}}{\Set}
+  \constr{\coeqproj}{B \to \coeqty{f}{g}} \\
+  \constr{\coeqeq}{(x : A) \to \coeqproj\ (f\ x) = \coeqproj\ (g\ x)}
+\end{datatype}
+
+\subsection{Syntax of type theory}
+
+\begin{sorts}
+  \sortnamety{\ttconty}{\Set} \\
+  \sortnamety{\tttyty}{\ttconty \to \Set}
+\end{sorts}
+
+\begin{datatype}{\ttconty}{}
+  \constr{\ttnil}{\ttconty} \\
+  \constr{\ttcons{\_}{\_}}{(\Gamma : \ttconty) \to \tttyty\ \Gamma \to \ttconty}
+\end{datatype}
+
+
+\begin{datatype}{\tttyty}{}
+  \constr{\ttzero}{(\Gamma : \ttconty) \to \tttyty\ \Gamma} \\
+  \constr{\ttone}{(\Gamma : \ttconty) \to \tttyty\ \Gamma} \\
+  \constr{\ttpi}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) \to \tttyty\ (\ttcons{\Gamma}{A}) \to \tttyty\ \Gamma}
+\end{datatype}
+
+\begin{sorts}
+  \sortnamety{\tttmty}{(\Gamma : \ttconty) \to \tttyty\ \Gamma \to \Set}
+\end{sorts}
+
+\begin{datatype}{\tttmty}{}
+  \constr{\ttapp}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
+    \tttmty\ \Gamma\ (\ttpi\ A\ B) \to \tttmty\ (\ttcons{\Gamma}{A})\ B} \\
+  \constr{\ttlam}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
+    \tttmty\ (\ttcons{\Gamma}{A}) B \to \tttmty\ \Gamma\ (\ttpi\ A\ B)} \\
+\end{datatype}
+
+% %\intertext{Equations on terms:}
+% %  &\ \ \ \ \ \ \vdots \\
+%   &\ \ \ \ \AgdaInductiveConstructor{\Pi\beta} : (\AB{\Gamma} : \Con) (\AB{A} : \Ty\ \AB{\Gamma}) (\AB{B} : \Ty\ (\AB{\Gamma}\AgdaInductiveConstructor{,}\, \AB{A})) \\
+%   &\ \ \ \ \ \     \to (\AB{t} : \Tm\ (\AB{\Gamma}, \AB{A})\ \AB{B}) \to \app\ \AB{\Gamma}\ \AB{A}\ \AB{B}\ (\lam\ \AB{\Gamma}\ \AB{A}\ \AB{B}\ \AB{t}) = \AB{t} \\
+%   &\ \ \ \ \ \ \vdots
+% \end{align*}
+% %
+
+
+\subsection{Cauchy reals}
+
+% %
+% \begin{align*}
+% &\data\ \Real : \Set \\
+% &\data\ \AgdaDatatype{\_\sim_{\_}\_} : \RatP \to \Real \to \Real \to \Set \\
+% \end{align*}
+% %
+% by the following clauses:
+% %
+% \begin{align*}
+% &\data\ \Real\ \where \\
+% &\ \ \ \ \rat : \Rat \to \Real \\
+% &\ \ \ \ \lim : (\AB{x} : \RatP \to \Real) \to ((\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \to \Real \\
+% &\ \ \ \ \eq : (\AB{u}\ \AB{v} : \Real) \to ((\AB{\epsilon} : \RatP) \to \AB{u} \sim_{\AB{\epsilon}} \AB{v}) \to \AB{u} = \AB{v} \\
+% \\
+% &\data\ \AgdaDatatype{\_\sim_{\_}\_}\ \where \\
+% &\ \ \ \ \ \ \vdots \\
+% &\ \ \ \ \limrat : (\AB{x} : \RatP \to \Real) (p : (\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \\
+% &\ \ \ \ \ \ \ \ \ \ \ \ (\AB{r} : \Rat) (\AB{\epsilon}\ \AB{\delta} : \RatP) \\
+% &\ \ \ \ \ \ \ \to \AB{x}\ \AB{\delta} \sim_{\AB{\epsilon} - \AB{\delta}} \rat\ \AB{r} \to (\lim\ \AB{x}\ \AB{p}) \sim_{\AB{\epsilon}} (\rat\ \AB{r}) \\
+% &\ \ \ \ \ \ \vdots
+% \end{align*}
+% %
+\subsection{Infinitely branching trees}
+
+% \begin{align*}
+% &\data\ \Tz : \Set \ \where\\
+% &\ \ \ \ \leaf : \Tz\\
+% &\ \ \ \ \node : (\Nat \to \Tz) \to \Tz
+% \end{align*}
+
+% \todoi{quotient this by relation}
+
+% However, if $\T$ is defined by the following quotient inductive
+% definition, the problem disappears altogether:
+% \begin{align*}
+% &\data\ \T : \Set \ \where\\
+% &\ \ \ \ \leafP : \T\\
+% &\ \ \ \ \nodeP : (\Nat \to \T) \to \T\\
+% &\ \ \ \ \perm : (\AgdaBound{f} : \Nat \to \T) \to (\AgdaBound{g} : \Nat \to \Nat) \to \isIso\ \AgdaBound{g}\\
+% &\ \ \ \ \ \  \to \nodeP\ \AgdaBound{f} = \nodeP\ (\AgdaBound{f} \circ \AgdaBound{g})
+% \end{align*}
+
+
+\section{Implementation}
+
+\todoi{``Implementing'' them by just adding axioms/postulates}
+
+\subsection{Agda}
+
+\todoi{Dan Licata's trick}
+
+\todoi{Newer: rewrite rules, but comes with ``obvious'' limitations}
+
+\subsection{Cubical type theory}
+
+\todoi{mention cubicaltt and other implementations of cubical type theories}
+
+\section{Related concepts}
+
