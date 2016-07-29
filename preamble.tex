@@ -9,11 +9,22 @@
 \usepackage{amsmath,amsthm,amssymb,stmaryrd}
 \usepackage{url}
 \usepackage[pdftex, all]{xy}
-\usepackage{environ} % for data type decl environment, since align* doesn't play nice
-\usepackage{xifthen} % for data type decl hackery, detect optional parameters
+\usepackage{environ} % for data type decl environment, since align* doesn't play nice with newenvironment
+\usepackage{xifthen} % for data type decl hackery, detect empty parameters
 
 % TODOs
 \newcommand{\todoi}[1]{\todo[inline]{#1}}
+
+\newcommand{\eg}{e.g.\xspace}
+\newcommand{\ie}{i.e.\xspace}
+
+% Propositions, theorems, corollaries, etc.
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 
 % Agda-style syntax highlighting
 \newcommand{\AgdaKeyword}[1]{\textcolor[HTML]{CD6600}{\mathbf{#1}}}
@@ -29,6 +40,10 @@
 % Universes
 \newcommand{\Set}{\AgdaPrimitiveType{\mathsf{Set}}}
 \newcommand{\Type}{\AgdaPrimitiveType{\mathsf{Type}}}
+\newcommand{\Prop}{\AgdaPrimitiveType{\mathsf{Prop}}}
+
+% Equational reasoning
+\newcommand{\reasontext}[1]{\{\ \textsf{#1}\ \}}
 
 % Data type declaration environment and commands
 \newcommand{\sortname}[1]{&\data\ #1}
@@ -46,6 +61,16 @@
     \BODY
   \end{align*}}
 
+% Logical equivalence
+\newcommand{\logequiv}{\leftrightarrow}
+
+% Equality and its operations
+\newcommand{\pathover}[4]{#3 =^{#1}_{#2} #4}
+\newcommand{\ap}{\AgdaFunction{\mathsf{ap}}}
+\newcommand{\apd}{\AgdaFunction{\mathsf{apd}}}
+\newcommand{\transport}{\AgdaFunction{\mathsf{transport}}}
+\newcommand{\defeq}{\equiv}
+\newcommand{\ddefeq}{:\defeq}
 
 % Naturals
 \newcommand{\natty}{\AgdaDatatype{\mathbb{N}}}
@@ -58,15 +83,26 @@
 \newcommand{\intone}{\AgdaInductiveConstructor{\mathsf{one}}}
 \newcommand{\intseg}{\AgdaInductiveConstructor{\mathsf{seg}}}
 
+\newcommand{\intrec}{\AgdaFunction{\mathsf{I-rec}}}
+\newcommand{\intrecbetazero}{\AgdaFunction{\mathsf{I-rec-\beta}}_{\intzero}}
+\newcommand{\intrecbetaone}{\AgdaFunction{\mathsf{I-rec-\beta}}_{\intone}}
+\newcommand{\intrecbetaseg}{\AgdaFunction{\mathsf{I-rec-\beta}}_{\intseg}}
+
+\newcommand{\intind}{\AgdaFunction{\mathsf{I-ind}}}
+
 % Quotient type
 \newcommand{\quotty}[2]{#1 \AgdaDatatype{/} #2}
 \newcommand{\quotproj}[1]{\AgdaInductiveConstructor{[}\,#1\,\AgdaInductiveConstructor{]}}
 \newcommand{\quoteq}{\AgdaInductiveConstructor{q}}
 
+\newcommand{\quotind}[2]{\AgdaFunction{\mathsf{#1 / #2 -ind}}}
+
 % Coequaliser
-\newcommand{\coeqty}[2]{\AgdaDatatype{\mathsf{coeq}}\ #1\ #2}
+\newcommand{\coeqty}[2]{\AgdaDatatype{\mathsf{coeq}}_{#1, #2}}
 \newcommand{\coeqproj}{\AgdaInductiveConstructor{c}}
 \newcommand{\coeqeq}{\AgdaInductiveConstructor{\mathsf{eq}}}
+
+\newcommand{\coeqind}[2]{\AgdaDatatype{\mathsf{coeq}}\ #1\ #2 -ind}
 
 % Syntax of type theory
 

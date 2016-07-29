@@ -1,26 +1,254 @@
 \chapter{Quotient inductive types}
+\label{qits}
 
 \section{Examples}
+\label{examples}
 
 \subsection{Interval type}
+\label{int}
 
-\begin{datatype}{\intty}{\Set}
+The simplest (non-empty) example of an inductive type with a path
+constructor which is still a set, is the interval type: two point
+constructors with a path constructor connecting them:
+%
+\begin{datatype}{\intty}{\Type}
   \constr{\intzero}{\intty} \\
   \constr{\intone}{\intty} \\
   \constr{\intseg}{\intzero = \intone}
 \end{datatype}
+%
+It should come as no surprise that this type can be shown to be
+equivalent to the unit type. However, this does not mean it is
+entirely uninteresting: unlike the unit type, the interval type
+implies function extensionality (\cref{int:funext}).
+
+As the interval type can be shown to be contractible, it does not
+matter whether we take the set truncation of it or not. As such, we
+will work with untruncated types for the remainder of this example.
+
+To define a function out of an inductive type, we need to say what
+each constructor is mapped to. For the interval type, we first of all
+need to give two points. Since every function in type theory is a
+congruence, \ie we have $\ap$, these two points need to be equal to
+eachother. The recursion principle is therefore as follows:
+$$
+\intrec : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone})
+\to \intty \to A
+$$
+which comes with the computation rules:
+%
+\begin{align*}
+  \intrecbetazero : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero = a_{\intzero} \\
+  \intrecbetaone : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone = a_{\intone}
+\end{align*}
+
+\subsubsection{Path computation rules}
+\label{int:pathcomp}
+
+The recursion principle of an inductive type comes with a computation
+rule for every constructor. So far we have only given the computation
+rules for the \emph{point constructors}. The computation rule for the
+path constructor is similar to those of the point constructors: it
+tells us that the action of $\intrec$ on the path $\intseg$ gives us
+back the $a_{\intseg}$ we put in, that is:
+$$
+\ap\ (\intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg})\ \intseg = a_{\intseg}
+$$
+However, the above does not type check if $\intrecbetazero$ and
+$\intrecbetaone$ are not strict equalities. We would need to transport
+the left-hand side over these point computation rules. We end up with
+the following square:
+$$
+\xymatrix{
+  \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero 
+  \ar@{-}^{\ap\ (\intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg})\ \intseg}[rr]
+  \ar@{-}_{\intrecbetazero}[d]
+  &&\intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone
+  \ar@{-}^{\intrecbetaone}[d]
+  \\
+  a_{\intzero} \ar@{-}_{a_{\intseg}}[rr] &&a_{\intone}
+}
+$$
+A path computation rule gives us an equation between paths in type we
+are eliminating into. If that type happens to be a set, then these
+equations would be trivial. Hence path computation rules for
+\emph{quotient} inductive types do not add anything new and will be
+omitted.
+
+\subsubsection{Induction principle}
+\label{int:ind}
+
+The induction principle gives us a way to show that for some predicate
+$P$ on $\intty$, we have a dependent function $(x : \intty) \to P\ x$.
+We have to give a method for each point constructor and each path
+constructor. The method we need to give for the constructor $\intseg$
+is not a simple path as it was with the recursion principle:
+$m_{\intzero}$ and $m_{\intone}$ may have different types. We do know
+that they can be related by transporting along $\intseg$, so we end up
+having to give a dependent path as the method for $\intseg$:
+
+$$
+\intind : (P : \intty \to \Type) (m_{\intzero} : P\ \intzero) (m_{\intone} : P\ \intone) (m_{\intseg} : \pathover{P}{\intseg}{\intzero}{\intone}) \to (x : \intty) \to P\ x
+$$
+
+As with the recursion principle, we of course have computation rules:
+\begin{align*}
+  \intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intzero = m_{\intzero} \\
+  \intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intone = m_{\intone} \\
+  \apd\ (\intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg})\ \intseg = m_{\intseg}
+\end{align*}
+
+\subsubsection{Function extensionality}
+\label{int:funext}
+
+Even though the interval is equivalent to the unit type, it has the
+surprising property that it implies function extensionality. Having an
+inductive type with two inhabitants that are propositionally equal but
+not definitionally allows us to represent equalities using
+functions. From the recursion principle we get the following logical
+equivalence for any type $A$:
+$$
+I \to A \logequiv (x\ y : A) \times (x = y)
+$$
+This is like the universal property for the interval with equivalence
+weakened to logical equivalence.
+
+\begin{proposition}
+  The interval type implies function extensionality.
+\end{proposition}
+
+\begin{proof}
+  Suppose we have types $A, B$ with two functions $f,g : A \to B$ and
+  a family of equations $p : (x : A) \to f\ x = g\ x$. We can define
+  $\tilde{p} : A \to I \to B$ as follows:
+  $$
+  \tilde{p}\ a \ddefeq \intrec\ B\ (f\ a)\ (g\ a)\ (p\ a)
+  $$
+  We can then construct the following term of type $f = g$:
+  $$
+  \ap\ (\lambda\ i\ a . \tilde{p}\ a\ i)\ \intseg
+  $$
+  This assumes that the computation rules of $\intrec$ hold
+  definitionally and that the type theory satisfies the $\eta$-law for
+  functions definitionally.
+\end{proof}
 
 \subsection{Quotients and colimits}
 
-\begin{datatype}{\quotty{A}{R}}{\Set}
+Quotient types can be realised as a higher inductive type as follows:
+suppose we have a type $A : \Type$ equipped a binary relation
+$R : A \to A \to \Type$, we define:
+%
+\begin{datatype}{\quotty{A}{R}}{\Type}
   \constr{\quotproj{\_}}{A \to \quotty{A}{R}} \\
   \constr{\quoteq}{(x\ y : A) \to R\ x\ y \to \quotproj{x} = \quotproj{y}}
 \end{datatype}
+%
+The elimination principle of the quotient $\quotty{A}{R}$ is as
+follows:
+%
+\begin{align*}
+&\quotind{A}{R} : \\
+&(P : \quotty{A}{R} \to \Type) \\
+&(m_{\quotproj{\_}} : (a : A) \to P\ \quotproj{a}) \\
+&(m_{\quoteq} : (x\ y : A) (p : R\ x\ y) \to \pathover{P}{\quoteq\ x\ y}{m_{\quotproj{\_}}\ x}{m_{\quotproj{\_}}\ y})\\
+&\to (x : \quotty{A}{R}) \to P\ x
+\end{align*}
+%
+Unlike with the interval types, whether we truncate or not does make a
+difference here. Ordinarily, one would expect $A$ to be a set and $R$
+to be $\Prop$-valued. These restrictions are not enough to ensure the
+quotient will also be a set. If we take $A$ to be the unit type and
+quotient it by the relation that is constantly the unit type as well,
+$\quotty{A}{R}$ will be equivalent to the circle.
 
-\begin{datatype}{\coeqty{f}{g}}{\Set}
+It is not necessary to require $R$ to be an equivalence
+relation. Since the path constructor $\quoteq$ constructs elements of
+an identity type, we can apply symmetry and other operations to the
+paths constructed by $\quoteq$. We effectively take the
+reflexive-symmetric-transitive closure of $R$.
+
+In the category of sets, one can construct colimits by using
+quotients. The same is true for types: we can construct coequalisers
+using quotient types. In the untruncated setting, these coequalisers
+will be \emph{homotopy} coequalisers. Since we already have arbitrary
+coproducts ($\Sigma$-types), we can then go on and construct arbitrary
+colimits using these two building blocks.
+
+\subsubsection{Quotient types implement coequalisers}
+If we have quotient types, we use them to define colimits such as
+coequalisers: suppose $A, B : \Type$ with $f, g : A \to B$ two
+functions, we can define a relation $R$ on $B$:
+$$
+R\ x\ y \ddefeq (z : A) \times (x = f\ z) \times (y = g\ z)
+$$
+
+\begin{proposition}
+  The quotient $\quotty{B}{R}$ is the coequaliser of $f$ and $g$, \ie
+  $\quotproj{\_} : B \to \quotty{B}{R}$ satisfies
+  $\quotproj{\_} \circ f = \quotproj{\_} \circ g$ and $\quotty{B}{R}$
+  satisfies the appropriate universal property.
+\end{proposition}
+
+\begin{proof}
+  We can show that the type of $\quoteq$ is equivalent to
+  $\quotproj{\_} \circ f = \quotproj{\_} \circ g$ by the following
+  equational reasoning:
+  %
+  \begin{align*}
+    &&&(x\ y : B) \to (z : A) \times (f\ z = x) \times (y = g\ z) \to \quotproj{x} = \quotproj{y} \\
+    &=& &\reasontext{currying and singleton contraction} \\
+    &&& (z : A) \to \quotproj{f\ z} = \quotproj{g\ z} \\
+    &=& &\reasontext{function extensionality} \\
+    &&& \quotproj{\_} \circ f = \quotproj{\_} \circ g
+  \end{align*}
+  % 
+  The universal property can be shown to follow directly from the
+  elimination principle.
+\end{proof}
+\subsubsection{Coequalisers implement quotient types}
+
+We can also define coequalisers directly as a higher inductive
+type. Given types $A, B$ with functions $f, g : A \to B$, we define:
+%
+\begin{datatype}{\coeqty{f}{g}}{\Type}
   \constr{\coeqproj}{B \to \coeqty{f}{g}} \\
   \constr{\coeqeq}{(x : A) \to \coeqproj\ (f\ x) = \coeqproj\ (g\ x)}
 \end{datatype}
+%
+which comes with the following elimination principle:
+%
+\begin{align*}
+  &\coeqind{f}{g} : \\
+  &(P : \coeqind{f}{g} \to \Type) \\
+  &(m_{\coeqproj} : (b : B) \to P\ (\coeqproj\ b)) \\
+  &(m_{\coeqeq} : (a : A) \to \pathover{P}{\coeqeq\ a}{m_{\coeqproj}\ (f\ a)}{m_{\coeqproj}\ (g\ a)}) \\
+  &(x : \coeqind{f}{g}) \to P\ x
+\end{align*}
+%
+Given a type $A : \Type$ and a relation $R : A \to A \to \Type$, we
+can define a type $\tilde{R} \ddefeq (x\ y : A) \times R\ x \ y$ which
+has two projections $\pi_0, \pi_1 : \tilde{R} \to A$. We can then take
+the coequaliser of these two functions:
+$$
+\xymatrix{
+\tilde{R} \ar@<-.5ex>[r]_{\pi_0} \ar@<.5ex>[r]^{\pi_1} &A \ar[r]^{\coeqproj} &\coeqty{\pi_0}{\pi_1}
+}
+$$
+
+\begin{proposition}
+  The coequaliser $\coeqty{\pi_0}{\pi_1}$ is the quotient of $A$ by
+  $R$.
+\end{proposition}
+
+\begin{proof}
+  We have to show that $\coeqty{\pi_0}{\pi_1}$ satisfies the
+  elimination principle of the quotient $\quotty{A}{R}$.
+\end{proof}
+
+We have shown that coequalisers and quotient types can be phrased in
+terms of eachother. We can go a bit further and state that they are
+equivalent when seen as families.
 
 \subsection{Syntax of type theory}
 
