@@ -250,6 +250,111 @@ We have shown that coequalisers and quotient types can be phrased in
 terms of eachother. We can go a bit further and state that they are
 equivalent when seen as families.
 
+\subsection{Infinitely branching trees}
+
+The examples we have seen so far seem to be expressible quotients of
+ordinary inductive types. Not all quotient inductive types have this
+property. One example where we can observe a difference is with the
+type of infinitely branching trees modulo permutation. We define the
+following inductive type:
+%
+\begin{datatype}{\treety}{\Set}
+  \constr{\treeleaf}{\treety} \\
+  \constr{\treenode}{(\natty \to \treety) \to \treety} \\
+  \constr{\treeperm}{(f : \natty \to \treety) (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treenode\ f = \treenode\ (f \circ \phi)}
+\end{datatype}
+
+The $\treeperm$ constructor tells that two nodes
+$f, f' : \natty \to \treety$ are considered to be equal if there
+exists a permutation $\phi$ such that $f = f' \circ \phi$.
+
+We can try and define this type as a quotient of the type without path
+constructor $\treeperm$:
+%
+\begin{datatype}{\pretreety}{\Set}
+  \constr{\pretreeleaf}{\pretreety} \\
+  \constr{\pretreenode}{(\natty \to \pretreety) \to \pretreety}
+\end{datatype}
+%
+with the relation defined inductively as:
+%
+\begin{datatype}{\treerelty{\_}{\_}}{\pretreety \to \pretreety \to \Set}
+  \constr{\treerelnode}{(f : \natty \to \pretreety) (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treerelty{\pretreenode\ f}{\pretreenode\ (f \circ \phi)}}  
+\end{datatype}
+%
+If we then look at the ``constructors'' of the quotient $\quotty{\pretreety}{\treerel}$, we have the following:
+%
+\begin{align*}
+  \quotproj{\pretreeleaf} : \quotty{\pretreety}{\treerel} \\
+  \quotproj{\_} \circ \pretreenode : (\natty \to \pretreety) \to \quotty{\pretreety}{\treerel}
+\end{align*}
+%
+The latter does not have the same type as $\treenode$. With the
+quotient inductive definition, the induction is performed
+``simultaneously'' with the quotienting. This is also where $\treety$
+differs from our previous examples in which there were no recursive
+occurrences in the point constructors.
+
+Lifting the $\treenode$ constructor to the quotient is problematic. It
+seems we need an inverse to the projection function
+$\quotproj{\_} : \pretreety \to \quotty{\pretreety}{\treerel}$, which
+we cannot expect to exist.
+
+Note however that if we had \emph{finitely} branching trees, we need
+not have such an inverse. In the finite case, we can apply the
+recursion principle to each argument and then apply the $\pretreenode$
+and $\quotproj{\_}$ constructors.
+
+In the infinitely branching case we can define the lifting of
+$\treenode$ if we have the axiom of choice at our disposal:
+
+\begin{proposition}
+  Assuming the axiom of choice, we can define a function
+  $(\natty \to \quotty{\pretreety}{\treerel}) \to
+  \quotty{\pretreety}{\treerel}$.
+\end{proposition}
+
+\begin{proof}
+  some proof
+\end{proof}
+
+We can then show that the quotient has the same elimination principle
+as the quotient inductive type $\treety$:
+
+\begin{proposition}
+  Assuming the axiom of choice, $\quotty{\pretreety}{\treerel}$
+  satisfies the same elimination principle as $\treety$.
+\end{proposition}
+
+\begin{proof}
+  some proof
+\end{proof}
+
+\subsection{Cauchy reals}
+
+% %
+% \begin{align*}
+% &\data\ \Real : \Set \\
+% &\data\ \AgdaDatatype{\_\sim_{\_}\_} : \RatP \to \Real \to \Real \to \Set \\
+% \end{align*}
+% %
+% by the following clauses:
+% %
+% \begin{align*}
+% &\data\ \Real\ \where \\
+% &\ \ \ \ \rat : \Rat \to \Real \\
+% &\ \ \ \ \lim : (\AB{x} : \RatP \to \Real) \to ((\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \to \Real \\
+% &\ \ \ \ \eq : (\AB{u}\ \AB{v} : \Real) \to ((\AB{\epsilon} : \RatP) \to \AB{u} \sim_{\AB{\epsilon}} \AB{v}) \to \AB{u} = \AB{v} \\
+% \\
+% &\data\ \AgdaDatatype{\_\sim_{\_}\_}\ \where \\
+% &\ \ \ \ \ \ \vdots \\
+% &\ \ \ \ \limrat : (\AB{x} : \RatP \to \Real) (p : (\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \\
+% &\ \ \ \ \ \ \ \ \ \ \ \ (\AB{r} : \Rat) (\AB{\epsilon}\ \AB{\delta} : \RatP) \\
+% &\ \ \ \ \ \ \ \to \AB{x}\ \AB{\delta} \sim_{\AB{\epsilon} - \AB{\delta}} \rat\ \AB{r} \to (\lim\ \AB{x}\ \AB{p}) \sim_{\AB{\epsilon}} (\rat\ \AB{r}) \\
+% &\ \ \ \ \ \ \vdots
+% \end{align*}
+% %
+
 \subsection{Syntax of type theory}
 
 \begin{sorts}
@@ -287,52 +392,6 @@ equivalent when seen as families.
 %   &\ \ \ \ \ \ \vdots
 % \end{align*}
 % %
-
-
-\subsection{Cauchy reals}
-
-% %
-% \begin{align*}
-% &\data\ \Real : \Set \\
-% &\data\ \AgdaDatatype{\_\sim_{\_}\_} : \RatP \to \Real \to \Real \to \Set \\
-% \end{align*}
-% %
-% by the following clauses:
-% %
-% \begin{align*}
-% &\data\ \Real\ \where \\
-% &\ \ \ \ \rat : \Rat \to \Real \\
-% &\ \ \ \ \lim : (\AB{x} : \RatP \to \Real) \to ((\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \to \Real \\
-% &\ \ \ \ \eq : (\AB{u}\ \AB{v} : \Real) \to ((\AB{\epsilon} : \RatP) \to \AB{u} \sim_{\AB{\epsilon}} \AB{v}) \to \AB{u} = \AB{v} \\
-% \\
-% &\data\ \AgdaDatatype{\_\sim_{\_}\_}\ \where \\
-% &\ \ \ \ \ \ \vdots \\
-% &\ \ \ \ \limrat : (\AB{x} : \RatP \to \Real) (p : (\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \\
-% &\ \ \ \ \ \ \ \ \ \ \ \ (\AB{r} : \Rat) (\AB{\epsilon}\ \AB{\delta} : \RatP) \\
-% &\ \ \ \ \ \ \ \to \AB{x}\ \AB{\delta} \sim_{\AB{\epsilon} - \AB{\delta}} \rat\ \AB{r} \to (\lim\ \AB{x}\ \AB{p}) \sim_{\AB{\epsilon}} (\rat\ \AB{r}) \\
-% &\ \ \ \ \ \ \vdots
-% \end{align*}
-% %
-\subsection{Infinitely branching trees}
-
-% \begin{align*}
-% &\data\ \Tz : \Set \ \where\\
-% &\ \ \ \ \leaf : \Tz\\
-% &\ \ \ \ \node : (\Nat \to \Tz) \to \Tz
-% \end{align*}
-
-% \todoi{quotient this by relation}
-
-% However, if $\T$ is defined by the following quotient inductive
-% definition, the problem disappears altogether:
-% \begin{align*}
-% &\data\ \T : \Set \ \where\\
-% &\ \ \ \ \leafP : \T\\
-% &\ \ \ \ \nodeP : (\Nat \to \T) \to \T\\
-% &\ \ \ \ \perm : (\AgdaBound{f} : \Nat \to \T) \to (\AgdaBound{g} : \Nat \to \Nat) \to \isIso\ \AgdaBound{g}\\
-% &\ \ \ \ \ \  \to \nodeP\ \AgdaBound{f} = \nodeP\ (\AgdaBound{f} \circ \AgdaBound{g})
-% \end{align*}
-
 
 \section{Implementation}
 

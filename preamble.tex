@@ -72,6 +72,9 @@
 \newcommand{\defeq}{\equiv}
 \newcommand{\ddefeq}{:\defeq}
 
+% is-prop, is-equiv, etc.
+\newcommand{\isequiv}{\AgdaFunction{\mathsf{is-equiv}}}
+
 % Naturals
 \newcommand{\natty}{\AgdaDatatype{\mathbb{N}}}
 \newcommand{\natzero}{\AgdaInductiveConstructor{\mathsf{zero}}}
@@ -103,6 +106,20 @@
 \newcommand{\coeqeq}{\AgdaInductiveConstructor{\mathsf{eq}}}
 
 \newcommand{\coeqind}[2]{\AgdaDatatype{\mathsf{coeq}}\ #1\ #2 -ind}
+
+% Infinitely branching tree
+\newcommand{\treety}{\AgdaDatatype{\mathsf{Tree}}}
+\newcommand{\treeleaf}{\AgdaInductiveConstructor{\mathsf{leaf}}}
+\newcommand{\treenode}{\AgdaInductiveConstructor{\mathsf{node}}}
+\newcommand{\treeperm}{\AgdaInductiveConstructor{\mathsf{perm}}}
+
+\newcommand{\pretreety}{\AgdaDatatype{\mathsf{Tree}_0}}
+\newcommand{\pretreeleaf}{\AgdaInductiveConstructor{\mathsf{leaf}_0}}
+\newcommand{\pretreenode}{\AgdaInductiveConstructor{\mathsf{node}_0}}
+
+\newcommand{\treerel}{\sim}
+\newcommand{\treerelty}[2]{#1 \AgdaDatatype{\treerel} #2}
+\newcommand{\treerelnode}{\AgdaInductiveConstructor{\mathsf{rel-node}}}
 
 % Syntax of type theory
 
