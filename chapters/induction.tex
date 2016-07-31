@@ -2,8 +2,115 @@
 
 \section{Categorical characterisation of induction}
 
+The induction principle of an inductive type $\Tty$ gives us a way to
+construct dependent functions $(x : \Tty) \to P\ x$ for families
+$P : \Tty \to \Type$. The family $P$ which we are eliminating into is
+also called the \emph{motive} of the inductive.
+
+For example, if we have a family $P : \natty \to \Type$ defined on the
+natural numbers, and given
+%
+\begin{itemize}
+\item $m_{\natzero} : P\ \natzero$,
+\item $m_{\natsucc} : (n : \natty) \to P\ n \to P\ (\natsucc\ n)$,
+\end{itemize}
+%
+the induction principle yields a dependent function
+$s : (x : \natty) \to P\ x$. This dependent function comes with a
+computation rule for every method:
+%
+\begin{itemize}
+\item $s_{\natzero} : s\ \natzero = m_{\natzero}$
+\item $s_{\natsucc} : (n : \natty) \to s\ (\natsucc\ n) = m_{\natsucc}\ n\ (s\ n)$
+\end{itemize}
+%
+We can think of the triple $(P,m_{\natzero},m_{\natsucc})$ as an
+\emph{algebra family} over the algebra $(\natty, \natzero, \natsucc)$,
+\ie we have
+$(P,m_{\natzero},m_{\natsucc}) : \Fam_{\Alg_{\lambda X . 1 + X}}
+(\natty, \natzero, \natsucc)$, where
+%
+\begin{align*}
+\Fam_{\Alg_{\lambda X . 1 + X}} (X , \theta_0, \theta_1) &\ddefeq (P : X \to \Type) \\
+& \times (m_0 : P\ \theta_0) \\
+&\times (m_1 : (x : X) \to P\ x \to P\ (\theta_1\ x))
+\end{align*}
+%
+For families in $\Type$, we have the equivalence, given $X : \Type$:
+$$
+(X \to \Type) = (Y : \Type) \times (p : Y \to X)
+$$
+For the abovementioned algebra families, we have a similar
+equivalence: for every $X : \Alg_{\lambda X . 1 + X}$, we have:
+$$
+\Fam_{\Alg_{\lambda X . 1 + X}}\ X = (X : | \Alg_{\lambda X . 1 +
+  X} |) \times (p : \Alg_{\lambda X . 1 + X}(Y,X))
+$$
+
+
+Similarly, dependent functions $(x : X) \to P\ x$ for a predicate
+$P : X \to \Type$ correspond to sections of the function $p : Y \to X$
+corresponding to $P$. The notion of function into $X$ and section
+readily generalises to any category. We can then state the induction
+principle for an algebra as the following section principle: \emph{any
+  algebra fibration has an algebra section}.
+
+\begin{definition}
+  The \emph{section principle} for an object $X$ in a category $\Cc$
+  says that for every $Y : | \Cc |$ and $p : \Cc(Y,X)$, there exists
+  $s : \Cc(X,Y)$ and a proof of $p \circ s = \id_X$, \ie that there is
+  a term
+  \[
+    \sectInd : (Y : | \Cc |) \times (p : \Cc(Y,X)) \to (s : \Cc(X,Y)) \times (p \circ s = \id_X)
+  \]
+\end{definition}
+
 \section{Section principle is logically equivalent to initiality}
 
-\section{Limits}
+The section principle can be stated for any category, so we do not
+have to work with the details of the categories of algebras. Assuming
+a bit more structure of the category, namely that finite limits, we
+can show that an object satisfies the section principle if and only if
+it is an initial object.
+
+\begin{lemma}
+\label{thm:initToSec}
+  Let $\Cc: \Cat$. If $X : | \Cc |$ is initial, then $X$ satisfies the
+  section principle.
+\end{lemma}
+\begin{proof}
+  Assume $X$ is initial. Given a morphism $p : Y \to X$, we need to
+  produce a morphism $s : X \to Y$ such that $p \circ s = id_X$.
+  Since $X$ is initial, we get for any $Y$ a unique arrow $X \to
+  Y$. If we postcompose this with $p$, we will get a morphism
+  $X \to X$, which by initiality has to be the identity morphism.
+\end{proof}
+
+\begin{lemma}
+\label{thm:secToInit}
+  Let $\Cc: \Cat$ and assume $\Cc$ has finite limits. If $X : | \Cc |$
+  satisfies the section principle, then $X$ is initial.
+\end{lemma}
+\begin{proof}
+  Given $Y : |\Cc|$, we need to provide a unique arrow $X \to
+  Y$. Consider the projection $\pi_1 : X \times Y \to X$, which is an
+  arrow into $X$ and therefore has a section $s : X \to X \times
+  Y$. Our candidate arrow is then $\pi_2 \circ s : X \to Y$, which we
+  have to show is unique. Using equalisers, we can show that any two
+  arrows $f,g$ out of $X$ to some other object $Y$ are equal:
+\[
+\xymatrix{
+E \ar[r]^{i} &X \ar@<-.5ex>[r]_-{f} \ar@<.5ex>[r]^-{g} &Y \\
+X \ar[u]^{s} \ar[ur]_{\id_{X}}
+}
+\]
+Let $E$ be the equaliser of $f$ and $g$, then we get a projection map
+$i : E \to X$. By the section principle, this map has a section
+$s : X \to E$, hence
+$f = \id_X \circ f = s \circ i \circ f = s \circ i \circ g = \id_X
+\circ g = g$ holds.
+\end{proof}
+
+\section{Limits in categories of algebras}
 
 \section{Deriving the induction principle}
