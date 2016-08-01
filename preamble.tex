@@ -144,10 +144,22 @@
 \newcommand{\Alg}{\AgdaDatatype{\mathsf{Alg}}}
 
 % Families
-\newcommand{\Fam}{\AgdaDatatype{\mathsf{Fam}}}
+\newcommand{\Fam}{\AgdaFunction{\mathsf{Fam}}}
+\newcommand{\total}{\AgdaFunction{\mathsf{total}}}
+\newcommand{\proj}{\AgdaFunction{\mathsf{proj}}}
+
 \newcommand{\sectInd}{\mathsf{sectInd}}
 
 % Categories
 \newcommand{\Cat}{\mathsf{Cat}}
 \newcommand{\Cc}{\mathcal{C}}
 \newcommand{\id}{\mathsf{id}}
+\newcommand{\algcat}[1]{#1\mathsf{-alg}}
+\newcommand{\dialgcat}[2]{(#1,#2)\mathsf{-dialg}}
+
+% Sorts
+\newcommand{\Sorts}{\AgdaDatatype{\mathsf{Sorts}}}
+\newcommand{\Ss}{\mathcal{S}}
+\newcommand{\SortCat}[1]{\AgdaFunction{\llbracket}\ #1\ \AgdaFunction{\rrbracket}}
+\newcommand{\nil}{\AgdaInductiveConstructor{\mathsf{nil}}}
+\newcommand{\Spec}{\AgdaDatatype{\mathsf{Spec}}}

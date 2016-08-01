@@ -3,57 +3,127 @@
 \section{Categorical characterisation of induction}
 
 The induction principle of an inductive type $\Tty$ gives us a way to
-construct dependent functions $(x : \Tty) \to P\ x$ for families
-$P : \Tty \to \Type$. The family $P$ which we are eliminating into is
-also called the \emph{motive} of the inductive.
-
-For example, if we have a family $P : \natty \to \Type$ defined on the
-natural numbers, and given
+construct dependent functions for families defined on $\Tty$. The
+family $P$ which we are eliminating into is also called the
+\emph{motive} of the inductive. By providing \emph{methods} for every
+constructor for this motive, the induction principle gives us a
+function $(x : \Tty) \to P\ x$. Recall that in the case of the natural
+numbers, the methods we have to supply have the following types:
 %
 \begin{itemize}
 \item $m_{\natzero} : P\ \natzero$,
 \item $m_{\natsucc} : (n : \natty) \to P\ n \to P\ (\natsucc\ n)$,
 \end{itemize}
 %
-the induction principle yields a dependent function
-$s : (x : \natty) \to P\ x$. This dependent function comes with a
-computation rule for every method:
+Given all this, the induction principle yields a dependent function
+$s : (x : \natty) \to P\ x$ satisfying certain computation rules.
+
+We can think of the triple $(P,m_{\natzero},m_{\natsucc})$ as a family
+of algebras defined over the algebra $(\natty, \natzero, \natsucc)$:
+
+\begin{definition}
+  We define a type of algebra families for this particular category of
+  algebras as:
 %
-\begin{itemize}
-\item $s_{\natzero} : s\ \natzero = m_{\natzero}$
-\item $s_{\natsucc} : (n : \natty) \to s\ (\natsucc\ n) = m_{\natsucc}\ n\ (s\ n)$
-\end{itemize}
+  \begin{alignat*}{2}
+    &\Fam_{\Alg_{\lambda X . 1 + X}} : | \Alg_{\lambda X . 1 + X} | \to \Type \\
+    &\Fam_{\Alg_{\lambda X . 1 + X}} (X , \theta_0, \theta_1) &\ddefeq& (P : X \to \Type) \\
+    &&\times& (m_0 : P\ \theta_0) \\
+    &&\times& (m_1 : (x : X) \to P\ x \to P\ (\theta_1\ x))
+  \end{alignat*}
 %
-We can think of the triple $(P,m_{\natzero},m_{\natsucc})$ as an
-\emph{algebra family} over the algebra $(\natty, \natzero, \natsucc)$,
-\ie we have
-$(P,m_{\natzero},m_{\natsucc}) : \Fam_{\Alg_{\lambda X . 1 + X}}
-(\natty, \natzero, \natsucc)$, where
-%
-\begin{align*}
-\Fam_{\Alg_{\lambda X . 1 + X}} (X , \theta_0, \theta_1) &\ddefeq (P : X \to \Type) \\
-& \times (m_0 : P\ \theta_0) \\
-&\times (m_1 : (x : X) \to P\ x \to P\ (\theta_1\ x))
-\end{align*}
-%
-For families in $\Type$, we have the equivalence, given $X : \Type$:
+\end{definition}
+
+In order to see that this type does correspond to a notion of family,
+recall that families on a type can also be represented as functions
+into said type:
+
+\begin{proposition}
+Given $X : \Type$, there is an equivalence:
 $$
 (X \to \Type) = (Y : \Type) \times (p : Y \to X)
 $$
-For the abovementioned algebra families, we have a similar
-equivalence: for every $X : \Alg_{\lambda X . 1 + X}$, we have:
+\end{proposition}
+
+\begin{proof}
+  Let $P : X \to \Type$ be a family on $X$, we can map this to the
+  pair $((x : X) \times P\ x, \pi_0)$, \ie the family's total space
+  along with its projection map into its base space. In the other
+  direction we map $(Y,p)$ to the preimage family
+  $\lambda x . (y : Y) \times (p\ y = x)$. Checking that these two
+  maps are eachother's inverses can be done by using function
+  extensionality and univalence.
+\end{proof}
+
+For the aforementioned algebra families, we have a similar
+equivalence:
+
+\begin{proposition}
+Given $X : \Alg_{\lambda X . 1 + X}$, there is an equivalence:
 $$
-\Fam_{\Alg_{\lambda X . 1 + X}}\ X = (X : | \Alg_{\lambda X . 1 +
+\Fam_{\Alg_{\lambda X . 1 + X}}\ X = (Y : | \Alg_{\lambda X . 1 +
   X} |) \times (p : \Alg_{\lambda X . 1 + X}(Y,X))
 $$
+\end{proposition}
 
+\begin{proof}
+  The proof follows the same structure as the $\Type$ case. Given an
+  algebra family $(P,m_0,m_1)$, we can define its ``total algebra'' as
+  follows:
+  $$
+  \total\ (P,m_0,m_1) \ddefeq ((x : X) \times P\ x , (\theta_0, m_0), (\lambda (x,p) . (\theta_1\ x, m_1\ x\ p)))
+  $$
+  The projection function $\pi_0 : (x : X) \times P\ x \to X$ turns
+  out to be an algebra morphism
+  $\total\ (P,m_0,m_1) \to (X,\theta_0,\theta_1)$: it satisfies the
+  computation rules definitionally. Let us denote this morphism as
+  $\proj\ (P,m_0,m_1)$. The mapping from left to right maps
+  $(P,m_0,m_1)$ to the pair
+  $(\total\ (P,m_0,m_1), \proj\ (P,m_0,m_1))$.
 
-Similarly, dependent functions $(x : X) \to P\ x$ for a predicate
-$P : X \to \Type$ correspond to sections of the function $p : Y \to X$
-corresponding to $P$. The notion of function into $X$ and section
-readily generalises to any category. We can then state the induction
-principle for an algebra as the following section principle: \emph{any
-  algebra fibration has an algebra section}.
+  For the other direction we need to generalise the preimage family to
+  algebras: given $(Y,\rho_0,\rho_1)$ with
+  $(p,p_0,p_1) : \Alg_{\lambda X . 1 +
+    X}((Y,\rho_0,\rho_1),(X,\theta_0,\theta_1))$,
+  we define the following family:
+  %
+  \begin{align*}
+  &(\ \lambda x . (y : Y) \times p\ y = x &&: X \to \Type \\
+  &,\ (\rho_0 , p_0) &&: (y : Y) \times p\ y = \theta_0 \\
+  &,\ \lambda x (y,z) . (\rho_1\ y , w) &&: (x : X) \to (y : Y) \times (p\ y = x) \to (y' : Y) \times (p\ y' = \theta_1\ x)\\
+  &)
+  \end{align*}
+  % 
+  where $w$ is defined as the following path:
+  $$
+  \xymatrix{
+    p\ (\rho_1\ y) \ar@{-}[r]^-{p_1} &\theta_1\ (p\ y) \ar@{-}^-{\ap\ \theta_1\ z}[r] &\theta_1\ x
+  }
+  $$
+\end{proof}
+
+Given a family $P : X \to \Type$, a dependent function
+$(x : X) \to P\ x$ corresponds to a \emph{section} of the projection
+function $\pi_0 : (x : X) \times P\ x \to X$. As it turns out, the
+corresponding notion of dependent function for an algebra family is a
+dependent function along with computation rules, \ie everything we get
+from the induction principle:
+
+\begin{definition}
+  Given an algebra family $(P,m_0,m_1)$, a \emph{dependent algebra
+    morphism} is a dependent function $s : (x : X) \to P\ x$ equipped
+  with the computation rules:
+  % 
+  \begin{itemize}
+  \item $s_{\natzero} : s\ \natzero = m_{\natzero}$
+  \item $s_{\natsucc} : (n : \natty) \to s\ (\natsucc\ n) = m_{\natsucc}\ n\ (s\ n)$
+  \end{itemize}
+\end{definition}
+
+As the definitions of function into $X$ and section only refer to the
+category structure, this generalises to any category. The induction
+principle that gives us a dependent morphism for any family can be
+therefore be phrased abstractly as follows:
 
 \begin{definition}
   The \emph{section principle} for an object $X$ in a category $\Cc$
@@ -112,5 +182,162 @@ $f = \id_X \circ f = s \circ i \circ f = s \circ i \circ g = \id_X
 \end{proof}
 
 \section{Limits in categories of algebras}
+
+In the rest of this section, we show that the categories of algebras
+we are working with have products and equalisers, and hence satisfy
+the assumption of Lemma~\ref{thm:secToInit}.  This can be done by
+induction on the specification, \ie by induction on the number of
+constructors. We will see that we also need that the forgetful
+functors into the category of sorts preserve these limits, which we
+can prove simultaneously with the construction of the limits.  For a
+quotient inductive-inductive type with no constructors, the category
+of algebras is the category of sorts, so we first show that this
+category has finite limits.
+
+\begin{lemma}[Limits in the category of sorts]
+\label{thm:lim-sorts}
+  For each sort $\Ss : \Sorts$, the category $\SortCat{\Ss}$ has
+  products and equalisers.
+\end{lemma}
+%TODO[FNF]: change \Spec to \Spec\ \Ss?
+\begin{proof}
+We proceed by induction on the specification of sorts $\Ss : \Sorts$.
+If $\Ss = \nil$, then $\SortCat{\Ss} = 1$, which trivially satisfies
+our criteria. In the induction step case, we have a category $S_i$
+which is built out of the previous category of sorts $S_{i-1} : \Cat$
+with $R_i : S_{i-1} \to \Set$. By the induction hypothesis $S_{i-1}$
+has products and equalisers. We can then define products in $S_{i}$
+as follows: suppose $(X,Y), (Z,W) : | S_{i} |$, \ie $X, Y : | S_{i-1} |$
+and $Y : R_i X \to \Set$, $W : R_i Z \to \Set$, since $S_{i-1}$ has
+products, we can define:
+\[
+(X,Y) \times (Z,W) \ddefeq (X \times Z , Y \times W)
+\]
+where $Y \times W : R_i (X \times Z) \to \Set$ is defined pointwise
+as:
+\[
+(Y \times W)\ x \ddefeq Y (R_i(\pi_0)\ x) \times W (R_i(\pi_1)\ x)
+\]
+The definition satisfies the universal property of products, which can
+be shown by appealing to the universal properties of products in
+$S_{i-1}$ and $\Set$.
+
+Equalisers can be constructed in a similar way, however it involves
+equalities between morphisms. Suppose
+$(f,f'), (g,g') : S_i((X,Y),(Z,W))$, then we have by function
+extensionality and using that an equality of pairs is equivalent a pair of
+equalities:
+%
+\begin{align*}
+ ((f,f') = (g,g'))& \\
+\simeq &\, (p : f = g) \\
+\times &\, \big(p' : (x : X) (y : Y\ x) \\
+&\ \ \ \to \transport\ W\ (R_i(p)\ x)\ (f'\ x\ y) = g'\ x\ y\big)
+\end{align*}
+%
+where we denote the action of $R_i$ on a proof of equality $p : f = g$
+by $R_i(p)\ x : R_i(f)\ x = R_i(g)\ x$. Since
+$f'\ x\ y : W\ (R_i(f)\ x)$ and $g'\ x\ y : W\ (R_i(g)\ x)$, we have
+to transport (or coerce) the left hand side of the equation along the
+equality $R_i(p)\ x$.
+
+Given $(f,f'), (g,g') : S_i((X,Y),(Z,W))$, by the induction hypothesis
+we get an equaliser $E : |S_{i-1}|$ with a projection map
+$e : S_{i-1}(E,X)$. This equaliser comes equipped with a proof
+$p : f \circ e = g \circ e$. The equaliser is then defined as $(E,F)$
+with:
+\begin{align*}
+F\ x & \ddefeq (y : Y\ (R_i\ e\ x)) \\
+& \times (\transport\ W\ (R_i(p)\ x)\ (f'\ (R_i\ e\ x)\ y) = g'\ (R_i\ e\ x)\ y)
+\end{align*}
+with $(e,e') : S_i((E,F),(X,Y))$ the projection morphism where
+\[
+e'\ x\ (y , p) \ddefeq y
+\]
+Showing that $(f,f') \circ (e,e') = (g,g') \circ (e,e')$ is then
+straightforward. The universal property can be shown similarly to that
+of the product: we have to appeal to the universal properties of
+equalisers in $S_{i-1}$ and $\Set$.
+\end{proof}
+
+When specifying a quotient inductive-inductive type with at least one constructor, we also need
+the category of algebras to have finite products.
+
+\begin{lemma}[Limits in the category of algebras]
+  For each sort $\Ss : \Sorts$ and specification $s : \Spec$, the
+  category of algebras $\Alg_s$ has products and
+  equalisers. Furthermore, the forgetful functor
+  $U_s : \Alg_s \to \SortCat{\Ss}$ preserves finite limits.
+\end{lemma}
+\begin{proof}
+  We prove both properties simultaneously by induction on $s : \Spec$.
+  For the empty quotient inductive-inductive type specification, the first statement is
+  Lemma~\ref{thm:lim-sorts}, and the forgetful functor of the category
+  of algebras into the category of sorts is the identity functor,
+  which trivially preserves limits. By the way the limits here are
+  constructed, the functor $t_i : S_i \to S_{i-1}$ also preserves
+  them. This means that if we have a forgetful functor
+  $U : \Alg_s \to \Ss$ for some $s : \Spec$, then for any
+  $S_i \in \Ss$, the extension $\bar{U} : \Alg_s \to S_i$ of $U$ also
+  preserves products and equalisers.
+
+For the induction step case, we have a specification $s : \Spec$ such that
+$\Alg_s : \Cat$ has products and equalisers and the forgetful functor
+$U : \Alg_s \to \Ss$ preserves them. To define a constructor on $s$,
+we need to specify its sort first. Suppose we have $S_i \in \Ss$, then
+either $S_i = 1$ or $S_i$ is built out of $S_{i-1}$ with some functor
+$R_i : S_{i-1} \to \Set$ and we have a forgetful functor
+$t_i : S_i \to S_{i-1}$. In the first case, we are done: adding
+constructors to an object in $1$ does not do anything. In the
+remainder we will assume the latter is the case.
+
+A 0-constructor of sort $S_i$ on a specification $s : \Spec$ is given
+by a functor $F : \Alg_s \to S_i$ such that
+$t_i \circ F = t_i \circ \bar{U}$. The algebras we are interested in
+are dialgebras $(X : \Alg_s) \times (\theta : S_i(FX, \bar{U}X))$ such
+that $t_i \theta = \id_{t_i (\bar{U}X)}$.
+
+Let $(X,\theta), (Y,\rho) : | \dialgcat{F}{\bar{U}} |$, then by the
+induction hypothesis we have that the projections map
+$\bar{U}(X \times Y) \to \bar{U}X \times \bar{U}Y$ has an inverse
+$\phi$. We can define the algebra structure on $X \times Y$ as
+follows:
+$$
+\xymatrix{
+F(X \times Y) \ar[r] &
+FX \times FY \ar[ld]_{\theta \times \rho} \\
+\bar{U}X \times \bar{U}Y \ar[r]^{\phi} &
+\bar{U}(X \times Y)
+}
+$$
+
+If $t_i\ \theta = \id_{t_i (\bar{U}X)}$ and
+$t_i\ \rho = \id_{t_i (\bar{U}Y)}$, then the composite will also
+satisfy this property, hence we are done. By the construction of
+products, the forgetful functor out of the new category of algebras
+preserves products.
+
+Equalisers are constructed in an analogous fashion.
+
+For 1-constructors the situation is also similar: we have to appeal to
+the $\bar{U}$ preserving the limits and have to use the fact that an
+equality between dependent pairs is equivalent to a dependent pair of
+equalities.
+\end{proof}
+
+Together with Lemmas~\ref{thm:initToSec} and \ref{thm:secToInit}, this
+immediately gives the main theorem of this section:
+
+\begin{theorem}
+\label{thm:main}
+  For each sort $\Ss : \Sorts$ and specification $s : \Spec$, let $X$
+  be an object in the category of algebras $\Alg_s$. Then $X$ is
+  initial if and only if $X$ satisfies the section principle. \qed
+\end{theorem}
+
+In particular, this means that when implementing or formalising
+quotient inductive-inductive types, one can restrict attention to the
+conceptually simpler notion of initial algebra.
+
 
 \section{Deriving the induction principle}
