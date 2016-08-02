@@ -137,131 +137,198 @@ therefore be phrased abstractly as follows:
 
 \section{Section principle is logically equivalent to initiality}
 
-The section principle can be stated for any category, so we do not
-have to work with the details of the categories of algebras. Assuming
-a bit more structure of the category, namely that finite limits, we
-can show that an object satisfies the section principle if and only if
-it is an initial object.
+Now we have a category theoretic characterisation of the induction
+principle, we have to show that it is logically equivalent to
+initiality. Assuming a bit more structure of the categories we are
+working with, namely that finite limits exist, we can show that an
+object satisfies the section principle if and only if it is an initial
+object.
 
 \begin{lemma}
-\label{thm:initToSec}
+  \label{initiality-to-section}
   Let $\Cc: \Cat$. If $X : | \Cc |$ is initial, then $X$ satisfies the
   section principle.
 \end{lemma}
 \begin{proof}
   Assume $X$ is initial. Given a morphism $p : Y \to X$, we need to
   produce a morphism $s : X \to Y$ such that $p \circ s = id_X$.
-  Since $X$ is initial, we get for any $Y$ a unique arrow $X \to
-  Y$. If we postcompose this with $p$, we will get a morphism
-  $X \to X$, which by initiality has to be the identity morphism.
+  Since $X$ is initial, we get a unique arrow $s : X \to Y$ such that:
+  $$
+  \xymatrix{
+    X \ar[r]^{\id_{X}} \ar[rd]_{s} &X \\
+    &Y \ar[u]_{p}
+  }
+  $$
+  The composite has to be equal to the identity morphism on $X$, as
+  that by initiality is the only endomorphism on $X$.
 \end{proof}
 
 \begin{lemma}
-\label{thm:secToInit}
+  \label{section-to-initiality}
   Let $\Cc: \Cat$ and assume $\Cc$ has finite limits. If $X : | \Cc |$
   satisfies the section principle, then $X$ is initial.
 \end{lemma}
 \begin{proof}
   Given $Y : |\Cc|$, we need to provide a unique arrow $X \to
-  Y$. Consider the projection $\pi_1 : X \times Y \to X$, which is an
+  Y$. Consider the projection $\pi_0 : X \times Y \to X$, which is an
   arrow into $X$ and therefore has a section $s : X \to X \times
-  Y$. Our candidate arrow is then $\pi_2 \circ s : X \to Y$, which we
-  have to show is unique. Using equalisers, we can show that any two
-  arrows $f,g$ out of $X$ to some other object $Y$ are equal:
-\[
-\xymatrix{
-E \ar[r]^{i} &X \ar@<-.5ex>[r]_-{f} \ar@<.5ex>[r]^-{g} &Y \\
-X \ar[u]^{s} \ar[ur]_{\id_{X}}
-}
-\]
-Let $E$ be the equaliser of $f$ and $g$, then we get a projection map
-$i : E \to X$. By the section principle, this map has a section
-$s : X \to E$, hence
-$f = \id_X \circ f = s \circ i \circ f = s \circ i \circ g = \id_X
-\circ g = g$ holds.
+  Y$. Our candidate arrow is then the composite:
+  $$
+  \xymatrix{
+    X \ar[r]^{s} &X \times Y \ar[r]^{\pi_1} &Y
+  }
+  $$
+  which we have to show is unique. Using equalisers, we can show that
+  any two arrows $f,g$ out of $X$ to some other object $Y$ are equal:
+  \[
+    \xymatrix{
+      E \ar[r]^{i} &X \ar@<-.5ex>[r]_-{f} \ar@<.5ex>[r]^-{g} &Y \\
+      X \ar[u]^{s} \ar[ur]_{\id_{X}}
+    }
+  \]
+  Let $E$ be the equaliser of $f$ and $g$, then we get a projection map
+  $i : E \to X$. By the section principle, this map has a section
+  $s : X \to E$, hence we have:
+  \begin{align*}
+    f &= \id_X \circ f \\
+      &= (s \circ i) \circ f \\
+      &= s \circ (i \circ f) \\
+      &= s \circ (i \circ g) \\
+      &= (s \circ i) \circ g \\
+      &= \id_X \circ g \\
+      &= g
+  \end{align*}
 \end{proof}
+
+Stating that an object is initial only requires us to define the type
+of objects and type of morphisms of the category. This makes it an
+attractive notion to internalise and work with, as defining it will
+not give us any coherence issues. The section principle however, needs
+a bit more structure: we need composition and identity morphisms. In
+order to show that initiality and the section principle coincide, we
+need even more structure: we need the identity \emph{laws} and
+associativity and the existence of certain limits.
 
 \section{Limits in categories of algebras}
 
-In the rest of this section, we show that the categories of algebras
-we are working with have products and equalisers, and hence satisfy
-the assumption of Lemma~\ref{thm:secToInit}.  This can be done by
-induction on the specification, \ie by induction on the number of
-constructors. We will see that we also need that the forgetful
-functors into the category of sorts preserve these limits, which we
-can prove simultaneously with the construction of the limits.  For a
-quotient inductive-inductive type with no constructors, the category
-of algebras is the category of sorts, so we first show that this
-category has finite limits.
+In this section we will show that the categories of algebras we are
+working with have products and equalisers, and hence satisfy the
+assumption of~\cref{section-to-initiality}. This is done by induction
+on the specification of the inductive definition, \ie by induction on
+its number of constructors. We will see that we also need that the
+forgetful functors into the category of sorts preserve these limits,
+which we can prove simultaneously with the construction of the limits.
 
-\begin{lemma}[Limits in the category of sorts]
-\label{thm:lim-sorts}
+For the empty specification, an inductive definition with no
+constructors, the resulting category of algebras is the category of
+sorts. We will show that this category has the required limits:
+
+\begin{lemma}
+\label{sorts-products}
   For each sort $\Ss : \Sorts$, the category $\SortCat{\Ss}$ has
-  products and equalisers.
+  products.
 \end{lemma}
-%TODO[FNF]: change \Spec to \Spec\ \Ss?
+
 \begin{proof}
-We proceed by induction on the specification of sorts $\Ss : \Sorts$.
-If $\Ss = \nil$, then $\SortCat{\Ss} = 1$, which trivially satisfies
-our criteria. In the induction step case, we have a category $S_i$
-which is built out of the previous category of sorts $S_{i-1} : \Cat$
-with $R_i : S_{i-1} \to \Set$. By the induction hypothesis $S_{i-1}$
-has products and equalisers. We can then define products in $S_{i}$
-as follows: suppose $(X,Y), (Z,W) : | S_{i} |$, \ie $X, Y : | S_{i-1} |$
-and $Y : R_i X \to \Set$, $W : R_i Z \to \Set$, since $S_{i-1}$ has
-products, we can define:
-\[
-(X,Y) \times (Z,W) \ddefeq (X \times Z , Y \times W)
-\]
-where $Y \times W : R_i (X \times Z) \to \Set$ is defined pointwise
-as:
-\[
-(Y \times W)\ x \ddefeq Y (R_i(\pi_0)\ x) \times W (R_i(\pi_1)\ x)
-\]
-The definition satisfies the universal property of products, which can
-be shown by appealing to the universal properties of products in
-$S_{i-1}$ and $\Set$.
+  We proceed by induction on the specification of sorts
+  $\Ss : \Sorts$.  If $\Ss = \nil$, then $\SortCat{\Ss} = \termcat$,
+  which trivially satisfies our criteria.
 
-Equalisers can be constructed in a similar way, however it involves
-equalities between morphisms. Suppose
-$(f,f'), (g,g') : S_i((X,Y),(Z,W))$, then we have by function
-extensionality and using that an equality of pairs is equivalent a pair of
-equalities:
-%
-\begin{align*}
- ((f,f') = (g,g'))& \\
-\simeq &\, (p : f = g) \\
-\times &\, \big(p' : (x : X) (y : Y\ x) \\
-&\ \ \ \to \transport\ W\ (R_i(p)\ x)\ (f'\ x\ y) = g'\ x\ y\big)
-\end{align*}
-%
-where we denote the action of $R_i$ on a proof of equality $p : f = g$
-by $R_i(p)\ x : R_i(f)\ x = R_i(g)\ x$. Since
-$f'\ x\ y : W\ (R_i(f)\ x)$ and $g'\ x\ y : W\ (R_i(g)\ x)$, we have
-to transport (or coerce) the left hand side of the equation along the
-equality $R_i(p)\ x$.
-
-Given $(f,f'), (g,g') : S_i((X,Y),(Z,W))$, by the induction hypothesis
-we get an equaliser $E : |S_{i-1}|$ with a projection map
-$e : S_{i-1}(E,X)$. This equaliser comes equipped with a proof
-$p : f \circ e = g \circ e$. The equaliser is then defined as $(E,F)$
-with:
-\begin{align*}
-F\ x & \ddefeq (y : Y\ (R_i\ e\ x)) \\
-& \times (\transport\ W\ (R_i(p)\ x)\ (f'\ (R_i\ e\ x)\ y) = g'\ (R_i\ e\ x)\ y)
-\end{align*}
-with $(e,e') : S_i((E,F),(X,Y))$ the projection morphism where
-\[
-e'\ x\ (y , p) \ddefeq y
-\]
-Showing that $(f,f') \circ (e,e') = (g,g') \circ (e,e')$ is then
-straightforward. The universal property can be shown similarly to that
-of the product: we have to appeal to the universal properties of
-equalisers in $S_{i-1}$ and $\Set$.
+  In the induction step case, we have $\SortCat{\Ss} = S_i$ for a
+  category $S_i$ which is built out of the previous category of sorts
+  $S_{i-1} : \Cat$ with $R_i : S_{i-1} \to \Set$. By the induction
+  hypothesis $S_{i-1}$ has products and equalisers. We can then define
+  products in $S_{i}$ as follows: suppose $(X,P), (Y,Q) : | S_{i} |$,
+  \ie $X, Y : | S_{i-1} |$ and $P : R_i X \to \Set$,
+  $Q : R_i Y \to \Set$, since $S_{i-1}$ has products, we can define:
+  \[
+    (X,P) \times (Y,Q) \ddefeq (X \times Y , P \times Q)
+  \]
+  where $P \times Q : R_i (X \times Y) \to \Set$ is defined pointwise
+  as:
+  \[
+    (P \times Q)\ x \ddefeq P (R_i\ \pi_0\ x) \times Q (R_i\ \pi_1\ x)
+  \]
+  This definition satisfies the universal property of products, which
+  can be shown by appealing to the universal properties of products in
+  $S_{i-1}$ and $\Set$: let $(Z,T) : | S_{i} |$, then we have:
+  % 
+  \begin{align*}
+    &&&S_i((Z,T),(X \times Y, P \times Q) \\
+    &=& &\reasontext{definition of products in $S_i$} \\
+    &&& (f : S_{i-1}(Z,X \times Y)) \\
+    &&& \times (g : (x : R_i Z) \to T\ x \to (P \times Q)\ (R_i\ f\ x)) \\
+    &=& &\reasontext{universal property of $X \times Y$ in $S_{i-1}$ and functoriality of $R_i$} \\
+    &&& (f_0 : S_{i-1}(Z,X)) \times (f_1 : S_{i-1}(Z,Y)) \\
+    &&& \times (g : (x : R_iZ) \to T\ x \to P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)) \\
+    &=& &\reasontext{universal property of $P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)$ in $\Set$} \\
+    &&& (f_0 : S_{i-1}(Z,X)) \times (f_1 : S_{i-1}(Z,Y)) \\
+    &&& \times (g_0 : (x : R_iZ) \to T\ x \to P\ (R_i\ f\ x)) \\
+    &&& \times (g_1 : (x : R_iZ) \to T\ x \to Q\ (R_i\ g\ x)) \\
+    &=& &\reasontext{definition of products in $S_i$} \\
+    &&& S_i((Z,T),(X,P)) \times S_i((Z,T),(Y,Q))
+  \end{align*}
 \end{proof}
 
-When specifying a quotient inductive-inductive type with at least one constructor, we also need
-the category of algebras to have finite products.
+Equalisers are constructed in similar way to products, however it
+involves equalities between morphisms. Suppose
+$(f,f'), (g,g') : S_i((X,Y),(Z,W))$, then we have by function
+extensionality and using that an equality of pairs is equivalent a
+pair of equalities:
+% 
+\begin{align*}
+  ((f,f') = (g,g')) &=& &(p : f = g) \\
+                    &\times& &(p' : (x : X) (y : Y\ x) \to \pathover{W}{R_i\ p\ x}{f'\ x\ y}{g'\ x\ y})
+\end{align*}
+% 
+where we denote the action of $R_i$ on a proof of equality $p : f = g$
+by $R_i(p)\ x : R_i\ f\ x = R_i(g)\ x$. Since
+$f'\ x\ y : W\ (R_i\ f\ x)$ and $g'\ x\ y : W\ (R_i\ g\ x)$, we have
+to transport the left hand side of the equation along the equality
+$R_i\ p\ x$.
+
+\begin{lemma}
+\label{sorts-equalisers}
+  For each sort $\Ss : \Sorts$, the category $\SortCat{\Ss}$ has
+  equalisers.
+\end{lemma}
+
+\begin{proof}
+  As before, we proceed by induction on the specification of sorts
+  $\Ss : \Sorts$.  If $\Ss = \nil$, then $\SortCat{\Ss} = \termcat$,
+  which trivially satisfies our criteria.
+
+
+
+  Given $(f,f'), (g,g') : S_i((X,Y),(Z,W))$, by the induction
+  hypothesis we get an equaliser $E : |S_{i-1}|$ with a projection map
+  $e : S_{i-1}(E,X)$. This equaliser comes equipped with a proof
+  $p : f \circ e = g \circ e$. The equaliser is then defined as
+  $(E,F)$ with:
+  \begin{align*}
+    F\ x & \ddefeq (y : Y\ (R_i\ e\ x)) \\
+         & \times (\pathover{W}{R_i\ p\ x}{f'\ (R_i\ e\ x)\ y}{g'\ (R_i\ e\ x)\ y})
+  \end{align*}
+  with $(e,e') : S_i((E,F),(X,Y))$ the projection morphism where
+  \[
+    e'\ x\ (y , p) \ddefeq y
+  \]
+  Showing that $(f,f') \circ (e,e') = (g,g') \circ (e,e')$ is then
+  straightforward. The universal property can be shown similarly to
+  that of the product: we have to appeal to the universal properties
+  of equalisers in $S_{i-1}$ and $\Set$.
+\end{proof}
+
+Combining this we get:
+
+\begin{theorem}
+  For each sort $\Ss : \Sorts$, the category $\SortCat{\Ss}$ has
+  finite limits.
+\end{theorem}
+
+When specifying a quotient inductive-inductive type with at least one
+constructor, we also need the category of algebras to have finite
+products.
 
 \begin{lemma}[Limits in the category of algebras]
   For each sort $\Ss : \Sorts$ and specification $s : \Spec$, the
@@ -271,62 +338,60 @@ the category of algebras to have finite products.
 \end{lemma}
 \begin{proof}
   We prove both properties simultaneously by induction on $s : \Spec$.
-  For the empty quotient inductive-inductive type specification, the first statement is
-  Lemma~\ref{thm:lim-sorts}, and the forgetful functor of the category
-  of algebras into the category of sorts is the identity functor,
-  which trivially preserves limits. By the way the limits here are
-  constructed, the functor $t_i : S_i \to S_{i-1}$ also preserves
-  them. This means that if we have a forgetful functor
+  For the empty quotient inductive-inductive type specification, the
+  first statement is Lemma~\ref{thm:lim-sorts}, and the forgetful
+  functor of the category of algebras into the category of sorts is
+  the identity functor, which trivially preserves limits. By the way
+  the limits here are constructed, the functor $t_i : S_i \to S_{i-1}$
+  also preserves them. This means that if we have a forgetful functor
   $U : \Alg_s \to \Ss$ for some $s : \Spec$, then for any
   $S_i \in \Ss$, the extension $\bar{U} : \Alg_s \to S_i$ of $U$ also
   preserves products and equalisers.
 
-For the induction step case, we have a specification $s : \Spec$ such that
-$\Alg_s : \Cat$ has products and equalisers and the forgetful functor
-$U : \Alg_s \to \Ss$ preserves them. To define a constructor on $s$,
-we need to specify its sort first. Suppose we have $S_i \in \Ss$, then
-either $S_i = 1$ or $S_i$ is built out of $S_{i-1}$ with some functor
-$R_i : S_{i-1} \to \Set$ and we have a forgetful functor
-$t_i : S_i \to S_{i-1}$. In the first case, we are done: adding
-constructors to an object in $1$ does not do anything. In the
-remainder we will assume the latter is the case.
+  For the induction step case, we have a specification $s : \Spec$
+  such that $\Alg_s : \Cat$ has products and equalisers and the
+  forgetful functor $U : \Alg_s \to \Ss$ preserves them. To define a
+  constructor on $s$, we need to specify its sort first. Suppose we
+  have $S_i \in \Ss$, then either $S_i = 1$ or $S_i$ is built out of
+  $S_{i-1}$ with some functor $R_i : S_{i-1} \to \Set$ and we have a
+  forgetful functor $t_i : S_i \to S_{i-1}$. In the first case, we are
+  done: adding constructors to an object in $1$ does not do
+  anything. In the remainder we will assume the latter is the case.
 
-A 0-constructor of sort $S_i$ on a specification $s : \Spec$ is given
-by a functor $F : \Alg_s \to S_i$ such that
-$t_i \circ F = t_i \circ \bar{U}$. The algebras we are interested in
-are dialgebras $(X : \Alg_s) \times (\theta : S_i(FX, \bar{U}X))$ such
-that $t_i \theta = \id_{t_i (\bar{U}X)}$.
+  A 0-constructor of sort $S_i$ on a specification $s : \Spec$ is
+  given by a functor $F : \Alg_s \to S_i$ such that
+  $t_i \circ F = t_i \circ \bar{U}$. The algebras we are interested in
+  are dialgebras $(X : \Alg_s) \times (\theta : S_i(FX, \bar{U}X))$
+  such that $t_i \theta = \id_{t_i (\bar{U}X)}$.
 
-Let $(X,\theta), (Y,\rho) : | \dialgcat{F}{\bar{U}} |$, then by the
-induction hypothesis we have that the projections map
-$\bar{U}(X \times Y) \to \bar{U}X \times \bar{U}Y$ has an inverse
-$\phi$. We can define the algebra structure on $X \times Y$ as
-follows:
-$$
-\xymatrix{
-F(X \times Y) \ar[r] &
-FX \times FY \ar[ld]_{\theta \times \rho} \\
-\bar{U}X \times \bar{U}Y \ar[r]^{\phi} &
-\bar{U}(X \times Y)
-}
-$$
+  Let $(X,\theta), (Y,\rho) : | \dialgcat{F}{\bar{U}} |$, then by the
+  induction hypothesis we have that the projections map
+  $\bar{U}(X \times Y) \to \bar{U}X \times \bar{U}Y$ has an inverse
+  $\phi$. We can define the algebra structure on $X \times Y$ as
+  follows:
+  $$
+  \xymatrix{ F(X \times Y) \ar[r] &
+    FX \times FY \ar[ld]_{\theta \times \rho} \\
+    \bar{U}X \times \bar{U}Y \ar[r]^{\phi} & \bar{U}(X \times Y) }
+  $$
 
-If $t_i\ \theta = \id_{t_i (\bar{U}X)}$ and
-$t_i\ \rho = \id_{t_i (\bar{U}Y)}$, then the composite will also
-satisfy this property, hence we are done. By the construction of
-products, the forgetful functor out of the new category of algebras
-preserves products.
+  If $t_i\ \theta = \id_{t_i (\bar{U}X)}$ and
+  $t_i\ \rho = \id_{t_i (\bar{U}Y)}$, then the composite will also
+  satisfy this property, hence we are done. By the construction of
+  products, the forgetful functor out of the new category of algebras
+  preserves products.
 
-Equalisers are constructed in an analogous fashion.
+  Equalisers are constructed in an analogous fashion.
 
-For 1-constructors the situation is also similar: we have to appeal to
-the $\bar{U}$ preserving the limits and have to use the fact that an
-equality between dependent pairs is equivalent to a dependent pair of
-equalities.
+  For 1-constructors the situation is also similar: we have to appeal
+  to the $\bar{U}$ preserving the limits and have to use the fact that
+  an equality between dependent pairs is equivalent to a dependent
+  pair of equalities.
 \end{proof}
 
-Together with Lemmas~\ref{thm:initToSec} and \ref{thm:secToInit}, this
-immediately gives the main theorem of this section:
+Together with \cref{initiality-to-section} and
+\cref{section-to-initiality}, this immediately gives the main theorem
+of this section:
 
 \begin{theorem}
 \label{thm:main}
@@ -338,6 +403,5 @@ immediately gives the main theorem of this section:
 In particular, this means that when implementing or formalising
 quotient inductive-inductive types, one can restrict attention to the
 conceptually simpler notion of initial algebra.
-
 
 \section{Deriving the induction principle}

@@ -3,10 +3,11 @@
 \bibliographystyle{plain}
 
 \usepackage{hyperref}
-\usepackage{cleveref}
 \usepackage{xspace}
 \usepackage{todonotes}
 \usepackage{amsmath,amsthm,amssymb,stmaryrd}
+\usepackage{cleveref} % load cleveref /after/ amsthm to distinguish between different theorem headings
+\usepackage{bbold} % for blackboard bold numeral 1
 \usepackage{url}
 \usepackage[pdftex, all]{xy}
 \usepackage{environ} % for data type decl environment, since align* doesn't play nice with newenvironment
@@ -19,7 +20,7 @@
 \newcommand{\ie}{i.e.\xspace}
 
 % Propositions, theorems, corollaries, etc.
-\newtheorem{theorem}{Theorem}
+\newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \theoremstyle{definition}
@@ -154,6 +155,7 @@
 \newcommand{\id}{\mathsf{id}}
 \newcommand{\algcat}[1]{#1\mathsf{-alg}}
 \newcommand{\dialgcat}[2]{(#1,#2)\mathsf{-dialg}}
+\newcommand{\termcat}{\mathbb{1}}
 
 % Sorts
 \newcommand{\Sorts}{\AgdaDatatype{\mathsf{Sorts}}}
