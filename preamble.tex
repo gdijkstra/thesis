@@ -38,6 +38,10 @@
 \newcommand{\data}{\AgdaKeyword{data}}
 \newcommand{\where}{\AgdaKeyword{where}}
 
+% Primitives
+\newcommand{\unitty}{\AgdaPrimitiveType{1}}
+\newcommand{\unitval}{\AgdaFunction{\mathsf{tt}}}
+
 % Universes
 \newcommand{\Set}{\AgdaPrimitiveType{\mathsf{Set}}}
 \newcommand{\Type}{\AgdaPrimitiveType{\mathsf{Type}}}
@@ -49,6 +53,7 @@
 % Data type declaration environment and commands
 \newcommand{\sortname}[1]{&\data\ #1}
 \newcommand{\sortnamety}[2]{\sortname{#1} : #2}
+\newcommand{\functy}[2]{&#1 : #2}
 \newcommand{\constr}[2]{&\ \ \ \ #1 : #2}
 
 \NewEnviron{datatype}[2]{%
@@ -123,7 +128,6 @@
 \newcommand{\treerelnode}{\AgdaInductiveConstructor{\mathsf{rel-node}}}
 
 % Syntax of type theory
-
 \newcommand{\ttconty}{\AgdaDatatype{\mathsf{Con}}}
 \newcommand{\tttyty}{\AgdaDatatype{\mathsf{Ty}}}
 
@@ -140,9 +144,8 @@
 
 % Arbitrary inductive type T
 \newcommand{\Tty}{\AgdaDatatype{T}}
-
-% Categories of algebras
-\newcommand{\Alg}{\AgdaDatatype{\mathsf{Alg}}}
+\newcommand{\Ta}{\AgdaInductiveConstructor{a}}
+\newcommand{\Tb}{\AgdaInductiveConstructor{b}}
 
 % Families
 \newcommand{\Fam}{\AgdaFunction{\mathsf{Fam}}}
@@ -152,14 +155,23 @@
 % Categories
 \newcommand{\Cat}{\mathsf{Cat}}
 \newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Dd}{\mathcal{D}}
 \newcommand{\id}{\mathsf{id}}
 \newcommand{\algcat}[1]{#1\mathsf{-alg}}
 \newcommand{\dialgcat}[2]{(#1,#2)\mathsf{-dialg}}
 \newcommand{\termcat}{\mathbb{1}}
+\newcommand{\Func}[2]{#1 \Rightarrow #2}
 
 % Sorts
-\newcommand{\Sorts}{\AgdaDatatype{\mathsf{Sorts}}}
+\newcommand{\sortsty}{\AgdaDatatype{\mathsf{Sorts}}}
 \newcommand{\Ss}{\mathcal{S}}
 \newcommand{\SortCat}[1]{\AgdaFunction{\llbracket}\ #1\ \AgdaFunction{\rrbracket}}
-\newcommand{\nil}{\AgdaInductiveConstructor{\mathsf{nil}}}
-\newcommand{\Spec}{\AgdaDatatype{\mathsf{Spec}}}
+\newcommand{\sortsnil}{\AgdaInductiveConstructor{\mathsf{nil}}}
+\newcommand{\sortssnoc}{\AgdaInductiveConstructor{\mathsf{snoc}}}
+
+% Spec
+\newcommand{\specty}{\AgdaDatatype{\mathsf{Spec}}}
+\newcommand{\specnil}{\AgdaInductiveConstructor{\mathsf{nil}}}
+\newcommand{\specsnoc}{\AgdaInductiveConstructor{\mathsf{snoc}}}
+\newcommand{\Alg}{\AgdaFunction{\mathsf{Alg}}}
+\newcommand{\Und}{\AgdaFunction{\mathsf{U}}}

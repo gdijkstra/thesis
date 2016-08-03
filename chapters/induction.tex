@@ -225,13 +225,13 @@ sorts. We will show that this category has the required limits:
 
 \begin{lemma}
 \label{sorts-products}
-  For each sort $\Ss : \Sorts$, the category $\SortCat{\Ss}$ has
+  For each sort $\Ss : \sortsty$, the category $\SortCat{\Ss}$ has
   products.
 \end{lemma}
 
 \begin{proof}
   We proceed by induction on the specification of sorts
-  $\Ss : \Sorts$.  If $\Ss = \nil$, then $\SortCat{\Ss} = \termcat$,
+  $\Ss : \sortsty$.  If $\Ss = \sortsnil$, then $\SortCat{\Ss} = \termcat$,
   which trivially satisfies our criteria.
 
   In the induction step case, we have $\SortCat{\Ss} = S_i$ for a
@@ -289,13 +289,13 @@ $R_i\ p\ x$.
 
 \begin{lemma}
 \label{sorts-equalisers}
-  For each sort $\Ss : \Sorts$, the category $\SortCat{\Ss}$ has
+  For each sort $\Ss : \sortsty$, the category $\SortCat{\Ss}$ has
   equalisers.
 \end{lemma}
 
 \begin{proof}
   As before, we proceed by induction on the specification of sorts
-  $\Ss : \Sorts$.  If $\Ss = \nil$, then $\SortCat{\Ss} = \termcat$,
+  $\Ss : \sortsty$.  If $\Ss = \sortsnil$, then $\SortCat{\Ss} = \termcat$,
   which trivially satisfies our criteria.
 
 
@@ -322,7 +322,7 @@ $R_i\ p\ x$.
 Combining this we get:
 
 \begin{theorem}
-  For each sort $\Ss : \Sorts$, the category $\SortCat{\Ss}$ has
+  For each sort $\Ss : \sortsty$, the category $\SortCat{\Ss}$ has
   finite limits.
 \end{theorem}
 
@@ -331,24 +331,24 @@ constructor, we also need the category of algebras to have finite
 products.
 
 \begin{lemma}[Limits in the category of algebras]
-  For each sort $\Ss : \Sorts$ and specification $s : \Spec$, the
+  For each sort $\Ss : \sortsty$ and specification $s : \specty$, the
   category of algebras $\Alg_s$ has products and
   equalisers. Furthermore, the forgetful functor
   $U_s : \Alg_s \to \SortCat{\Ss}$ preserves finite limits.
 \end{lemma}
 \begin{proof}
-  We prove both properties simultaneously by induction on $s : \Spec$.
+  We prove both properties simultaneously by induction on $s : \specty$.
   For the empty quotient inductive-inductive type specification, the
   first statement is Lemma~\ref{thm:lim-sorts}, and the forgetful
   functor of the category of algebras into the category of sorts is
   the identity functor, which trivially preserves limits. By the way
   the limits here are constructed, the functor $t_i : S_i \to S_{i-1}$
   also preserves them. This means that if we have a forgetful functor
-  $U : \Alg_s \to \Ss$ for some $s : \Spec$, then for any
+  $U : \Alg_s \to \Ss$ for some $s : \specty$, then for any
   $S_i \in \Ss$, the extension $\bar{U} : \Alg_s \to S_i$ of $U$ also
   preserves products and equalisers.
 
-  For the induction step case, we have a specification $s : \Spec$
+  For the induction step case, we have a specification $s : \specty$
   such that $\Alg_s : \Cat$ has products and equalisers and the
   forgetful functor $U : \Alg_s \to \Ss$ preserves them. To define a
   constructor on $s$, we need to specify its sort first. Suppose we
@@ -358,7 +358,7 @@ products.
   done: adding constructors to an object in $1$ does not do
   anything. In the remainder we will assume the latter is the case.
 
-  A 0-constructor of sort $S_i$ on a specification $s : \Spec$ is
+  A 0-constructor of sort $S_i$ on a specification $s : \specty$ is
   given by a functor $F : \Alg_s \to S_i$ such that
   $t_i \circ F = t_i \circ \bar{U}$. The algebras we are interested in
   are dialgebras $(X : \Alg_s) \times (\theta : S_i(FX, \bar{U}X))$
@@ -395,7 +395,7 @@ of this section:
 
 \begin{theorem}
 \label{thm:main}
-  For each sort $\Ss : \Sorts$ and specification $s : \Spec$, let $X$
+  For each sort $\Ss : \sortsty$ and specification $s : \specty$, let $X$
   be an object in the category of algebras $\Alg_s$. Then $X$ is
   initial if and only if $X$ satisfies the section principle. \qed
 \end{theorem}
