@@ -24,15 +24,20 @@ Describing inductive definitions with such constructors is not
 something we can do with a single endofunctor on an appropriately
 chosen category. Instead of having one functor, we need a functor for
 every constructor. The domain of the $n$-th functor will then be the
-``category of algebras of all previous constructors''. To illustrate
-this idea, we consider the following example (which we can easily show
-to be equivalent to the booleans):
-%
-\begin{datatype}{\Tty}{\Type}
-  \constr{\Ta}{\unitty \to \Tty} \\
-  \constr{\Tb}{(t : \Tty) \times \Ta\ \unitval = t \to \Tty}
-\end{datatype}
-%
+``category of algebras of all previous constructors''. 
+
+\begin{example}
+  \label{silly-type}
+  To illustrate this idea, we consider the following example (which we
+  can easily show to be equivalent to the booleans):
+  % 
+  \begin{datatype}{\Tty}{\Type}
+    \constr{\Ta}{\unitty \to \Tty} \\
+    \constr{\Tb}{(t : \Tty) \times \Ta\ \unitval = t \to \Tty}
+  \end{datatype}
+  % 
+\end{example}
+
 The first constructor $\Ta$ can be described as being an $F_0$-algebra
 structure on $\Tty$, with $F_0 : \Type \to \Type$ being defined as
 $F_0 X \ddefeq \unitty$. The arguments of $\Tb$ are described by the
@@ -49,6 +54,7 @@ $(F_1,U_0)$-\emph{dialgebra}~\cite{Hagino1987} structure on
 $(\Tty,\Ta) : \algcat{F_0}$.
 %
 \begin{definition}
+  \label{dialg}
   Let $F, G : \Cc \to \Dd$ be functors. The category $\dialgcat{F}{G}$ has
   as objects pairs $(X, \theta)$ where $X : |\Cc|$ and $\theta : F X \to
   G X$. A morphism from $(X, \theta)$ to $(Y, \rho)$ is a morphism $f : X
@@ -61,6 +67,11 @@ $(\Tty,\Ta) : \algcat{F_0}$.
   $$
 \end{definition}
 %
+
+As $\specty$ is essentially a list type, we will use list notation for
+its values, \eg we denote $\specsnoc\ (\specsnoc\ F_0\ \specnil)\ F_1$
+as $[F_0,F_1]$.
+
 Any dialgebra category $\dialgcat{F}{G}$ comes with a forgetful
 functor $U : \dialgcat{F}{G} \to \Cc$ which projects out the carrier
 of the algebra. This means in particular that we have a forgetful
@@ -101,6 +112,7 @@ can formalise the concept $\Type$-sorted inductive-inductive
 definitions as a inductive-recursive type:
 %
 \begin{definition}
+  \label{type-sorted-spec}
   The specification of a $\Type$-sorted inductive-inductive definition
   and its category of algebras and underlying carrier functor is given
   by the following inductive-recursive
@@ -133,21 +145,79 @@ definitions as a inductive-recursive type:
   a dialgebra.
 \end{definition}
 
-% \begin{example}
-%   The example in \eqref{eq:silly-T} can be represented by the
-%   specification $[F_0, F_1]$, where $F_0 : \Type \to \Type$ is defined by $F_0\ X \ddefeq 1$ and $F_1 : \Alg_{[F_0]} \to \Type$ is defined by
-%   \[
-%     F_1\ (X, a) \ddefeq (x : X) \times (a\ \ast = x) \enspace .
-%   \]
-%   An object in $\Alg_{[F_0]}$ consists of a set $X : \Type$ and elements $a : 1 \to X$ and $b : ((x : X) \times (a\ \ast = x)) \to X$.
-
-% \end{example}
+\begin{example}
+  The example in \cref{silly-type} can be represented by the
+  specification $[F_0, F_1]$ where $F_0$ and $F_1$ are the same
+  functors as before, as we have that $\Type \defeq \Alg_{[]}$,
+  $\algcat{F_0} \defeq \Alg_{[F_0]}$ and
+  $\dialgcat{F_1}{U_0} \defeq \Alg_{[F_0,F_1]}$.
+\end{example}
 
 \subsection{Avoiding induction-recursion}
 
+The type of specifications in \cref{type-sorted-spec} is given
+inductive-recursively. Intuitively the type is just a snoc-list of
+functors. The induction-recursion allows us to succinctly make sure
+that the domain of the functors is always a category of algebras. We
+can avoid induction-recursion by separately defining the snoc-list of
+functors and a predicate on that list that ensures the domain of the
+functors is correct:
 
+\begin{definition}
+  % 
+  \begin{datatype}{\specaltty}{\Type}
+    \constr{\specaltnil}{\specaltty} \\
+    \constr{\specaltsnoc}{\specaltty \to (\Cc : \Cat)\ (\Func{\Cc}{\Type}) \to \specaltty}
+  \end{datatype}
+  % 
+  On this type, we define a predicate mutually with its interpretation
+  function $\Algalt$ with forgetful functor $\Undalt$:
+  %
+  \begin{sorts}
+    \functy{\specaltiscorrect}{\specaltty \to \Type} \\
+    \functy{\Algalt}{(s : \specaltty) \times (\specaltiscorrect\ s) \to \Cat} \\
+    \functy{\Undalt}{(s : \specaltty) \times (p : \specaltiscorrect\ s) \to \Func{\Algalt_{(s,p)}}{\Type}}
+  \end{sorts}
+  %
+  where
+  %
+  \begin{align*}
+    \specaltiscorrect\ \specaltnil &\ddefeq \unitty \\
+    \specaltiscorrect\ (\specaltsnoc\ s\ \Cc\ F) &\ddefeq (p : \specaltiscorrect) \times (\Cc = \Algalt_{(s,p)})
+  \end{align*}
+  %
+  The definitions of $\Alg'$ and $\Und'$ are similar to the previous
+  definitions: we can pattern match on the equality proofs we get from
+  $\specaltiscorrect$ and then use the previous definitions.
+\end{definition}
+
+\begin{remark}
+  The mutual definition of $\specaltiscorrect$, $\Alg'$ and $\Und'$
+  can be avoided by combining all three definitions into one function
+  with all its arguments and result types combined in a big
+  $\Sigma$-type.
+\end{remark}
+
+\begin{proposition}
+  The types $\specty$ and $(s : \specaltty) \times \specaltiscorrect\ s$ are equivalent.
+\end{proposition}
+
+\begin{proof}
+  This is a straightforward proof by induction on the types involved.
+\end{proof}
 
 \subsection{Coherence issues}
+
+So far we have not given a precise definition of $\dialgcat{F}{G}$ for
+some functors $F, G : \Cc \to \Dd$. In \cref{dialg}, we have defined
+the category its objects and morphisms. The objects are defined in
+terms of objects from $\Cc$ and morphisms from $\Dd$. Morphisms are
+defined in terms of morphisms in $\Cc$ and $\Dd$ along with equalities
+between them. If we are only interested in objects and morphisms of
+$\dialgcat{F}{G}$, we need to know what the objects and morphisms of
+$\Cc$ and $\Dd$ are and the actions of $F$ and $G$ on those. Once we
+go beyond morphisms, we run into trouble.
+
 
 
 \section{Dependent sorts}
