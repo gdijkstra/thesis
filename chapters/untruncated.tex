@@ -1,0 +1,159 @@
+\chapter{Moving to an untruncated setting}
+
+\section{Sort categories}
+
+The categories $\Type$ and $\Fam$ are satisfy the category laws and
+their (higher) coherences definitionally. Whether a sorts category
+$\SortCat{s}$ given by a $s : \sortsty$ depends on the functors in the
+list $s$. Looking at the definition of the sorts categories, if all
+the functors involved satisfy the functor laws definitionally then the
+resulting categories will be strict as well.
+
+Although we are not able to internally define the type of strict
+functors, there is a definable class of functors that happen to be
+strict: containers.
+
+\begin{definition}
+  A \emph{container} on $\Type$ is a type of \emph{shapes} $S : \Type$
+  along with a family of \emph{positions} $P : S \to \Type$, denoted
+  as $\cont{S}{P}$.
+\end{definition}
+
+\begin{definition}
+  The \emph{extension} of a container $\cont{S}{P}$ is a functor
+  $\context{\cont{S}{P}} : \Func{\Type}{\Type}$, with its action on
+  objects defined as
+  $\context{\cont{S}{P}}_0\ X \ddefeq (s : S) \times (P\ s \to X)$ and
+  its action on morphisms as
+  $\context{\cont{S}{P}}_1\ f \ddefeq \lambda (s , t) . (s , f \circ
+  t)$
+\end{definition}
+
+Looking at the action on morphisms of a container, we see that it is
+defined in terms of composition in $\Type$, so the functor laws
+translate to the category laws of $\Type$, hence they are satisfied
+strictly.
+
+However, to define the category of sorts, we need not only
+endofunctors on $\Type$ but also functors with as its domain another
+category of sorts. We can generalise the notion of containers as
+follows:
+
+\begin{definition}
+  A \emph{generalised container} on a category $\Cc$ is a type of
+  \emph{shapes} $S : \Type$ along with a family of \emph{positions}
+  $P : S \to | \Cc | $, denoted as $\cont{S}{P}$.
+\end{definition}
+
+\begin{definition}
+  The \emph{extension} of a generalised container $\cont{S}{P}$ on
+  $\Cc$ is a functor $\context{\cont{S}{P}} : \Func{\Cc}{\Type}$, with
+  its action on objects defined as
+  $\context{\cont{S}{P}}_0\ X \ddefeq (s : S) \times (\Cc(P\ s, X))$
+  and its action on morphisms as
+  $\context{\cont{S}{P}}_1\ f \ddefeq \lambda (s , t) . (s , f \circ
+  t)$
+\end{definition}
+
+As before, the functor laws of a container depend on the category laws
+of the domain of the functor. If we have a definition of a sort
+category in which all the functors are given as containers, the
+resulting category will satisfy the category laws strictly.
+
+
+\section{Categories of algebras}
+
+So far we have not given a precise definition of $\dialgcat{F}{G}$ for
+some functors $F, G : \Cc \to \Dd$. In \cref{dialg}, we have defined
+the category its objects and morphisms. The objects are defined in
+terms of objects from $\Cc$ and morphisms from $\Dd$. Morphisms are
+defined in terms of morphisms in $\Cc$ and $\Dd$ along with equalities
+between them. If we are only interested in objects and morphisms of
+$\dialgcat{F}{G}$, we need to know what the objects and morphisms of
+$\Cc$ and $\Dd$ are and the actions of $F$ and $G$ on those. Once we
+go beyond morphisms, we run into trouble.
+
+To illustrate these issues, we will look at the definition of the
+$\dialgcat{F}{G}$ in detail. 
+
+\subsection{Identity morphisms}
+
+Given an object $(X,\theta) : | \dialgcat{F}{G} |$, we define the
+identity morphism
+$(\id_\Cc\ X , \id_0) : \dialgcat{F}{G}((X,\theta),(Y,\theta))$ with
+$\id_0$ defined a:
+$$
+\xymatrix{
+G\ \id_\Cc \circ \theta
+\ar@{-}[rr]
+\ar@{-}[d]
+&
+&\theta \circ F\ \id_\Cc
+\ar@{-}[d]
+\\
+\id_\Dd \circ \theta
+\ar@{-}[dr]
+&
+&\theta \circ \id_\Dd
+\ar@{-}[dl]
+\\
+&\theta
+&
+}
+$$
+
+\subsection{Composition}
+
+$$
+\xymatrix{
+G\ (g \circ f) \circ \theta
+\ar@{-}[r]
+\ar@{-}[d]
+&\zeta \circ F(g \circ f)
+\ar@{-}[d]
+\\
+(G\ g \circ G\ f) \circ \theta
+\ar@{-}[d]
+&\zeta \circ (F\ g \circ F\ f)
+\ar@{-}[d]
+\\
+G\ g \circ (G\ f \circ \theta)
+\ar@{-}[d]
+&(\zeta \circ F\ g) \circ F\ f
+\ar@{-}[d]
+\\
+G\ g \circ (\rho \circ F\ f)
+\ar@{-}[r]
+&(G\ g \circ \rho) \circ F\ f
+}
+$$
+
+\subsection{Identity laws}
+
+\begin{proposition}
+  Let $(f,f_0),(g,g_0)$ be two dialgebra morphisms
+  $(X,\theta) \to (Y,\rho)$ in $\dialgcat{F}{G}$, then we have the
+  following equivalence of equalities:
+  \begin{align*}
+    ((f,f_0) = (g,g_0)) &= &(p : f = g)\\
+    &\times &(p_0 : 
+              \xymatrix{
+              G\ f \circ
+              \ar@{-}[r]^{f_0}
+              \ar@{-}[d]_{G\ p \circ \theta}
+              &\rho \circ F\ f
+              \ar@{-}[d]^{\rho \circ F\ p}
+              \\
+              G\ g \circ \theta
+              \ar@{-}[r]_{g_0}
+              &\rho \circ F\ g
+              })
+  \end{align*}
+\end{proposition}
+
+\begin{proof}
+  proof
+\end{proof}
+
+\subsection{Associativity}
+
