@@ -12,6 +12,7 @@
 \usepackage[pdftex, all]{xy}
 \usepackage{environ} % for data type decl environment, since align* doesn't play nice with newenvironment
 \usepackage{xifthen} % for data type decl hackery, detect empty parameters
+\usepackage{graphicx} % for \naturalto hackery
 
 % TODOs
 \newcommand{\todoi}[1]{\todo[inline]{#1}}
@@ -156,6 +157,16 @@
 \newcommand{\proj}{\AgdaFunction{\mathsf{proj}}}
 
 % Categories
+% From: http://tex.stackexchange.com/questions/140978/arrow-accented-with-a-dot-natural-transformation
+\newcommand{\naturalto}{%
+  \mathrel{\vbox{\offinterlineskip
+    \mathsurround=0pt
+    \ialign{\hfil##\hfil\cr
+      \normalfont\scalebox{1.2}{.}\cr
+      $\rightarrow$\cr}
+  }}%
+}
+
 \newcommand{\Cat}{\mathsf{Cat}}
 \newcommand{\Aa}{\mathcal{A}}
 \newcommand{\Cc}{\mathcal{C}}
@@ -165,6 +176,7 @@
 \newcommand{\dialgcat}[2]{(#1,#2)\mathsf{-dialg}}
 \newcommand{\termcat}{\mathbb{1}}
 \newcommand{\Func}[2]{#1 \Rightarrow #2}
+\newcommand{\Nat}[2]{#1 \naturalto #2}
 
 % Sorts
 \newcommand{\sortsty}{\AgdaDatatype{\mathsf{Sorts}}}
@@ -190,3 +202,12 @@
 % Containers
 \newcommand{\cont}[2]{#1 \lhd #2}
 \newcommand{\context}[1]{\llbracket #1 \rrbracket}
+
+% Rel-sorted example inductive type (A,B)
+\newcommand{\Aty}{\AgdaDatatype{A}}
+\newcommand{\Aco}{\AgdaInductiveConstructor{c_0}}
+\newcommand{\Aci}{\AgdaInductiveConstructor{c_1}}
+
+\newcommand{\Bty}{\AgdaDatatype{B}}
+\newcommand{\Bcii}{\AgdaInductiveConstructor{c_2}}
+\newcommand{\Bciii}{\AgdaInductiveConstructor{c_3}}

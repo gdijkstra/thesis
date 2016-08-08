@@ -284,7 +284,7 @@ specification the list $[R_0]$ with $R_0\ x \ddefeq \natty$.
 \end{example}
 
 \begin{example}
-  \label{ex:rel}
+  \label{rel-sorts}
   Similarly, the category $\Rel$ can be represented by the list
   $[R_0, R_1]$ with
   \begin{itemize}
@@ -337,6 +337,146 @@ giving a category $\Aa : \Cat$ along with a proof of $\Aa \in \Ss$.
 \subsection{Makkai's dependent sorts}
 
 \section{Categories of algebras}
+
+\subsection{A $\Rel$-sorted quotient inductive-inductive type}
+
+As a warm-up, in this section we will give an example of how the
+specification and the categories of algebras look like for the
+following quotient inductive-inductive definition:
+%
+\begin{sorts}
+  \sortnamety{\Aty}{\Set} \\
+  \sortnamety{\Bty}{\Aty \to \Aty \to \Set}
+\end{sorts}
+%
+\begin{datatype}{\Aty}{}
+  \constr{\Aco}{\Aty} \\
+  \constr{\Aci}{\Aty}
+\end{datatype}
+%
+\begin{datatype}{\Bty}{}
+  \constr{\Bcii}{\natty \to \Bty\ \Aco\ \Aci} \\
+  \constr{\Bciii}{(n : \natty) \to \Bcii\ n = \Bcii\ (n+1)}
+\end{datatype}
+
+The sorts of the definition are
+$(A : \Set) \times (B : A \to A \to \Set)$: the category of sorts is
+the category $\Rel$. In \cref{rel-sorts} we saw how this can be
+represented as a list of functors. This category is also the first
+category of algebras, \ie algebras with no constructors, and will as
+such also be referred to as $\Alg_0$.
+
+\subsubsection{Specifying constructors}
+The first constructor $\Aco$ has no arguments and is of sort
+$\Aty : \Set$. Its arguments can be described by the functor
+$F_0 : \Func{\Rel}{\Set}$ with $F_0\ (X,R) \ddefeq \unitty$. The
+category of algebras for the first constructor is then
+$\dialgcat{F_0}{t_1}$, where $t_1 : \Func{\Rel}{\Set}$ is the
+forgetful functor. Strictly speaking, an $(F_0,t_1)$-dialgebra
+structure on a relation $(X,R)$ is a function $1 \to X$, but for this
+example we will work with the equivalent definition
+$| \Alg_1 | \equiv (X : \Set) \times (R : X \to X \to \Set) \times
+(\theta_0 : X)$.
+Morphisms $(X,R,\theta_0) \to (Y,S,\rho_0)$ consist of:
+%
+\begin{itemize}
+\item $f : X \to Y$
+\item $g : (x\ y : X) \to R\ x\ y \to S\ (f\ x)\ (f\ y)$
+\item $f_0 : f\ \theta_0 = \rho_0$
+\end{itemize}
+%
+We see that we get a morphism in $\Rel$ along with a computation rule
+that tells us that the morphism in $\Rel$ preserves the
+$(F_0,t_1)$-dialgebra structure.
+%
+Note that $F_0$ is a functor from $\Rel$ to $\Set$ and is not an
+endofunctor on $\Set$: the constructor may refer to elements of fibres
+of the relation $X \to X \to \Set$ being defined. The category
+$\Alg_1$ also comes with a forgetful functor $U_1 : \Func{\Alg_1}{\Alg_0}$
+defined by $U_1 ((X,R),\theta_0) \ddefeq (X,R)$ --- in fact, every
+category of algebras $\Alg_{i+1}$ has a similarly defined forgetful
+functor $U_{i+1} : \Func{\Alg_{i+1}}{\Alg_0$}.
+
+For the second constructor $\Aci$, the specification is largely
+similar: it is given by the functor $F_1 : \Func{\Alg_1}{\Set}$
+defined by $F_1\ (X, R, \theta_0) \ddefeq \unitty$.
+
+The third constructor $\Bcii$ maps into a different sort, hence its
+definition will be slightly different. We want the resulting category
+$\Alg_3$ of algebras for constructors $\Aco, \Aci, \Bcii$ to have
+objects
+$((X,R) : \Rel) \times (\theta_0 : X) \times (\theta_1 : X) \times
+(\theta_2 : \natty \to R\ \theta_0\ \theta_1)$,
+and we want morphisms
+$((X,R),\theta_0,\theta_1,\theta_2) \to ((Y,S),\rho_0,\rho_1,\rho_2)$
+to consist of
+$(f,g,f_0,f_1) :
+\Alg_2(((X,R),\theta_0,\theta_1),((Y,S),\rho_0,\rho_1))$
+together with an equality
+$$
+g_2 : (n : \natty)  \to \pathover{S}{(f_0,f_1)}{g\ \theta_0\ \theta_1\ (\theta_2\ n)}{\rho_2\ n}
+$$
+%WAS: g_2 : (x\ y: X) (n : \natty)  \to g\ x\ y\ (\theta_2\ n) = \rho_2\ n
+% -- CHECK new version is correct!
+Note how we have to use the equalities $f_0 : f\ \theta_0 = \rho_0$ and
+$f_1 : f\ \theta_1 = \rho_1$ to reconcile the types of
+$g\ \theta_1\ \theta_2\ (\theta_2\ n) : S\ (f\ \theta_0)\ (f\
+\theta_1)$ and $\rho_2 : S\ \rho_0\ \rho_1$.
+%
+Realising the above directly as a dialgebra category is a bit
+tricky. However, we can rewrite the type of
+$\theta_2 : \natty \to R\ \theta_0\ \theta_1$ to the equivalent ``Henry
+Ford''-style type (you can have any $(x, y)$ you want, as long as it's
+$(\theta_0, \theta_1)$)\
+\[
+\theta_2' : (x\ y : X) \to \big((x = \theta_0) \times (y = \theta_1) \times \natty\big) \to R\ x\ y 
+\]
+ %
+and define the functor $F_2 : Alg_2 \to \Rel$ by
+$F_2 ((X,Y),\theta_0,\theta_1) \ddefeq (X , \lambda x\ y . (x =
+\theta_0) \times (y = \theta_1) \times \natty)$
+in order to see that $\theta_2'$ is a $(F_2,U_2)$-dialgebra. The
+objects in this category give us ``too much'': such a dialgebra gives
+us a morphism $F_2((X,Y),\theta_0,\theta_1) \to (X,Y)$ in $\Rel$, so
+we also get a function $X \to X$. We can solve this problem by adding
+an equation that the function $X \to X$ need be the identity. $\Alg_3$
+is therefore not a category of dialgebras directly, but an equaliser
+of one, as we will elucidate later on in some section.
+
+The fourth constructor $\Bciii$ is a path constructor. Hence, not only
+do we need to supply a functor $F_3 : \Func{\Alg_3}{\Alg_0}$ to
+specify the arguments, but we also need to specify the endpoints of
+the path. Just as for $\Bcii$, we will first need to rewrite the type
+of the constructor. We denote again by $\theta_2'$ the Henry
+Ford-version of $\theta_2$.  We then have that the type
+$(n : \natty) \to \theta_2\ n = \theta_2\ (n+ 1)$ is equivalent to the
+type
+%
+\begin{multline*}
+(x\ y : X) \to \big((p : x =  \theta_0) \times (q : y = \theta_1) \times (n : \natty)\big) \\
+\ \ \ \ \to \theta_2'\ x\ y\ p\ q\ n = \theta_2'\ x\ y\ p\ q\ (n+1)
+\end{multline*}
+%
+The endpoints can then be specified as natural transformations
+$l, r : \Nat{F_3}{U_3}$, where $F_3 : \Func{\Alg_3}{\Rel}$ is defined in a
+way similar to $F_2$. Given an algebra $A : \Alg_3$, $l_A$ and $r_A$
+both define a morphism in
+$\Rel$. $l_{((X,Y),\theta_0,\theta_1,\theta_2)}$ and
+$r_{((X,Y),\theta_0,\theta_1,\theta_2)}$ are defined as
+$(\id_X, l^1_{((X,Y),\theta_0,\theta_1,\theta_2)})$ and
+$(\id_X,r^1_{((X,Y),\theta_0,\theta_1,\theta_2)})$ respectively, with
+%
+\begin{align*}
+&l^1_{((X,Y),\theta_0,\theta_1,\theta_2)}\ a\ b\ (p, q, n) \ddefeq \theta_2'\ a\ b\ p\ q\ n \\
+&r^1_{((X,Y),\theta_0,\theta_1,\theta_2)}\ a\ b\ (p, q, n) \ddefeq \theta_2'\ a\ b\ p\ q\ (n+1)
+\end{align*}
+%
+By function extensionality, we can then say the category of algebras
+$\Alg_3$ has objects $(X : | \Alg_2 |) \times (\theta_3 : l_X = r_X)$,
+\ie it is a equaliser category. The morphisms are just morphisms in
+$\Alg_2$ with no extra structure. For higher inductive types, one
+usually expects a path computation rule for any path constructor, but
+as we are working with sets, equalities between paths are trivial.
 
 \subsection{0-constructors}
 
