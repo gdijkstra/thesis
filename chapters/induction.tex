@@ -407,3 +407,122 @@ quotient inductive-inductive types, one can restrict attention to the
 conceptually simpler notion of initial algebra.
 
 \section{Deriving the induction principle}
+
+If we unfold the section principle for our categories of algebras, we
+will not end up with a very natural induction principle. One of the
+key features of type theory is that we have special notation for
+families. If we want to define a predicate on a type $X$, the most 
+natural way to do it is usually to define a family $X \to \Set$, not
+to define another type $Y$ with a function $Y \to X$. 
+
+Since our categories of sorts and algebras are built out of types, we
+can try and derive a notion of families in these categories. In
+$\Set$, we have the equivalence, for any $X : \Set$:
+$$
+(X \to \Set) \simeq (Y : \Set) \times (p : Y \to X)
+$$
+where the function left to right is defined as
+$\lambda P . ((x : X) \times P\ x , \pi_0)$, \ie we map the family to
+its ``total space'' and its projection function. The inverse operation
+is the preimage family: $(Y,p)$ is mapped to
+$\lambda x . (y : Y) \times (p\ y = x)$. 
+
+\subsection{Induction for $F$-algebras}
+If we want to derive the notion of families of $F$-algebras for some
+endofunctor $F : \Func{\Set}{\Set}$, then we proceed as follows: let
+$(X,\theta) : | \algcat{F} |$, we want to solve the equivalence for
+the type $\tau$:
+%
+\begin{align*}
+&\ \ \ \ \ \ (P : X \to \Set) \times (m : \tau) \\
+&\simeq ((Y,\rho) : | \algcat{F} |) \times ((p,p_0) : \algcat{F}((Y,\rho),(X,\theta)))  
+\end{align*}
+%
+We set $Y$ to $(x : X) \times P\ x$ and $p$ to $\pi_0$. We then have
+to simplify the type
+$(\rho : F ((x : X) \times P\ x)) \times (p_0 : \pi_0\ \circ \rho =
+\theta \circ F\ \pi_0)$, which leads us to:
+$$
+m : (x : F ((x : X) \times P\ x)) \to P\ (F\ \pi_0\ x)
+$$
+This can be simplified even further if we define the operation
+$\Box_F : (X \to \Set) \to FX \to \Set$, \ie the action of $F$ on type
+families, which has the defining equation
+$F ((x : X) \times P\ x) \simeq (x : FX) \times \Box_F\ P\
+x$. Rewriting the type of $m$ using this notation gives us:
+$$
+m : (x : FX) \times \Box_F\ P\ x \to P\ (\theta\ x)
+$$
+Intuitively the type $\Box_F\ P\ x$ is the induction hypothesis.
+
+\subsection{General framework}
+The operations we need from a category $\Cc$ to talk about families
+are as follows:
+%
+\begin{itemize}
+\item $\Fam_{\Cc} : | \Cc | \to \Type$
+\item $\total : (X : | \Cc |) \to \Fam_{\Cc}\ X \to | \Cc |$
+\item $\proj : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \Cc(\total\ X\ P, X)$
+\item $\preimage : (X : | \Cc |)\ (Y : | \Cc |)\ (p : \Cc(Y,X)) \to \Fam_{\Cc}\ X$
+\end{itemize}
+%
+The operations should also satisfy the following correctness conditions, for any $X : | \Cc |$:
+%
+\begin{itemize}
+\item for any family $P : \Fam_{\Cc}\ X$, 
+  $$\preimage\ X\ (\total\ X\ P , \proj\ X\ P) = P$$
+\item for any object $Y : | \Cc |$ with $p : \Cc(Y,X)$,
+  %
+  \begin{align*}
+  &\ \ \ \ \ \ (\total\ X\ (\preimage\ X\ (Y,p)) , \proj\ X\ (\preimage\ X\ (Y,p))) \\
+  &= (Y,p)
+  \end{align*}
+\end{itemize}
+%
+To define these operations for the sort and algebra categories, we can
+perform induction on the specification and apply the same techniques
+as we did to derive the notion of families in $\algcat{F}$.
+
+Given these operations, we can generalise the $\Box$ operator to any
+functor $F : \Func{\Cc}{\Dd}$, given we have $\Fam_{\Cc}$ and
+$\Fam_{\Dd}$: given $X : | \Cc |$ and $P : \Fam_{\Cc}\ X$,
+$\Box_F : (X : | \Cc |) \to \Fam_{\Cc} \to \Fam_{\Dd}$ is defined as:
+$$
+\Box_F\ X\ P \ddefeq \preimage_{\Dd}\ FX\ (F\ (\total_{\Cc}\ X\ P) , F\ (\proj_{\Cc}\ X\ P))
+$$
+
+Having defined families, we can then go on to generalise the notion of
+dependent functions. In $\Set$, given a family $P : X \to \Set$, a
+dependent function $(x : X) \to P\ x$ corresponds to a function
+$s : X \to (x : X) \times P\ x$ along with
+$s_0 : \pi_0 \circ s = id_X$. The function from left to right sends a
+dependent function $s$ to its graph $\lambda x . (x , s\ x)$, which is
+trivially a section. The other direction composes the section $s$ with
+$\pi_1$, but we have to transport along the proof given by $s_0$ to
+make it typecheck.
+
+To generalise dependent morphisms to a category $\Cc$, we need a family
+$\DepHom_{\Cc} : (X : | \Cc |)\ (P : \Fam_{\Cc}\ X) \to \Type$ along with
+the following operations, given an object $X : | \Cc |$ and a family
+$P : \Fam_{\Cc}\ X$:
+%
+\begin{itemize}
+\item $\grph : \DepHom\ X\ P \to \Sect\ X\ (\total\ X\ P,\proj\ X\ P)$
+\item $\snd : \Sect\ X\ (\total\ X\ P,\proj\ X\ P) \to \DepHom_{\Cc}\ X\ P$
+\end{itemize}
+%
+The correctness conditions are:
+%
+\begin{itemize}
+\item for any $f : \DepHom_{\Cc}\ X\ P$,
+  $$\snd\ X\ P\ s\ (\grph\ X\ P\ f) = f$$
+\item for any $s : \Sect\ X\ (\total\ X\ P, \proj\ X\ P)$,
+  $$\grph\ X\ P\ (\snd\ X\ P\ s) = s$$
+\end{itemize}
+%
+
+\subsection{Induction for quotient inductive-inductive definitions}
+
+\subsubsection{0-constructors}
+
+\subsubsection{1-constructors}
