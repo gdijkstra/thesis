@@ -473,15 +473,266 @@ $(\id_X,r^1_{((X,Y),\theta_0,\theta_1,\theta_2)})$ respectively, with
 %
 By function extensionality, we can then say the category of algebras
 $\Alg_3$ has objects $(X : | \Alg_2 |) \times (\theta_3 : l_X = r_X)$,
-\ie it is a equaliser category. The morphisms are just morphisms in
+\ie it is an equaliser category. The morphisms are just morphisms in
 $\Alg_2$ with no extra structure. For higher inductive types, one
 usually expects a path computation rule for any path constructor, but
 as we are working with sets, equalities between paths are trivial.
 
+\subsection{Inductive-recursive definition of specifications}
+
+We have already seen how $\Set$-sorted inductive-inductive definitions
+can be formalised. Generalising this to arbitrary quotient
+inductive-inductive definitions means that we have to generalise in
+two aspects: we have to be able to deal arbitrary sorts, as well as
+with path constructors.
+
+Let $\Ss : \sortsty$ be a specification of sorts. Recall that we have a
+predicate $\Aa \in \Ss$ that tells us that $\Aa : \Cat$ is one of the
+sort categories in $\Ss$. Specifying a constructor now requires us to
+specify a sort, which is done by using the predicate. The type of
+quotient inductive-inductive specifications is then refined to the
+following definition:
+
+\begin{definition}[Specification of quotient
+inductive-inductive types]
+The specification of a quotient inductive-inductive type and its
+category of algebras and underlying carrier functor is given by the
+following inductive-recursive definition of
+\begin{sorts}
+  \sortnamety{\specty}{\Set} \\
+  \functy{\Constr}{(s : \specty)\ (\Aa: \Cat) \to \Aa \in \Ss \to \Set} \\
+  \functy{\Alg}{\specty \to \Cat} \\
+  \functy{\Und}{(s : \specty) \to \Func{\Alg_s}{\SortCat{\Ss}}} \\
+\end{sorts}
+% 
+with
+%
+\begin{datatype}{\specty}{}
+  \constr{\specnil}{\specty} \\
+  \constr{\specsnoc}{(s : \specty) (\Aa: \Cat) (p : \Aa \in \Ss) \to \Constr\ s\ \Aa\ p \to \specty}
+\end{datatype}
+%
+where $\Constr\ s\ \Aa\ p$ is defined by recursion on $p : \Aa \in \Ss$ such that
+\begin{align*}
+&\Constr\ s\ 1\ p \ddefeq 0 \\
+&\Constr\ s\ \Aa\ p \ddefeq \Constr_0\ s\ \Aa\ p + \Constr_1\ s\ \Aa\ p
+\end{align*}
+%
+The functions $\Constr_0$, $\Constr_1$, $\Alg$ and $\Und$ will be
+defined in the remainder of this section.
+\end{definition}
+
+Let us briefly discuss the defining clauses for $\Constr\ s\ \Aa\ p$,
+which is meant to describe the data needed to specify a constructor of
+sort $\Aa$. There should not be any constructors of the trivial sort
+$\Aa = \termcat$, and if $\Aa$ is a non-trivial sort, then a
+constructor can either be a point constructor specified by
+$\Constr_0\ s\ \Aa\ p$, or a path constructor specified by
+$\Constr_1\ s\ \Aa\ p$. The next two subsections will describe the
+data needed for point and path constructors respectively.
+
 \subsection{0-constructors}
+
+Suppose we have $S_i \in \Ss$ and $s : \specty$, and we have already
+constructed
+%
+\begin{itemize}
+\item $\Alg_s : \Cat$,
+\item $U_s : \Alg_s \to \SortCat{\Ss}$ its forgetful functor, and
+\item the extension $\bar{U}_s : \Alg_s \to S_i$ of $U_s$, which we
+  get from $S_i \in \Ss$.
+\end{itemize}
+%
+To make more concrete: suppose $\Ss$ contains $n$ sorts and $s$
+describes $m$ constructors, then an object in $X : \Alg_s$ is a tuple
+$(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)$. The functor $U_s$
+gives us back all underlying carriers, \ie
+$U_s(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m) = (X_0, \hdots,
+X_n)$
+and the functor $\bar{U}_s$ further projects down to the $i$ first
+carriers $X_0, \hdots, X_i$, with
+$(X_0, \hdots, X_{i-1}) : | S_{i-1} |$ and
+\[
+X_i : R_i (X_0, \hdots, X_{i-1}) \to \Set \enspace .
+\]
+Recall that $R_i : \Func{S_{i-1}}{\Set}$ is the functor that describes how
+the family $X_i$ depends on the previous sorts $X_0, \hdots,
+X_{i-1}$. A point constructor structure on $X$ is of the form
+$$
+\theta : (x : R_i (X_0, \hdots, X_{i-1})) \to F_1\ (X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)\ x \to X_i\ x
+$$
+where
+$$
+F_1 : ((X_0,\hdots,X_n,\theta_0,\hdots,\theta_m) : | \Alg_s |) \to R_i (X_0, \hdots, X_{i-1}) \to \Set
+$$
+Note that the functor $\bar{U}_s$ can be decomposed into two parts: we
+have $\bar{U}_0 : \Alg_s \to S_{i-1}$ and
+$\bar{U}_1 : (X : \Alg_s) \to R_i\ (\bar{U}_0\ X) \to \Set$.
+$\bar{U}_0$ can also be written as $t_i \circ \bar{U}_s$, where
+$t_i : S_i \to S_{i-1}$ is the forgetful functor of $S_i$. In order
+for the point constructor specified by $F_1$ to be well-defined, \ie
+to make sense of its computation rule, we need
+$F X \ddefeq (\bar{U}_0\ X, F_1\ X)$ to be a functor
+$\Func{\Alg_s}{S_i}$.  This leads us to the definition of a point
+constructor specification:
+
+\begin{definition}
+  Given a specification $s : \specty$, a point constructor of sort
+  $S_i \in \Ss$ is specified by giving a functor
+  $F : \Func{\Alg_s}{S_i}$ such that the following commutes:
+  $$
+  \xymatrix{
+    \Alg_s \ar[r]^{F} \ar[d]_{\bar{U}_s} &S_i \ar[d]^{t_i} \\
+    S_i \ar[r]^{t_i} &S_{i-1}
+  }
+  $$
+  In other words, we have
+  $$
+  \Constr_0\ s\ S_i\ p \ddefeq (F : \Func{\Alg_s}{S_i}) \times (p : t_i \circ F = t_i \circ \bar{U}_s) \enspace .
+  $$
+\end{definition} 
+
+The fact that $F$ must satisfy the commutativity condition intuitively
+means that $F$ leaves the sorts $(X_0, \hdots, X_{i-1})$ ``untouched''.
+
+We now explain how to construct the category $\Alg_{s'}$ of algebras
+for a an specification with an additional point constructor. Suppose
+the specification $s'$ has been obtained as the extension of a
+specification $s$ by a point constructor given by a functor
+$F : \Alg_s \to S_i$, which decomposes as $F = (\bar{U}_0, F_1)$. The
+previous characterisation of a point constructor algebra structure on
+an object $X : | \Alg_s |$ can be summarised as having a dependent
+function of morphisms
+\[
+\theta : (x : R_i (\bar{U}_0\ X)) \to F_1\ X\ x \to \bar{U}_1\ X\ x
+\]
+A morphism $(X,\theta) \to (Y,\rho)$ consists of a morphism
+$f : \Alg_s(X,Y)$ along with a ``computation rule'':
+\begin{multline*}
+f_0 : (x : R_i \ (\bar{U}_0\ X))\ (y : F_1\ X\ x) \to \\ \bar{U}_1(f)\ x\ (\theta\ x\ y) = \rho\ (R_i(\bar{U}_0(f))\ x)\ (F_1(f)\ x\ y)
+\end{multline*}
+This category of algebras look similar to
+$\dialgcat{F}{\bar{U}_s}$. However, as we have seen previously, the
+category of dialgebras contains too much: morphisms there also come
+with a superfluous endomorphism in $S_{i-1}$. We want this morphism to
+be an identity morphism, which we can achieve by taking an
+equaliser. The category $\dialgcat{F}{\bar{U}_s}$ comes with two
+forgetful functors: $V$ that gives us the carrier of the algebra and
+$V^I$ that gives us algebra structure on the carrier, which is a
+morphism in $S_i$ or equivalently, an object in the arrow category
+$S_i^I$. The definition of the new category of algebras is as follows:
+
+\begin{definition}
+  Let $s' : \specty$ be the specification $s$ extended with a
+  0-constructor of sort $S_i$ given by a functor $F : \Alg_s \to S_i$
+  satisfying $t_i \circ F = t_i \circ \bar{U}_s$. The category of
+  algebras $\Alg_{s'}$ is as the following equaliser in $\Cat$:
+  \[
+  \xymatrix{
+    \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\bar{U}_s} \ar[r]^-{V} \ar[d]^-{V^I} &\Alg_s \ar[r]^-{\bar{U}_s} &S_i \ar[r]^{t_i} &S_{i-1} \ar[d]^-{\id} \\
+    &S_i^I \ar[rrr]^{t_i^I} && &S_{i-1}^I }
+  \]
+  where $e$ is the projection map of the equaliser, $t_i^I$ is the
+  functor $t_i$ lifted to a functor between the respective arrow
+  categories and $\id$ is the functor that assigns to each object the
+  identity morphism of that object.
+
+The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite:
+\[
+\xymatrix{
+    \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\bar{U}_s} \ar[r]^-{V} &\Alg_s \ar[r]^-{U_s} &\SortCat{\Ss}
+}
+\]
+\end{definition}
 
 \subsection{1-constructors}
 
+Specifying the arguments for a path constructor is done in exactly the
+same way as for a point constructor, while the endpoints of the path
+is given by natural transformations. Suppose $s : \specty$, then a path
+constructor structure of sort $S_i \in \Ss$ on an object
+$(X_0, \hdots, X_n, \theta_0,\hdots,\theta_m) : | \Alg_s |$ is of the
+form:
+\begin{align}
+\label{eq:theta}
+  \begin{split}
+    &\theta : (x : R_i (X_0, \hdots, X_{i-1})) \\
+    &\ \ \to (y : F_1\ (X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)\ x \\
+    &\ \ \to l^1_{(X_0,\hdots,X_n,\theta_0,\hdots,\theta_m)}\ x\ y =_{X_i\ x} r^1_{(X_0,\hdots,X_n,\theta_0,\hdots,\theta_m)}\ x\ y 
+  \end{split}
+\end{align}
+where
+\begin{itemize}
+\item $F_1 : (X : | \Alg_s |) \to R_i (\bar{U}_0 X) \to \Set$, such
+  that $F X \ddefeq (\bar{U}_0 X, F_1 X)$ is a functor $\Alg_s \to S_i$, and
+\item
+  $l^1, r^1 : (X : | \Cc |) (x : R_i (\bar{U}_0\ X)) (y : F_1\ X\ x)
+  \to \bar{U}_1\ X\ x$
+  such that $l_X \ddefeq (\id_{\bar{U}_0 X}, l^1)$ and
+  $r_X \ddefeq (\id_{\bar{U}_0 X}, r^1)$ are natural transformations
+  $\Nat{F}{\bar{U}_s}$.
+\end{itemize}
+Algebra morphisms $(X,\theta) \to (Y,\rho)$ are simply morphisms
+$X \to Y$ in $\Alg_s$. As we are working with sets, we do not need
+computation rules for the paths: any equation between paths is
+trivial.
+
+Summarising the above, we get to the following definition of
+1-constructor specification:
+
+\begin{definition}
+  Given a specification $s : \specty$, a 1-constructor of sort
+  $S_i \in \SortCat{\Ss}$ is specified by a functor
+  $F : \Alg_s \to S_i$ satisfying $t_i \circ F = t_i \circ \bar{U}_s$
+  and two natural transformations $\ell, r : F \to \bar{U}_s$ satisfying
+  $t_i\ \ell = t_i\ r = \id_{t_i \circ \bar{U}_s}$, \ie
+\begin{align*}
+\Constr_1\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \bar{U}_s) \\ \times (\ell : F \to \bar{U}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \bar{U}_s}) \\ \times (r : F \to \bar{U}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \bar{U}_s}) \enspace .
+\end{align*}
+\end{definition}
+
+The restriction on the natural transformations $\ell$ and $r$ is the
+same kind of restriction as the restriction on $F$: the natural
+transformations must leave the sorts below $S_i$ untouched.
+
+Note that by function extensionality, the type of $\theta$ in
+\eqref{eq:theta} is equivalent to $l^1_X = r^1_X$. Since
+$t_i\ (l\ X) = t_i\ (r\ X) = \id_{t_i \circ
+  \bar{U}}$, %: S_{i-1} (t_i(\bar{U} X), t_i (\bar{U} X))$,
+the equality $l_1\ X = r_1\ X$ of dependent functions in
+$\Set$ is equivalent to the equality $l\ X = r\ X
+$ of morphisms in
+$S_i$. We also observe that a natural transformation $\alpha : F \to
+\bar{U}$ gives rise to a functor $\hat{\alpha} : \Alg_s \to
+S_i^I$, mapping $X : | \Alg_s |$ to $\alpha_X : S_i(F\ X,\bar{U}\
+X)$. Functoriality of this functor comes from the naturality of
+$\alpha$. This leads us to the definition of the category of algebras
+for a path constructor:
+
+\begin{definition}
+  Let $s' : \specty$ be the specification
+  $s$ extended with a path constructor of sort
+  $S_i$ given by a functor $F : \Alg_s \to S_i$ satisfying $t_i \circ
+  F = t_i \circ \bar{U}_s$ and natural transformations $l, r : F \to
+  \bar{U}_s$ satisfying $t_i\ l = t_i\ r = \id_{t_i \circ
+    \bar{U}_s}$. The category of algebras
+  $\Alg_{s'}$ is defined as the following equaliser in $\Cat$:
+  \[
+  \xymatrix{
+    \Alg_{s'} \ar[r]^{e} &\Alg_s \ar@<-.5ex>[r]_-{\hat{r}} \ar@<.5ex>[r]^-{\hat{l}} &S_i^I
+  }
+  \]
+  where $e$ is the projection map of the equaliser.
+
+The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite
+\[
+\xymatrix{
+    \Alg_{s'} \ar[r]^{e} &\Alg_s \ar[r]^{U_s} &\SortCat{\Ss}
+}
+\]
+\end{definition}
+
+\subsection{Other constructors}
 
 \section{From syntax to functors}
 
