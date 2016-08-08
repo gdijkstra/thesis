@@ -322,6 +322,7 @@ $R_i\ p\ x$.
 Combining this we get:
 
 \begin{theorem}
+  \label{limits-sorts}
   For each sort $\Ss : \sortsty$, the category $\SortCat{\Ss}$ has
   finite limits.
 \end{theorem}
@@ -337,16 +338,17 @@ products.
   $U_s : \Alg_s \to \SortCat{\Ss}$ preserves finite limits.
 \end{lemma}
 \begin{proof}
-  We prove both properties simultaneously by induction on $s : \specty$.
-  For the empty quotient inductive-inductive type specification, the
-  first statement is Lemma~\ref{thm:lim-sorts}, and the forgetful
-  functor of the category of algebras into the category of sorts is
-  the identity functor, which trivially preserves limits. By the way
-  the limits here are constructed, the functor $t_i : S_i \to S_{i-1}$
-  also preserves them. This means that if we have a forgetful functor
-  $U : \Alg_s \to \Ss$ for some $s : \specty$, then for any
-  $S_i \in \Ss$, the extension $\bar{U} : \Alg_s \to S_i$ of $U$ also
-  preserves products and equalisers.
+  We prove both properties simultaneously by induction on
+  $s : \specty$.  For the empty quotient inductive-inductive type
+  specification, the first statement is \cref{limits-sorts}, and the
+  forgetful functor of the category of algebras into the category of
+  sorts is the identity functor, which trivially preserves limits. By
+  the way the limits here are constructed, the functor
+  $t_i : S_i \to S_{i-1}$ also preserves them. This means that if we
+  have a forgetful functor $U : \Alg_s \to \Ss$ for some
+  $s : \specty$, then for any $S_i \in \Ss$, the extension
+  $\bar{U} : \Alg_s \to S_i$ of $U$ also preserves products and
+  equalisers.
 
   For the induction step case, we have a specification $s : \specty$
   such that $\Alg_s : \Cat$ has products and equalisers and the
