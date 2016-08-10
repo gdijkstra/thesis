@@ -79,32 +79,40 @@ $\dialgcat{F}{G}$ in detail.
 \subsection{Identity morphisms}
 
 Given an object $(X,\theta) : | \dialgcat{F}{G} |$, we define the
-identity morphism
-$(\id_\Cc\ X , \id_0) : \dialgcat{F}{G}((X,\theta),(Y,\theta))$ with
-$\id_0$ defined as:
+identity morphism as
+$$
+\id_{\dialgcat{F}{G}}\ (X,\theta) \ddefeq (\id_\Cc\ X , \id_0)
+$$
+with $\id_0$ defined as:
 $$
 \xymatrix{
 G\ \id_\Cc \circ \theta
-\ar@{-}[rr]
-\ar@{-}[d]
+\ar@{-}[rr]^{\id_0}
+\ar@{-}[d]_{\Gid \circ \theta}
 &
 &\theta \circ F\ \id_\Cc
-\ar@{-}[d]
+\ar@{-}[d]^{\theta \circ \Fid}
 \\
 \id_\Dd \circ \theta
-\ar@{-}[dr]
+\ar@{-}[dr]_{\leftid_{\Dd}}
 &
 &\theta \circ \id_\Dd
-\ar@{-}[dl]
+\ar@{-}[dl]^{\rightid_{\Dd}}
 \\
 &\theta
 &
 }
 $$
 
-We notice that in order to define the identity \emph{morphisms} of
-$\dialgcat{F}{G}$, we rely on the identity \emph{laws} of the category
-$\Dd$. 
+Unsurprisingly, the construction of identity morphisms relies on the
+functor $F$ and $G$ preserving identity morphisms. Perhaps more
+surprising is that the construction also relies on the identity
+\emph{laws} of the category $\Dd$, \ie a category structure ``one
+level up'' from identity morphisms.
+
+In our cases, the codomain of functors $F$ and $G$ is always $\Type$
+or some other category of sorts: it does not change with the number of
+constructors.
 
 \subsection{Composition}
 
