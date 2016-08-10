@@ -744,6 +744,16 @@ close to what one would want to write down in a proof assistant, \ie a
 list of types of the constructors. There are some limitations to this
 approach.
 
-
-
-
+One difference between how one writes down inductive definitions in
+Agda and our specification type is that in Agda we have to group all
+the constructors per sort, \ie we cannot write down a definition with
+sorts $\Aty : \Set$, $\Bty : \Aty \to \Set$ and constructors:
+%
+\begin{itemize}
+\item $\Aco : \Aty$
+\item $\Bci : \Bty\ \Aco$
+\item $\Acii : \Bci = \Bci \to \Aty$
+\end{itemize}
+%
+In Agda we cannot alternate between the sorts, which prevents us from
+defining types as the one given above.
