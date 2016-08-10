@@ -60,7 +60,6 @@ of the domain of the functor. If we have a definition of a sort
 category in which all the functors are given as containers, the
 resulting category will satisfy the category laws strictly.
 
-
 \section{Categories of algebras}
 
 So far we have not given a precise definition of $\dialgcat{F}{G}$ for
@@ -116,52 +115,79 @@ constructors.
 
 \subsection{Composition}
 
-Given algebras $(X,\theta),(Y,\rho)(Z,\zeta) : | \dialgcat{F}{G} |$
-and morphisms $(g,g_0) : \dialgcat{F}{G}((Y,\rho),(Z,\zeta)$ and
-$(f,f_0) : \dialgcat{F}{G}((X,\theta),(Y,\rho))$, the composition of morphisms is defined as
+Suppose we are given algebras
+$(X,\theta),(Y,\rho)(Z,\zeta) : | \dialgcat{F}{G} |$ and morphisms
+$(g,g_0) : (Y,\rho) \to (Z,\zeta)$ and
+$(f,f_0) : (X,\theta) \to (Y,\rho)$. If we want to compose the two
+morphisms, we need a way to glue the squares $g_0$ and $f_0$ together,
+\ie we need an operation:
 $$
-(g,g_0) \circ (f,f_0) \ddefeq (g \circ f , g_0 \circ_0 f_0)
+\xymatrix{
+ FX \ar[r]^\theta \ar[d]_{F f}                 \ar@{}[dr]|{f_0} &GX \ar[d]^{G f}="Gf"
+&
+&FY \ar[r]^\rho   \ar[d]_{F g}="Fg"            \ar@{}[dr]|{g_0} &GY \ar[d]^{G g}="Gg"
+&
+&FX \ar[r]^\theta \ar[d]_{F (g \circ f)}="Fgf" \ar@{}[dr]|{g_0 \circ_0 f_0} &GX \ar[d]^{G (g \circ f)}
+\\ 
+ FY \ar[r]_{\rho}  &GY
+&
+&FZ \ar[r]_{\zeta} &GZ
+&
+&FZ \ar[r]_{\zeta} &GZ
+\ar "Gf";"Fg"
+\ar "Gg";"Fgf"
+}
 $$
-where $g_0 \circ_0 f_0$ is defined as the composition:
+The (vertical) composition of the squares $g_0 \circ_0 f_0$ is defined as the composite:
 $$
 \xymatrix{
 G\ (g \circ f) \circ \theta
-\ar@{-}[r]
-\ar@{-}[d]
+\ar@{-}[r]^{g_0 \circ_0 f_0}
+\ar@{-}[d]_{\Gcomp g f \circ \theta}
 &\zeta \circ F(g \circ f)
-\ar@{-}[d]
+\ar@{-}[d]^{\zeta \circ \Fcomp g f}
 \\
 (G\ g \circ G\ f) \circ \theta
-\ar@{-}[d]
+\ar@{-}[d]_{\assoc_{\Dd}}
 &\zeta \circ (F\ g \circ F\ f)
-\ar@{-}[d]
+\ar@{-}[d]^{\assoc_{\Dd}}
 \\
 G\ g \circ (G\ f \circ \theta)
-\ar@{-}[d]
+\ar@{-}[d]_{G g \circ f_0}
 &(\zeta \circ F\ g) \circ F\ f
-\ar@{-}[d]
+\ar@{-}[d]^{g_0 \circ F f}
 \\
 G\ g \circ (\rho \circ F\ f)
-\ar@{-}[r]
+\ar@{-}[r]_{\assoc_{\Dd}}
 &(G\ g \circ \rho) \circ F\ f
 }
 $$
+Composition of dialgebra morphisms is then:
+$$
+(g,g_0) \circ (f,f_0) \ddefeq (g \circ f , g_0 \circ_0 f_0)
+$$
+As with identity morphisms, we notice that we need to appeal to the
+functors preserving the same kind of structure we are defining here:
+they need to preserve composition. We also need categorical structure
+one level up from composition from the category $\Dd$, namely
+associativity. 
 
 \subsection{Identity laws}
 
 \begin{proposition}
+  \label{morphism-equality}
   Let $(f,f_0),(g,g_0)$ be two dialgebra morphisms
   $(X,\theta) \to (Y,\rho)$ in $\dialgcat{F}{G}$, then we have the
   following equivalence of equalities:
   \begin{align*}
-    ((f,f_0) = (g,g_0)) &= &(p : f = g)\\
-    &\times &(p_0 : 
+    ((f,f_0) = (g,g_0)) &= &&(p : f = g)\\
+    &\times &&(p_0 : 
               \xymatrix{
-              G\ f \circ
+              G\ f \circ \theta
               \ar@{-}[r]^{f_0}
-              \ar@{-}[d]_{G\ p \circ \theta}
+              \ar@{-}[d]_{G p \circ \theta}
               &\rho \circ F\ f
-              \ar@{-}[d]^{\rho \circ F\ p}
+              \ar@{-}[d]^{\rho \circ F p}
               \\
               G\ g \circ \theta
               \ar@{-}[r]_{g_0}
@@ -174,5 +200,33 @@ $$
   proof
 \end{proof}
 
+To give a witness for the left identity law, we need to show given:
+\begin{itemize}
+\item objects $(X,\theta), (Y,\rho) : |\dialgcat{F}{G}|$
+\item with a morphism $(f,f_0) : (X,\theta) \to (Y,rho)$
+\end{itemize}
+that $\id_{\dialgcat{F}{G}}\ (Y,\rho) \circ_{\dialgcat{F}{G}} (f,f_0) = (f,f_0)$. Unfolding definitions this reduces to having to show that:
+$$
+(\id_{\Cc}\ Y \circ_{\Cc} f , \id_0\ \rho \circ_0 f_0) = (f,f_0)
+$$
+Applying \cref{morphism-equality} this is the same as giving a proof $p : \id_{\Cc}\ Y \circ f = f$ along with a square:
+$$
+\xymatrix{
+              G\ (\id_{\Cc}\ Y \circ f) \circ \theta
+              \ar@{-}[r]^{\id_0\ \rho \circ_0 f_0}
+              \ar@{-}[d]_{G p \circ \theta}
+              &\rho \circ F\ (\id_{\Cc}\ Y \circ f)
+              \ar@{-}[d]^{\rho \circ F p}
+              \\
+              G\ f \circ \theta
+              \ar@{-}[r]_{f_0}
+              &\rho \circ F\ f
+              }
+$$
+For $p$ we can fill in $\leftid_{\Cc}\ f$
+
+
 \subsection{Associativity}
+
+\section{Equaliser categories}
 
