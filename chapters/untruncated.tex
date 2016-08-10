@@ -81,7 +81,7 @@ $\dialgcat{F}{G}$ in detail.
 Given an object $(X,\theta) : | \dialgcat{F}{G} |$, we define the
 identity morphism
 $(\id_\Cc\ X , \id_0) : \dialgcat{F}{G}((X,\theta),(Y,\theta))$ with
-$\id_0$ defined a:
+$\id_0$ defined as:
 $$
 \xymatrix{
 G\ \id_\Cc \circ \theta
@@ -102,8 +102,19 @@ G\ \id_\Cc \circ \theta
 }
 $$
 
+We notice that in order to define the identity \emph{morphisms} of
+$\dialgcat{F}{G}$, we rely on the identity \emph{laws} of the category
+$\Dd$. 
+
 \subsection{Composition}
 
+Given algebras $(X,\theta),(Y,\rho)(Z,\zeta) : | \dialgcat{F}{G} |$
+and morphisms $(g,g_0) : \dialgcat{F}{G}((Y,\rho),(Z,\zeta)$ and
+$(f,f_0) : \dialgcat{F}{G}((X,\theta),(Y,\rho))$, the composition of morphisms is defined as
+$$
+(g,g_0) \circ (f,f_0) \ddefeq (g \circ f , g_0 \circ_0 f_0)
+$$
+where $g_0 \circ_0 f_0$ is defined as the composition:
 $$
 \xymatrix{
 G\ (g \circ f) \circ \theta

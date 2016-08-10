@@ -2,10 +2,13 @@
 
 \section{Strict positivity}
 
-\section{Initial algebras via sequential colimits}
+
+
+\section{Initial objects via sequential colimits}
 
 
 \begin{theorem}[Ad\'amek]
+  \label{adamek-thm}
   Let $\Cc : \Cat$ be a category with an endofunctor
   $F : \Func{\Cc}{\Cc}$. The category of algebras $\algcat{F}$ has an
   initial object if $\Cc$ has sequential colimits and $F$ preserves
@@ -16,7 +19,112 @@
   
 \end{proof}
 
-\subsection{Constructing $\Set$-sorted quotient-inductive definitions}
+\subsection{$\Set$-sorted inductive-inductive definitions}
 
+Before we try to tackle the general case, we will look at the
+simplified setting of $\Set$-sorted inductive-inductive
+definitions. The categories of algebras in this case are categories of
+dialgebras. As it turns out, these categories are equivalent to
+ordinary categories of algebras for some endofunctor.
 
-\section{Containers}
+Observe that if we have $F : \Func{\Cc}{\Cc}$ such that $F$ and $\Cc$
+satisfy the conditions of \cref{adamek-thm}, then the forgetful
+functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
+
+\begin{proposition}
+  Let $F : \Func{\Cc}{\Cc}$ be an endofunctor on a category
+  $\Cc : \Cat$ which has sequential colimits, which $F$ preserves. The
+  forgetful functor $U : \Func{algcat{F}}{\Cc}$ has a left adjoint.
+\end{proposition}
+
+\begin{proof}
+  The left adjoint is defined pointwise: for $A : \Cc$, $L A$ is
+  defined as the initial algebra of the functor $\lambda X . A + FX$.
+  This functor again satisfies the conditions of \cref{adamek-thm}, so
+  these initial algebras exist.
+
+  We then need to check whether 
+  
+  
+\end{proof}
+
+\begin{proposition}
+  Let $\Cc$ be a category with sequential colimits and
+  $F : \Func{\Cc}{\Cc}$ be a functor that preserves them. The category
+  $\algcat{F}$ has sequential colimits.
+\end{proposition}
+
+\begin{proof}
+  
+\end{proof}
+
+\begin{proposition}
+  Let $s : \specty$ be a specification of a $\Set$-sorted
+  inductive-inductive definition. If every arguments functor $F_i$
+  preserves sequential colimits, the forgetful functor
+  $U : \Func{\Alg_s}{\Set}$ has a left adjoint.
+\end{proposition}
+
+\begin{proof}
+  
+\end{proof}
+
+\begin{proposition}
+  Let $s : \specty$ be a specification of a
+  $\Set$-sorted inductive-inductive definition. If every arguments
+  functor $F_i$ preserves sequential colimits, then
+  $\Alg_s$ has an initial object.
+\end{proposition}
+
+\begin{proof}
+  The category $\Set$ has an initial object $\initty$. There exists an
+  adjunction $L \dashv U : \Alg_s$ where $U$ is the
+  forgetful functor. Left adjoints preserve colimits, hence
+  $L\ \initty$ is initial in $\Alg_s$.
+\end{proof}
+
+\subsection{Sort categories}
+
+Suppose we have a sort specification $\Ss : \sortsty$ giving rise to
+the following chain of sort categories:
+$$
+\xymatrix{
+\termcat &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_n}
+}
+$$
+
+Note that the forgetful functor $\Func{\Fam}{\Set}$ has a left
+adjoint: the truth functor that maps a set $X$ to the family
+$\lambda x . \unitty : X \to \Set$. This generalises to any functor in
+the abovementioned chain of sort categories:
+
+\begin{proposition}
+Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
+\end{proposition}
+
+\begin{proof}
+  We define the functor $u_i : \Func{S_i}{S_{i+1}}$ as follows:
+  \begin{itemize}
+  \item on objects: $u_i X \ddefeq (X , \lambda x . \unitty)$
+  \item on morphisms: $u_i f \ddefeq (f , \lambda a\ x . x)$
+  \end{itemize}
+  We then have to check whether we have for any $X : | S_i |$ and
+  $(Y,Q) : | S_{i+1} |$ that
+  $$
+  S_{i+1}(u_i\ X , (Y,Q)) = S_i(X,Y)
+  $$
+  which we can show by simple equational reasoning:
+  \begin{align*}
+      &&S_{i+1}(u_i\ X , (Y,Q)) \\
+    &=& S_{i+1}((X,\lambda x . \unitty), (Y,Q)) \\
+    &=& (f : S_i(X,Y) \times (g : (a : R_{i+1} X) \to \unitty \to \unitty) \\
+    &=& S_i(X,Y)
+  \end{align*}
+
+\end{proof}
+
+\subsection{Categories of algebras}
+
+\subsubsection{0-constructors}
+
+\subsubsection{1-constructors}
