@@ -1,2 +1,86 @@
 \chapter{Preliminaries}
 
+\section{Category theory in type theory}
+
+When defining the concept of category in type theory, we have to make
+several choices. A naive way of defining a category would be as the
+following $\Sigma$-type:
+$$
+\Cat \ddefeq (obj : \Type) \times (hom : obj \to obj \to \Type) \times (\hdots)
+$$
+where on the place of the ellipsis one would have to fill in the
+category structure and laws. 
+
+\begin{definition}[Category]
+  We define the type $\Cat : \Type$ as the following $\Sigma$-type:
+  %
+  \begin{align*}
+    \Cat &\ddefeq &&(obj : \Type) \\
+         &\times &&(hom : obj \to obj \to \Type) \\
+         &\times &&(hom-is-set : (X\ Y : obj) \to \isset (hom\ X\ Y)) \\
+         &\times &&(id : (X : obj) \to hom\ X\ X) \\
+         &\times &&(comp : \{\ X\ Y\ Z : obj\ \} \to hom\ Y\ Z \to hom\ X\ Y \to hom\ X\ Z) \\
+         &\times &&(left-id : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ (id\ Y)\ f = f) \\
+         &\times &&(right-id : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ f\ (id\ X) = f) \\
+         &\times &&(assoc : \{\ X\ Y\ Z\ W : obj\ \}\ (h : hom\ Z\ W) (g : hom\ Y\ Z) (f : hom\ X\ Y) \\
+         & &&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \to comp\ (comp\ h\ g)\ f = comp\ h\ (comp\ g\ f))
+  \end{align*}
+\end{definition}
+
+\begin{example}
+  The universe $\Set$ of types that are sets forms a category with its
+  morphisms defined as functions between sets.
+\end{example}
+
+\begin{example}
+  The universe $\Type$ is \emph{not} a category in this sense, as for
+  arbitrary types $X, Y$, the function space $X \to Y$ will in general
+  not be a set.
+\end{example}
+
+\begin{definition}[Functor]
+  Suppose $\Cc, \Dd : \Cat$, then we define the type of functors $\Cc$
+  to $\Dd$ as the following $\Sigma$-type:
+  %
+  \begin{align*}
+    \Func{\Cc}{\Dd} &\ddefeq &&(obj : | \Cc | \to | \Dd |) \\
+    &\times &&(hom : \{\ X\ Y : | \Cc |\ \} \to \Cc(X,Y) \to \Cc(obj\ X, obj\ Y)) \\
+    &\times &&(id : \{\ X : | \Cc |\ \} \to hom\ (\id_{\Cc}\ X) = \id_{\Dd}\ (obj\ X)) \\
+    &\times &&(comp : \{\ X\ Y\ Z : | \Cc |\ \}\ (g : \Cc(Y,Z))\ (h : \Cc(X,Y)) \to hom\ (g \circ_{\Cc} f) = hom\ g \circ_{\Dd} hom\ f)
+  \end{align*}
+\end{definition}
+
+In ordinary category theory, done in a set theoretic metatheory,
+talking about equality between \emph{objects} is \emph{evil}: doing so
+allows us to write propositions that are not invariant under
+equivalence of categories. In type theory we have a type of equalities
+between any type, so ...
+
+\begin{definition}[Isomorphism]
+  Let $X, Y : | \Cc |$ for some $\Cc : \Cat$, then the type of
+  isomorphisms between $X$ and $Y$ is defined as:
+  \begin{align*}
+    \Iso{X}{Y} &\ddefeq &&(to : X \to Y) \\
+               &\times &&(from : Y \to X) \\
+               &\times &&(from-to : from \circ to = \id_{\Cc}\ X) \\
+               &\times &&(to-from : to \circ to = \id_{\Cc}\ Y)
+  \end{align*}
+\end{definition}
+
+\begin{definition}[Univalent category]
+  A category $\Cc$ is called \emph{univalent} if for any two objects
+  $X, Y : | \Cc |$ we have the following equivalence:
+  $$
+  \Iso{X}{Y} = (X = Y)
+  $$  
+\end{definition}
+
+\subsection{Higher categories}
+
+As mentioned before, the universe of types $\Type$ does not form a
+category if we take functions as morphisms. Function spaces will in
+general not be sets. However, we can define composition and identity
+morphisms in the usual way. These will satisfy the category laws
+definitionally as well.
+
+

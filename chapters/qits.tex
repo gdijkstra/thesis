@@ -395,17 +395,30 @@ as the quotient inductive type $\treety$:
 
 \section{Implementation}
 
-\todoi{``Implementing'' them by just adding axioms/postulates}
+One way to ``implement'' a particular quotient inductive type, is by
+postulating its constructors along with the eliminator with its
+computation rules. The downside of such an approach is that as soon as
+we want to use it and not just define it, we will have to manually
+``call'' the computation rules.
 
-\subsection{Agda}
+A first approximation to implement quotient inductive types (or any
+higher inductive type) in a more practical manner was discovered
+by~\cite{Licata2011}. The idea is to leverage the inductive type
+mechanism of Agda itself and add path constructors as postulates. One
+can then define the eliminator by pattern matching on the inductive
+type, adding the computation rule for the path constructors as
+postulates. Care has to be taken to not expose the constructors of the
+type in such a way that one can circumvent the eliminator and use
+pattern matching directly, in a possible unsound way.
 
-\todoi{Dan Licata's trick}
+Having definitional computation rules for the point constructors is a
+big improvement over everything being propositional. However, the path
+computation rules still only hold propositionally.
 
-\todoi{Newer: rewrite rules, but comes with ``obvious'' limitations}
+In order to experiment with higher inductive types and cubical type
+theory in Agda, rewrite rules have been introduced. 
 
 \subsection{Cubical type theory}
-
-\todoi{mention cubicaltt and other implementations of cubical type theories}
 
 \section{Related concepts}
 

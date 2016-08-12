@@ -742,7 +742,36 @@ We have given a specification of inductive descriptions in terms of
 its algebraic semantics. Sometimes the algebraic semantics is very
 close to what one would want to write down in a proof assistant, \ie a
 list of types of the constructors. There are some limitations to this
-approach.
+approach. When we want to fit an inductive definition into our schema,
+we have to perform some translations first: we have the uncurry the
+type and translate it into the ``Henry Ford''-version.
+
+Other limitations are that the arguments part must be functorial:
+recursive occurrences may only be in positive positions. One example
+of a data type where this is not the case is the higher order abstract
+syntax embedding of untyped lambda calculus:
+%
+\begin{datatype}{\tttmty}{\Set}
+  \constr{\ttapp}{\tttmty \to \tttmty \to \tttmty} \\
+  \constr{\ttlam}{(\tttmty \to \tttmty) \to \tttmty}
+\end{datatype}
+%
+In the constructor $\ttlam$, there is a recursive occurrence in both
+negative as well as a positive position. The map
+$\lambda X . (X \to X)$ is therefore not functorial: it is neither
+contravariant nor covariant. 
+
+This is problematic with pattern matching ``semantics''.
+
+Another example of this phenomenon is if we write down an inductive
+definition with as constructors the axioms of a field:
+%
+\begin{datatype}{Field}{\Set}
+  \hdots \\
+  \constr{inv}{(x : Field) \to ((x = 0) \to \emptyty) \to Field} \\
+  \hdots 
+\end{datatype}
+%
 
 One difference between how one writes down inductive definitions in
 Agda and our specification type is that in Agda we have to group all
