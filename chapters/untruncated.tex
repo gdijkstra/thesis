@@ -1,13 +1,98 @@
 \chapter{Moving to an untruncated setting}
 
-\section{Sort categories}
+In the previous chapters, we have mostly worked with sets. In this
+chapter we show what kind of issues one encounters if we work in an
+untruncated setting instead. The first issue is to make precise what
+we mean when we talk about \emph{categories}. Previously it was a
+\emph{type} of objects equipped with hom-\emph{sets} that satisfy
+category laws. If we want to generalise to hom-\emph{types}, just
+having the category laws may no longer be enough: we may need so
+called \emph{coherence conditions}. For example, if we have four
+composable morphisms:
+$$
+\xymatrix{
+  X \ar[r]^{f} &Y \ar[r]^{g} &Z \ar[r]^{h} &W \ar[r]^{i} &V
+}
+$$
+there are different ways to use associativity to show
+$$
+((i \circ h) \circ g) \circ f = i \circ (h \circ (g \circ f))
+$$
+The \emph{coherence condition for associativity} is the condition that
+states that these different ways be equal.
 
-The categories $\Type$ and $\Fam$ are satisfy the category laws and
-their (higher) coherences definitionally. Whether a sorts category
-$\SortCat{s}$ given by a $s : \sortsty$ depends on the functors in the
-list $s$. Looking at the definition of the sorts categories, if all
-the functors involved satisfy the functor laws definitionally then the
-resulting categories will be strict as well.
+\begin{definition}[Coherence condition for associativity]
+  The witness of associativity
+  $$
+  \assoc : (h : \Cc(Z,W)) (g : \Cc(Y,Z)) (f : \Cc(X,Y)) \to ((h \circ g) \circ f) = (h \circ (g \circ f))
+  $$
+  is \emph{coherent} if for any composable arrows $i, h, g, f$ the
+  following commutes:
+  $$
+  \xymatrix{
+    &(i \circ (h \circ g)) \circ f \ar@{-}[dr]^{\assoc i (h \circ g) f} &\\
+    ((i \circ h) \circ g) \circ f \ar@{-}[ur]^{(\assoc i h g) \circ f} \ar@{-}[d]_{\assoc (i \circ h) g f}  &&i \circ ((h \circ g) \circ f) \ar@{-}[d]^{i \circ \assoc h g f}\\
+    (i \circ h) \circ (g \circ f) \ar@{-}[rr]_{\assoc i h (g \circ f)} &&i \circ (h \circ (g \circ f))
+  }
+  $$
+\end{definition}
+
+We can formulate similar conditions for the interactions between the
+identity laws and associativity. The story does not end there however:
+the witnesses of the coherence conditions themselves also need to
+be coherent, ad infinitum. 
+
+In type theory we may find examples of categories which satisfy the
+category laws up to definitional equality, which means all the
+coherence conditions are trivially satisfied. Examples of such
+categories are $\Type$ and $\Fam$. As we will see in this chapter, the
+categories we are interested in, namely the categories of algebras,
+will generally speaking not satisfy the category laws strictly.
+
+\section{Coherence laws for functors}
+
+Talking about the category laws in an untruncated setting also means
+that we now have to worry about what it means for a functor to
+preserve them. If we take for example the left identity law, we notice
+that there are multiple ways to produce an equality
+$F (id Y \circ f) = F f$. we can either use the left identity law of
+the domain of $F$ or the one of its codomain, by first appealing to
+the fact that $F$ preserves composition and identity morphisms. The
+functor $F$ preserves the left identity law if these two approaches
+yield the same equality:
+
+\begin{definition}
+  A functor $F : \Func{\Cc}{\Dd}$ satisfies the coherence law for the
+  left identity law of $\Cc$ if the following commutes for any $f : \Cc(X,Y)$:
+  $$
+  \xymatrix{
+    F (\id_{\Cc} Y \circ_{\Cc} f) \ar@{-}[rr]^{F (\leftid_{\Cc} f)} \ar@{-}[d]_{\Fcomp (\id_{\Cc} Y) f} &&F f \ar@{-}[d]^{\leftid_{\Dd} F f} \\
+    F (\id_{\Cc} Y) \circ_{\Dd} f \ar@{-}[rr]_{\Fid Y \circ_{\Dd} f} &&\id_{\Dd} (F Y) \circ_{\Dd} f
+  }
+  $$  
+\end{definition}
+
+The coherence law for the right identity law is defined similarly.
+
+\begin{definition}
+  A functor $F : \Func{\Cc}{\Dd}$ satisfies the coherence law for the
+  associativity law of $\Cc$ if, given three composable arrows:
+  $$
+  \xymatrix{
+    X \ar[r]^{f} &Y \ar[r]^{g} &Z \ar[r]^{h} &W
+  }
+  $$
+  the following commutes
+  $$
+  \xymatrix{
+    F ((h \circ g) \circ f) \ar@{-}[rr]^{F (\assoc_{\Cc} h g f)} \ar@{-}[d]_{\Fcomp (h \circ g) f} &&F (h \circ (g \circ f)) \ar@{-}[d]^{\Fcomp h (g \circ f)} \\
+    F (h \circ g) \circ F f \ar@{-}[d]_{\Fcomp h g \circ F f} &&F h \circ F (g \circ f) \ar@{-}[d]^{F h \circ \Fcomp g f} \\
+    (F h \circ F g) \circ F f  \ar@{-}[rr]_{\assoc_{\Dd} Fh Fg Ff} && F h \circ (F g \circ F f)
+  }
+  $$
+\end{definition}
+
+\section{Generalised containers}
 
 Although we are not able to internally define the type of strict
 functors, there is a definable class of functors that happen to be
@@ -60,7 +145,18 @@ of the domain of the functor. If we have a definition of a sort
 category in which all the functors are given as containers, the
 resulting category will satisfy the category laws strictly.
 
-\section{Categories of algebras}
+
+
+\section{Sort categories}
+
+The categories $\Type$ and $\Fam$ are satisfy the category laws and
+their (higher) coherences definitionally. Whether a sorts category
+$\SortCat{s}$ given by a $s : \sortsty$ depends on the functors in the
+list $s$. Looking at the definition of the sorts categories, if all
+the functors involved satisfy the functor laws definitionally then the
+resulting categories will be strict as well.
+
+\section{Categories of dialgebras}
 
 So far we have not given a precise definition of $\dialgcat{F}{G}$ for
 some functors $F, G : \Cc \to \Dd$. In \cref{dialg}, we have defined
@@ -170,9 +266,18 @@ As with identity morphisms, we notice that we need to appeal to the
 functors preserving the same kind of structure we are defining here:
 they need to preserve composition. We also need categorical structure
 one level up from composition from the category $\Dd$, namely
-associativity. 
+associativity.
+
+Looking at this definition of composition, we notice that even when
+$\Cc$ and $\Dd$ are strict categories, with $F$ and $G$ being strict
+functors, \eg when we consider $F$-algebras on $\Type$ with $F$ given
+as a container, composition will not be strictly associative.
 
 \subsection{Identity laws}
+
+If we want to talk about the identity laws in a category of
+dialgebras, we need to know what equality between dialgebra morphisms
+looks like. We can characterise it as follows:
 
 \begin{proposition}
   \label{morphism-equality}
@@ -197,7 +302,12 @@ associativity.
 \end{proposition}
 
 \begin{proof}
-  proof
+  Using the fact that an equality of dependent pairs is a dependent pair of equalities, we get that
+  $$
+  ((f,f_0) = (g,g_0)) = (p : f = g) \times (p_0 : \pathover{\lambda h . G h \circ \theta = \rho \circ F h}{p}{f_0}{g_0}
+  $$
+  Having a path $p_0$ over a family of equalities is equivalent to the
+  square by the usual reasoning.
 \end{proof}
 
 To give a witness for the left identity law, we need to show given:
@@ -229,4 +339,10 @@ For $p$ we can fill in $\leftid_{\Cc}\ f$
 \subsection{Associativity}
 
 \section{Equaliser categories}
+
+\section{Categories of algebras}
+
+For our applications, we do not need the full generality of dialgebra categories. 
+
+\section{Coherence in a cubical setting}
 
