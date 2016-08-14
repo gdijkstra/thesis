@@ -2,7 +2,19 @@
 
 \section{Strict positivity}
 
+In \cref{from-syntax-to-functors} we have seen that not every list of
+constructors can be made sense of in terms of being objects of
+categories of algebras. In order for the arguments of the constructors
+to describe functors, the recursive occurrences have to all be in
+positive positions. 
 
+Even if we consider endofunctors on $\Set$, its initial algberas need
+not exist: the types we are talking about have to be \emph{strictly}
+positive. One example of a functor that does not have an initial
+algebra is the \emph{double powerset functor}
+$P X \ddefeq (X \to 2) \to 2$. By Lambek's theorem the initial algebra
+would give us a set $X$ such that $X = P X$. If we then apply Cantor's
+theorem, we arrive at a contradiction.
 
 \section{Initial objects via sequential colimits}
 
