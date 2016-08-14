@@ -254,7 +254,7 @@ sorts. We will show that this category has the required limits:
   $S_{i-1}$ and $\Set$: let $(Z,T) : | S_{i} |$, then we have:
   % 
   \begin{align*}
-    &&&S_i((Z,T),(X \times Y, P \times Q) \\
+    &&&S_i((Z,T),(X \times Y, P \times Q)) \\
     &=& &\reasontext{definition of products in $S_i$} \\
     &&& (f : S_{i-1}(Z,X \times Y)) \\
     &&& \times (g : (x : R_i Z) \to T\ x \to (P \times Q)\ (R_i\ f\ x)) \\
@@ -456,73 +456,220 @@ $$
 Intuitively the type $\Box_F\ P\ x$ is the induction hypothesis.
 
 \subsection{General framework}
-The operations we need from a category $\Cc$ to talk about families
-are as follows:
+\begin{definition}[Family structure on a category]
+  The operations we need from a category $\Cc$ to talk about families
+  are as follows:
 %
-\begin{itemize}
-\item $\Fam_{\Cc} : | \Cc | \to \Type$
-\item $\total : (X : | \Cc |) \to \Fam_{\Cc}\ X \to | \Cc |$
-\item $\proj : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \Cc(\total\ X\ P, X)$
-\item $\preimage : (X : | \Cc |)\ (Y : | \Cc |)\ (p : \Cc(Y,X)) \to \Fam_{\Cc}\ X$
-\end{itemize}
+  \begin{itemize}
+  \item $\Fam_{\Cc} : | \Cc | \to \Type$
+  \item $\total : (X : | \Cc |) \to \Fam_{\Cc}\ X \to | \Cc |$
+  \item
+    $\proj : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \Cc(\total\ X\ P,
+    X)$
+  \item
+    $\preimage : (X : | \Cc |)\ (Y : | \Cc |)\ (p : \Cc(Y,X)) \to
+    \Fam_{\Cc}\ X$
+  \end{itemize}
 %
-The operations should also satisfy the following correctness conditions, for any $X : | \Cc |$:
+  The operations should also satisfy the following correctness
+  conditions, for any $X : | \Cc |$:
 %
-\begin{itemize}
-\item for any family $P : \Fam_{\Cc}\ X$, 
+  \begin{itemize}
+  \item for any family $P : \Fam_{\Cc}\ X$,
   $$\preimage\ X\ (\total\ X\ P , \proj\ X\ P) = P$$
 \item for any object $Y : | \Cc |$ with $p : \Cc(Y,X)$,
   %
   \begin{align*}
-  &\ \ \ \ \ \ (\total\ X\ (\preimage\ X\ (Y,p)) , \proj\ X\ (\preimage\ X\ (Y,p))) \\
-  &= (Y,p)
+    &\ \ \ \ \ \ (\total\ X\ (\preimage\ X\ (Y,p)) , \proj\ X\ (\preimage\ X\ (Y,p))) \\
+    &= (Y,p)
   \end{align*}
 \end{itemize}
 %
+\end{definition}
 To define these operations for the sort and algebra categories, we can
 perform induction on the specification and apply the same techniques
 as we did to derive the notion of families in $\algcat{F}$.
 
 Given these operations, we can generalise the $\Box$ operator to any
-functor $F : \Func{\Cc}{\Dd}$, given we have $\Fam_{\Cc}$ and
-$\Fam_{\Dd}$: given $X : | \Cc |$ and $P : \Fam_{\Cc}\ X$,
-$\Box_F : (X : | \Cc |) \to \Fam_{\Cc} \to \Fam_{\Dd}$ is defined as:
-$$
-\Box_F\ X\ P \ddefeq \preimage_{\Dd}\ FX\ (F\ (\total_{\Cc}\ X\ P) , F\ (\proj_{\Cc}\ X\ P))
-$$
+functor $F : \Func{\Cc}{\Dd}$.
+
+\begin{definition}[Functorial action on families]
+  Given family structures $\Fam_{\Cc}$ and $\Fam_{\Dd}$, and
+  $X : | \Cc |$ and $P : \Fam_{\Cc}\ X$,
+  $\Box_F : (X : | \Cc |) \to \Fam_{\Cc} \to \Fam_{\Dd}$ is defined
+  as:
+  $$
+  \Box_F\ X\ P \ddefeq \preimage_{\Dd}\ FX\ (F\ (\total_{\Cc}\ X\ P) ,
+  F\ (\proj_{\Cc}\ X\ P))
+  $$
+\end{definition}
+
+\begin{proposition}
+  \label{box-thm}
+  Given family structures $\Fam_{\Cc}$ and $\Fam_{\Dd}$, and
+  $X : | \Cc |$ and $P : \Fam_{\Cc}\ X$, we have
+  $$
+  F (\total_{\Cc}\ X\ P) = \total_{\Dd}\ (F X) (\Box_F\ P)
+  $$
+\end{proposition}
+
+\begin{proof}
+  This follows directly from the correctness condition of the family
+  structure on $\Dd$:
+  \begin{align*}
+    &&&F (\total_{\Cc}\ X\ P) \\
+    &=& &\reasontext{correctness condition of $\Fam_{\Dd}$} \\
+    &&&\total_{\Dd}\ (F X) (\preimage_{\Dd}\ (F X) (F (\total_{\Cc}\ X\ P), F (\proj_{\Cc}\ X\ P))) \\
+    &=& &\reasontext{definition of $\Box_F$} \\
+    &&&\total_{\Dd}\ (F X) (\Box_F\ P)
+  \end{align*}
+\end{proof}
+
+\begin{corollary}
+  Applying \cref{box-thm} to endofunctors on $\Set$, we get, given
+  $F : \Func{\Set}{\Set}$, $X : \Set$, $P : X \to \Set$:
+  $$
+  F ((x : X) \times P x) = (x : FX) \times \Box_F\ P\ x
+  $$
+\end{corollary}
 
 Having defined families, we can then go on to generalise the notion of
 dependent functions. In $\Set$, given a family $P : X \to \Set$, a
 dependent function $(x : X) \to P\ x$ corresponds to a function
 $s : X \to (x : X) \times P\ x$ along with
-$s_0 : \pi_0 \circ s = id_X$. The function from left to right sends a
+$s_0 : \pi_0 \circ s = \id_X$. The function from left to right sends a
 dependent function $s$ to its graph $\lambda x . (x , s\ x)$, which is
 trivially a section. The other direction composes the section $s$ with
 $\pi_1$, but we have to transport along the proof given by $s_0$ to
 make it typecheck.
 
-To generalise dependent morphisms to a category $\Cc$, we need a family
-$\DepHom_{\Cc} : (X : | \Cc |)\ (P : \Fam_{\Cc}\ X) \to \Type$ along with
-the following operations, given an object $X : | \Cc |$ and a family
-$P : \Fam_{\Cc}\ X$:
+\begin{definition}
+  The type of \emph{sections} in a category $\Cc$ is defined as:
+  \begin{align*}
+    &\Sect_{\Cc} : (X : | \Cc |) (Y : | \Cc |) (p : \Cc(Y,X)) \to \Set \\
+    &\Sect_{\Cc}\ X\ Y\ p \ddefeq (s : \Cc(X,Y)) \times (s_0 : p \circ s = \id_X)
+  \end{align*}
+\end{definition}
+
+A dependent morphism structure on a category with a family structure
+is something that allows us to perform the same construction as in
+$\Set$:
+
+\begin{definition}[Dependent morphism structure]
+  To generalise dependent morphisms to a category $\Cc$, we need a
+  family
+  $\DepHom_{\Cc} : (X : | \Cc |)\ (P : \Fam_{\Cc}\ X) \to \Type$ along
+  with the following operations, given an object $X : | \Cc |$ and a
+  family $P : \Fam_{\Cc}\ X$:
 %
-\begin{itemize}
-\item $\grph : \DepHom\ X\ P \to \Sect\ X\ (\total\ X\ P,\proj\ X\ P)$
-\item $\snd : \Sect\ X\ (\total\ X\ P,\proj\ X\ P) \to \DepHom_{\Cc}\ X\ P$
-\end{itemize}
+  \begin{itemize}
+  \item
+    $\grph : \DepHom\ X\ P \to \Sect\ X\ (\total\ X\ P,\proj\ X\ P)$
+  \item
+    $\snd : \Sect\ X\ (\total\ X\ P,\proj\ X\ P) \to \DepHom_{\Cc}\ X\
+    P$
+  \end{itemize}
 %
-The correctness conditions are:
+  The correctness conditions are:
 %
-\begin{itemize}
-\item for any $f : \DepHom_{\Cc}\ X\ P$,
+  \begin{itemize}
+  \item for any $f : \DepHom_{\Cc}\ X\ P$,
   $$\snd\ X\ P\ s\ (\grph\ X\ P\ f) = f$$
 \item for any $s : \Sect\ X\ (\total\ X\ P, \proj\ X\ P)$,
   $$\grph\ X\ P\ (\snd\ X\ P\ s) = s$$
 \end{itemize}
 %
+\end{definition}
+
+Note that the correctness conditions give us an equivalence
+$$
+\DepHom_{\Cc}\ X\ P = \Sect_{\Cc}\ (\total_{\Cc}\ X\ P)\ X\ (\proj_{\Cc}\ X\ P)
+$$
 
 \subsection{Induction for quotient inductive-inductive definitions}
 
+The family structure on $\Set$ is the usual one. We can derive
+definitions of the family structure on categories of algebras by
+induction. Since they are defined ``on top of'' $\Set$, we can use the
+specification and the family structure on $\Set$ to derive appropriate
+definitions.
+
+\subsubsection{Family and dependent morphism structure on $\Fam$}
+
+Before we move on to sort categories and categories of algebras, let
+us first consider the families and dependent morphisms in the category
+$\Fam$. Recall that $\Fam$ is the sort category for the
+inductive-inductive type $(\ttconty,\tttyty)$ of contexts and types in
+a context. We will use the intuition of the induction principle of
+that inductive-inductive definition to make sense of what is going on
+here.
+
+Our first goal is to derive a family $\Fam_{\Fam} : | \Fam | \to \Set$
+that satisfies, for any $X : | \Fam |$:
+$$
+\Fam_{\Fam} = (Y : | \Fam |) \times \Fam(Y,X)
+$$
+We derive the definition by taking the right hand side of the above
+equation and performing the following equational reasoning:
+\begin{align*}
+  &&&(Y : | \Fam |) \times \Fam(Y,X) \\
+  &=& &\reasontext{definition of objects and morphisms in $\Fam$} \\
+  &&&(Y : \Set) \times (Q : Y \to \Set) \times (p : Y \to X) \\
+  &&&\times (q : (y : Y) \to Q\ y \to P\ (p\ y)) \\
+  &=& &\reasontext{combining $Y$ and $P$ using the family structure on $\Set$} \\
+  &&&(V : X \to \Set) \times (Q : (x : X) \times V\ x \to \Set) \\
+  &&&\times (q : (y : (x : X) \times V\ x) \to Q\ y \to P\ (\pi_1\ y)) \\
+  &=& &\reasontext{currying} \\
+  &&&(V : X \to \Set) \times (Q : (x : X) \to V\ x \to \Set) \\
+  &&&\times (q : (x : X) \to (y : V\ x) \to Q\ x\ y \to P\ x) \\
+  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\Set$} \\
+  &&&(V : X \to \Set) \times (W : (x : X) \to V\ x \to P\ x \to \Set)
+\end{align*}
+What we ended up with does match with what a motive for $(\ttconty,\tttyty)$
+is, namely:
+$$
+(P : \ttconty \to \Set) \times (Q : (\Gamma : \ttconty) \to P\ \Gamma \to \tttyty\ \Gamma \to \Set)
+$$
+A motive consists of a motive on $\ttconty$, which is just a family
+on it, along with a family on $\tttyty$, for every
+$\Gamma : \ttconty$. Since we may also refer to results we get from
+doing induction on $\Gamma$, we also have a $P\ \Gamma$ in there.
+
+We then give the following definitions:
+\begin{align*}
+  \Fam_{\Fam}\ (X , P) &\ddefeq (V : X \to \Set) \times (W : (x : X) \to V\ x \to P\ x \to \Set) \\
+  \total_{\Fam}\ (X , P)\ (V , W) &\ddefeq ((x : X) \times P x , \lambda (x,y) . (z : V\ x) \times W\ x\ z\ y) \\
+  \proj_{\Fam}\ (X, P)\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) . y) \\
+  \preimage_{\Fam}\ (X, P)\ ((Y,Q),(p, q) &\ddefeq (\lambda x . (y : Y) \times p\ y = x , \lambda x\ y\ z . ?)
+\end{align*}
+
+Now we have a family structure on $\Fam$, we need to define what
+dependent morphisms of these families are.
+
+\subsubsection{Sort categories}
+
+The family structure on a sort category can be given by induction on
+the specification. In the case of an empty specification, we define
+$\Fam_{\termcat}\ X \ddefeq \unitty$ for any $X : | \termcat |$. The
+other definitions are equally trivial.
+
+In the induction step case, we get a family structure on $S_{i-1}$ and
+have to provide one on the category $S_i$ which is built out of
+$S_{i-1}$ with the functor $R_i : \Func{S_{i-1}}{\Set}$. Our goal is
+to find, given $X : | S_{i-1} |$ and $P : R_i X \to \Set$, a set
+$\Fam_{S_i} (X, P)$ such that:
+$$
+\Fam_{S_i} (X, P) = ((Y , Q) : | S_i |) \times (p : S_i((Y,Q),(X,P)))
+$$
+We can perform the following equational reasoning on the right hand
+side of the equation above:
+\begin{align*}
+  &&&(Y : | S_i |) \times (p : S_i(Y,(X,P))) \\
+  &=& &\reasontext{definition of $S_i$} \\
+  &&&(Y : | S_{i-1} |) \times (Q : R_i Y \to \Set) \times (p : S_{i-1}(Y,X)) \times (q : (x : R_i Y) \to Q\ x \to P\ (R_i\ p\ x)) \\
+  &=& &\reasontext{combining $Y$ and $p$ using family structure on $S_{i-1}$} \\
+  &&&()
+\end{align*}
 \subsubsection{0-constructors}
 
 \subsubsection{1-constructors}
