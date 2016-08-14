@@ -32,11 +32,11 @@ category structure and laws.
   morphisms defined as functions between sets.
 \end{example}
 
-\begin{example}
+\begin{remark}
   The universe $\Type$ is \emph{not} a category in this sense, as for
   arbitrary types $X, Y$, the function space $X \to Y$ will in general
   not be a set.
-\end{example}
+\end{remark}
 
 \begin{definition}[Functor]
   Suppose $\Cc, \Dd : \Cat$, then we define the type of functors $\Cc$
@@ -49,6 +49,12 @@ category structure and laws.
     &\times &&(comp : \{\ X\ Y\ Z : | \Cc |\ \}\ (g : \Cc(Y,Z))\ (h : \Cc(X,Y)) \to hom\ (g \circ_{\Cc} f) = hom\ g \circ_{\Dd} hom\ f)
   \end{align*}
 \end{definition}
+
+As is usual, we will use the notation $F X$, where
+$F : \Func{\Cc}{\Dd}$ and $X : | \Cc |$ for the action of $F$ on
+object $X$ and $F f$ for the action on morphisms $f : \Cc(X,Y)$. When
+defining functors, we will often only define the action on objects and
+leave the rest implicit.
 
 In ordinary category theory, done in a set theoretic metatheory,
 talking about equality between \emph{objects} is \emph{evil}: doing so
