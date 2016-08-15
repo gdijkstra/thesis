@@ -456,6 +456,20 @@ $$
 Intuitively the type $\Box_F\ P\ x$ is the induction hypothesis.
 
 \subsection{General framework}
+
+To derive notions of famlies and dependent morphism in the categories
+of algebras, we will introduce some notation, making precise what we
+have to generalise. We want to define a type of families over an
+object that is equivalent to the type of morphisms into that same
+object. We will call such a structure the \emph{family structure} on
+that category. This definition on its own is not very useful: we can
+always trivially satisfy the definition by letting the type of
+families exactly be the type of morphisms into an object. However, our
+categories are not completely arbitrary: they are always in some way
+built out of objects and morphisms in $\Set$. We can therefore use the
+notion of families in $\Set$ for those parts and see how the remaining
+parts simplify.
+
 \begin{definition}[Family structure on a category]
   The operations we need from a category $\Cc$ to talk about families
   are as follows:
@@ -636,15 +650,29 @@ $\Gamma : \ttconty$. Since we may also refer to results we get from
 doing induction on $\Gamma$, we also have a $P\ \Gamma$ in there.
 
 We then give the following definitions:
+%
 \begin{align*}
   \Fam_{\Fam}\ (X , P) &\ddefeq (V : X \to \Set) \times (W : (x : X) \to V\ x \to P\ x \to \Set) \\
   \total_{\Fam}\ (X , P)\ (V , W) &\ddefeq ((x : X) \times P x , \lambda (x,y) . (z : V\ x) \times W\ x\ z\ y) \\
   \proj_{\Fam}\ (X, P)\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) . y) \\
-  \preimage_{\Fam}\ (X, P)\ ((Y,Q),(p, q) &\ddefeq (\lambda x . (y : Y) \times p\ y = x , \lambda x\ y\ z . ?)
+  \preimage_{\Fam}\ (X, P)\ ((Y,Q),(p, q)) &\ddefeq (\lambda x . (y : Y) \times p\ y = x , \lambda x\ y\ z . ?)
 \end{align*}
-
+%
 Now we have a family structure on $\Fam$, we need to define what
-dependent morphisms of these families are.
+dependent morphisms of these families are. Returning to the
+$(\ttconty,\tttyty)$ example, given a motive $P : \ttconty \to \Set$,
+$Q : (\Gamma : \ttconty) \to P\ \ttconty \to \tttyty\ \Gamma \to \Set$
+and the appropriate methods, the induction principle gives us two
+functions:
+%
+\begin{align*}
+  &\ttconind : (\Gamma : \ttconty) \to P\ \Gamma \\
+  &\tttyind : (\Gamma : \ttconty) (\tau : \tttyty\ \Gamma) \to Q\ \Gamma\ (\ttconind\ \Gamma)\ \tau
+\end{align*}
+%
+The function $\tttyind$ refers to $\ttconind$ in its type as well: the
+results we get from $\ttconind$ may be used in the motive of
+$\tttyty$.
 
 \subsubsection{Sort categories}
 
@@ -668,8 +696,17 @@ side of the equation above:
   &=& &\reasontext{definition of $S_i$} \\
   &&&(Y : | S_{i-1} |) \times (Q : R_i Y \to \Set) \times (p : S_{i-1}(Y,X)) \times (q : (x : R_i Y) \to Q\ x \to P\ (R_i\ p\ x)) \\
   &=& &\reasontext{combining $Y$ and $p$ using family structure on $S_{i-1}$} \\
-  &&&()
+  &&&(V : \Fam_{S_{i-1}}\ X) \times (Q : R_i (\total_{S_{i-1}}\ X\ V) \to \Set) \\
+  &&&\times (q : (x : R_i (\total_{S_{i-1}}\ X\ V)) \to Q\ x \to P\ (R_i (\proj_{S_{i-1}}\ X\ V)\ x)) \\
+  &=& &\reasontext{rewrite $R_i (\total_{S_{i-1}}\ X\ V)$ with $\Box_{R_i}$} \\
+  &&&(V : \Fam_{S_{i-1}}\ X) \times (Q : (x : R_i X) \times \Box_{R_i}\ X\ V\ x \to \Set) \\
+  &&&\times (q : (x : R_i X) \times (y : \Box_{R_i}\ X\ V\ x) \to Q\ (x , y) \to P\ x)) \\
+  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\Set$} \\
+  &&&(V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \to \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
 \end{align*}
+
+
+
 \subsubsection{0-constructors}
 
 \subsubsection{1-constructors}
