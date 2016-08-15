@@ -1,5 +1,32 @@
 \chapter{Induction versus initiality}
 
+In the previous chapter we have seen how we can specify a quotient
+inductive-inductive definition by giving a list of sorts and a list of
+constructors: we have to give the type formation and introduction
+rules. From these rules, we can then derive the category of
+algebras. The notion of algebra morphism looks a lot like the
+recursion principle for the inductive definition. In fact, saying that
+an algebra is \emph{weakly initial} is precisely the statement that
+the algebra satisfies the recursion principle. The link between full
+initiality and the induction principle is a bit more
+involved. Initiality talks about the morphism we get from the
+recursion principle being \emph{unique}: its statement involves
+equality of morphisms. The induction principle is something that
+allows us to produce dependent functions into families over our
+inductive definitions.
+
+Initial algebra semantics is a very attractive way of ``explaining''
+inductive definitions: stating the property of being initial only
+requires us to have defined the objects and morphisms:
+
+\begin{definition}[Initiality]
+  An object $X$ of a category $\Cc$ is \emph{initial} if for every
+  $Y : | \Cc |$ the set $\Cc(X,Y)$ is contractible.
+\end{definition}
+
+From this definition it also immediate that being initial is
+propositional.
+
 \section{Categorical characterisation of induction}
 
 The induction principle of an inductive type $\Tty$ gives us a way to
@@ -271,22 +298,28 @@ sorts. We will show that this category has the required limits:
 \end{proof}
 
 Equalisers are constructed in similar way to products, however it
-involves equalities between morphisms. Suppose
-$(f,f'), (g,g') : S_i((X,Y),(Z,W))$, then we have by function
-extensionality and using that an equality of pairs is equivalent a
-pair of equalities:
-% 
-\begin{align*}
-  ((f,f') = (g,g')) &=& &(p : f = g) \\
-                    &\times& &(p' : (x : X) (y : Y\ x) \to \pathover{W}{R_i\ p\ x}{f'\ x\ y}{g'\ x\ y})
-\end{align*}
-% 
-where we denote the action of $R_i$ on a proof of equality $p : f = g$
-by $R_i(p)\ x : R_i\ f\ x = R_i(g)\ x$. Since
-$f'\ x\ y : W\ (R_i\ f\ x)$ and $g'\ x\ y : W\ (R_i\ g\ x)$, we have
-to transport the left hand side of the equation along the equality
-$R_i\ p\ x$.
+involves equalities between morphisms, which we can simplify using the
+following proposition:
 
+\begin{proposition}
+  Suppose $(f,f'), (g,g') : S_i((X,Y),(Z,W))$, then:
+  % 
+  \begin{align*}
+    ((f,f') = (g,g')) &=& &(p : f = g) \\
+                      &\times& &(p' : (x : X) (y : Y\ x) \to \pathover{W}{R_i\ p\ x}{f'\ x\ y}{g'\ x\ y})
+  \end{align*}
+  % 
+  where we denote the action of $R_i$ on a proof of equality
+  $p : f = g$ by $R_i(p)\ x : R_i\ f\ x = R_i(g)\ x$. Since
+  $f'\ x\ y : W\ (R_i\ f\ x)$ and $g'\ x\ y : W\ (R_i\ g\ x)$, we have
+  to transport the left hand side of the equation along the equality
+  $R_i\ p\ x$.
+\end{proposition}
+
+\begin{proof}
+  This holds by function extensionality and using that an equality of
+  pairs is equivalent a pair of equalities.
+\end{proof}
 \begin{lemma}
 \label{sorts-equalisers}
   For each sort $\Ss : \sortsty$, the category $\SortCat{\Ss}$ has
@@ -329,13 +362,12 @@ Combining this we get:
 
 When specifying a quotient inductive-inductive type with at least one
 constructor, we also need the category of algebras to have finite
-products.
+limits.
 
 \begin{lemma}[Limits in the category of algebras]
   For each sort $\Ss : \sortsty$ and specification $s : \specty$, the
-  category of algebras $\Alg_s$ has products and
-  equalisers. Furthermore, the forgetful functor
-  $U_s : \Alg_s \to \SortCat{\Ss}$ preserves finite limits.
+  category of algebras $\Alg_s$ has products. Furthermore, the
+  forgetful functor $U_s : \Alg_s \to \SortCat{\Ss}$ preserves these products.
 \end{lemma}
 \begin{proof}
   We prove both properties simultaneously by induction on
@@ -351,14 +383,14 @@ products.
   equalisers.
 
   For the induction step case, we have a specification $s : \specty$
-  such that $\Alg_s : \Cat$ has products and equalisers and the
-  forgetful functor $U : \Alg_s \to \Ss$ preserves them. To define a
-  constructor on $s$, we need to specify its sort first. Suppose we
-  have $S_i \in \Ss$, then either $S_i = 1$ or $S_i$ is built out of
-  $S_{i-1}$ with some functor $R_i : S_{i-1} \to \Set$ and we have a
-  forgetful functor $t_i : S_i \to S_{i-1}$. In the first case, we are
-  done: adding constructors to an object in $1$ does not do
-  anything. In the remainder we will assume the latter is the case.
+  such that $\Alg_s : \Cat$ has products and the forgetful functor
+  $U : \Alg_s \to \Ss$ preserves them. To define a constructor on $s$,
+  we need to specify its sort first. Suppose we have $S_i \in \Ss$,
+  then either $S_i = 1$ or $S_i$ is built out of $S_{i-1}$ with some
+  functor $R_i : S_{i-1} \to \Set$ and we have a forgetful functor
+  $t_i : S_i \to S_{i-1}$. In the first case, we are done: adding
+  constructors to an object in $1$ does not do anything. In the
+  remainder we will assume the latter is the case.
 
   A 0-constructor of sort $S_i$ on a specification $s : \specty$ is
   given by a functor $F : \Alg_s \to S_i$ such that
@@ -382,14 +414,9 @@ products.
   satisfy this property, hence we are done. By the construction of
   products, the forgetful functor out of the new category of algebras
   preserves products.
-
-  Equalisers are constructed in an analogous fashion.
-
-  For 1-constructors the situation is also similar: we have to appeal
-  to the $\bar{U}$ preserving the limits and have to use the fact that
-  an equality between dependent pairs is equivalent to a dependent
-  pair of equalities.
 \end{proof}
+
+
 
 Together with \cref{initiality-to-section} and
 \cref{section-to-initiality}, this immediately gives the main theorem
