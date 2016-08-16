@@ -701,6 +701,27 @@ The function $\tttyind$ refers to $\ttconind$ in its type as well: the
 results we get from $\ttconind$ may be used in the motive of
 $\tttyty$.
 
+We can derive this formulation by the following equational reasoning:
+\begin{align*}
+  &&&(s : \Fam_{\Fam}((X,P),(\total_{\Fam}\ (X , P)\ (V, W)))) \times (s_0 : \proj_{\Fam}\ (X, P)\ (V, W) \circ_{\Fam} s = \id_{\Fam}\ (X,P)) \\
+  &=&& \reasontext{definition of morphisms in $\Fam$, equality of pairs is pair of equalities} \\
+  &&&(s : X \to (x : X) \times V\ x) \\
+  &&&\times (t : (x : X) \to P\ x \to (y : P (\pi_0\ (s\ x))) \times (W\ (\pi_0\ (s\ x))\ y\ (\pi_1\ (s\ x)))) \\
+  &&&\times (s_0 : \pi_0 \circ s = \id_{\Set}\ X) \times (t_0 : \lambda x z . \pi_0\ (t\ x\ z) = \lambda x z . z) \\
+  &=&& \reasontext{combining $s$ and $s_0$ using the dependent morphism structure on $\Set$} \\
+  &&&(s : (x : X) \to V\ x) \times (t : (x : X) \to P\ x \to (y : P\ x) \times W\ x\ y\ (s\ x)) \\
+  &&&\times (t_0 : \lambda x z . \pi_0\ (t\ x\ z) = \lambda x z . z) \\
+  &=&& \reasontext{combining $t$ and $t_0$ using the dependent morphism structure on $\Set$} \\
+  &&&(s : (x : X) \to V\ x) \times (t : (x : X)\ (y : P x) \to W\ x\ y\ (s\ x))
+\end{align*}
+
+The dependent morphism structure on $\Fam$ is then:
+%
+\begin{align*}
+  asdf
+\end{align*}
+%
+
 \subsubsection{Sort categories}
 
 The family structure on a sort category can be given by induction on
