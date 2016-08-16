@@ -1,5 +1,101 @@
 \chapter{Preliminaries}
 
+\section{Basic type formers}
+
+
+
+\section{Equality}
+
+\begin{definition}
+  Given a type $A : \Type$ and $x, y : A$, we define the type
+  $x = y : \Type$, with constructor:
+  $$
+  \refl : (x : A) \to x = x
+  $$
+
+  The elimination principle for the identity type is:
+  \begin{align*}
+  \J : &(A : \Type)\ (P : (x\ y : A) \to x = y \to \Type)\ \\
+  &(m : (x : A) \to P\ x\ x\ (\refl\ x)) \\
+  &\to (x\ y : A)\ (p : x = y) \to P\ x\ y\ p
+  \end{align*}
+  which satisfies the computation rule:
+  $$
+  \J\ A\ P\ m\ x\ x\ (\refl\ x) \defeq m\ x
+  $$
+\end{definition}
+
+\begin{lemma}
+  Given a type $A : \Type$, the identity types form an equivalence
+  relation on $A$.
+\end{lemma}
+
+\begin{proof}
+  We need to show that the relation $\_ = \_ : A \to A \to \Type$ is
+  reflexive, symmetric and transitive. Reflexivity we naturally get
+  from the $\refl$ constructor. For symmetry we need to appeal to the
+  elimination principle. Let $p : x = y$, we define $\sym{p} : y = x$:
+  $$
+  \sym{p} \ddefeq \J\ A\ (\lambda x\ y\ p . y = x)\ (\lambda x . \refl\ x)\ x\ y\ p
+  $$
+\end{proof}
+
+\begin{lemma}
+  The identity types on a type $A : \Type$ form a groupoid with
+  respect to propositional equality.
+\end{lemma}
+
+\begin{proof}
+  
+\end{proof}
+
+\subsection{Truncation levels}
+
+\subsection{Equivalence}
+
+\begin{definition}
+  Types $A$ and $B$ are \emph{logically equivalent} if we have
+  functions $A \to B$ and $B \to A$.
+\end{definition}
+
+\begin{definition}[Isomorphism]
+  
+\end{definition}
+
+\begin{definition}[Equivalence]
+  
+\end{definition}
+
+
+
+\subsection{Univalence}
+
+\begin{definition}[Univalence]
+  
+\end{definition}
+
+\subsection{Function extensionality}
+
+\begin{lemma}
+  Univalence implies function extensionality
+\end{lemma}
+
+\subsection{Alternative formulation of identity types}
+
+Given the definition of identity types above, we can define an
+alternative formulation of identity types which have different
+computational properties. This formulation is based on the insight
+that identity types satisfy a form of the Yoneda lemma and that
+$\Type$ comes with a strict categorical structure.
+
+\begin{lemma}[Yoneda lemma for identity types]
+  
+\end{lemma}
+
+\begin{proof}
+  Straightforward proof by path induction.
+\end{proof}
+
 \section{Category theory in type theory}
 
 When defining the concept of category in type theory, we have to make
