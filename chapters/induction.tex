@@ -627,6 +627,40 @@ $$
 \DepHom_{\Cc}\ X\ P = \Sect_{\Cc}\ (\total_{\Cc}\ X\ P)\ X\ (\proj_{\Cc}\ X\ P)
 $$
 
+Similar to the action of a functor $F$ on families, we can use this
+structure to define the action of functors on dependent
+morphisms. Given a functor $F : \Func{\Cc}{\Dd}$, we can define:
+$$
+\bar{F} : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \DepHom_{\Cc}\ X\ P \to \DepHom_{\Cc}\ FX\ (\Box_F\ X\ P)
+$$
+If $F$ happens to be an endofunctor on $\Set$, this simplifies to:
+$$
+\bar{F} : (X : \Set) (P : X \to \Set) \to ((x : X) \to P\ x) \to (x : F X) \to \Box_F\ X\ P\ x
+$$
+Before we define $\bar{F}$, observe that we can easily define a function:
+$$
+\Sect_{\Cc}\ X\ (s , p) \to \Sect_{\Dd}\ FX\ (F s , F p)
+$$
+$\bar{F}$ can then be defined as the composite:
+$$
+\xymatrix{
+\DepHom_{\Cc}\ X\ P
+\ar[d]^{\grph}
+\\
+\Sect_{\Cc}\ X\ (\total_{\Cc}\ X\ P, \proj_{\Cc}\ X\ P)
+\ar[d] 
+\\
+\Sect_{\Dd}\ FX\ (F (\total_{\Cc}\ X\ P), F\ (\proj_{\Cc}\ X\ P))
+\ar[d]^{\phi}
+\\
+\Sect_{\Dd}\ FX\ (\total_{\Dd}\ FX (\Box_F\ X\ P), \proj_{\Dd}\ FX\ (\Box_F\ X\ P))
+\ar[d]^{\snd}
+\\
+\DepHom_{\Dd}\ FX\ (\Box_F\ X\ P)
+}
+$$
+The map $\phi$ we get from the equivalence given in \cref{box-thm}.
+
 \subsection{Induction for quotient inductive-inductive definitions}
 
 The family structure on $\Set$ is the usual one. We can derive
@@ -679,10 +713,10 @@ doing induction on $\Gamma$, we also have a $P\ \Gamma$ in there.
 We then give the following definitions:
 %
 \begin{align*}
-  \Fam_{\Fam}\ (X , P) &\ddefeq (V : X \to \Set) \times (W : (x : X) \to V\ x \to P\ x \to \Set) \\
-  \total_{\Fam}\ (X , P)\ (V , W) &\ddefeq ((x : X) \times P x , \lambda (x,y) . (z : V\ x) \times W\ x\ z\ y) \\
-  \proj_{\Fam}\ (X, P)\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) . y) \\
-  \preimage_{\Fam}\ (X, P)\ ((Y,Q),(p, q)) &\ddefeq (\lambda x . (y : Y) \times p\ y = x , \lambda x\ y\ z . ?)
+  \Fam_{\Fam}\ (X , P) &\ddefeq (V : X \to \Set) \times (W : (x : X) \to P\ x \to V\ x \to \Set) \\
+  \total_{\Fam}\ (X , P)\ (V , W) &\ddefeq ((x : X) \times V\ x , (\lambda (x , z) . (y : P\ x) \times W\ x\ y\ z)) \\
+  \proj_{\Fam}\ (X, P)\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) \to z) \\
+  \preimage_{\Fam}\ (X, P)\ ((C,D),(p, q)) &\ddefeq (\lambda a . (c : C) \times p\ c = a , \lambda  x y (z, z') . (w : D\ z) \times (\pathover{P}{z'}{q\ z\ w}{y}))
 \end{align*}
 %
 Now we have a family structure on $\Fam$, we need to define what
@@ -718,10 +752,11 @@ We can derive this formulation by the following equational reasoning:
 The dependent morphism structure on $\Fam$ is then:
 %
 \begin{align*}
-  asdf
+  \DepHom_{\Fam}\ (X , P)\ (V , W) &\ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x)) \\
+  \grph_{\Fam}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ((\lambda x . (x , f\ x) , \lambda x\ y . y , (g\ x\ y)) , \refl) \\
+  \snd_{\Fam}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
 \end{align*}
 %
-
 \subsubsection{Sort categories}
 
 The family structure on a sort category can be given by induction on
@@ -752,6 +787,16 @@ side of the equation above:
   &=& &\reasontext{combining $Q$ and $q$ using family structure on $\Set$} \\
   &&&(V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \to \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
 \end{align*}
+
+The family structure on $S_i$ is then:
+%
+\begin{align*}
+  \Fam_{S_i}\ (X , P) &\ddefeq \\
+  \total_{S_i}\ (X , P)\ (V , W) &\ddefeq \\
+  \proj_{S_i}\ (X, P)\ (V, W) &\ddefeq \\
+  \preimage_{S_i}\ (X, P)\ ((C,D),(p, q)) &\ddefeq  
+\end{align*}
+%
 
 
 
