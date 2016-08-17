@@ -1,8 +1,51 @@
 \chapter{Preliminaries}
 
 \section{Basic type formers}
+In type theory we can form $\Pi$-types, or dependent functions, given
+a type $A$ and for every $a : A$ a type $B\ a$, we have the type:
+$$
+(x : A) \to B\ a
+$$
+Traditionally this is denoted as $\Pi (x : A) . B\ a$. We will use
+Agda's notation for $\Pi$-types instead. The introduction rule for
+$\Pi$-types is that if we have $x : A$ in our context and a term
+$b : B\ x$, then we can form the term:
+$$
+\lambda x . b : (x : A) \to B\ x
+$$
+$\Pi$-types have an elimination rule, called \emph{application}: if
+$f : (x : A) \to B\ x$ and $x : A$, then $f\ x : B\ x$. Terms of
+$\Pi$-types are subject to two classes of definitional equalities,
+$\beta$-equality:
+$$
+(\lambda x . e)\ y \defeq e[x/y]
+$$
+where $e[x/y]$ denotes the substitution of every occurence in $e$ of
+$x$ with $y$. Furthermore we have $\eta$-equality, for every
+$f : (x : A) \to B\ x$:
+$$
+f \defeq \lambda x . f\ x
+$$
+Note that if the codomain of a $\Pi$-type does not refer to elements
+of its domain, \ie when we have a non-dependent function, we denote it
+as $A \to B$.
+
+Apart from $\Pi$-types, we also have $\Sigma$-types, or dependent
+pairs/products. The type formation rule is similar to that of
+$\Pi$-types: if we have a type $A$ such that if we have $a : A$ in our
+context, the term $B\ a$ is a type, then we have that the following is a type:
+$$
+(x : A) \times B\ a
+$$
+This is traditionally written as $\Sigma (x : A) . B\ a$, but we are
+using the \emph{Capriotti notation} here, which mimicks Agda's
+notation for $\Pi$-types.
+
+\subsection{Universes}
 
 
+
+\subsection{Inductive data types}
 
 \section{Equality}
 
@@ -80,6 +123,25 @@
   Univalence implies function extensionality
 \end{lemma}
 
+\subsection{Singleton contraction}
+
+\begin{proposition}
+  For any type $A : \Type$ and $a : A$, we have the following
+  equivalence:
+  $$
+  ((x : A) \times (x = a)) = \unitty
+  $$
+\end{proposition}
+
+\begin{proof}
+  This follows directly from path induction.
+\end{proof}
+
+The type $(x : A) \times (x = a)$ is called a \emph{singleton}. This
+fact is very useful in equational reasoning. It is comparable to high
+school algebra where multiplying by $\frac{a}{a}$ for a cleverly
+chosen expression $a$ is a useful technique.
+
 \subsection{Alternative formulation of identity types}
 
 Given the definition of identity types above, we can define an
@@ -122,6 +184,10 @@ category structure and laws.
          & &&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \to comp\ (comp\ h\ g)\ f = comp\ h\ (comp\ g\ f))
   \end{align*}
 \end{definition}
+
+The type of objects of a category $\Cc$ is denoted with $| \Cc |$. The
+type of morphisms given objects $X, Y : | \Cc |$ is denoted as
+$\Cc(X,Y)$.
 
 \begin{example}
   The universe $\Set$ of types that are sets forms a category with its
@@ -177,6 +243,14 @@ between any type, so ...
   $$  
 \end{definition}
 
+\begin{proposition}
+  The category $\Set$ is univalent.
+\end{proposition}
+
+\begin{proof}
+  This follows directly from univalence for the universe $\Type$.
+\end{proof}
+
 \subsection{Higher categories}
 
 As mentioned before, the universe of types $\Type$ does not form a
@@ -185,4 +259,26 @@ general not be sets. However, we can define composition and identity
 morphisms in the usual way. These will satisfy the category laws
 definitionally as well.
 
+We can relax the definition of category to not have hom-\emph{sets}
+but hom-\emph{types}. Composition and identity morphisms still make
+sense with this generalisation. We may run into issues with the
+category \emph{laws}: in some situations it is not enough to simply
+have the laws, they also need to be coherent in some sense: the
+interaction of the laws with eachother needs to satisfy certain laws
+as well. Naturally, how these coherence laws interact also has to
+adhere to additional higher coherence laws, ad infinitum.
 
+Stating all these coherence properties in a uniform way in type theory
+itself is currently still an open problem. One approach to solve this
+problem is to extend the theory with an \emph{internal} notion of
+strict equality. This then allows us to define Segal \emph{types},
+mimicking the usual constructions on bisimplicial sets.
+
+Alternatively, one can define simplicial sets and bisimplicial sets in
+type theory and use these to define \inftycats with. This means
+however that we the type of objects is a bisimplicial set, which is
+not a convenient object to work with in type theory.
+
+In some cases, such as $\Type$ and $\Fam$ the category of families,
+the category laws are satisfied strictly, which means all the
+coherence laws are also satisfied trivially.
