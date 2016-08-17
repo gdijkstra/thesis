@@ -72,6 +72,7 @@
 \newcommand{\sortnamety}[2]{\sortname{#1} : #2}
 \newcommand{\functy}[2]{&#1 : #2}
 \newcommand{\constr}[2]{&\ \ \ \ #1 : #2}
+\newcommand{\constrdots}{&\ \ \ \ \ \ \vdots}
 
 \NewEnviron{datatype}[2]{%
   \begin{align*}
@@ -102,6 +103,8 @@
 \newcommand{\natty}{\AgdaDatatype{\mathbb{N}}}
 \newcommand{\natzero}{\AgdaInductiveConstructor{\mathsf{zero}}}
 \newcommand{\natsucc}{\AgdaInductiveConstructor{\mathsf{succ}}}
+
+\newcommand{\natrec}{\AgdaFunction{\mathbb{N}\mathsf{-rec}}}
 
 % Interval type
 \newcommand{\intty}{\AgdaDatatype{\mathsf{I}}}
@@ -194,6 +197,7 @@
 \newcommand{\id}{\mathsf{id}}
 \newcommand{\algcat}[1]{#1\mathsf{-alg}}
 \newcommand{\dialgcat}[2]{(#1,#2)\mathsf{-dialg}}
+\newcommand{\monalgcat}[1]{#1\mathsf{-Alg}}
 \newcommand{\termcat}{\mathbb{1}}
 \newcommand{\Func}[2]{#1 \Rightarrow #2}
 \newcommand{\Nat}[2]{#1 \naturalto #2}
@@ -241,13 +245,29 @@
 \newcommand{\cont}[2]{#1 \lhd #2}
 \newcommand{\context}[1]{\llbracket #1 \rrbracket}
 
-% Rel-sorted example inductive type (A,B)
+% Rel-sorted example inductive type (A,B) and general arbitrary
+% inductive type A
 \newcommand{\Aty}{\AgdaDatatype{A}}
+\newcommand{\Ac}{\AgdaInductiveConstructor{c}}
 \newcommand{\Aco}{\AgdaInductiveConstructor{c_0}}
 \newcommand{\Aci}{\AgdaInductiveConstructor{c_1}}
 \newcommand{\Acii}{\AgdaInductiveConstructor{c_2}}
+\newcommand{\Ack}{\AgdaInductiveConstructor{c_k}}
 
 \newcommand{\Bty}{\AgdaDatatype{B}}
 \newcommand{\Bci}{\AgdaInductiveConstructor{c_1}}
 \newcommand{\Bcii}{\AgdaInductiveConstructor{c_2}}
 \newcommand{\Bciii}{\AgdaInductiveConstructor{c_3}}
+
+\newcommand{\Arec}{\AgdaFunction{A\mathsf{-rec}}}
+
+% Field
+\newcommand{\fieldty}{\AgdaDatatype{\mathsf{Field}}}
+\newcommand{\fieldinv}{\AgdaInductiveConstructor{\mathsf{inv}}}
+\newcommand{\fieldzero}{\AgdaInductiveConstructor{0}}
+
+% Free monad
+\newcommand{\Fstareta}{\AgdaInductiveConstructor{\eta}}
+\newcommand{\Fstarc}{\AgdaInductiveConstructor{c}}
+
+\newcommand{\List}{\AgdaDatatype{\mathsf{List}}}

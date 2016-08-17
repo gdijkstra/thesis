@@ -1,6 +1,166 @@
 \chapter{Describing inductive definitions}
 
+When we give an inductive definition, we have to give four sets of
+rules:
+\begin{itemize}
+\item \emph{type formation rules}: we have to specify the \emph{sorts}
+  of the definition. For example, for the contexts and types
+  definition we have a rule stating that $\ttconty$ is a type and that
+  for every $\Gamma : \ttconty$, $\tttyty\ \Gamma$ is a type.
+\item \emph{introduction rules}: we have to have means of creating
+  instances of the data: we need \emph{constructors}
+\item \emph{elimination rules}: we also need means to manipulate the
+  data: we need an induction principle
+\item \emph{computation rules}: the induction principle needs to ``compute''
+\end{itemize}
+
+In practice one gives the type formation and introduction rules, which
+are used to derive the elimination and computation rules from.
+
+In this chapter we will not work directly on the level of syntax, but
+will work on a categorical level.
+
 \section{Algebraic semantics}
+
+Let us look at a list of constructors of an ordinary data type, \eg:
+\begin{datatype}{\Aty}{\Type}
+  \constr{\Aco}{F_0\ \Aty \to \Aty} \\
+  \constr{\Aci}{F_1\ \Aty \to \Aty} \\
+  \constrdots \\
+  \constr{\Ack}{F_k\ \Aty \to \Aty}
+\end{datatype}
+with every $F_i : \Type \to \Type$ being a function that gives us the
+arguments of the constructors. One observation is that if we have
+coproducts, we can rewrite the definition into one having a single
+constructor:
+\begin{datatype}{\Aty}{\Type}
+  \constr{\Ac}{F_0\ \Aty + F_1\ \Aty + \hdots + F_k\ \Aty \to \Aty}
+\end{datatype}
+Hence for ordinary inductive types, it is enough to just consider
+definitions with a single constructor. The type formation rule for
+such a definition is always the same: $\Aty$ is a type. The
+introduction rule is given by supplying a function
+$F : \Type \to \Type$, yielding the constructor
+$\Ac : F\ \Aty \to \Aty$.
+
+Moving on the recursion principle, we notice that we need more
+structure on the function $F$. The recursion principle gives us a way
+to define a function $\Aty \to X$ for some type $X$, given some
+additional structure on $X$. Intuitively we need to specify for every
+constructor what the corresponding ``constructor'' in the target type
+is. For example, for the natural numbers we have:
+$$
+\natrec : (A : \Type)\ (\theta_0 : A)\ (\theta_1 : A \to A) \to \natty \to A
+$$
+with computation rules giving us equalities
+$\natrec\ A\ \theta_0\ \theta_1\ \natzero = \theta_0$ and
+$\natrec\ A\ \theta_0\ \theta_1\ (\natsucc\ n) = \theta_1\ (\natrec\
+A\ \theta_0\ \theta_1\ n)$.
+These rules tell us that applying $\natrec$ to constructors of
+$\natty$ is the same as first applying $\natrec$ to the recursive
+arguments and then applying the ``constructors'' of the target of the
+recursion.
+
+In order to generalise the recursion principle and its computation
+rules to any inductive type $\Aty$ with constructor
+$\Ac : F\ \Aty \to \Aty$, we need $F$ to be \emph{functorial}. We can
+then state the recursion principle for $\Aty$ as:
+$$
+\Arec : (X : \Type)\ (\theta : F\ X \to X) \to \Aty \to X
+$$
+with as its computation rule:
+$$
+\Arec\ X\ \theta\ (\Ac\ x) = \theta\ (F\ f\ x)
+$$
+
+
+\begin{definition}
+  Given an endofunctor $F$ on $\Cc$, an \emph{$F$-algebra} is an
+  object $X : | \Cc |$ along with an \emph{$F$-algebra structure}
+  $\theta : \Cc(F X, X)$. The object $X$ is also referred to as the
+  \emph{carrier} or \emph{underlying object} of the algebra.
+\end{definition}
+
+\begin{definition}
+  Given $F$-algebras $(X,\theta)$ and $(Y,\rho)$ an \emph{$F$-algebra
+    morphism} consists of a morphism $f : \Cc(X,Y)$ such that the
+  following commutes:
+  $$
+  \xymatrix{
+    FX \ar[r]^{\theta} \ar[d]_{Ff} &X \ar[d]^{f} \\
+    FY \ar[r]^{\rho} &Y
+  }
+  $$
+\end{definition}
+
+\begin{proposition}
+  Given an endofunctor $F$, $F$-algebras and $F$-algebra morphisms
+  form a category, denoted as $\algcat{F}$.
+\end{proposition}
+
+\subsection{Monad algebras}
+
+Given an endofunctor $F$ on $\Type$, we can consider its \emph{free
+  monad} $F^*$, which is defined pointwise as the inductive type:
+
+\begin{datatype}{F^* X}{\Type}
+  \constr{\Fstareta}{X \to F^* X} \\
+  \constr{\Fstarc}{F (F^* X) \to F^* X}
+\end{datatype}
+
+It is straightforward to show that $F^*$ forms a monad.
+
+\begin{proposition}
+  $F^*$ forms a monad with unit $\eta$ and multiplication defined by
+  recursion.
+\end{proposition}
+
+$F^*$ is called the \emph{free} monad as it is a free object with
+regards to the forgetful functor of the category of monads on $\Type$
+to endofunctors on $\Type$.
+
+Note that $F^* \emptyty$ gives us the inductive type defined by $F$.
+
+\begin{definition}
+  Given a monad $M : \Func{\Cc}{\Cc}$ with $\eta : \Nat{1_{\Cc},M}$
+  its unit and $\mu : \Nat{M^2,M}$ is multiplication, a monad algebra
+  on $M$ is an object $X : | \Cc |$ and a morphism
+  $\theta : \Cc(MX,X)$ such that it respects the monad operations, \ie
+  the following commutes:
+  $$
+  \xymatrix{
+    X \ar[r]^{\eta_X} \ar[dr]_{\id_X} &MX \ar[d]^{\theta} \\
+    &X
+  }
+  $$
+  and
+  $$
+  \xymatrix{
+    &M^2 X \ar[r]^{M \theta} \ar[d]_{\mu_X} &MX \ar[d]^{\theta} \\
+    &MX \ar[r]_{\theta} &X
+  }
+  $$
+
+  Monad algebra morphisms are defined in the same way as morphisms of
+  algebras of an endofunctor.
+\end{definition}
+
+\begin{proposition}
+  Monad algebras and monad algebra morphisms form a category, denoted
+  $\monalgcat{M}$, also called the \emph{Eilenberg-Moore category} of
+  $M$.
+\end{proposition}
+
+\begin{theorem}
+  Let $F : \Func{\Cc}{\Cc}$ be an endofunctor on $\Cc$ with
+  $F^* : \Func{\Cc}{\Cc}$ its free monad, then $\monalgcat{F^*}$ is
+  equivalent to $\algcat{F}$.
+\end{theorem}
+
+If we associate ordinary inductive types with free monads, then a
+generalisation of this would be to consider not just free monads, but
+any \emph{presented monad}, \ie a monad that is defined in terms of
+generators and relations. 
 
 \section{$\Set$-sorted inductive-inductive definitions}
 
@@ -734,7 +894,31 @@ The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the com
 
 \subsection{Other constructors}
 
+If we look at the constructors we have seen so far, they all are of
+the shape:
+$$
+\Ac : (x : F\ X) \to G (X , x)
+$$
+where $F : | \Cc | \to \Type$ and
+$G : (X : | \Cc |) \to F\ X \to \Type$ where $\Cc$ is some category of
+algebras and $F$ and $G$ are in some sense functorial. For $G$ we seen
+that it was either a forgetful functor or yielding some equation on
+the carrier of the type we are defining. This begs the question if we
+can then generalise inductive definitions even further, \ie can we
+have constructors such as:
+$$
+\Ac : \Aty \to \List\ \Aty
+$$
+It turns out that this particular example does not work out.
 
+There are examples of constructors that do make sense. If we want to
+truncate our inductive type to be propositional, we can add a
+constructor:
+$$
+\Ac : \isprop\ \Ac
+$$
+This works out in this case, as $\isprop\ \Ac$ is equivalent to
+$(x\ y : \Ac) \to x = y$. 
 
 \section{From syntax to functors}
 \label{from-syntax-to-functors}
@@ -762,17 +946,28 @@ negative as well as a positive position. The map
 $\lambda X . (X \to X)$ is therefore not functorial: it is neither
 contravariant nor covariant. 
 
-This is problematic with pattern matching ``semantics''.
+This is problematic with pattern matching ``semantics''. Having an
+inductive type such as $\tttmty$ along with pattern matching (even
+when recursion is restricted to structurally smaller subterms), is
+unsound and allows us to write diverging terms.
 
 Another example of this phenomenon is if we write down an inductive
 definition with as constructors the axioms of a field:
 %
-\begin{datatype}{Field}{\Set}
-  \hdots \\
-  \constr{inv}{(x : Field) \to ((x = 0) \to \emptyty) \to Field} \\
-  \hdots 
+\begin{datatype}{\fieldty}{\Set}
+  \constr{\fieldzero}{\fieldty} \\
+  \constrdots \\
+  \constr{\fieldinv}{(x : \fieldty) \to ((x = \fieldzero) \to \emptyty) \to \fieldty} \\
+  \constrdots
 \end{datatype}
 %
+The category of algebras of this specification should be equivalent to
+the category of fields. If the datatype $\fieldty$ were to exist, it
+then would be the initial object in this category. However, the
+category of fields does not have an initial object. The problem with
+the datatype is that the constructor $\fieldinv$ has a recursive
+occurrence in a negative position: the constructor $\fieldzero$ occurs
+in a negative position.
 
 One difference between how one writes down inductive definitions in
 Agda and our specification type is that in Agda we have to group all
