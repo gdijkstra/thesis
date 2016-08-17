@@ -1,5 +1,23 @@
 \chapter{Constructing quotient inductive types}
 
+For ordinary inductive types, it is usual that if one wants to add
+them to a theory, the ``easiest'' way is to add a primitive that gives
+us an initial algebra for a strictly positive functor on $\Type$, \ie
+a functor given as a $\Type$-container. This primitive is called the
+\emph{W-type}. Every ordinary inductive type can be written in terms
+of this primitive. The benefit of such a primitive is that when we
+want to analyse the theory, we do not have to adjust our analyses
+every time we add an inductive type. In terms of programming, there
+are some downsides to writing everything using W-types however.
+
+For quotient inductive-inductive definitions, we cannot reduce our
+specifications to instance of a primitive similar to W-types. However,
+in this chapter we will see that it is possible to perform the
+construction of initial objects via sequential colimits in type theory
+itself. With this construction, we get quotient inductive-inductive
+definitions by having certain ordinals, arbitrary coproducts and
+coequalisers.
+
 \section{Strict positivity}
 
 In \cref{from-syntax-to-functors} we have seen that not every list of
@@ -18,17 +36,36 @@ theorem, we arrive at a contradiction.
 
 \section{Initial objects via sequential colimits}
 
+Initial algebras of an endofunctor can be 
 
 \begin{theorem}[Ad\'amek]
   \label{adamek-thm}
   Let $\Cc : \Cat$ be a category with an endofunctor
   $F : \Func{\Cc}{\Cc}$. The category of algebras $\algcat{F}$ has an
-  initial object if $\Cc$ has sequential colimits and $F$ preserves
-  these colimits.
+  initial object if $\Cc$ has sequential colimits and an initial
+  object and $F$ preserves these colimits.
 \end{theorem}
 
 \begin{proof}
-  
+  Define $X_\omega$ as the colimit of the cochain:
+  $$
+  \xymatrix{
+    \initobj \ar[r]^{\inithom} 
+    &F\ \initobj \ar[r]^{F \inithom} 
+    &F^2\ \initobj \ar[r]^{F^2 \inithom} 
+    &F^3\ \initobj \ar[r]^{F^3 \inithom} 
+    &F^4\ \initobj \ar[r] 
+    &\hdots
+  }
+  $$
+  Observe that if we apply $F$ to this cochain, we end up with the
+  same cochain, as we can just put the initial object in front of it
+  without changing anything. Since $F$ preserves colimits of cochains,
+  the colimit of this is $F X_\omega$. This gives us an isomorphism
+  $X_\omega \simeq F X_\omega$, hence we get an algebra structure
+  $\theta_\omega$ on $X_\omega$.
+
+  We need to check whether $(X_\omega,\theta_\omega)$ is initial.
 \end{proof}
 
 \subsection{$\Set$-sorted inductive-inductive definitions}
@@ -45,8 +82,10 @@ functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
 
 \begin{proposition}
   Let $F : \Func{\Cc}{\Cc}$ be an endofunctor on a category
-  $\Cc : \Cat$ which has sequential colimits, which $F$ preserves. The
-  forgetful functor $U : \Func{algcat{F}}{\Cc}$ has a left adjoint.
+  $\Cc : \Cat$ which has initial object, binary coproducts and
+  sequential colimits. Suppose furthermore that $F$ preserves
+  sequential colimits, then the forgetful functor
+  $U : \Func{algcat{F}}{\Cc}$ has a left adjoint.
 \end{proposition}
 
 \begin{proof}
@@ -67,7 +106,39 @@ functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
 \end{proposition}
 
 \begin{proof}
-  
+  Suppose we have the following cochain in $\algcat{F}$:
+  $$
+  \xymatrix{
+    (X_0,\theta_0) \ar[r]^{x_0}
+    &(X_1,\theta_1) \ar[r]^{x_1} 
+    &(X_2,\theta_1) \ar[r]^{x_2} 
+    &(X_3,\theta_1) \ar[r]^{x_3}
+    &(X_4,\theta_1) \ar[r]
+    &\hdots
+  }
+  $$
+  This means we have the following diagram in $\Cc$:
+  $$
+  \xymatrix{
+    F X_0 \ar[r]^{F x_0} \ar[d]_{\theta_0}
+    &F X_1 \ar[r]^{F x_1} \ar[d]_{\theta_1}
+    &F X_2 \ar[r]^{F x_2} \ar[d]_{\theta_2}
+    &F X_3 \ar[r]^{F x_3} \ar[d]_{\theta_3}
+    &F X_4 \ar[r] \ar[d]_{\theta_4} 
+    &\hdots
+    \\
+    X_0 \ar[r]_{x_0}
+    &X_1 \ar[r]_{x_1}
+    &X_2 \ar[r]_{x_2}
+    &X_3 \ar[r]_{x_3}
+    &X_4 \ar[r]
+    &\hdots
+  }
+  $$
+  We can take the colimit of the bottom sequence $(X_i,x_i)$, which
+  will have an algebra structure as $F$ preserves colimits of
+  cochains. However, we need to make sure that all the inclusion maps
+  $X_i \to X_\omega$ are algebra morphisms.
 \end{proof}
 
 \begin{proposition}
