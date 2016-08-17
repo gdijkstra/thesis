@@ -38,9 +38,12 @@
 \newcommand{\AgdaPrimitiveType}[1]{\textcolor[HTML]{0000CD}{#1}}
 \newcommand{\AgdaFunction}[1]{\textcolor[HTML]{0000CD}{#1}}
 
+\newcommand{\AgdaPragma}[1]{\mathsf{\{-\#\ #1\ \#-\}}}
+
 % Keywords
 \newcommand{\data}{\AgdaKeyword{data}}
 \newcommand{\where}{\AgdaKeyword{where}}
+\newcommand{\postulate}{\AgdaKeyword{postulate}}
 
 % Primitives
 \newcommand{\emptyty}{\AgdaPrimitiveType{0}}
@@ -190,6 +193,8 @@
   }}%
 }
 
+\newcommand{\inftycat}{$(\omega,1)$-category\xspace}
+\newcommand{\inftycats}{$(\omega,1)$-categories\xspace}
 \newcommand{\Cat}{\AgdaPrimitiveType{\mathsf{Cat}}}
 \newcommand{\Aa}{\mathcal{A}}
 \newcommand{\Cc}{\mathcal{C}}
@@ -264,6 +269,10 @@
 \newcommand{\Bciii}{\AgdaInductiveConstructor{c_3}}
 
 \newcommand{\Arec}{\AgdaFunction{A\mathsf{-rec}}}
+
+% Real numbers
+\newcommand{\realty}{\AgdaDatatype{\mathbb{R}}}
+\newcommand{\realrel}[2]{#1 \AgdaDatatype{\sim} #2}
 
 % Field
 \newcommand{\fieldty}{\AgdaDatatype{\mathsf{Field}}}

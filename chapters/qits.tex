@@ -1,6 +1,12 @@
 \chapter{Quotient inductive types}
 \label{qits}
 
+In this chapter we will give several examples of quotient inductive
+types, motivating their usefulness, before we set out giving a precise
+definition. We will also compare it to other notions such as quotient
+types. We will discuss the status of current (partial) implementations
+of quotient and higher inductive types in various proof assistants.
+
 \section{Examples}
 \label{examples}
 
@@ -332,14 +338,30 @@ as the quotient inductive type $\treety$:
 
 \subsection{Cauchy reals}
 
-% %
-% \begin{align*}
-% &\data\ \Real : \Set \\
-% &\data\ \AgdaDatatype{\_\sim_{\_}\_} : \RatP \to \Real \to \Real \to \Set \\
-% \end{align*}
-% %
-% by the following clauses:
-% %
+Another situation where we benefit from the ability to define an
+inductive type and ``at the same time'' quotient it is when defining
+the real numbers. If we want to define them as equivalence classes of
+Cauchy sequences of rational numbers, we traditionally run into
+problems. To show that this definition yields a version of the reals
+that is Cauchy complete, we need to have countable choice at our
+disposal.
+
+Instead of taking that approach, one can define the reals as the
+following quotient inductive-inductive definition:
+
+\begin{sorts}
+  \sortnamety{\realty}{\Set} \\
+  \sortnamety{\realrel{\_}{\_}}{\realty \to \realty \to \Set}
+\end{sorts}
+
+\begin{datatype}{\realty}{}
+  \constrdots
+\end{datatype}
+
+\begin{datatype}{\realrel{\_}{\_}}{}
+  \constrdots
+\end{datatype}
+
 % \begin{align*}
 % &\data\ \Real\ \where \\
 % &\ \ \ \ \rat : \Rat \to \Real \\
@@ -416,9 +438,64 @@ big improvement over everything being propositional. However, the path
 computation rules still only hold propositionally.
 
 In order to experiment with higher inductive types and cubical type
-theory in Agda, rewrite rules have been introduced. 
+theory in Agda, rewrite rules have been introduced. We can denote any
+relation as being a rewrite relation, for example if we want to
+rewrite according to $\_=\_$, we write:
+$$
+\AgdaPragma{BUILTIN\ REWRITE\ \_=\_}
+$$
+Suppose we have a term $p : x = y$ that we want to add as a
+definitional equality, \ie we want Agda to always rewrite $x$ to $y$,
+then we write:
+$$
+\AgdaPragma{REWRITE\ p}
+$$
+Using these, a type such as the interval can be
+``implemented'' as follows:
+\begin{align*}
+  &\postulate \\
+  &\ \ \ \ \intzero : \intty \\
+  &\ \ \ \ \intone : \intty \\
+  &\ \ \ \ \intseg : \intzero = \intone \\
+  &\ \ \ \ \intrec : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone}) \\
+  &\ \ \ \ \ \ \ \ \to \intty \to A \\
+  &\ \ \ \ \intrecbetazero : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone}) \\
+  &\ \ \ \ \ \ \ \ \to \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero = a_{\intzero} \\
+  &\ \ \ \ \intrecbetaone : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone})  \\
+  &\ \ \ \ \ \ \ \ \to \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone = a_{\intone}\\
+  \\
+  &\AgdaPragma{REWRITE\ \intrecbetazero} \\
+  &\AgdaPragma{REWRITE\ \intrecbetaone}
+\end{align*}
+Obviously these rewrite pragmas are not safe in anyway: we can easily
+add rules that make the type checker loop or that allow us to inhabit
+the empty type.
 
 \subsection{Cubical type theory}
 
 \section{Related concepts}
 
+As mentioned, quotient inductive-inductive definitions are related to
+quotient types. Quotient types have been studied in several forms in
+type theory.
+
+Inductive definitions with equalities have been studied in Miranda
+(data types with laws) and as non-free data types in 
+
+One way to think about quotient inductive-inductive definitions is to
+view the constructors as atoms and function symbols of some (algebraic)
+theory. The path constructors are then equations on the theory. The
+types then give us the syntactic model of that particular theory. One
+difference with quotient inductive-inductive definitions is that we
+can mix point and path constructors, as opposed to first listing all
+the point constructors and then listing all the path
+constructors. This means that point or path constructors may also
+refer to a previous path constructor. For quotient inductive-inductive
+definitions being able to do this may turn out not to be terribly
+interesting, but when we move to higher inductive types, being able to
+do so is essential: without it we would not be able to give the
+definition of things like the torus in the usual way.
+
+Since quotient inductive-inductive definitions can be thought of as
+syntactic models of certain theories, concepts such as monads,
+essentially algebraic theories and Lawvere theories are related.
