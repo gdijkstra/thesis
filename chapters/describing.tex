@@ -483,13 +483,22 @@ When giving a quotient inductive-inductive definition, we start out by
 defining its sorts. When specifying a constructor, we need to say what
 sort we want to construct points or paths in. To this end, we can
 define a membership relation
-\[
-  \_ \in \_ : \Cat \to \sortsty \to \Type
-\]
-where $\Cc \in \Ss$ means that $\Cc$ appears in the chain
-${1 \leftarrow S_0 \leftarrow \ldots \leftarrow S_n}$ corresponding to
-$\Ss$, \ie $\Cc$ is either $1$, or $S_i$ for some $0 \leq i \leq
-n$.
+$$
+  \sortsin{\_}{\_} : \Cat \to \sortsty \to \Type
+$$
+where $\sortsin{\Cc}{\Ss}$ means that $\Cc$ is one of the $S_i$ in the chain
+${S_0 \leftarrow \ldots \leftarrow S_n}$. We can formalise this with
+the following inductive type:
+%
+\begin{datatype}{\sortsin{\_}{\_}}{\Cat \to \sortsty \to \Type}
+  \constr{\sortsinhere}{(s : \sortsty)\ (R : \Func{\SortCat{s}}{\Type}) \to \sortsin{\SortCat{\sortssnoc\ s\ R}}{\sortssnoc\ s\ R}} \\
+  \constr{\sortsinthere}{(s : \sortsty)\ (R : \Func{\SortCat{s}}{\Type})\ (\Cc : \Cat) \to \sortsin{\Cc}{s} \to \sortsin{\Cc}{\sortssnoc\ s\ R}}
+\end{datatype}
+%
+Note with this definition, $\sortsin{\termcat}{s}$ is uninhabited for
+any $s : \sortsty$. This is useful as adding constructors of sort
+$\termcat$ does not do anything, so we need not consider this case.
+
 For a quotient inductive-inductive definition with sorts
 $\Ss : \sortsty$, specifying the sort for a constructor is done by
 giving a category $\Aa : \Cat$ along with a proof of $\Aa \in \Ss$.
