@@ -501,7 +501,8 @@ $\termcat$ does not do anything, so we need not consider this case.
 
 For a quotient inductive-inductive definition with sorts
 $\Ss : \sortsty$, specifying the sort for a constructor is done by
-giving a category $\Aa : \Cat$ along with a proof of $\Aa \in \Ss$.
+giving a category $\Aa : \Cat$ along with a proof of
+$\sortsin{\Aa}{\Ss}$.
 
 \subsection{Makkai's dependent sorts}
 
@@ -656,7 +657,7 @@ two aspects: we have to be able to deal arbitrary sorts, as well as
 with path constructors.
 
 Let $\Ss : \sortsty$ be a specification of sorts. Recall that we have a
-predicate $\Aa \in \Ss$ that tells us that $\Aa : \Cat$ is one of the
+predicate $\sortsin{\Aa}{\Ss}$ that tells us that $\Aa : \Cat$ is one of the
 sort categories in $\Ss$. Specifying a constructor now requires us to
 specify a sort, which is done by using the predicate. The type of
 quotient inductive-inductive specifications is then refined to the
@@ -669,7 +670,7 @@ category of algebras and underlying carrier functor is given by the
 following inductive-recursive definition of
 \begin{sorts}
   \sortnamety{\specty}{\Set} \\
-  \functy{\Constr}{(s : \specty)\ (\Aa: \Cat) \to \Aa \in \Ss \to \Set} \\
+  \functy{\Constr}{(s : \specty)\ (\Aa: \Cat) \to \sortsin{\Aa}{\Ss} \to \Set} \\
   \functy{\Alg}{\specty \to \Cat} \\
   \functy{\Und}{(s : \specty) \to \Func{\Alg_s}{\SortCat{\Ss}}} \\
 \end{sorts}
@@ -678,10 +679,10 @@ with
 %
 \begin{datatype}{\specty}{}
   \constr{\specnil}{\specty} \\
-  \constr{\specsnoc}{(s : \specty) (\Aa: \Cat) (p : \Aa \in \Ss) \to \Constr\ s\ \Aa\ p \to \specty}
+  \constr{\specsnoc}{(s : \specty) (\Aa: \Cat) (p : \sortsin{\Aa}{\Ss}) \to \Constr\ s\ \Aa\ p \to \specty}
 \end{datatype}
 %
-where $\Constr\ s\ \Aa\ p$ is defined by recursion on $p : \Aa \in \Ss$ such that
+where $\Constr\ s\ \Aa\ p$ is defined by recursion on $p : \sortsin{\Aa}{\Ss}$ such that
 \begin{align*}
 &\Constr\ s\ 1\ p \ddefeq 0 \\
 &\Constr\ s\ \Aa\ p \ddefeq \Constr_0\ s\ \Aa\ p + \Constr_1\ s\ \Aa\ p
@@ -702,14 +703,14 @@ data needed for point and path constructors respectively.
 
 \subsection{0-constructors}
 
-Suppose we have $S_i \in \Ss$ and $s : \specty$, and we have already
+Suppose we have $\sortsin{S_i}{\Ss}$ and $s : \specty$, and we have already
 constructed
 %
 \begin{itemize}
 \item $\Alg_s : \Cat$,
 \item $U_s : \Alg_s \to \SortCat{\Ss}$ its forgetful functor, and
 \item the extension $\bar{U}_s : \Alg_s \to S_i$ of $U_s$, which we
-  get from $S_i \in \Ss$.
+  get from $\sortsin{S_i}{\Ss}$.
 \end{itemize}
 %
 To make more concrete: suppose $\Ss$ contains $n$ sorts and $s$
@@ -747,7 +748,7 @@ constructor specification:
 
 \begin{definition}
   Given a specification $s : \specty$, a point constructor of sort
-  $S_i \in \Ss$ is specified by giving a functor
+  $\sortsin{S_i}{\Ss}$ is specified by giving a functor
   $F : \Func{\Alg_s}{S_i}$ such that the following commutes:
   $$
   \xymatrix{
@@ -819,7 +820,7 @@ The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the com
 Specifying the arguments for a path constructor is done in exactly the
 same way as for a point constructor, while the endpoints of the path
 is given by natural transformations. Suppose $s : \specty$, then a path
-constructor structure of sort $S_i \in \Ss$ on an object
+constructor structure of sort $\sortsin{S_i}{\Ss}$ on an object
 $(X_0, \hdots, X_n, \theta_0,\hdots,\theta_m) : | \Alg_s |$ is of the
 form:
 \begin{align}
@@ -851,7 +852,7 @@ Summarising the above, we get to the following definition of
 
 \begin{definition}
   Given a specification $s : \specty$, a 1-constructor of sort
-  $S_i \in \SortCat{\Ss}$ is specified by a functor
+  $\sortsin{S_i}{\Ss}$ is specified by a functor
   $F : \Alg_s \to S_i$ satisfying $t_i \circ F = t_i \circ \bar{U}_s$
   and two natural transformations $\ell, r : F \to \bar{U}_s$ satisfying
   $t_i\ \ell = t_i\ r = \id_{t_i \circ \bar{U}_s}$, \ie
