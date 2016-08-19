@@ -459,16 +459,21 @@ specification the list $[R_0]$ with $R_0\ x \ddefeq \natty$.
 
 \subsection{Sort membership}
 
-A specification $\Ss = [R_0, \ldots, R_n] : \sortsty$ defines a chain of categories
-\[
+Given a specification $s : \sortsty$ and a functor
+$R : \Func{\SortCat{s}}{\Type}$, we can define a forgetful functor
+$t : \Func{\SortCat{\sortssnoc\ s\ R}}{\SortCat{s}}$ which maps an object
+$(X , P) : \SortCat{\sortssnoc\ s\ R}$ to $X$. A specification
+$\Ss = [R_0, \ldots, R_n] : \sortsty$ therefore defines a chain of
+categories:
+$$
 \xymatrix{
 1 &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_i}
 }
-\]
+$$
 where $n$ is the number of functors in the list and
 $S_i = \SortCat{R_0, \ldots, R_i}$ is the category of sorts truncated
-to the first $i$ elements. Every $t_i$ is the forgetful functor that
-maps $(X,Y)$ to $X$.
+to the first $i$ elements. Every $t_i$ is the forgetful functor into
+the previous category.
 
 \begin{example}
 In the case of $\Rel$, we get the sequence
@@ -495,16 +500,125 @@ the following inductive type:
   \constr{\sortsinthere}{(s : \sortsty)\ (R : \Func{\SortCat{s}}{\Type})\ (\Cc : \Cat) \to \sortsin{\Cc}{s} \to \sortsin{\Cc}{\sortssnoc\ s\ R}}
 \end{datatype}
 %
-Note with this definition, $\sortsin{\termcat}{s}$ is uninhabited for
-any $s : \sortsty$. This is useful as adding constructors of sort
-$\termcat$ does not do anything, so we need not consider this case.
-
+\begin{example}
+  Consider the specification of $\Rel$ (\cref{rel-sorts}). If we want
+  to say that $\sortsin{\SortCat{[R_0]}}{[R_0,R_1]}$ (recall that
+  $\SortCat{[R_0]}$ is equivalent to $\Type$), then we can do so by
+  giving the following term:
+  $$
+  \sortsinthere\ [R_0]\ R_1\ \SortCat{R_0}\ (\sortsinhere\ \sortsnil\ R_0)
+  $$
+\end{example}
+%
 For a quotient inductive-inductive definition with sorts
 $\Ss : \sortsty$, specifying the sort for a constructor is done by
 giving a category $\Aa : \Cat$ along with a proof of
-$\sortsin{\Aa}{\Ss}$.
+$\sortsin{\Aa}{\Ss}$. Note that with this definition,
+$\sortsin{\termcat}{s}$ is uninhabited for any $s : \sortsty$. This is
+useful as adding constructors of sort $\termcat$ does not do anything,
+so we need not consider this case.
+
+Suppose we have a chain of sorts
+$S_1 \from S_2 \from \hdots \from S_n$ and a functor
+$U : \Func{\Cc}{S_n}$, then naturally we can extend this functor to
+$\hat{U_i} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by composing
+with the forgetful functors. We can formalise this operation with sort
+membership, \ie for every specification $s : \sortsty$ with a functor
+$U : \Func{\Cc}{\SortCat{s}}$, we can define the function:
+$$
+\hat{U} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{s}} \to \Func{\Cc}{S_i}
+$$
+This function is defined by induction over the proof of
+$\sortsin{S_i}{\SortCat{s}}$.
+
 
 \subsection{Makkai's dependent sorts}
+
+As mentioned before, giving an inductive definition is similar to
+defining a theory: we specify the type formation rules, or the sorts,
+we specify the point constructors, or the function symbols and we
+specify the path constructors, or the equations. One important aspect
+of our inductive definitions is that our type formation rules do not
+just give us a collection of types, but also type \emph{families}: we
+do have \emph{dependent sorts}.
+
+In Makkai's FOLDS (first-order logic with dependent sorts), these
+dependent sorts are represented as presheaves over certain
+categories. Observe that the category of families $\Fam$ can either be
+defined as having objects $(X : \Set) \times (P : X \to \Set)$ or as
+having as objects $(X Y : \Set) \times (p : Y \to X)$. The latter
+category can be explained as the presheaf category $\Set^I$, where $I$
+is the arrow category $\cdot \to \cdot$.
+
+Suppose we have an inductive definition with sorts
+%
+\begin{itemize}
+\item $O : \Type$
+\item $A : O \to O \to \Type$ (a family of arrows)
+\item $T : (x y z : O) \to A\ x\ y \to A\ y\ z \to A\ x\ z \to \Type$ (a family of triangles)
+\end{itemize}
+%
+The corresponding category of sorts can be represented as presheaves over the category:
+$$
+\xymatrix{
+\cdot     
+\ar@<-.5ex>[r]
+\ar@<.5ex>[r]
+&\cdot
+\ar@<-.75ex>[r]
+\ar@<.0ex>[r]
+\ar@<.75ex>[r]
+&\cdot
+}
+$$
+In Makkai, they consider dependent sorts to be specified by presheaves
+on a \emph{direct category}.
+\begin{definition}[Direct category]
+  A category $\Cc$ is \emph{direct} if $\Cc$ contains no infinite
+  descending chain of non-identity morphisms.
+\end{definition}
+Intuitively this means that all the arrows go in the ``same
+direction'' and that there are no non-trivial automorphisms.
+
+There is also no finiteness restriction on this, so one could also
+talk about presheaves from the simplex category (without the
+degeneracies) $\Delta^+$.
+$$
+\xymatrix{
+\cdot     
+\ar@<-.5ex>[r]
+\ar@<.5ex>[r]
+&\cdot
+\ar@<-1ex>[r]
+\ar@<0ex>[r]
+\ar@<1ex>[r]
+&\cdot
+\ar@<-1.5ex>[r]
+\ar@<-.5ex>[r]
+\ar@<.5ex>[r]
+\ar@<1.5ex>[r]
+&\hdots
+}
+$$
+Our definition of sorts does not support infinitely many sorts,
+however one could take a coinductive interpretation of the $\sortsty$
+type.
+
+Some sorts do not translate easily to the presheaf approach. Take for
+example the sorts:
+\begin{itemize}
+\item $A : \Type$
+\item $B : \List\ A \to \Type$
+\end{itemize}
+With the $\sortsty$ datatype, we are allowed to use arbitrary
+functors, so this readily translates to that setting. In the presheaf
+setting, there is not such a straightforward translation possible.
+
+We have chosen our specific definition of sorts in this way as it
+follows our syntax closely. Most importantly, the sort membership
+relation can be defined in a straightforward manner and used in a
+similarly straightforward manner.
+
 
 \section{Categories of algebras}
 
@@ -529,22 +643,42 @@ following quotient inductive-inductive definition:
   \constr{\Bciii}{(n : \natty) \to \Bcii\ n = \Bcii\ (n+1)}
 \end{datatype}
 
-The sorts of the definition are
+In this section we will show what all the categories of algebras are
+and how they can be characterised. We will get a chain of categories:
+$$
+\xymatrix{
+\Alg_0
+&\Alg_1
+\ar[l]
+&\Alg_2
+\ar[l]
+&\Alg_3
+\ar[l]
+&\Alg_4
+\ar[l]
+}
+$$
+where $\Alg_i$ is the category that ``contains'' the first $i$
+constructors. The functors are the forgetful functors. $\Alg_4$ is the
+category we are ultimately interested in: this is the category of
+algebras that is associated with the full inductive definition.
+
+{\bf Sorts} The sorts of the definition are
 $(A : \Set) \times (B : A \to A \to \Set)$: the category of sorts is
 the category $\Rel$. In \cref{rel-sorts} we saw how this can be
 represented as a list of functors. This category is also the first
 category of algebras, \ie algebras with no constructors, and will as
 such also be referred to as $\Alg_0$.
 
-\subsubsection{Specifying constructors}
-The first constructor $\Aco$ has no arguments and is of sort
-$\Aty : \Set$. Its arguments can be described by the functor
-$F_0 : \Func{\Rel}{\Set}$ with $F_0\ (X,R) \ddefeq \unitty$. The
-category of algebras for the first constructor is then
-$\dialgcat{F_0}{t_1}$, where $t_1 : \Func{\Rel}{\Set}$ is the
-forgetful functor. Strictly speaking, an $(F_0,t_1)$-dialgebra
-structure on a relation $(X,R)$ is a function $1 \to X$, but for this
-example we will work with the equivalent definition
+{\bf First constructor} ($\Aco : \Aty$) The first constructor $\Aco$
+has no arguments and is of sort $\Aty : \Set$. Its arguments can be
+described by the functor $F_0 : \Func{\Rel}{\Set}$ with
+$F_0\ (X,R) \ddefeq \unitty$. The category of algebras for the first
+constructor is then $\dialgcat{F_0}{t_1}$, where
+$t_1 : \Func{\Rel}{\Set}$ is the forgetful functor. Strictly speaking,
+an $(F_0,t_1)$-dialgebra structure on a relation $(X,R)$ is a function
+$1 \to X$, but for this example we will work with the equivalent
+definition
 $| \Alg_1 | \equiv (X : \Set) \times (R : X \to X \to \Set) \times
 (\theta_0 : X)$.
 Morphisms $(X,R,\theta_0) \to (Y,S,\rho_0)$ consist of:
@@ -567,11 +701,16 @@ defined by $U_1 ((X,R),\theta_0) \ddefeq (X,R)$ --- in fact, every
 category of algebras $\Alg_{i+1}$ has a similarly defined forgetful
 functor $U_{i+1} : \Func{\Alg_{i+1}}{\Alg_0$}.
 
-For the second constructor $\Aci$, the specification is largely
-similar: it is given by the functor $F_1 : \Func{\Alg_1}{\Set}$
-defined by $F_1\ (X, R, \theta_0) \ddefeq \unitty$.
+{\bf Second constructor} ($\Aci : \Aty$) For the second constructor
+$\Aci$, the specification is largely similar: it is given by the
+functor $F_1 : \Func{\Alg_1}{\Set}$ defined by
+$F_1\ (X, R, \theta_0) \ddefeq \unitty$. $\Alg_2$ has objects
+$(X : \Set) \times (\theta_0 : X) \times (\theta_1 : X)$, or
+equivalently: $\Alg_2$ can be thought of as being the dialgebra
+category $\dialgcat{F_1}{t_1 \circ U_1}$.
 
-The third constructor $\Bcii$ maps into a different sort, hence its
+{\bf Third constructor} ($\Bcii : \natty \to \Bty\ \Aco\ \Aci$) The
+third constructor $\Bcii$ maps into a different sort, hence its
 definition will be slightly different. We want the resulting category
 $\Alg_3$ of algebras for constructors $\Aco, \Aci, \Bcii$ to have
 objects
@@ -590,18 +729,30 @@ $$
 % -- CHECK new version is correct!
 Note how we have to use the equalities $f_0 : f\ \theta_0 = \rho_0$ and
 $f_1 : f\ \theta_1 = \rho_1$ to reconcile the types of
-$g\ \theta_1\ \theta_2\ (\theta_2\ n) : S\ (f\ \theta_0)\ (f\
-\theta_1)$ and $\rho_2 : S\ \rho_0\ \rho_1$.
-%
+$$
+g\ \theta_1\ \theta_2\ (\theta_2\ n) : S\ (f\ \theta_0)\ (f\ \theta_1)
+$$
+and 
+$$
+\rho_2 : S\ \rho_0\ \rho_1 .
+$$
 Realising the above directly as a dialgebra category is a bit
-tricky. However, we can rewrite the type of
-$\theta_2 : \natty \to R\ \theta_0\ \theta_1$ to the equivalent ``Henry
-Ford''-style type (you can have any $(x, y)$ you want, as long as it's
-$(\theta_0, \theta_1)$)\
-\[
+tricky. Observe however that if we have the following type
+$$
+(x : A) \to P\ (e\ x)
+$$
+for some $P : B \to \Set$ and $e : A \to B$, we can rewrite it to the
+equivalent type:
+$$
+(x : A) (b : B) \to b = e\ x \to P\ b
+$$
+By singleton contraction, we see that the two types are indeed
+equivalent. The latter version is sometimes referred to as the ``Henry
+Ford''-style type (you can have any $b : B$ you want, as long as it is
+$e\ x$). Along these lines, we can rewrite the type of $\theta_2$ to:
+$$
 \theta_2' : (x\ y : X) \to \big((x = \theta_0) \times (y = \theta_1) \times \natty\big) \to R\ x\ y 
-\]
- %
+$$
 and define the functor $F_2 : Alg_2 \to \Rel$ by
 $F_2 ((X,Y),\theta_0,\theta_1) \ddefeq (X , \lambda x\ y . (x =
 \theta_0) \times (y = \theta_1) \times \natty)$
@@ -613,12 +764,14 @@ an equation that the function $X \to X$ need be the identity. $\Alg_3$
 is therefore not a category of dialgebras directly, but an equaliser
 of one, as we will elucidate later on in some section.
 
-The fourth constructor $\Bciii$ is a path constructor. Hence, not only
-do we need to supply a functor $F_3 : \Func{\Alg_3}{\Alg_0}$ to
-specify the arguments, but we also need to specify the endpoints of
-the path. Just as for $\Bcii$, we will first need to rewrite the type
-of the constructor. We denote again by $\theta_2'$ the Henry
-Ford-version of $\theta_2$.  We then have that the type
+{\bf Fourth constructor}
+($\Bciii : (n : \natty) \to \Bcii\ n = \Bcii\ (n+1)$) The fourth
+constructor $\Bciii$ is a path constructor. Hence, not only do we need
+to supply a functor $F_3 : \Func{\Alg_3}{\Alg_0}$ to specify the
+arguments, but we also need to specify the endpoints of the path. Just
+as for $\Bcii$, we will first need to rewrite the type of the
+constructor. We denote again by $\theta_2'$ the Henry Ford-version of
+$\theta_2$.  We then have that the type
 $(n : \natty) \to \theta_2\ n = \theta_2\ (n+ 1)$ is equivalent to the
 type
 %
