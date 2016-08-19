@@ -236,6 +236,17 @@ order to show that initiality and the section principle coincide, we
 need even more structure: we need the identity \emph{laws} and
 associativity and the existence of certain limits.
 
+The proof of initiality shown here is intuitively very similar to what
+one would do if one had the concrete induction principle: we first
+have to define a ``constant algebra family'' for the given algebra. In
+the categorical setting this corresponds to forming the product and
+considering the projection morphism. From this we get an algebra
+morphism. Showing that this algebra morphism is unique can then be
+done by again appealing to the induction principle. The motive of this
+induction is then stating that the two morphisms are pointwise
+equal. Giving the methods for this motive, \ie giving the algebra
+family, corresponds to forming the equaliser.
+
 \section{Limits in categories of algebras}
 
 In this section we will show that the categories of algebras we are
@@ -246,14 +257,16 @@ its number of constructors. We will see that we also need that the
 forgetful functors into the category of sorts preserve these limits,
 which we can prove simultaneously with the construction of the limits.
 
+\subsection{Sort categories}
+
 For the empty specification, an inductive definition with no
 constructors, the resulting category of algebras is the category of
 sorts. We will show that this category has the required limits:
 
 \begin{lemma}
-\label{sorts-products}
+  \label{sorts-products}
   For each sort $\Ss : \sortsty$, the category $\SortCat{\Ss}$ has
-  products.
+  binary products.
 \end{lemma}
 
 \begin{proof}
@@ -352,17 +365,70 @@ following proposition:
   of equalisers in $S_{i-1}$ and $\Set$.
 \end{proof}
 
-Combining this we get:
+\begin{remark}
+  Let $\termcat \from S_0 \from S_1 \from \hdots \from S_n$ be a chain
+  of sort categories. All the forgetful functors
+  $t_i : S_i \to S_{i-1}$ (with $S_{-1} \ddefeq \termcat$) preserve
+  products and equalisers. This follows directly from the definition
+  of the limits.
+\end{remark}
 
-\begin{theorem}
-  \label{limits-sorts}
-  For each sort $\Ss : \sortsty$, the category $\SortCat{\Ss}$ has
-  finite limits.
-\end{theorem}
+\subsection{Categories of algebras}
+For the categories of algebras, we will perform induction on the
+amount of constructors. We also need to simultaneously show that the
+forgetful functors into the category of sorts preserve the limits.
 
-When specifying a quotient inductive-inductive type with at least one
-constructor, we also need the category of algebras to have finite
-limits.
+\subsubsection{Products}
+
+\begin{lemma}[Products of 0-constructors]
+  Let $\Ss : \sortsty$ and $s : \specty_{\Ss}$ with
+\end{lemma}
+
+\begin{proof}
+  
+\end{proof}
+
+\begin{lemma}[Products of 1-constructors]
+  
+\end{lemma}
+
+\begin{proof}
+  
+\end{proof}
+
+\subsubsection{Equalisers}
+
+\begin{lemma}[Equality of 0-constructor morphisms]
+  
+\end{lemma}
+
+\begin{proof}
+  
+\end{proof}
+
+\begin{lemma}[Equalisers of 0-constructors]
+  
+\end{lemma}
+
+\begin{proof}
+  
+\end{proof}
+
+\begin{proposition}[Equality of 1-constructor morphisms]
+  
+\end{proposition}
+
+\begin{proof}
+  
+\end{proof}
+
+\begin{lemma}[Equalisers of 1-constructors]
+  
+\end{lemma}
+
+\begin{proof}
+  
+\end{proof}
 
 \begin{lemma}[Limits in the category of algebras]
   For each sort $\Ss : \sortsty$ and specification $s : \specty$, the
