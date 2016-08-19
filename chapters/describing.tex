@@ -20,6 +20,17 @@ are used to derive the elimination and computation rules from.
 In this chapter we will not work directly on the level of syntax, but
 will work on a categorical level.
 
+We have seen in the examples in \cref{qits} that quotient
+inductive-inductive definitions differ from ordinary inductive
+definitions in three ways:
+%
+\begin{itemize}
+\item constructors may refer to any previous constructor
+\item we are not defining one type, but a collection of types and type
+  families
+\item apart from point constructors we also have path constructors
+\end{itemize}
+
 \section{Algebraic semantics}
 
 Let us look at a list of constructors of an ordinary data type, \eg:
