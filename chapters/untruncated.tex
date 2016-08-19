@@ -322,18 +322,82 @@ $$
 Applying \cref{morphism-equality} this is the same as giving a proof $p : \id_{\Cc}\ Y \circ f = f$ along with a square:
 $$
 \xymatrix{
-              G\ (\id_{\Cc}\ Y \circ f) \circ \theta
-              \ar@{-}[r]^{\id_0\ \rho \circ_0 f_0}
-              \ar@{-}[d]_{G p \circ \theta}
-              &\rho \circ F\ (\id_{\Cc}\ Y \circ f)
-              \ar@{-}[d]^{\rho \circ F p}
-              \\
-              G\ f \circ \theta
-              \ar@{-}[r]_{f_0}
-              &\rho \circ F\ f
-              }
+  G\ (\id_{\Cc}\ Y \circ f) \circ \theta
+  \ar@{-}[r]^{\id_0\ \rho \circ_0 f_0}
+  \ar@{-}[d]_{G p \circ \theta}
+  &\rho \circ F\ (\id_{\Cc}\ Y \circ f)
+  \ar@{-}[d]^{\rho \circ F p}
+  \\
+  G\ f \circ \theta
+  \ar@{-}[r]_{f_0}
+  &\rho \circ F\ f
+}
 $$
-For $p$ we can fill in $\leftid_{\Cc}\ f$
+For $p$ we can fill in $\leftid_{\Cc}\ f$. We get the following
+diagram:
+$$
+\xymatrix{
+G f \circ \theta
+\ar@{-}[rr]^{G (\leftid_{\Cc} f) \circ \theta}
+\ar@{-}[dd]_{\leftid_{\Dd} (G f)) \circ \theta}
+\ar@{}[ddrr]|{first}
+&&G (\id_{\Cc}\ Y \circ f) \circ \theta
+\ar@{-}[dd]^{(\Gcomp (\id_{\Cc} Y) f) \circ \theta}
+\\
+\\
+(\id_{\Dd} (G Y) \circ G f) \circ \theta
+\ar@{-}[rr]^{(\Gid Y \circ G f) \circ \theta}
+\ar@{-}[dd]_{\assoc_{\Dd} (\id_{Dd} (G Y)) (G f) \theta}
+\ar@{}[ddrr]|{second}
+&&(G (\id_{\Cc} Y) \circ G f) \circ \theta
+\ar@{-}[dd]
+\\
+\\
+\id_{\Dd} (G Y) \circ (G f \circ \theta)
+\ar@{-}[rr]
+\ar@{-}[dd]
+\ar@{}[ddrr]|{third}
+&&G (\id_{\Cc} Y) \circ (G f \circ \theta)
+\ar@{-}[dd]
+\\
+\\
+\id_{\Dd} (G Y) \circ (\rho \circ F f)
+\ar@{-}[rr]
+\ar@{-}[dd]
+\ar@{}[ddrr]|{fourth}
+&&G (\id_{\Cc} Y) \circ (\rho \circ F f)
+\ar@{-}[dd]
+\\
+\\
+((\id_{\Dd} (G Y)) \circ \rho) \circ F f
+\ar@{-}[rr]
+\ar@{-}[dd]
+\ar@{}[ddrr]|{fifth}
+&&(G (\id_{\Cc} Y) \circ \rho) \circ F f
+\ar@{-}[dd]
+\\
+\\
+(\rho \circ \id_{\Dd} (F Y)) \circ F f
+\ar@{-}[rr]
+\ar@{-}[dd]
+\ar@{}[ddrr]|{sixth}
+&&(\rho \circ F (\id_{\Cc} Y)) \circ F f
+\ar@{-}[dd]
+\\
+\\
+\rho \circ (\id_{\Dd} (F Y) \circ F f)
+\ar@{-}[rr]
+\ar@{-}[dd]
+\ar@{}[ddrr]|{seventh}
+&&\rho \circ (F (\id_{\Cc} Y) \circ F f)
+\ar@{-}[dd]
+\\
+\\
+\rho \circ F f
+\ar@{-}[rr]
+&&\rho \circ F ((\id_{\Cc} Y) \circ f)
+}
+$$
 
 
 \subsection{Associativity}
