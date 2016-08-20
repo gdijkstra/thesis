@@ -979,6 +979,62 @@ The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the com
 \]
 \end{definition}
 
+\begin{remark}
+  To explicate the phenomenon of a category of dialgebras containing
+  ``too much'', we will look at how the category of algebras of the
+  following inductive-inductive definitions is built up:
+  %
+  \begin{sorts}
+    \sortnamety{\Aty}{\Set} \\
+    \sortnamety{\Bty}{\Aty \to \Set}
+  \end{sorts}
+  %
+  \begin{datatype}{\Aty}{}
+    \constr{\Aco}{\Aty}
+  \end{datatype}
+  %
+  \begin{datatype}{\Bty}{}
+    \constr{\Bci}{(x : X) \to \emptyty \to \Bty\ x}
+  \end{datatype}
+  %
+  We can see that $\Aty$ is equivalent to $\unitty$. The second
+  constructor $\Bci$ does not add anything to any $\Bty\ x$: $B$ is
+  the constantly empty family.
+
+  The constructor $\Aco$ can be described by
+  the functor:
+  \begin{align*}
+    &F_0 : \Func{\Fam}{\Set} \\
+    &F_0 (X , P) \ddefeq \unitty
+  \end{align*}
+  The category of algebras containing only the first constructor is
+  $\dialgcat{F_0}{V}$ where $V : \Func{\Fam}{\Set}$ is the forgetful
+  functor. The second constructor $\Bci$ , which does not add anything
+  to the inductive type, can be described by the functor:
+  \begin{align*}
+    &F_1 : \Func{\dialgcat{F_0}{V}}{\Fam} \\
+    &F_1 ((X , P) , \theta) \ddefeq (X , \lambda x . \emptyty)
+  \end{align*}
+  It is clear that this functor satisfies the condition that
+  $V \circ F_1 = V \circ U_0$ where
+  $U_0 : \Func{\dialgcat{F_0}{V}}{\Fam}$ is the forgetful functor.
+
+  If we then unfold the definition of $\dialgcat{F_1}{U_0}$, we see
+  that it has objects:
+  \begin{align*}
+    | \dialgcat{F_1}{U_0} | &= &(X : \Set) \times (P : X \to \Set) \\
+    &\times &(\theta_0 : \unitty \to X) \times (\theta_1 : X \to X) \times (\theta_2 :  (x : X) \to \emptyty \to P\ (\theta_1\ x) \\
+    &= &(X : \Set) \times (P : X \to \Set) \times (\theta_0 : X) \times (\theta_1 : X \to X)
+  \end{align*}
+  
+  As mentioned before: we see that we get a superfluous $X \to X$
+  function. For the inductive definition on its own, we are just
+  interested in the initial object of the category of algebras. Here
+  we see that the initial object of the dialgebra category is the
+  natural numbers with a constantly empty family over it.
+\end{remark}
+
+
 \subsection{1-constructors}
 
 Specifying the arguments for a path constructor is done in exactly the
