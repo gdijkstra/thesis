@@ -863,9 +863,86 @@ The family structure on $S_i$ is then:
   \preimage_{S_i}\ (X, P)\ ((C,D),(p, q)) &\ddefeq  
 \end{align*}
 %
-
-
+The dependent morphism structure on $S_i$ is then:
+%
+\begin{align*}
+  \DepHom_{S_i}\ (X , P)\ (V , W) &\ddefeq ?\\
+  \grph_{S_i}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ? \\
+  \snd_{S_i}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
+\end{align*}
+%
 
 \subsubsection{0-constructors}
 
+Suppose we have the following data describing a 0-constructor:
+%
+\begin{itemize}
+\item $\Ss : \sortsty$
+\item $s : \specty_{\Ss}$
+\item $S_i : \Cat$
+\item $p : \sortsin{S_i}{\Ss}$
+\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \hat{U_s}$
+\end{itemize}
+
+Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
+specification, which is $s$ extended with the 0-constructor given by
+the data above. We want to derive the family structure on this
+category $\Alg_{s'}$:
+$$
+\hdots
+$$
+The family structure on $\Alg_{s'}$ is then:
+%
+\begin{align*}
+  \Fam_{\Alg_{s'}}\ (X , \theta) &\ddefeq \\
+  \total_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
+  \proj_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
+  \preimage_{\Alg_{s'}}\ (X,  \theta)\ ((Y , \rho),(p , p_0)) &\ddefeq  
+\end{align*}
+%
+The dependent morphism structure on $\Alg_{s'}$ is then:
+%
+\begin{align*}
+  \DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq ?\\
+  \grph_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ (f , f_0) &\ddefeq ? \\
+  \snd_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ ((s , s_0) , s_1) &\ddefeq ?
+\end{align*}
+%
+
 \subsubsection{1-constructors}
+
+Suppose we have the following data describing a 1-constructor:
+%
+\begin{itemize}
+\item $\Ss : \sortsty$
+\item $s : \specty_{\Ss}$
+\item $S_i : \Cat$
+\item $p : \sortsin{S_i}{\Ss}$
+\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \hat{U_s}$
+\item $l , r : \Nat{F}{\hat{U_s}}$ such that $t_i l = t_i r = \id$
+\end{itemize}
+
+Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
+specification, which is $s$ extended with the 1-constructor given by
+the data above. We want to derive the family structure on this
+category $\Alg_{s'}$:
+$$
+\hdots
+$$
+The family structure on $\Alg_{s'}$ is then:
+%
+\begin{align*}
+  \Fam_{\Alg_{s'}}\ (X , \theta) &\ddefeq \\
+  \total_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
+  \proj_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
+  \preimage_{\Alg_{s'}}\ (X,  \theta)\ ((Y , \rho),(p , p_0)) &\ddefeq  
+\end{align*}
+%
+The dependent morphism structure on $\Alg_{s'}$ is then:
+%
+\begin{align*}
+  \DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq ?\\
+  \grph_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ (f , f_0) &\ddefeq ? \\
+  \snd_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ ((s , s_0) , s_1) &\ddefeq ?
+\end{align*}
+%
