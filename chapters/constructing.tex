@@ -10,9 +10,7 @@ want to analyse the theory, we do not have to adjust our analyses
 every time we add an inductive type. In terms of programming, there
 are some downsides to writing everything using W-types however.
 
-For quotient inductive-inductive definitions, we cannot reduce our
-specifications to instance of a primitive similar to W-types. However,
-in this chapter we will see that it is possible to perform the
+In this chapter we will see that it is possible to perform the
 construction of initial objects via sequential colimits in type theory
 itself. With this construction, we get quotient inductive-inductive
 definitions by having certain ordinals, arbitrary coproducts and
@@ -33,6 +31,12 @@ algebra is the \emph{double powerset functor}
 $P X \ddefeq (X \to 2) \to 2$. By Lambek's theorem the initial algebra
 would give us a set $X$ such that $X = P X$. If we then apply Cantor's
 theorem, we arrive at a contradiction.
+
+\section{Generalising W-types}
+
+The W-types primitive gives us initial algebras for containers on
+$\Set$. In this section we will explore generalising this concept to
+quotient inductive-inductive definitions.
 
 \section{Initial objects via sequential colimits}
 
