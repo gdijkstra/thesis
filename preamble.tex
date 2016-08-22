@@ -50,7 +50,7 @@
 % Primitives
 \newcommand{\emptyty}{\AgdaPrimitiveType{0}}
 \newcommand{\unitty}{\AgdaPrimitiveType{1}}
-\newcommand{\unitval}{\AgdaFunction{\mathsf{tt}}}
+\newcommand{\unitval}{\AgdaInductiveConstructor{\mathsf{tt}}}
 
 \newcommand{\initty}{\AgdaPrimitiveType{0}}
 
@@ -66,8 +66,12 @@
 \newcommand{\Fam}{\AgdaFunction{\mathsf{Fam}}}
 \newcommand{\Rel}{\AgdaFunction{\mathsf{Rel}}}
 
+\newcommand{\Level}{\AgdaPrimitiveType{\mathsf{Level}}}
+
 \newcommand{\isset}{\AgdaFunction{\mathsf{is-set}}}
 \newcommand{\isprop}{\AgdaFunction{\mathsf{is-prop}}}
+\newcommand{\iscontr}{\AgdaFunction{\mathsf{is-contr}}}
+\newcommand{\istrunc}[1]{\AgdaFunction{\mathsf{is-#1-trunc}}}
 
 % Equational reasoning
 \newcommand{\reasontext}[1]{\{\ \textsf{#1}\ \}}
@@ -101,6 +105,17 @@
 \newcommand{\defeq}{\equiv}
 \newcommand{\ddefeq}{:\defeq}
 
+% Path composition from The Book.
+\newcommand{\ct}{%
+  \mathchoice{\mathbin{\raisebox{0.5ex}{$\displaystyle\centerdot$}}}%
+             {\mathbin{\raisebox{0.5ex}{$\centerdot$}}}%
+             {\mathbin{\raisebox{0.25ex}{$\scriptstyle\,\centerdot\,$}}}%
+             {\mathbin{\raisebox{0.1ex}{$\scriptscriptstyle\,\centerdot\,$}}}
+}
+
+\newcommand{\trans}[2]{#1 \ct #2}
+
+
 % is-prop, is-equiv, etc.
 \newcommand{\isequiv}{\AgdaFunction{\mathsf{is-equiv}}}
 
@@ -110,6 +125,14 @@
 \newcommand{\natsucc}{\AgdaInductiveConstructor{\mathsf{succ}}}
 
 \newcommand{\natrec}{\AgdaFunction{\mathbb{N}\mathsf{-rec}}}
+
+% Booleans
+\newcommand{\boolty}{\AgdaDatatype{\mathsf{Bool}}}
+\newcommand{\booltrue}{\AgdaInductiveConstructor{\mathsf{true}}}
+\newcommand{\boolfalse}{\AgdaInductiveConstructor{\mathsf{false}}}
+
+\newcommand{\boolnot}{\AgdaFunction{\mathsf{not}}}
+
 
 % Interval type
 \newcommand{\intty}{\AgdaDatatype{\mathsf{I}}}
@@ -195,6 +218,8 @@
   }}%
 }
 
+\newcommand{\inftygrpd}{$\infty$-groupoid\xspace}
+\newcommand{\inftygrpds}{$\infty$-groupoids\xspace}
 \newcommand{\inftycat}{$(\omega,1)$-category\xspace}
 \newcommand{\inftycats}{$(\omega,1)$-categories\xspace}
 \newcommand{\Cat}{\AgdaPrimitiveType{\mathsf{Cat}}}
@@ -205,6 +230,7 @@
 \newcommand{\algcat}[1]{#1\mathsf{-alg}}
 \newcommand{\dialgcat}[2]{(#1,#2)\mathsf{-dialg}}
 \newcommand{\monalgcat}[1]{#1\mathsf{-Alg}}
+\newcommand{\initcat}{\mathbb{0}}
 \newcommand{\termcat}{\mathbb{1}}
 \newcommand{\Func}[2]{#1 \Rightarrow #2}
 \newcommand{\Nat}[2]{#1 \naturalto #2}

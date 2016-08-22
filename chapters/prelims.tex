@@ -1,5 +1,11 @@
 \chapter{Preliminaries}
 
+In this chapter we will introduce the type theoretic background
+material for the thesis. We introduce notation and basic propositions
+and lemmata that we will use throughout the thesis. As we will be
+using category theoretic approaches, the chapter is concluded with our
+approach to category theory in type theory.
+
 \section{Basic type formers}
 In type theory we can form $\Pi$-types, or dependent functions, given
 a type $A$ and for every $a : A$ a type $B\ a$, we have the type:
@@ -43,9 +49,114 @@ notation for $\Pi$-types.
 
 \subsection{Universes}
 
+Another basic type is the type whose inhabitants themselves are again
+types, the universe $\Type$. Using such a universe, we can now
+rephrase the type formation for $\Pi$-types as having a term:
+$$
+\Pi : (A : \Type) \to (B : A \to \Type) \to \Type
+$$
+Such a universe may not have the property that $\Type : \Type$ as that
+gives rise to a paradox, similar to Russell's paradox in set
+theory. Instead, we have a hierarchy of universes:
+$$
+\Type_0 : \Type_1 : \Type_2 : \hdots
+$$
+While avoiding the paradox, this hierarchy brings a lot of complexity
+to our language in terms of usability. Every time we use a universe,
+we have to explicitly indicate its level, cluttering our terms.
 
+One solution to this problem is to leave the level indices implicit
+and let the type checker infer them, if there exists a valid
+substitution. This is the approach Coq takes.
+
+Another problem is that we may want to give definitions that can be
+instantiated to more than one level. If we want to define a function
+composition operator, we would like that it works for functions
+between types of any level. In Agda, we have the notion of
+\emph{universe polymorphism}. We can define terms such as:
+\begin{align*}
+  &\id : (n : \Level) (A : \Type_n) \to A \to A \\
+  &\id\ n\ A\ x \ddefeq x
+\end{align*}
+The function $\id$ is polymorphic over all levels $n$. While this
+saves us from having to define $\id$ for any level, universe
+polymorphism does introduce some complexity of its own. $\Level$ is
+\emph{not} a type, which means that while
+$(n : \Level) (A : \Type_n) \to A \to A$ is a valid Agda
+\emph{expression}, it is not a type, \ie it is not an inhabitant of
+$\Type_i$ for any $i : \Level$.
+
+In this thesis we will leave the universe levels implicit. The
+formalisation in Agda of course makes them explicit and uses universe
+polymorphism where applicable.
+
+\subsection{Implicit arguments}
+
+An important feature of Agda is that we can denote arguments of a
+function as being an \emph{implicit argument}. One use case is the
+aforementioned universe levels. If we consider again the type and
+definition of $\id$, with implicit arguments, we can write:
+\begin{align*}
+&\id : {n : \Level} {A : \Type_n} \to A \to A \\
+&\id\ x \ddefeq x
+\end{align*}
+The idea here is that the context in which a function is called gives
+information we can use to fill in the blanks: if we call $\id$ with a
+certain argument, we know the type of the argument and in turn also
+know the universe level of that type. Sometimes the context does not
+contain enough information to resolve the holes left by the implicit
+arguments.
 
 \subsection{Inductive data types}
+
+As mentioned in the introduction, an important feature to have in a
+type theory is to have a way to define custom inductive data types. In
+Agda, one can define an inductive type by giving a list of
+constructors. For example, the natural numbers can be defined as
+follows:
+\begin{datatype}{\natty}{\Type}
+  \constr{\natzero}{\natty} \\
+  \constr{\natsucc}{\natty \to \natty}
+\end{datatype}
+We will often use Agda-like notation to give
+definitions/specifications of inductive types.
+
+Two trivial, yet important types we will use are the empty and the
+unit types, which can be defined as inductive types:
+\begin{datatype}{\emptyty}{\Type}
+\end{datatype}
+%
+\begin{datatype}{\unitty}{\Type}
+  \constr{\unitval}{\unitty}
+\end{datatype}
+%
+The ``smallest non-trivial'' data type, $\boolty$ can also be defined
+inductively:
+\begin{datatype}{\boolty}{\Type}
+  \constr{\booltrue}{\boolty} \\
+  \constr{\boolfalse}{\boolty}
+\end{datatype}
+
+Such a declaration in Agda does not give us the elimination principle
+directly. Instead Agda has a notion of \emph{dependent pattern
+  matching}: we write our functions out of inductive types by matching
+against the possible constructors of said types. These function
+definitions may be recursive, as long as the recursive occurrences are
+on a subterm of the pattern. Dependent pattern matching has been shown
+to be equivalent to having eliminators, assuming all types satisfy
+uniqueness of identity proofs. Moreover, the translation of pattern
+matching definitions into definitions with eliminators does not always
+preserve definitional equalities.
+
+As opposed to adding inductive types to the theory in an ad hoc
+manner, one can add W-types as a primitive and define all inductive
+types in terms of this primitive. W-types are enough to give us
+ordinary inductive types as well as indexed inductive types.
+
+In this thesis, the inductive definitions we need to formalise the
+theory of quotient inductive-inductive types, can all be written using
+W-types. However, for sake of convenience and presentational clarity,
+we will use Agda its notation to present these.
 
 \section{Equality}
 
@@ -75,12 +186,18 @@ notation for $\Pi$-types.
 
 \begin{proof}
   We need to show that the relation $\_ = \_ : A \to A \to \Type$ is
-  reflexive, symmetric and transitive. Reflexivity we naturally get
+  reflexive, symmetric and transitive. Reflexivity we immediately get
   from the $\refl$ constructor. For symmetry we need to appeal to the
   elimination principle. Let $p : x = y$, we define $\sym{p} : y = x$:
   $$
   \sym{p} \ddefeq \J\ A\ (\lambda x\ y\ p . y = x)\ (\lambda x . \refl\ x)\ x\ y\ p
   $$
+  For transitivity, we need an operation:
+  $$
+  \trans{\_}{\_} : x = y \to y = z \to x = z
+  $$
+  This can be defined by path induction on any of combination of its
+  arguments.
 \end{proof}
 
 \begin{lemma}
@@ -89,20 +206,129 @@ notation for $\Pi$-types.
 \end{lemma}
 
 \begin{proof}
-  
+  The identity types on $A$ form a groupoid with transitivity as its
+  composition, its inverses given by symmetry and the unit being
+  reflexivity. These operations need to adhere to the following laws:
+  \begin{itemize}
+  \item associativity: $(p : x = y) (q : y = z) (r : z = w) \to \trans{(\trans{p}{q})}{r} = \trans{p}{(\trans{q}{r})}$
+  \item left identity: $(p : x = y) \to \trans{\refl_x}{p} = p$
+  \item right identity: $(p : x = y) \to \trans{p}{\refl_y} = p$
+  \item left inverse: $(p : x = y) \to \trans{\sym{p}}{p} = \refl_y$
+  \item right inverse: $(p : x = y) \to \trans{p}{\sym{p}} = \refl_x$
+  \end{itemize}
+  These can all be shown to hold by straightforward path induction.
 \end{proof}
+
+\begin{remark}
+  The computational properties of transitivity obviously depend on how
+  it is defined: we either get the left identity or the right identity
+  law to hold definitionally if we perform path induction on one
+  argument. If it is defined by path induction on both arguments, we
+  get neither law ``for free''. We can make a new definition of
+  propositional equality on top of the original one, which satisfies
+  the category laws definitionally, as we will see in
+  \cref{alt-identity-type}.
+\end{remark}
+
+Since identity types are types again, they themselves are also
+equipped with a groupoid structure. We can always consider identity
+types of identity types of identity types, et cetera. Such an infinite
+tower of groupoids on top of eachother is called an \inftygrpd. An
+external proof of the fact that every type gives rise to an \inftygrpd
+has been given. Internally this has not been shown yet, as one first
+needs an internal definition of \inftygrpd.
 
 \subsection{Truncation levels}
 
-\subsection{Equivalence}
+If we consider the tower of identity types for a specific type $A$, it
+is sometimes the case that after several levels the identity types
+\emph{vanish}, \ie they are equivalent to the unit type. Another way
+of stating that a type is equivalent to the unit type is that it is
+\emph{contractible}:
 
 \begin{definition}
-  Types $A$ and $B$ are \emph{logically equivalent} if we have
-  functions $A \to B$ and $B \to A$.
+  A type $A$ is \emph{contractible} if there exists a ``central''
+  point $c : A$ such that every point is connected to the centre via
+  an equality:
+  \begin{align*}
+    &\iscontr : (A : \Type) \to \Type \\
+    &\iscontr A \ddefeq (c : A) \times ((x : A) \to c = x)
+  \end{align*}
 \end{definition}
 
+We can show that the identity types for a contractible type are again
+contractible: $\iscontr\ A \to (x\ y : A) \to \iscontr\ (x = y)$. The
+level at which the identity types vanish is the so called
+\emph{truncation level} or \emph{h-level} of the type:
+\begin{definition}
+  A type has truncation level $n : \natty_{-2}$, if we have a proof of
+  $\istrunc{n}\ A$ where $\istrunc{n}$ is defined recursively over $n$:
+  \begin{align*}
+    &\istrunc{n} : (A : \Type) \to \Type \\
+    &\istrunc{-2}\ A \ddefeq \iscontr\ A \\
+    &\istrunc{n+1}\ A \ddefeq (x\ y : A) \to \istrunc{n}\ (x = y)
+  \end{align*}
+\end{definition}
+
+For our purposes, there are two important truncation levels, apart
+from contractibility:
+\begin{definition}
+  A type is a \emph{proposition} or \emph{propositional} if it has
+  truncation level $-1$.
+\end{definition}
+
+A useful characterisation of propositions is given by the following
+proposition:
+\begin{proposition}
+  If the type $A$ satisfies $(x\ y : A) \to x = y$ then $A$ is
+  propositional.
+\end{proposition}
+From this characterisation, we immediately see that if $A$ is
+propositional, then it is either empty or contractible, \ie uniquely
+inhabited up to propositional equality. Of course, we do not have an
+internal proof of
+$(A : \Type) \to \isprop\ A \to (A \to \emptyty) + (\iscontr\ A)$.
+
+The next truncation level, level $0$, are the so called sets:
+\begin{definition}
+  A type is a \emph{set} if it has truncation level $0$, \ie for all
+  $x, y : A$, $x = y$ is propositional.
+\end{definition}
+The property of being a set is also called ``uniqueness of identity
+proofs''.
+
+\subsection{Equivalence}
+
+We have a notion of equality on types, so far have not talked in great
+detail about equality on a universe of types, \ie equality
+\emph{between} types.
+
+A very weak notion of types being equal is ``logical equivalence'':
+\begin{definition}
+  Types $A$ and $B$ are \emph{logically equivalent} if we have
+  functions $A \to B$ and $B \to A$:
+  \begin{align*}
+    &A \logequiv B : \Type \\
+    &A \logequiv B \ddefeq (A \to B) \times (B \to A)
+  \end{align*}
+\end{definition}
+
+With logical equivalence we do not have any requirements on the two
+functions between the two types, just that there exist any. There
+being a logical equivalence is also not a proposition: the type
+$\boolty \logequiv \boolty$ has two distinct inhabitants:
+$(\id_{\boolty} , \id_{\boolty})$ and $(\boolnot , \boolnot)$.
+
+The notion of isomorphism also requires the two functions to be
+eachother's inverses:
 \begin{definition}[Isomorphism]
-  
+  Types $A$ and $B$ are \emph{isomorphic} if they are eachother's
+  inverse:
+  \begin{align*}
+    &\Iso{A}{B} : \Type \\
+    &\Iso{A}{B} \ddefeq (f : A \to B) \times (g : B \to A)  \\
+    &\ \ \ \ \ \ \times ((x : A) \to g\ (f\ a) = a) \times ((y : B) \to f\ (g\ y) = y)
+  \end{align*}
 \end{definition}
 
 \begin{definition}[Equivalence]
@@ -140,15 +366,38 @@ notation for $\Pi$-types.
 The type $(x : A) \times (x = a)$ is called a \emph{singleton}. This
 fact is very useful in equational reasoning. It is comparable to high
 school algebra where multiplying by $\frac{a}{a}$ for a cleverly
-chosen expression $a$ is a useful technique.
+chosen expression $a$, or recognising that two factors cancel
+eachother out, are a useful techniques.
 
 \subsection{Alternative formulation of identity types}
+\label{alt-identity-type}
+We have seen that the identity types form a groupoid on its underlying
+type. The unit and associativity laws do not hold definitionally for
+this groupoid. When reasoning about equalities \emph{between} paths,
+it can be annoying if we have to take associativity into account. For
+example, suppose we want to prove
+$a \ct p \ct (\sym{p} \ct b) = a \ct b$, for some expressions $a$ and
+$b$. The easiest way to prove this is by applying path induction to
+$p$, which will reduce the goal to $a \ct b = a \ct b$. However,
+sometimes we are in comparable situations where we cannot perform path
+induction on all of the paths involved.
+\begin{align*}
+  &a \ct p \ct (\sym{p} \ct b) \\
+  &= \\
+  &a \ct ((p \ct \sym{p}) \ct b) \\
+  &= \\
+  &a \ct (\refl \ct b) \\
+  &= \\
+  &a \ct b
+\end{align*}
 
-Given the definition of identity types above, we can define an
-alternative formulation of identity types which have different
-computational properties. This formulation is based on the insight
-that identity types satisfy a form of the Yoneda lemma and that
-$\Type$ comes with a strict categorical structure.
+We can define an alternative formulation of identity types which have
+different computational properties. This formulation is based on the
+insight that functions on $\Type$ do satisfy the associativity and
+unit laws definitionally with respect to function composition.
+
+Identity types satisfy a form of the Yoneda lemma and that $\Type$
+comes with a strict categorical structure.
 
 \begin{lemma}[Yoneda lemma for identity types]
   
@@ -217,6 +466,20 @@ $F : \Func{\Cc}{\Dd}$ and $X : | \Cc |$ for the action of $F$ on
 object $X$ and $F f$ for the action on morphisms $f : \Cc(X,Y)$. When
 defining functors, we will often only define the action on objects and
 leave the rest implicit.
+
+\begin{definition}
+  The \emph{empty category} $\initcat$ is defined as the category with
+  no objects. The \emph{unit category} $\termcat$ is defined as the
+  category with one object and no non-trivial automorphisms.
+\end{definition}
+
+\begin{definition}
+  The category of categories $\Cat$ is defined as a category with as
+  objects categories and morphisms functors.
+\end{definition}
+
+The categories $\initcat$ and $\termcat$ are respectively initial and
+terminal in the category of categories.
 
 In ordinary category theory, done in a set theoretic metatheory,
 talking about equality between \emph{objects} is \emph{evil}: doing so
