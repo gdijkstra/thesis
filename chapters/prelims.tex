@@ -238,6 +238,94 @@ external proof of the fact that every type gives rise to an \inftygrpd
 has been given. Internally this has not been shown yet, as one first
 needs an internal definition of \inftygrpd.
 
+\subsection{Dependent equality}
+
+When considering type familes $B : A \to \Type$ over some type $A$, we
+sometimes find ourselves in the situation that we want to talk about
+equality of $a : B\ x$ and $b : B\ y$ where $x = y$ but not
+necessarily $x \defeq y$. In this case the term $a = b$ is
+well-typed. However, given a path $x = y$, inhabitants of $B\ x$ can
+be \emph{transported} to inhabitants of $B\ y$:
+\begin{definition}
+  Given $A : \Type$ and $B : A \to \Type$, we define:
+  \begin{align*}
+    &\transport\ B : (p : x = y) \to B\ x \to B\ y \\
+    &\transport\ B\ p\ a \ddefeq J\ A\ (\lambda x\ y\ q . B\ x \to B\ y)\ (\lambda x\ a . a)\ p\ a
+  \end{align*}
+\end{definition}
+
+Using $\transport$ we can define the notion of \emph{dependent path}:
+\begin{definition}
+  Given $A : \Type$, $B : A \to \Type$ and a path $p : x = y$ for
+  $x, y : A$, the type of dependent equalities between $a : B\ x$ and
+  $b : B\ y$ is defined as:
+  \begin{align*}
+    &\pathover{B}{p}{a}{b} : \Type \\
+    &\pathover{B}{p}{a}{b} \ddefeq \transport\ B\ p\ a = b
+  \end{align*}
+\end{definition}
+
+\subsection{Functoriality of functions}
+
+The equality relation is a congruence: it is preserved by any function.
+
+\begin{proposition}
+  Given a function $f : A \to B$ and an equality $x = y$, we have
+  $f\ x = f\ y$.
+\end{proposition}
+
+\begin{proof}
+  We can define the operation $\ap$ (action (of the function) on
+  paths) by path induction:
+  \begin{align*}
+    &\ap : (f : X \to Y) \to x = y \to f\ x = f\ y \\
+    &\ap\ f\ p \ddefeq \J\ (\lambda x\ y\ p . f\ x = f\ y)\ (\lambda x . \refl_{f\ x})\ x\ y\ p
+  \end{align*}
+\end{proof}
+
+We can regard the identity type on a type as a category: we have
+identity morphisms given by $\refl$ and composition given by
+$\trans{\_}{\_}$, which is associative and satisfies the left and
+right unit laws. In this light, any function $A \to B$ can be thought
+of as a functor from the identity types on $A$ to the identity types
+on $B$:
+
+\begin{proposition}
+  For any function $f : X \to Y$, $\ap\ f$ is functorial:
+  \begin{itemize}
+  \item $\ap\ f\ \refl_x = \refl_{f\ x}$
+  \item $\ap\ f\ (\trans{p}{q}) = \trans{\ap\ f\ p}{\ap\ f\ q}$
+  \end{itemize}
+\end{proposition}
+
+\begin{proof}
+  By path induction.
+\end{proof}
+
+$\ap$ is also functorial in its first argument:
+
+\begin{proposition}
+  For any $p : x = y$, the following holds:
+  \begin{itemize}
+  \item $\ap\ \id_A p = p$
+  \item $\ap\ (g \circ f)\ p = \ap\ g\ (\ap\ f\ p)$
+  \end{itemize}
+\end{proposition}
+
+\begin{proof}
+  By path induction.
+\end{proof}
+
+Apart from having an action on paths for functions, we can define a
+similar operation for dependent functions:
+
+\begin{definition}
+  \begin{align*}
+    &\apd : (f : (x : A) \to B\ x) \to (p : x = y) \to \pathover{B}{p}{f\ x}{f\ y}
+  \end{align*}
+  is defined by path induction
+\end{definition}
+
 \subsection{Truncation levels}
 
 If we consider the tower of identity types for a specific type $A$, it
@@ -296,6 +384,17 @@ The next truncation level, level $0$, are the so called sets:
 \end{definition}
 The property of being a set is also called ``uniqueness of identity
 proofs''.
+\begin{definition}
+  We define the universe of sets as follows:
+  \begin{align*}
+    &\Set : \Type \\
+    &\Set \ddefeq (X : \Type) \times \isset\ X
+  \end{align*}
+\end{definition}
+
+For the sake of brevity, we will not be explicit about projecting the
+type out inhabitants of $\Set$ and will write things such as
+$(A : \Set) \to A \to A$, as though it were $\Type$.
 
 \subsection{Equivalence}
 
@@ -331,27 +430,114 @@ eachother's inverses:
   \end{align*}
 \end{definition}
 
+The type of isomorphisms is not necessarily propositional: the
+examples given for logical equivalence can be shown to be distinct
+isomorphisms as well.
+
 \begin{definition}[Equivalence]
   
 \end{definition}
 
+\begin{proposition}
+  Every isomorphism gives rise to an equivalence.
+\end{proposition}
 
+Note that all these relations are equivalence relations. We can also
+show that composing them is associative. Isomorphisms and
+equivalences furthermore satisfy the groupoid laws.
 
 \subsection{Univalence}
 
-\begin{definition}[Univalence]
-  
+We have seen that we can formulate an appropriate notion of equality
+between types, but now we have two different ways of stating equality
+on the universe of types: equivalence and identity types. All the
+things we prove about identity types, have to proven again for
+equivalences. 
+
+Perhaps more importantly, is that we do not have an induction
+principle for equivalences. While we can show that equivalences form
+an equivalence relation and also satisfy the groupoid laws, we cannot
+show that it is a congruence. In other words: we do not have a prove
+of the statement that every construction in type theory is invariant
+under equivalence.
+
+\begin{definition}
+  Every equality between types gives rise to an isomorphism:
+  \begin{align*}
+    &idtoequiv : (A = B) \to \Iso{A}{B} \\
+    &idtoequiv \ddefeq \J\ (\lambda A\ B\ p . \Iso{A}{B}))\ (\lambda A \to id-iso\ A)\ 
+  \end{align*}
 \end{definition}
+
+\begin{definition}[Univalence]
+  A universe of types is \emph{univalent} if the function $idtoequiv$
+  is an equivalence.
+\end{definition}
+
+In other words: univalence gives us an equivalence:
+$$
+(\Equiv{A}{B}) = (A = B)
+$$
+As equivalence and equality between types are equal things, we will
+speak about equivalences between types whilst using the symbol for
+equality.
+
+Often we will give an equality between types by providing an
+isomorphism, which gives us an equivalence, which gives us an equality
+by virtue of univalence.
+
+We will assume univalence holds for our universes of types unless
+otherwise indicated.
 
 \subsection{Function extensionality}
 
-\begin{lemma}
-  Univalence implies function extensionality
-\end{lemma}
+In ordinary mathematics, one usually proves that two functions are
+equal by showing that they are pointwise equal: we appeal to function
+extensionality. In type theory this can be formulated as follows:
+\begin{definition}[Function extensionality]
+  Suppose we have functions $f, g : (x : X) \to P\ x$, function
+  extensionality gives us a term of type:
+  $$
+  ((x : X) \to f\ x = g\ x) \to f = g
+  $$
+\end{definition}
 
-\subsection{Singleton contraction}
+Function extensionality is not something that is provable in ordinary
+\mltt. However, it does follow from univalence and as we will see, it
+also follows from having quotients. In fact, these imply we have \emph{strong function extensionality}:
 
-\begin{proposition}
+\begin{proposition}[Strong function extensionality]
+  For any two functions $f, g : (x : X) \to P\ x$, we have the following equivalence:
+  $$
+  ((x : X) \to f\ x = g\ x) = (f = g)
+  $$
+\end{proposition}
+
+\subsection{Equivalences of $\Sigma$-types}
+
+We often work with nested $\Sigma$-types and have to provide
+equivalences between them. There are basic equivalences that we often
+use to build up our bigger equivalences of.
+
+For non-dependent products, we can show that it satisfies laws of a
+commutative monoid using univalence (these do not hold
+definitionally):
+\begin{itemize}
+\item $A \times \unitty = \unitty \times A = A$
+\item $A \times (B \times C) = (A \times B) \times C$
+\item $A \times B$
+\end{itemize}
+We have similar properties for $\Sigma$-types:
+\begin{itemize}
+\item $(a : A) \times \unitty = (x : \unitty) \times A = A$
+\item $(a : A) \times ((b : B) \times C\ (a , b)) = (x : (a : A) \times B\ a) \times C\ x$
+\end{itemize}
+Commutativity only makes sense when the types do not depend on
+eachother, so we do not have such a statement for $\Sigma$-types. In
+equational reasoning we will not be explicit about applying
+associativity or other laws and often will neglect parentheses.
+
+\begin{proposition}[Singleton contraction]
   For any type $A : \Type$ and $a : A$, we have the following
   equivalence:
   $$
@@ -368,6 +554,15 @@ fact is very useful in equational reasoning. It is comparable to high
 school algebra where multiplying by $\frac{a}{a}$ for a cleverly
 chosen expression $a$, or recognising that two factors cancel
 eachother out, are a useful techniques.
+
+\begin{proposition}[Equality of inhabitants of $\Sigma$-types]
+  Equality between inhabitants of a $\Sigma$-type is equivalent to a
+  $\Sigma$-type of equalities. Given a family $A : Type$,
+  $B : A \to \Type$, and $x , y : A$, $z : B\ a$, $w : B\ y$, we have:
+  $$
+  ((x , z) = (y , w)) = (p : x = y) \times (q : \pathover{B}{p}{z}{w})
+  $$
+\end{proposition}
 
 \subsection{Alternative formulation of identity types}
 \label{alt-identity-type}
@@ -391,13 +586,38 @@ induction on all of the paths involved.
   &a \ct b
 \end{align*}
 
+Because associativity does not hold definitionally, we cannot give as
+proof term:
+$$
+\ap\ (\lambda h . a \ct h \ct b) (sym-inv\ p) : a \ct (p \ct \sym{p}) \ct b = a \ct b
+$$
+as it has the wrong type, hence we are stuck with filling in
+associativity and unit laws here and there. This is particularly
+frustrating when one then has to prove things about the resulting path
+being equal to something else.
+
 We can define an alternative formulation of identity types which have
 different computational properties. This formulation is based on the
 insight that functions on $\Type$ do satisfy the associativity and
-unit laws definitionally with respect to function composition.
+unit laws definitionally with respect to function composition. We define:
+$$
+x =_{A}^{'} y \ddefeq (z : A) \to z = x \to z = y
+$$
+Reflexivity is then redefined as the identity function and
+transitivity is given by function composition. There are functions to
+and fro between the two formulations:
+\begin{align*}
+  &to : x = y \to x =^{'} y \\
+  &to\ p = \lambda z\ q . \trans{q}{p} \\
+  \\
+  &from : x =^{'} y \to x = y \\
+  &from\ p = p\ x\ \refl_{x}
+\end{align*}
 
-Identity types satisfy a form of the Yoneda lemma and that $\Type$
-comes with a strict categorical structure.
+We can think of a function $\lambda z . z = x$ as a representible
+functor. A function of type $(z : A) \to z = x \to z = y$ is
+necessarily a natural transformation. Under this association, we can
+formulate the Yoneda lemma for identity types:
 
 \begin{lemma}[Yoneda lemma for identity types]
   
@@ -406,6 +626,19 @@ comes with a strict categorical structure.
 \begin{proof}
   Straightforward proof by path induction.
 \end{proof}
+
+\begin{proposition}
+  Given a type $A : \Type$ with elements $x, y : A$, we have an equivalence:
+  $$
+  (x =^{'}_{A} y) = (x =_{A} y)
+  $$
+\end{proposition}
+
+The equivalence we get from the Yoneda lemma for identity types. This
+equivalence also maps reflexivitiy and transitivity of the original
+identity types onto composition of the alternative version and vice
+versa. The alternative identity types also satisfy the path induction
+principle.
 
 \section{Category theory in type theory}
 
@@ -513,6 +746,23 @@ between any type, so ...
 \begin{proof}
   This follows directly from univalence for the universe $\Type$.
 \end{proof}
+
+\subsection{Families}
+
+We can define a type of families:
+\begin{align*}
+  &\Fam : \Type \\
+  &\Fam \ddefeq (X : \Type) \times (P : X \to \Type)
+\end{align*}
+The first projection of $\Fam$ is referred to as the \emph{carrier} or
+\emph{underlying type} of the family.
+
+A morphism between two families is a function between the underlying
+types and a witness of the fact that this function ``preserves the
+predicate'':
+\begin{align*}
+  &\Fam((X,P),(Y,Q)) \ddefeq (f : X \to Y) \times (g : (x : X) \to P\ x \to Q\ (f\ x))
+\end{align*}
 
 \subsection{Higher categories}
 
