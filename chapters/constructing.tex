@@ -38,6 +38,20 @@ The W-types primitive gives us initial algebras for containers on
 $\Set$. In this section we will explore generalising this concept to
 quotient inductive-inductive definitions.
 
+Having W-types in our type theory means we have a primitive:
+$$
+\wty : \cont{S}{P} \to \Type
+$$
+which comes with the following:
+\begin{itemize}
+\item $\wsup_{\cont{S}{P}} : (P : \wty_{\cont{S}{P}} \to \Type)\ (m : (x : \context{\cont{S}{P}}\ \wty_{\cont{s}{p}}) \to \Box_{\context{\cont{S}{P}}}\ P\ x \to P\ (\wsup\ x)) \to (x : \wty_{\cont{S}{P}}) \to P\ x$
+\item $\welim : ?$
+\item $\welimbeta : ?$
+\end{itemize}
+
+In other words: $W$ gives us an algebra for a container on $\Type$
+which satisfies the induction principle.
+
 \section{Initial objects via sequential colimits}
 
 Initial algebras of an endofunctor can be 
