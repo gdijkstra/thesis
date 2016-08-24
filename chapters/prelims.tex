@@ -47,6 +47,23 @@ This is traditionally written as $\Sigma (x : A) . B\ a$, but we are
 using the \emph{Capriotti notation} here, which mimicks Agda's
 notation for $\Pi$-types.
 
+The type $(x : A) \times B\ x$ comes with two projection functions:
+\begin{itemize}
+\item $\pi_0 : (x : A) \times B\ x \to A$
+\item $\pi_1 : (x : A) \times B\ x \to B\ x$
+\end{itemize}
+Since we are explicitly giving a name to the first element of the
+pair, we do not explicitly use the first projection in the type of the
+second projection. Using the ``anonymous'' notation we would instead have:
+$$
+\pi_1 : (z : \Sigma A B) \to (\pi_0\ z)
+$$
+The $\eta$-law for $\Sigma$-types gives us the following definitional
+equality for every pair $z : \Sigma A B$:
+$$
+z \defeq (\pi_0\ z , \pi_1\ z)
+$$
+
 \subsection{Universes}
 
 Another basic type is the type whose inhabitants themselves are again
@@ -264,6 +281,55 @@ Using $\transport$ we can define the notion of \emph{dependent path}:
     &\pathover{B}{p}{a}{b} \ddefeq \transport\ B\ p\ a = b
   \end{align*}
 \end{definition}
+
+Although we can define things such as composition for dependent
+equalities and prove some of the same properties that ordinary
+equality has, dependent equalities are not always convenient to work
+with. Sometimes we can rewrite them to ordinary equalities. One
+example of this are dependent equalities over a family of equalities,
+\ie a family $\lambda x . f\ x = g\ x$, for some functions
+$f, g : X \to Y$.
+
+\begin{proposition}
+  Let $f, g : X \to Y$ be two functions, $x, y : X$ and suppose we
+  have the following data:
+  \begin{itemize}
+  \item $p : f\ x = g\ x$
+  \item $q : f\ y = g\ y$
+  \item $r : x = y$
+  \end{itemize}
+  then a dependent equality:
+  $$
+  \pathover{\lambda x . f\ x = g\ x}{r}{p}{q}
+  $$
+  is equivalent to:
+  $$
+  p \ct \ap\ g\ r = \ap\ f\ r \ct q
+  $$
+\end{proposition}
+
+\begin{remark}
+  When we are dealing with equalities between compositions of paths
+  such as in the above proposition, then it makes sense to denote this
+  as a commutative diagram. The above example translates to the
+  following diagram:
+  $$
+  \xymatrix{
+    f\ x 
+    \ar@{-}[r]^{p}
+    \ar@{-}[d]_{\ap f r}
+    &g\ x
+    \ar@{-}[d]^{\ap g r}
+    \\
+    f\ y
+    \ar@{-}[r]_{q}
+    &g\ y
+  }
+  $$
+  Paths are denoted with lines with no arrow heads, as they are
+  invertible. Since direction is not always relevant, we usually
+  denote $\sym{p}$ as $p$ in such a diagram.
+\end{remark}
 
 \subsection{Functoriality of functions}
 
