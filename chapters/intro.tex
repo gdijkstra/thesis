@@ -1,4 +1,5 @@
 \chapter{Introduction}
+\label{intro}
 
 In this thesis we set out to develop a theory of \emph{quotient
   inductive-inductive definitions}. This first chapter we will give
@@ -7,6 +8,17 @@ chapter is concluded by an overview of the thesis and a list
 contributions.
 
 \section{Inductive definitions in mathematics and computer science}
+
+Inductive definitions occur in various forms in both mathematics and
+computer science. We will start out by going through some examples in
+a classical (set theoretic) mathematical setting. We will then show
+what role induction plays in type theory and mention the various forms
+of induction that have been explored in that area. We also spend some
+time talking about the categorical treatment of (algebraic) theories
+and its relation to inductive definitions. After this we talk about
+the use of induction in programming in the form of algebraic data
+types and pattern matching definitions and mention how it relates to
+inductive definitions in type theory.
 
 \subsection{In mathematics}
 In mathematics, induction is an important proof technique. The most
@@ -18,12 +30,16 @@ $n \in \natty$ that $\phi(n) \to \phi(n+1)$. In fact, the fact that
 the natural numbers satisfy this property can be seen as one of the
 defining properties of the natural numbers. This was first written
 down formally by Guiseppe Peano. He defined the natural numbers to be
-a set $\natty$ with the properties:
+a set $\natty$ with the properties such as:
 \begin{itemize}
 \item $0 \in \natty$
 \item for any $n \in \natty$, $\natsucc(n) \in \natty$.
 \item $\natty$ satisfies the induction principle
 \end{itemize}
+The remaining axioms describe the equality relation on the natural
+numbers and postulate the injectivity of the $\natsucc$ constructor
+and that $\natzero \neq \natsucc\ n$ for all $n \in \natty$.
+
 Such a definition is an \emph{inductive definition}.
 
 There are other forms of induction in mathematics: transfinite
@@ -37,6 +53,11 @@ Formal treatment of schemes of inductive definitions in first order
 logic. ``Hauptsatz for the intuitionistic theory of iterated inductive
 definitions'' by Martin-L\"of.
 
+\todoi{something about quotients in set theory and how this is not
+  always straightforward, \eg comments from Conway about defining
+  surreal numbers in ZFC. Also how one typically needs choice in order
+  to do things.}
+
 \subsection{In type theory}
 In this thesis, we are concerned with inductive definitions in type
 theory. In Martin-L\"of Type Theory, types are usually defined
@@ -48,8 +69,12 @@ inductively. They are defined by four sets of rules:
 \item \emph{computation rules} ($\natind\ P\ m_{\natzero}\ m_{\natsucc}\ \natzero = m_{\natzero}$, $\natind\ P\ m_{\natzero}\ m_{\natsucc}\ (\natsucc\ n) = m_{\natsucc}\ n\ (\natind\ P\ m_{\natzero}\ m_{\natsucc} n)$)
 \end{itemize}
 The type formation, introduction and elimination rules are not
-essentially different from Peano's rules. Essential to type theory are
-the computation rules.
+essentially different from Peano's rules. Missing however are rules
+defining an equality relation on $\natty$. As we will see, we can
+define the equality relation as a single parametric inductive
+definition uniformly for all types. Given this notion of equality and
+given that we have a universe of types, one can derive that the
+constructors are disjoint and injective.
 
 The declaration of an inductive definition involves given rules in all
 these classes. However, as observed by Backhouse, it is enough to give
@@ -147,7 +172,7 @@ also has to make sure that the inductive definitions themselves are of
 the right shape: they have to be \emph{strictly positive}. If we were
 to have an inductive type:
 \begin{datatype}{\Tty}{\Type}
-  \constr{\Ta}{(\Tty \to \Tty)}{\Tty}
+  \constr{\Ta}{(\Tty \to \Tty) \to \Tty}
 \end{datatype}
 then we can define:
 \begin{align*}
@@ -250,7 +275,11 @@ studies topological spaces up to homotopy, types themselves can also
 be thought of as topological spaces up to homotopy. This observation
 has given rise to the field of \emph{homotopy type theory}.
 
-something about univalence
+A model of type theory emphasising its relationship to homotopy
+theory, is the simplicial set model. Simplicial sets have a notion of
+\emph{equivalence} which coincides with equality. In this model the
+\emph{univalence axiom} is valid, which roughly means that
+(coherently) isomorphic types are also propositionally equal.
 
 Now we know we can think of types as topological spaces up to
 homotopy, we need a way to define the usual examples, such as the
@@ -269,22 +298,151 @@ a point with a non-trivial loop, as the following \emph{higher
 The constructor $\circleloop$ is a \emph{path constructor}: it
 constructs a new path from $\circlebase$ to $\circlebase$. 
 
+\todoi{something about an recursion principle for this}
+
+Note that to show that $\circleloop \neq \refl_{\circlebase}$, we need
+to have a universe of types which is univalent. This is similar to how
+we cannot show that $\booltrue \neq \boolfalse$ if we cannot eliminate into a
+universe.
+
+Apart from allowing constructors to construct paths between points,
+higher inductive types also allow for \emph{higher} path constructors
+which construct paths between paths. For example, we can describe the
+torus as the following higher inductive type:
+\begin{datatype}{\torusty}{\Type}
+  \constr{\torusbase}{\torusty} \\
+  \constr{\torusp}{\torusbase = \torusbase} \\
+  \constr{\torusq}{\torusbase = \torusbase} \\
+  \constr{\torusr}{\torusp \ct \torusq = \torusq \ct \torusp}
+\end{datatype}
+
+This approach has been succesfully used to formalise various results
+of homotopy theory in type theory, leading to the field of
+\emph{synthetic homotopy theory}.
+
+While people have succesfully used certain particular higher inductive
+types and shown that they behave nicely. There are informal proofs
+that higher inductive types in general have certain properties, \eg we
+can reduce any $n$-constructor with $n > 1$ to a 1-constructor by
+iterating the so called hub-spokes construction. However, a general
+theory or formal definition of higher inductive types is missing so
+far. There is a draft by Lumsdaine and Shulman that discusses the
+semantics of higher inductive types, but leaves out the syntactic
+details. Sojakova has worked out that initial algebra semantics for
+certain higher inductive types along with a more general form called
+W-suspensions coincides with the corresponding induction principles.
+
+Furthermore some results have been made by expressing certain higher
+inductive types in terms of a small set of primitive (higher)
+inductive types.
+
+\todoi{something about path constructors and algebraic theories}
+
 \section{Internalising the theory of quotient inductive-inductive definitions}
 
+Our goal is not only to devise a theory of quotient
+inductive-inductive definitions, but also make sure we can formalise
+it in type theory itself. With the definition being internal we mean
+that in order to formalise it, we do not first have to formalise the
+ordinary metatheory of type theory itself, which is already a
+gargantuan undertaking of its own, and then build upon that. Instead
+we have a more direct definition.
 
+\todoi{something about how we can define a predicate on a type saying
+  that it satisfies the induction principle or is the initial object
+  in the category of algebras: this kind of internal def is the one we want}
+
+The advantage of this approach that we have a stronger guarantee that
+our proofs are correct if we have formalised them. Another advantage
+is that having an internal definition of inductive definitions is that
+we can perform induction on them, \ie we can do metaprogramming or
+generic programming.
+
+Having the theory internal to type theory also allows us to check
+whether we have a valid implementation of quotient inductive-inductive
+definitions. To show that the implementation is correct is to show
+that we get initial objects in the appropriate category of
+algebras. If we manage to show that it is enough to implement a small
+set of primitive quotient inductive types to be able to implement
+arbitrary quotient inductive-inductive definitions, this amounts to
+using these primitives to constructing initial objects in the
+categories of algebras.
+
+There are downsides to an internal approach however. When talking
+about inductive definitions for type theory, we often expect the
+computation rules to hold definitionally. In type theory we only have
+the weaker notion of propositional equality at our disposal. Replacing
+definitional equality with propositional equality is not always
+straightforward: one frequently runs into \emph{coherence
+  issues}.
+
+There are several solutions to this problem. One solution is to change
+the type theory to also have an internal notion of definitional
+equality. Such a theory has as of yet not been worked out fully yet,
+but progress has been made so far. Now there are two approaches to
+define the category of algebras: we can take the original definition
+and use definitional equality where needed. Doing this is not without
+problems: one is bound to run into issues of resulting ``types'' not
+fibrant, hence not being types but \emph{pretypes}. Another approach
+is to deal with the coherence issues in a uniform way using techniques
+from \inftycat theory, which can be performed in type theory using the
+internal definitional equalities.
+
+Another solution to the coherence issues is to restrict one self to
+\emph{sets}, \ie types that satisfy the uniqueness of identity proofs
+principle, as a first approximation. This is the approach we will use
+in the main parts of this thesis. This allows us to focus on the
+essential parts of the theory and defer the coherence issues to a
+later point in time.
+
+Opposed to tackling the coherence conditions uniformly using the heavy
+handed methods from \inftycat theory, one can deal with the coherence
+lazily, \ie as they pop up. For our purposes we usually do not need
+the full set of coherence conditions from the categories we work with,
+so we can just manually use those that we need to prove our theorems
+about inductive definitions. This approach is explored in one of the
+last chapters.
 
 \section{Overview of the thesis and contributions}
 
+The main contribution of this thesis is a formal specification of
+quotient inductive-inductive definitions, given in type theory. The
+thesis is organised as follows:
+
 \begin{itemize}
-\item Give a specification of quotient inductive-inductive definitions
-  in terms of certain categories of algebras.
-\item Show that for these categories an object is initial if and only
-  if it satisfies a categorical induction principle.
-\item We derive the type theoretic induction principle from the
-  categorical induction principle.
-\item We have some preliminary results on constructing quotient
-  inductive-inductive definitions given some reasonable assumptions on
-  the type theory.
-\item We show what the difficulties are when moving from a set-based
-  setting to the untruncated case.
+\item In \cref{prelims}, we give the basic concepts and notation we
+  will use in this thesis, along with proofs of basic propositions and
+  lemmata used throughout the thesis.
+\item \Cref{qits} presents examples of quotient inductive-inductive
+  definitions and their applications and compares them to other
+  notions such as quotients and coequalisers.
+\item \Cref{describing} contains the formal specification of quotient
+  inductive-inductive definitions. They are specified as being a
+  certain kind of iterated dialgebras, which generalises the
+  presentation of ordinary inductive definitions as algebras of
+  functors.
+\item Having a formal specification of quotient inductive-inductive
+  definitions and the corresponding categories of algebras, we show in
+  \cref{induction} that the initial algebra semantics coincides with a
+  categorical formulation of the type theoretic induction
+  principle. From the categorical formulation we derive the type
+  theoretic formulation, showing that induction and initiality
+  coincide for our inductive definitions.
+\item In \cref{constructing} we give some preliminary results on
+  constructing quotient inductive-inductive definitions given some
+  reasonable assumptions on the type theory.
+\item \Cref{untruncated} is about what the difficulties are when
+  moving from a set-based setting to the untruncated case. Here we go
+  into detail about the coherence issues we face and how some of these
+  can be solved in an ad-hoc manner.
+\item The last chapter, \cref{conclusion}, presents the conclusions of
+  the thesis along with a discussion of the presented results. We also
+  point out several avenues for future work.
 \end{itemize}
+
+\section{Declaration of authorship}
+
+A lot of the research leading up to this thesis has been a joint
+effort with fellow researchers.
+
+\todoi{Mention Thorsten, Paolo and Fredrik}
