@@ -13,6 +13,7 @@
 \usepackage{environ} % for data type decl environment, since align* doesn't play nice with newenvironment
 \usepackage{xifthen} % for data type decl hackery, detect empty parameters
 \usepackage{graphicx} % for \naturalto hackery
+\usepackage{tgpagella}
 
 % TODOs
 \newcommand{\todoi}[1]{\todo[inline]{#1}}
@@ -127,6 +128,7 @@
 \newcommand{\natsucc}{\AgdaInductiveConstructor{\mathsf{succ}}}
 
 \newcommand{\natrec}{\AgdaFunction{\mathbb{N}\mathsf{-rec}}}
+\newcommand{\natind}{\AgdaFunction{\mathbb{N}\mathsf{-ind}}}
 
 % Booleans
 \newcommand{\boolty}{\AgdaDatatype{\mathsf{Bool}}}
@@ -320,9 +322,18 @@
 \newcommand{\Fstarc}{\AgdaInductiveConstructor{c}}
 
 \newcommand{\List}{\AgdaDatatype{\mathsf{List}}}
+\newcommand{\listcons}{\AgdaInductiveConstructor{\mathsf{cons}}}
+\newcommand{\listnil}{\AgdaInductiveConstructor{\mathsf{nil}}}
+\newcommand{\listmap}{\AgdaFunction{\mathsf{map}}}
+\newcommand{\listfoldr}{\AgdaFunction{\mathsf{foldr}}}
 
 % W-types
 \newcommand{\wty}{\AgdaDatatype{\mathsf{W}}}
 \newcommand{\wsup}{\AgdaInductiveConstructor{\mathsf{sup}}}
 \newcommand{\welim}{\AgdaFunction{\mathsf{W-elim}}}
 \newcommand{\welimbeta}{\AgdaFunction{\mathsf{W-elim-\beta}}}
+
+% Circle
+\newcommand{\circlety}{\AgdaDatatype{S^1}}
+\newcommand{\circlebase}{\AgdaInductiveConstructor{\mathsf{base}}}
+\newcommand{\circleloop}{\AgdaInductiveConstructor{\mathsf{loop}}}

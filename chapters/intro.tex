@@ -1,3 +1,290 @@
 \chapter{Introduction}
 
-hello test~\cite{Univalent2013}
+In this thesis we set out to develop a theory of \emph{quotient
+  inductive-inductive definitions}. This first chapter we will give
+some context of the problem, prior art and related concepts. The
+chapter is concluded by an overview of the thesis and a list
+contributions.
+
+\section{Inductive definitions in mathematics and computer science}
+
+\subsection{In mathematics}
+In mathematics, induction is an important proof technique. The most
+common and perhaps oldest form of induction is induction on the
+natural numbers\footnote{Early applications of this principle go back
+  to Parmenides?}: if we want to prove that a formula $\phi(n)$ holds
+for any $n \in \natty$, it suffices to prove $\phi(0)$ and for any
+$n \in \natty$ that $\phi(n) \to \phi(n+1)$. In fact, the fact that
+the natural numbers satisfy this property can be seen as one of the
+defining properties of the natural numbers. This was first written
+down formally by Guiseppe Peano. He defined the natural numbers to be
+a set $\natty$ with the properties:
+\begin{itemize}
+\item $0 \in \natty$
+\item for any $n \in \natty$, $\natsucc(n) \in \natty$.
+\item $\natty$ satisfies the induction principle
+\end{itemize}
+Such a definition is an \emph{inductive definition}.
+
+There are other forms of induction in mathematics: transfinite
+induction (induction over ordinals other than the natural numbers?) 
+
+Interesting inductive definitions are those of the surreal numbers,
+where one also introduces an equivalence relation inductively at the
+same time as its elements.
+
+Formal treatment of schemes of inductive definitions in first order
+logic. ``Hauptsatz for the intuitionistic theory of iterated inductive
+definitions'' by Martin-L\"of.
+
+\subsection{In type theory}
+In this thesis, we are concerned with inductive definitions in type
+theory. In Martin-L\"of Type Theory, types are usually defined
+inductively. They are defined by four sets of rules:
+\begin{itemize}
+\item \emph{type formation rules} ($\natty$ is a type)
+\item \emph{introduction rules} ($\natzero : \natty$)
+\item \emph{elimination rules} (given $P : \natty \to \Type$, $m_{\natzero} : P\ \natzero$, $m_{\natsucc} : (n : \natty) \to P\ n \to P\ (\natsucc\ n)$, we get $\natind\ P\ m_{\natzero}\ m_{\natsucc} : (x : \natty) \to P\ x$)
+\item \emph{computation rules} ($\natind\ P\ m_{\natzero}\ m_{\natsucc}\ \natzero = m_{\natzero}$, $\natind\ P\ m_{\natzero}\ m_{\natsucc}\ (\natsucc\ n) = m_{\natsucc}\ n\ (\natind\ P\ m_{\natzero}\ m_{\natsucc} n)$)
+\end{itemize}
+The type formation, introduction and elimination rules are not
+essentially different from Peano's rules. Essential to type theory are
+the computation rules.
+
+The declaration of an inductive definition involves given rules in all
+these classes. However, as observed by Backhouse, it is enough to give
+the type formation rules and introduction rules: the elimination
+principle along with its computation rules can be derived from
+them. This fact is also reflected in how one declares inductive
+definitions in type theory-based proof assistants such as Coq and Agda
+by simply giving a list of constructors, \ie introduction rules.
+
+
+
+\subsection{In category theory}
+Apart from the type theoretic perspective, the categorical perspective
+is also relevant. Inductive definitions such as the natural numbers
+can be explained as being an initial object in the category of
+$F$-algebras, for some endofunctor $F$. The specification of an
+inductive definition then amounts to giving the appropriate
+endofunctor on the appropriately chosen category.
+
+As observed by Shulman, since given an endofunctor $F$ the category of
+$F$-algebras is equivalent to the category of \emph{monad algebras} on
+$F^*$ the free monad of $F$ (if it exists), generalising inductive
+definitions ought to involve moving from free monads to a larger class
+of monads. A related concept to inductive definitions are algebraic
+theories. An algebraic theory consists of a set of \emph{operations},
+which are much like \emph{constructors} of an inductive
+definition. Another ingredient to algebraic theories are
+\emph{equations}, which is traditionally not considered to be a part
+of inductive definitions. Models of algebraic theories such as the
+theory of groups can be specified as being monad algebras of the monad
+that corresponds to the theory. For groups, this is the monad on
+$\Set$ which sends a set to the underlying set of the free group on
+that set.
+
+The quotient inductive-inductive definitions we present in this thesis
+are inductive definitions with equations and as such can also be
+thought of as algebraic theories. There is a difference however with
+theories in general. With inductive definitions we are interested in
+the \emph{initial} object of the category of algebras or models. For
+theories, the existence of an initial object is not always
+important. Consider the theory of fields, the category of fields does
+not have an initial object. However, presenting the theory of fields
+categorically also means we have to move from algebraic theories to
+generalised varieties. 
+
+Also the syntax of type theory itself can be thought of as an
+inductive definition. One way of describing the semantics of type
+theory is as \emph{categories with families}. These objects themselves
+form a category in which the syntax, given as the \emph{syntactic
+  model}, is the initial object. As such, the category of categories
+with families can be thought of as a category of algebras. Realising
+type theory in type theory as an inductive definition is done in ...
+
+\subsection{In computer science}
+
+Recursion is a central concept to computer science. Data structures
+are often defined in terms of themselves, for example a binary tree is
+either a leaf or a pair of binary trees. Functions defined on binary
+trees are then naturally also recursive themselves. In functional
+programming languages one usually has a mechanism available to define
+recursive data structures, called algebraic data types. In Haskell,
+one can define (linked) lists as the algebraic data type:
+$$
+\data\ \List\ a = \listnil\ |\ \listcons\ a\ (\List\ a)
+$$
+Using \emph{pattern matching} on the constructors, we can define
+functions on algebraic data types, \eg:
+\begin{align*}
+  &\listmap : (a \to b) \to \List\ a \to \List\ b \\
+  &\listmap\ f\ \listnil = \listnil \\
+  &\listmap\ f\ (\listcons\ x\ xs) = \listcons\ (f\ x)\ (\listmap\ f\ xs)
+\end{align*}
+In languages like Haskell, we only get a way to pattern matching on an
+algebraic data type: we do not get an induction principle as a
+primitive. However, as we are allowed to use recursion to our heart's
+content, we can derive the (non-dependent) induction principle. For
+lists this is usually called $\listfoldr$:
+\begin{align*}
+  &\listfoldr : b \to (a \to b \to b) \to \List\ a \to b \\
+  &\listfoldr\ e\ op\ \listnil = e \\
+  &\listfoldr\ e\ op\ (\listcons\ x\ xs) = op\ x\ (\listfoldr\ e\ op\ xs)
+\end{align*}
+
+If we move to a dependently typed programming language that we want to
+be total, we cannot take this approach to algebraic data types /
+inductive definitions. In such a setting one can do it the type
+theoretic way and use elimination principles instead of pattern
+matching.  In Agda (or as first implemented in ALF) one can have
+pattern matching with recursion as long as one makes sure that the
+definitions are \emph{structurally} recursive: the recursive
+occurrences are on subterms of the arguments of the clause.
+
+Restricting recursive function definitions is not enough however: one
+also has to make sure that the inductive definitions themselves are of
+the right shape: they have to be \emph{strictly positive}. If we were
+to have an inductive type:
+\begin{datatype}{\Tty}{\Type}
+  \constr{\Ta}{(\Tty \to \Tty)}{\Tty}
+\end{datatype}
+then we can define:
+\begin{align*}
+  &uh : T \to \emptyty \\
+  &uh (\Ta\ f) \ddefeq uh\ (f\ (\lambda x . x)) \\
+  \\
+  &oh : T \\
+  &oh \ddefeq (\lambda x . x)
+\end{align*}
+Since $f\ (\lambda x . x)$ is structurally smaller than $\Ta\ f$, the
+definition of $uh$ is structurally recursive. However, it does give us
+a term that does not have a normal form, namely $uh\ oh$.
+
+Indexed inductive types, or generalised algebraic data types as they
+are called in Haskell, are useful in programming as they allow us to
+encode properties in the types. Examples being well-scoped and
+well-typed abstract syntax trees and red-black trees. Pattern matching
+in this setting, which is called dependent pattern matching, also
+becomes a powerful tool. As we have to unify the type of the function
+that is being defined with that of the constructor of a clause, we
+actually get more information about the variables present in the
+patterns. This may rule out impossible clauses or tell us that certain
+variables are definitionally equal.
+
+When we restrict ourselves to strictly positive inductive definitions
+and structurally recursive function definitions, we end up with a
+subset of definitions that can be translated to the corresponding
+invocations of the elimination principles. There are some caveats with
+this translation however. For ordinary inductive types, it is the case
+that such a translation cannot always preserve the definitional
+computational behaviour of the original function. (See Berry's
+minority function.) When we move to indexed inductive definitions, the
+translation becomes more involved and in general requires uniqueness
+of identity proofs of the equality used in the translation.
+
+The latter is a problem when we want to use pattern matching
+definitions in homotopy type theory, where uniqueness of identity
+proofs does not hold. Luckily there exist further restrictions that we
+can make on the pattern matching definitions to ensure that a
+translation to eliminators is possible, without having to use
+uniqueness of identity proofs. This is implemented in Agda.
+
+
+\section{Homotopy type theory and higher inductive types}
+
+In type theory we have a notion of equality defined on \emph{terms}
+called \emph{definitional} equality, which we refer to with the symbol
+$\equiv$:
+\begin{itemize}
+\item $\lambda x . e\ x \equiv \lambda y . e\ y$: $\alpha$-equivalence
+\item $\lambda x . f\ x \equiv f$: $\eta$-equivalence
+\item $(\lambda x . e) a \equiv e[x/a]$: $\beta$-equivalence
+\end{itemize}
+
+This notion of equality is \emph{external} to the theory, it is a
+meta-theoretic property. For example, we cannot write down a type:
+$$
+(A : \Type) \to (x\ y : A) \to x \equiv y \to A
+$$
+However, using an indexed inductive definition we can ``internalise''
+it: given a type $A$ we define:
+%
+\begin{datatype}{\_=_A\_}{A \to A \to \Type}
+  \constr{\refl}{(x : A) \to x =_A x}
+\end{datatype}
+%
+If we have a term $\refl\ x : x =_A y$ for some $x, y : A$ then this
+only type checks if $x \equiv y$. From a pattern matching point of
+view, it seems like this equality really matches up with definitional
+equality. If we normalise a closed term of an identity type $x = y$,
+it normalises to $\refl$, hence it gives us that $x \equiv y$. As
+such, one would expect that if we have two terms $p, q : x = y$, then
+also $p = q$, \ie we have \emph{uniqueness of identity proofs}. Using
+dependent pattern matching this is easy to prove:
+\begin{align*}
+  &uip : (A : \Type)\ (x\ y : A)\ (p\ q : x = y) \to p = q \\
+  &uip\ A\ x\ .x\ (\refl\ x)\ (\refl\ x) \ddefeq \refl\ (\refl\ x)
+\end{align*}
+Pattern matching on $p$ forces $x$ and $y$ to be definitionally equal,
+yielding $p \equiv \refl\ x$. Pattern matching on $q$, which now has
+type $x = x$, also gives us $q \equiv \refl\ x$. We then have
+$p \equiv \refl\ x \equiv q$, hence $\refl\ (\refl\ x)$ type checks.
+
+However, translating this proof of uniqueness of identity proofs to
+one that only makes use of the elimination principle of identity
+types, called the $\J$ eliminator, is impossible. It has been shown
+that there exists a model of type theory with identity types, in which
+types are modelled as groupoids. There exist groupoids in which there
+are non-trivial automorphisms, hence this model violates uniqueness of
+identity proofs.
+
+The idea to model types as groupoids comes from the fact that $J$
+allows us to show that the identity types form not only an equivalence
+relation on a type, but that the transitivity and symmetry operations,
+along with $\refl$ also satisfy the groupoid laws. These laws are
+satisfied again up to propositional equality, so the identity types
+themselves are groupoids, ad infinitum. In fact, types can be seen as
+\inftygrpds. Since \inftygrpds are a model of homotopy theory, which
+studies topological spaces up to homotopy, types themselves can also
+be thought of as topological spaces up to homotopy. This observation
+has given rise to the field of \emph{homotopy type theory}.
+
+something about univalence
+
+Now we know we can think of types as topological spaces up to
+homotopy, we need a way to define the usual examples, such as the
+circle and the torus, in a type theoretic way. As we have seen, we
+define new data types in type theory usually as an inductive
+type. However, ordinary inductive definitions do not give us a way to
+create new paths between points that was not already there. The
+solution is to generalise the idea of constructor to also allow for
+paths to be constructed. We can then define the circle, which is just
+a point with a non-trivial loop, as the following \emph{higher
+  inductive type}:
+\begin{datatype}{\circlety}{\Type}
+  \constr{\circlebase}{\circlety} \\
+  \constr{\circleloop}{\circlebase = \circlebase}
+\end{datatype}
+The constructor $\circleloop$ is a \emph{path constructor}: it
+constructs a new path from $\circlebase$ to $\circlebase$. 
+
+\section{Internalising the theory of quotient inductive-inductive definitions}
+
+
+
+\section{Overview of the thesis and contributions}
+
+\begin{itemize}
+\item Give a specification of quotient inductive-inductive definitions
+  in terms of certain categories of algebras.
+\item Show that for these categories an object is initial if and only
+  if it satisfies a categorical induction principle.
+\item We derive the type theoretic induction principle from the
+  categorical induction principle.
+\item We have some preliminary results on constructing quotient
+  inductive-inductive definitions given some reasonable assumptions on
+  the type theory.
+\item We show what the difficulties are when moving from a set-based
+  setting to the untruncated case.
+\end{itemize}
