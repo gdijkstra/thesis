@@ -1,61 +1,186 @@
-\chapter{Constructing quotient inductive types}
+\chapter{Constructing quotient inductive-inductive definitions}
 \label{constructing}
 
-For ordinary inductive types, it is usual that if one wants to add
-them to a theory, the ``easiest'' way is to add a primitive that gives
-us an initial algebra for a strictly positive functor on $\Type$, \ie
-a functor given as a $\Type$-container. This primitive is called the
-\emph{W-type}. Every ordinary inductive type can be written in terms
-of this primitive. The benefit of such a primitive is that when we
-want to analyse the theory, we do not have to adjust our analyses
-every time we add an inductive type. In terms of programming, there
-are some downsides to writing everything using W-types however.
+We have given a formal definition of what constitutes a quotient
+inductive-inductive definition in terms of algebraic semantics. We
+have shown that the resulting categories of algebras are sensible in
+the sense that an algebra is initial if and only if it satisfies the
+induction principle. We have therefore shown that the initial algebras
+are well-behaved in this regard. To justify adding quotient
+inductive-inductive types to the theory, we still need to establish
+their existence in the usual models. After all, these results are all
+uninteresting if these models do not have quotient inductive-inductive
+types, which would make our results vacuously true.
 
-In this chapter we will see that it is possible to perform the
-construction of initial objects via sequential colimits in type theory
-itself. With this construction, we get quotient inductive-inductive
-definitions by having certain ordinals, arbitrary coproducts and
-coequalisers.
+To start out we will address the issue of strict positivity in
+inductive definitions and see how we can generalise the notion of
+\emph{container} to fit our needs. In this light, we will examine what
+the associated generalisation of W-types would be for our inductive
+definitions.
+
+Starting from a more semantic point of view, we discuss in
+\cref{sequential-colimits} the usual construction of intial algebras
+for an endofunctor as a sequential colimit. We explore how this
+approach can be both internalised as well as adapted to construct
+initial algebras for certain classes of quotient inductive-inductive
+definitions.
 
 \section{Strict positivity}
 
-In \cref{from-syntax-to-functors} we have seen that not every list of
-constructors can be made sense of in terms of being objects of
-categories of algebras. In order for the arguments of the constructors
-to describe functors, the recursive occurrences have to all be in
-positive positions. 
-
-Even if we consider endofunctors on $\Set$, its initial algberas need
-not exist: the types we are talking about have to be \emph{strictly}
-positive. One example of a functor that does not have an initial
-algebra is the \emph{double powerset functor}
-$P X \ddefeq (X \to 2) \to 2$. By Lambek's theorem the initial algebra
-would give us a set $X$ such that $X = P X$. If we then apply Cantor's
-theorem, we arrive at a contradiction.
-
-\section{Generalising W-types}
-
-The W-types primitive gives us initial algebras for containers on
-$\Set$. In this section we will explore generalising this concept to
-quotient inductive-inductive definitions.
-
-Having W-types in our type theory means we have a primitive:
+For ordinary inductive types we have to have several syntactic
+restrictions on the point constructors in order for the inductive
+types to actually exist. We have seen in
+\cref{from-syntax-to-functors} that the recursive positions may only
+occur in \emph{positive positions} in order for the arguments to
+describe a covariant functor. This is not enough to guarantee the
+existence of an initial algebra. If we look at $\Set$ and consider the
+double powerset functor $P : \Func{\Set}{\Set}$:
 $$
-\wty : \cont{S}{P} \to \Type
+P\ X \ddefeq (X \to \boolty) \to \boolty
 $$
-which comes with the following:
-\begin{itemize}
-\item $\wsup_{\cont{S}{P}} : (P : \wty_{\cont{S}{P}} \to \Type)\ (m : (x : \context{\cont{S}{P}}\ \wty_{\cont{s}{p}}) \to \Box_{\context{\cont{S}{P}}}\ P\ x \to P\ (\wsup\ x)) \to (x : \wty_{\cont{S}{P}}) \to P\ x$
-\item $\welim : ?$
-\item $\welimbeta : ?$
-\end{itemize}
+This defines a covariant functor on $\Set$, yet $\algcat{P}$ does not
+have an initial algebra. By Lambek's lemma, having an initial algebra
+$(X,\theta) : | \algcat{P} |$ would imply that $\Iso{X}{P\ X}$. By
+Cantor's theorem, we know that there is no set $X$ which is isomorphic
+to its powerset, hence we arrive at a contradiction.
 
-In other words: $W$ gives us an algebra for a container on $\Type$
-which satisfies the induction principle.
+\subsection{Containers}
+The inductive definitions therefore need to be \emph{strictly}
+positive: positivity alone does not suffice. There are different ways
+to formally specify strictly positive functors. We can use a syntactic
+way to describe them as the class of functors that contains all
+constant functor, closed under sums and products of strictly positive
+functors, exponentiation with a constant on the left of the arrow, and
+taking fixpoints\todo{refer to morris constructing universes phd}. A
+more compact way to characterise strictly positive functors on $\Set$
+in type theory is as \emph{containers}:
+%
+\begin{definition}
+  A \emph{container} on $\Set$ consists of:
+  \begin{itemize}
+  \item $S : \Set$, a type of \emph{shapes}
+  \item $P : S \to \Set$, a family of \emph{position}, indexed by the shapes.
+  \end{itemize}
+  %
+  The container with shapes $S$ and positions $P$ is denoted as
+  $\cont{S}{P}$
+\end{definition}
+%
+The corresponding functor is called the \emph{extension} of the container:
+%
+\begin{definition}
+  Given a container $\cont{S}{P}$, its \emph{extension} is the functor
+  $\context{\cont{S}{P}} : \Func{\Set}{\Set}$ with its action on objects
+  defined as, for every $X : \Set$:
+  $$
+  \context{\cont{S}{P}}\ X \ddefeq (s : S) \times (P\ s \to X)
+  $$
+  and its action on functions $f : X \to Y$:
+  $$
+  \context{\cont{S}{P}}\ f \ddefeq \lambda (s , t) . (s , f \circ t)
+  $$
+\end{definition}
+
+To give the data for a quotient inductive-inductive definition, we
+often need more than just endofunctors on $\Set$. We are generally
+working with functors $\Func{\Alg_s}{S_i}$ where $s : \specty$
+describes the previous constructors and $S_i$ is sort category
+describing the sort of the constructor we are defining. Containers
+have a generalisation to \emph{indexed containers} which describe
+functors between slice categories of $\Set$. This concept is again an
+instance of the more general notion of \emph{polynomial functor},
+which describes strictly positive functors between slices categories
+of a locally cartesian closed category. We cannot expect $\Alg_s$ to
+be locally cartesian closed in general: if we take $s$ to be the
+specification corresponding to setoids\todo{have this as an example in
+  ``describing'' chapter to refer to}, then $\Alg_s$ is equivalent to
+the category setoids, which is not locally cartesian closed\todo{refer
+  to note by Nicolai and Thorsten}.
+
+If we look at containers a bit more closely, we see that they are
+coproduct of a family of representable functors. This observation
+leads us to \emph{generalised containers}, also known as
+\emph{famillialy representable functors}\todo{ref to artin gluing
+  paper}:
+%
+\begin{definition}
+  A \emph{generalised container} on a category $\Cc$ consists of:
+  \begin{itemize}
+  \item $S : \Set$, a type of shapes,
+  \item $P : S \to | \Cc |$, a family of representing objects, indexed
+    by the shapes.
+  \end{itemize}
+\end{definition}
+%
+The extension generalises straightforwardly:
+%
+\begin{definition}
+  Given a container $\cont{S}{P}$ on a category $\Cc$, its extension
+  is the functor $\context{\cont{S}{P}} : \Func{\Cc}{\Set}$ with its
+  action on objects defined as, for every $X : | \Cc |$:
+  $$
+  \context{\cont{S}{P}}\ X \ddefeq (s : S) \times \Cc(P\ s, X)
+  $$
+  and its action on functions $f : X \to Y$:
+  $$
+  \context{\cont{S}{P}}\ f \ddefeq \lambda (s , t) . (s , f \circ t)
+  $$
+\end{definition}
+%
+For ordinary containers, there exists a composition operation on
+them. For generalised containers, such an operation only makes sense
+if the extensions are composable. Even then, the usual construction is
+not always possible: suppose we have a $\Cc$-container $\cont{S}{P}$
+and a $\Set$-container $\cont{T}{Q}$, given an object $X : | \Cc |$, we can calculate:
+\begin{align*}
+  \context{\cont{T}{Q}}\ (\context{\cont{S}{P}}\ X) &=& &(t : T) \times (Q\ t \to \context{\cont{S}{P}}) \\
+  &=& &(t : T) \times (Q\ t \to (s : S) \times \Cc(P\ s, X)) \\
+  &=& &(t : T) \times (a : Q\ t \to S) \times (b : (x : Q\ t) \to \Cc(P\ (a\ x), X))
+\end{align*}
+Looking at the above computation, a candidate $\Cc$-container whose
+extension is equal to the composite
+$\context{\cont{T}{Q}} \circ \context{\cont{S}{P}}$ seems to have as shapes
+$$
+(t : T) \times (Q\ t \to S)
+$$
+In the ordinary container case, to derive the corresponding positions,
+one uses currying on the type of $b$. However, $P$ is a constant
+family and $S$ is non-empty, then we can compute the composite
+container. This is the case where we compose $\context{\cont{T}{Q}}$
+with a representible functor.
+
+\todoi{compute the case where $\context{\cont{S}{P}}$ is a
+  representable functor}
+
+The notion of \emph{container morphism}, which are used to represent
+natural transformations between containers can be phrased as follows
+for generalised containers:
+\begin{definition}
+  Given $\Cc$-containers $\cont{S}{P}$ and $\cont{T}{Q}$, a container
+  morphism consists of:
+  \begin{itemize}
+  \item $f : S \to T$
+  \item $g : (s : S) \to \Cc(Q\ (f\ s), P\ s)$
+  \end{itemize}
+  with its extension being the natural transformation:
+  \begin{align*}
+    &\context{f , g} : (X : | \Cc |) \to \context{\cont{S}{P}}\ X \to \context{\cont{T}{Q}}\ X \\
+    &\context{f , g}\ X\ (s , t) \ddefeq (f\ s , t \circ (g\ s))
+  \end{align*}
+  Naturality follows from the associativity law of $\Cc$.
+\end{definition}
+
+\subsection{Generalising W-types}
+
 
 \section{Initial objects via sequential colimits}
+\label{sequential-colimits}
 
-Initial algebras of an endofunctor can be 
+Initial algebras of endofunctors can be constructed via sequential
+colimits, given some reasonable assumptions on the endofunctor. In
+this section we will review this result due to Ad\'amek and see how we
+can use it to construct initial dialgebras. We will also discuss how
+these proofs can be performed inside type theory itself.
 
 \begin{theorem}[Ad\'amek]
   \label{adamek-thm}
@@ -104,7 +229,7 @@ functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
   $\Cc : \Cat$ which has initial object, binary coproducts and
   sequential colimits. Suppose furthermore that $F$ preserves
   sequential colimits, then the forgetful functor
-  $U : \Func{algcat{F}}{\Cc}$ has a left adjoint.
+  $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint.
 \end{proposition}
 
 \begin{proof}
@@ -230,3 +355,6 @@ Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
 \subsubsection{0-constructors}
 
 \subsubsection{1-constructors}
+
+\todo{This is related to the ``On the Construction of Free Algebras
+  for Equational Systems'' paper}
