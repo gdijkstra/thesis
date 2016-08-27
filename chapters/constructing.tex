@@ -23,7 +23,28 @@ Starting from a more semantic point of view, we discuss in
 for an endofunctor as a sequential colimit. We explore how this
 approach can be both internalised as well as adapted to construct
 initial algebras for certain classes of quotient inductive-inductive
-definitions.
+definitions. They key is here to not only construct an initial object
+but establish that there is a left adjoint to the forgetful functor
+$\Func{\Alg_{n+1}}{\Alg_{n}}$, which allows us to do the construction by
+induction on the length of the specification. We end up with a chain
+of adjunctions:
+$$
+\xymatrix{
+\Set \ar@/^/[r]^{L_0}
+\ar@{}[r]|{\top} 
+&\Alg_0 \ar@/^/[l]^{U_0} \ar@/^/[r]^{L_1} 
+\ar@{}[r]|{\top} 
+&\Alg_1 \ar@/^/[l]^{U_1} \ar@/^/[r]^{L_2} 
+\ar@{}[r]|{\top} 
+&\hdots \ar@/^/[l]^{U_2} \ar@/^/[r]^{L_n} 
+\ar@{}[r]|{\top} 
+&\Alg_n \ar@/^/[l]^{U_n}
+}
+$$
+Since left adjoints preserve colimits, in particular initial objects
+and $\Set$ has an initial object $\emptyty$,
+$(L_n \circ \hdots \circ L_0)\ \emptyty$ gives us the initial algebra
+in $\Alg_n$ we are after.
 
 \section{Strict positivity}
 
@@ -81,6 +102,7 @@ The corresponding functor is called the \emph{extension} of the container:
   $$
 \end{definition}
 
+\subsection{Containers for $\Set$-sorted definitions}
 To give the data for a quotient inductive-inductive definition, we
 often need more than just endofunctors on $\Set$. We are generally
 working with functors $\Func{\Alg_s}{S_i}$ where $s : \specty$
@@ -133,7 +155,7 @@ if the extensions are composable. Even then, the usual construction is
 not always possible: suppose we have a $\Cc$-container $\cont{S}{P}$
 and a $\Set$-container $\cont{T}{Q}$, given an object $X : | \Cc |$, we can calculate:
 \begin{align*}
-  \context{\cont{T}{Q}}\ (\context{\cont{S}{P}}\ X) &=& &(t : T) \times (Q\ t \to \context{\cont{S}{P}}) \\
+  \context{\cont{T}{Q}}\ (\context{\cont{S}{P}}\ X) &=& &(t : T) \times (Q\ t \to \context{\cont{S}{P}}\ X) \\
   &=& &(t : T) \times (Q\ t \to (s : S) \times \Cc(P\ s, X)) \\
   &=& &(t : T) \times (a : Q\ t \to S) \times (b : (x : Q\ t) \to \Cc(P\ (a\ x), X))
 \end{align*}
@@ -144,13 +166,17 @@ $$
 (t : T) \times (Q\ t \to S)
 $$
 In the ordinary container case, to derive the corresponding positions,
-one uses currying on the type of $b$. However, $P$ is a constant
-family and $S$ is non-empty, then we can compute the composite
-container. This is the case where we compose $\context{\cont{T}{Q}}$
-with a representible functor.
-
-\todoi{compute the case where $\context{\cont{S}{P}}$ is a
-  representable functor}
+one uses currying on the type of $b$. However, if
+$\context{\cont{S}{P}}$ happens to have a left adjoint
+$L : \Func{\Set}{\Cc}$, then the situation simplifies as follows:
+\begin{align*}
+  \context{\cont{T}{Q}}\ (\context{\cont{S}{P}}\ X) &=& &(t : T) \times (Q\ t \to \context{\cont{S}{P}}\ X) \\
+  &=& &(t : T) \times (\Cc(L (Q\ t), X)) \\
+\end{align*}
+So we get the following equation:
+$$
+\context{\cont{T}{Q}} \circ \context{\cont{S}{P}} = \context{\cont{T}{L \circ P}}
+$$
 
 The notion of \emph{container morphism}, which are used to represent
 natural transformations between containers can be phrased as follows
@@ -170,8 +196,77 @@ for generalised containers:
   Naturality follows from the associativity law of $\Cc$.
 \end{definition}
 
+\todoi{Formulate and establish completeness for container morphisms}
+
+\subsection{Containers for arbitrarily sorted definitions}
+We have given a way to describe strictly positive functors and natural
+transformations needed to describe $\Set$-sorted quotient
+inductive-inductive definitions.
+
+\todoi{Explain $\Fam$ case via presheaf formulation}
+
 \subsection{Generalising W-types}
 
+\section{Initial objects in sort categories}
+
+If we have an inductive specification with no constructors, the
+category of algebras is the category of sorts. Constructing the
+initial object in these categories is similar to the construction in
+$\Fam$. We will construct the left adjoint to the forgetful functors
+of sort categories, similar to that of $\Fam$. The forgetful functor
+$\Func{\Fam}{\Set}$ has a left adjoint: the \emph{truth functor} that
+maps a set $X$ to the family $\lambda x . \unitty : X \to \Set$. This
+generalises to any functor in the abovementioned chain of sort
+categories: suppose we have a sort specification $\Ss : \sortsty$
+giving rise to the following chain of sort categories:
+$$
+\xymatrix{
+\termcat &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_n}
+}
+$$
+
+\begin{proposition}
+Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
+\end{proposition}
+
+\begin{proof}
+  We define the functor $u_i : \Func{S_i}{S_{i+1}}$ as follows:
+  \begin{itemize}
+  \item on objects: $u_i X \ddefeq (X , \lambda x . \unitty)$
+  \item on morphisms: $u_i f \ddefeq (f , \lambda a\ x . x)$
+  \end{itemize}
+  We then have to check whether we have for any $X : | S_i |$ and
+  $(Y,Q) : | S_{i+1} |$ that
+  $$
+  S_{i+1}(u_i\ X , (Y,Q)) = S_i(X,Y)
+  $$
+  which we can show by simple equational reasoning:
+  \begin{align*}
+      &&S_{i+1}(u_i\ X , (Y,Q)) \\
+    &=& S_{i+1}((X,\lambda x . \unitty), (Y,Q)) \\
+    &=& (f : S_i(X,Y) \times (g : (a : R_{i+1} X) \to \unitty \to \unitty) \\
+    &=& S_i(X,Y)
+  \end{align*}
+
+\end{proof}
+
+We therefore get the following chain of adjunctions:
+$$
+\xymatrix{
+\termcat \ar@/^/[r]^{u_0}
+\ar@{}[r]|{\top} 
+&S_0 \ar@/^/[l]^{t_0} \ar@/^/[r]^{u_1} 
+\ar@{}[r]|{\top} 
+&S_1 \ar@/^/[l]^{t_1} \ar@/^/[r]^{u_2} 
+\ar@{}[r]|{\top} 
+&\hdots \ar@/^/[l]^{t_2} \ar@/^/[r]^{u_n} 
+\ar@{}[r]|{\top} 
+&S_n \ar@/^/[l]^{t_n}
+}
+$$
+
+\todoi{Explain how we get an adjunction with $\Set$ as well and how
+  this is our adjunction $L_0 \dashv U_0 : \Func{\Alg_0}{\Set}$}
 
 \section{Initial objects via sequential colimits}
 \label{sequential-colimits}
@@ -211,6 +306,16 @@ these proofs can be performed inside type theory itself.
 
   We need to check whether $(X_\omega,\theta_\omega)$ is initial.
 \end{proof}
+
+\subsection{Internal sequential colimits}
+
+We can perform the construction of initial algebras inside type theory
+itself, given certain primitives. For colimits of $\omega$-chains, it
+is enough to have natural numbers and coequalisers at hand.
+
+\todoi{Show how natural numbers in $\Set$ and coequalisers in $\Cc$
+  (arbitrary coproducts?)  are enough to establish that $\Cc$ has
+  sequential colimits. Do this first in $\Set$ of course.}
 
 \subsection{$\Set$-sorted inductive-inductive definitions}
 
@@ -312,43 +417,6 @@ functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
 
 \subsection{Sort categories}
 
-Suppose we have a sort specification $\Ss : \sortsty$ giving rise to
-the following chain of sort categories:
-$$
-\xymatrix{
-\termcat &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_n}
-}
-$$
-
-Note that the forgetful functor $\Func{\Fam}{\Set}$ has a left
-adjoint: the truth functor that maps a set $X$ to the family
-$\lambda x . \unitty : X \to \Set$. This generalises to any functor in
-the abovementioned chain of sort categories:
-
-\begin{proposition}
-Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
-\end{proposition}
-
-\begin{proof}
-  We define the functor $u_i : \Func{S_i}{S_{i+1}}$ as follows:
-  \begin{itemize}
-  \item on objects: $u_i X \ddefeq (X , \lambda x . \unitty)$
-  \item on morphisms: $u_i f \ddefeq (f , \lambda a\ x . x)$
-  \end{itemize}
-  We then have to check whether we have for any $X : | S_i |$ and
-  $(Y,Q) : | S_{i+1} |$ that
-  $$
-  S_{i+1}(u_i\ X , (Y,Q)) = S_i(X,Y)
-  $$
-  which we can show by simple equational reasoning:
-  \begin{align*}
-      &&S_{i+1}(u_i\ X , (Y,Q)) \\
-    &=& S_{i+1}((X,\lambda x . \unitty), (Y,Q)) \\
-    &=& (f : S_i(X,Y) \times (g : (a : R_{i+1} X) \to \unitty \to \unitty) \\
-    &=& S_i(X,Y)
-  \end{align*}
-
-\end{proof}
 
 \subsection{Categories of algebras}
 
