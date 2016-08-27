@@ -12,14 +12,52 @@ rules:
   instances of the data: we need \emph{constructors}
 \item \emph{elimination rules}: we also need means to manipulate the
   data: we need an induction principle
-\item \emph{computation rules}: the induction principle needs to ``compute''
+\item \emph{computation rules}: these specify how the elimination
+  rules interact with the introduction rules
 \end{itemize}
 
-In practice one gives the type formation and introduction rules, which
-are used to derive the elimination and computation rules from.
+It has been shown\todo{Backhouse reference} that the type formation
+and introduction rules are enough to derive the rest from. This is
+also reflected in how one gives an inductive definition in proof
+assistants such as Agda and Coq: we give the type signature of the
+inductive definition (its type formation rules) and a list of
+constructors (its introduction rules).
 
-In this chapter we will not work directly on the level of syntax, but
-will work on a categorical level.
+There are several equivalent ways to describe inductive definitions:
+we can formulate a syntax of constructors and describe the elimination
+principle by induction on terms in this syntax. This syntax is a
+subset of the syntax of type theory: we need to be able to write down
+a list of constructors which is just a list of types of a certain
+form. One can take an ``analytic'' approach to this: take the syntax
+of type theory and define a predicate on it that tells us whether a
+term is in the appropriate subset. This is effectively what systems
+like Agda do: you can write down a list of constructors and Agda
+checks whether it makes sense, \eg whether the result types of the
+constructors are correct and whether the arguments are strictly
+positive. Doing this in type theory itself will be rather involved, as
+formalising the syntax of type theory in type theory is generally not
+something lightweight. 
+
+A more semantic approach is to start from the characterisation of
+inductive definitions as the initial algebra given some endofunctor on
+an appropriately chosen category. Ordinary inductive types can be
+explained as initial algebras of strictly positive endofunctors on
+$\Set$, which is something we can concisely formalise in type
+theory. The functors can be described as \emph{containers} and the
+category of algebras on a container can also be readily
+formalised. Stating that it is initial only requires us to have
+defined the objects and morphisms of this category. 
+
+From the initial algebra semantics we can directly read off the
+introduction rules along with the recursion principle and its
+computation rules. This categorical setting allows us to generalise
+without having to keep track of too many moving parts, but on the
+other hand also is not so overly abstract that it sacrifices intuition
+for conciceness.
+
+While the recursion principle can be straightforwardly recovered from
+initiality, the induction principle is another story. This is covered
+in \cref{induction}.
 
 We have seen in the examples in \cref{qits} that quotient
 inductive-inductive definitions differ from ordinary inductive
@@ -32,7 +70,27 @@ definitions in three ways:
 \item apart from point constructors we also have path constructors
 \end{itemize}
 
+We start out by reviewing initial algebra semantics of ordinary
+inductive types in \cref{algebraic-semantics}. In
+\cref{set-sorted-inductive-inductive-definitions} we see how this
+approach can be generalised to support having constructors that refer
+to previous constructors. \Cref{dependent-sorts} formalises the notion
+of \emph{dependent sorts}, which deals with the type formation rules
+for quotient inductive-inductive definitions. In
+\cref{categories-of-algebras} the full formal definition of
+declarations of quotient inductive-inductive definitions is given as a
+form of iterated dialgebras with equations. This is followed by a
+discussion on whether we can generalise this idea to a larger class of
+dialgebras in \cref{other-forms-of-constructors}, allowing for a more
+general shape of constructors. \cref{from-syntax-to-functors} how the
+formal inductive definitions differ from what one would like to write
+down in type theory itself. In
+\cref{application-to-equational-theories} we see how the formalisation
+of quotient inductive-inductive definitions can also be used to talk
+about equational theories.
+
 \section{Algebraic semantics}
+\label{algebraic-semantics}
 
 Let us look at a list of constructors of an ordinary data type, \eg:
 \begin{datatype}{\Aty}{\Type}
@@ -120,6 +178,9 @@ Given an endofunctor $F$ on $\Type$, we can consider its \emph{free
   \constr{\Fstarc}{F (F^* X) \to F^* X}
 \end{datatype}
 
+\todoi{Mention that this gives us a left adjoint to the forgetful
+  functor, hence $F^*$ is a monad}
+
 It is straightforward to show that $F^*$ forms a monad.
 
 \begin{proposition}
@@ -168,13 +229,21 @@ Note that $F^* \emptyty$ gives us the inductive type defined by $F$.
   $F^* : \Func{\Cc}{\Cc}$ its free monad, then $\monalgcat{F^*}$ is
   equivalent to $\algcat{F}$.
 \end{theorem}
+\todo{Refer to polynomial monad paper by Kock/Gambino}
 
 If we associate ordinary inductive types with free monads, then a
 generalisation of this would be to consider not just free monads, but
 any \emph{presented monad}, \ie a monad that is defined in terms of
 generators and relations. 
 
+\todoi{Mention that this is the approach taken in the
+  Shulman/Lumsdaine paper. While our approach is definitely similar,
+  we consider the forgetful functors and left adjoints
+  \emph{separately}: we decouple the definition of algebras and such
+  from their existence.}
+
 \section{$\Set$-sorted inductive-inductive definitions}
+\label{set-sorted-inductive-inductive-definitions}
 
 We have mentioned that one of the defining features of the inductive
 definitions we want to be able to handle, is any constructor may refer
@@ -380,6 +449,7 @@ functors is correct:
 \end{proof}
 
 \section{Dependent sorts}
+\label{dependent-sorts}
 
 Describing how a sort depends the previous sorts can be done by
 providing a functor of the previous category of sorts into $\Type$. A
@@ -633,6 +703,7 @@ similarly straightforward manner.
 
 
 \section{Categories of algebras}
+\label{categories-of-algebras}
 
 \subsection{A $\Rel$-sorted quotient inductive-inductive type}
 
@@ -1123,33 +1194,61 @@ The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the com
 \]
 \end{definition}
 
-\subsection{Other constructors}
+\section{Other forms of constructors}
+\label{other-forms-of-constructors}
 
-If we look at the constructors we have seen so far, they all are of
+If we look at the 0-constructors we have seen so far, they all are of
 the shape:
 $$
-\Ac : (x : F\ X) \to G (X , x)
+\Ac : \Alg_s(F X , U X)
 $$
-where $F : | \Cc | \to \Type$ and
-$G : (X : | \Cc |) \to F\ X \to \Type$ where $\Cc$ is some category of
-algebras and $F$ and $G$ are in some sense functorial. For $G$ we seen
-that it was either a forgetful functor or yielding some equation on
-the carrier of the type we are defining. This begs the question if we
-can then generalise inductive definitions even further, \ie can we
-have constructors such as:
+where $s : \specty$ and $F, U : \Func{\Alg_s}{S_i}$ for some sort
+category $S_i$. This begs the question if we generalise this to a
+larger class of dialgebras. For example, can we have constructors such
+as:
 $$
 \Ac : \Aty \to \List\ \Aty
 $$
-It turns out that this particular example does not work out.
+It turns out that this particular example does not work out. To see
+this, let us define the following inductive definition:
+\begin{datatype}{\Aty}{\Set}
+  \constr{\Aco}{\Aty} \\
+  \constr{\Aci}{\Aty \to \List\ \Aty}
+\end{datatype}
+
+\begin{proposition}
+  $\Aty$ does not exist, \ie the category of algebras that corresponds
+  to the above inductive definition does not have an initial algebra.
+\end{proposition}
+
+\begin{proof}
+  Suppose $(X,x,\theta)$ is an initial algebra, \ie a pointed set
+  $(X,x)$ with a function $\theta : X \to \List\ X$. By pattern
+  matching, we know that $\theta\ x$ is either $\listnil$ or
+  $\listcons\ a\ as$ for some $a : X$ and $as : \List\ A$.
+
+  If $\theta\ x = \listnil$, then we can define an algebra
+  $(\unitty, \unitval, \lambda x . [ \unitval ])$. We observe that there are no
+  algebra morphisms from $(X,x,\theta)$ into
+  $(\unitty, \unitval, \lambda x . [ \unitval ]$): for $f : X \to \unitty$, which
+  obviously satisfies $f\ x = \unitval$, we have that
+  $\listnil = \List\ f\ (\theta\ x) \neq [ \unitval ]$.
+
+  In the case that $\theta\ x = \listcons\ a\ as$, we can do something
+  similar: instead of having a singleton list as the algebra on
+  $(\unitty, \unitval)$, we have the empty list. We can then observe
+  that there are no algebra morphisms from $(X,x,\theta)$ into
+  $(\unitty, \unitval, \lambda x . \listnil)$.
+\end{proof}
 
 There are examples of constructors that do make sense. If we want to
 truncate our inductive type to be propositional, we can add a
 constructor:
 $$
-\Ac : \isprop\ \Ac
+\Ac : \isprop\ \Aty
 $$
-This works out in this case, as $\isprop\ \Ac$ is equivalent to
-$(x\ y : \Ac) \to x = y$. 
+This works out in this case, as $\isprop\ \Aty$ is equivalent to
+$(x\ y : \Aty) \to x = y$. 
 
 \section{From syntax to functors}
 \label{from-syntax-to-functors}
@@ -1213,3 +1312,29 @@ sorts $\Aty : \Set$, $\Bty : \Aty \to \Set$ and constructors:
 %
 In Agda we cannot alternate between the sorts, which prevents us from
 defining types as the one given above.
+
+\section{Application to equational theories}
+\label{application-to-equational-theories}
+
+\todo{Move this to a final concluding chapter?} Now that we have a
+mechanism that gives us the category of algebras given a list of
+constructors, we can also use this to create the category of models
+for an equational theory. For example, if we take the axioms of
+setoids as constructors, the corresponding category of algebras is
+equivalent to the category of setoids. A setoid consists of the
+following data:
+\begin{itemize}
+\item $X : \Set$
+\item $R : X \to X \to \Set$
+\item $\mathsf{refl} : (x : X) \to R\ x\ x$
+\item $\mathsf{sym} : (x\ y : X) \to R\ x\ y \to R\ y\ x$
+\item $\mathsf{trans} : (x\ y\ z : R) \to R\ x\ y \to R\ y\ z \to R\ x\ z$
+\item $\mathsf{is-prop} : (x\ y : R) \to (p\ q : R\ x\ y) \to p = q$
+\end{itemize}
+As an inductive definition, this is not terribly interesting as the
+initial algebra for this would consist of the empty type with an
+equivalence relation.
+
+\todoi{Explain why what we get is really the category of setoids: for
+  this we just need to look at the morphisms in the sort category, \ie
+  $\Rel$}
