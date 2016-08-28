@@ -304,6 +304,40 @@ this section we will review this result due to Ad\'amek and see how we
 can use it to construct initial dialgebras. We will also discuss how
 these proofs can be performed inside type theory itself.
 
+\begin{definition}[$\omega$-cochain]
+  An $\omega$-cochain in a category $\Cc$ consists of:
+  \begin{itemize}
+  \item $X : \natty \to | \Cc |$
+  \item $x : \natty \to \Cc(X_n , X_{n+1})$
+  \end{itemize}
+  \ie, we have the following diagram:
+  $$
+  \xymatrix{
+    X_0 \ar[r]^{x_0}
+    &X_1 \ar[r]^{x_1}
+    &X_2 \ar[r]^{x_2}
+    &X_3 \ar[r]^{x_3}
+    &X_4 \ar[r]^{x_4}
+    &\hdots
+  }
+  $$
+\end{definition}
+
+\begin{definition}[Sequential colimit]
+  Given an $\omega$-cochain $(X,x)$, the colimit of $(X,x)$ consists
+  of:
+  \begin{itemize}
+  \item An object $X_\omega : | \Cc |$
+  \item $c : (n : \natty) \to \Cc(X_n,X_\omega)$ its constructors
+  \item $g : (n : \natty) \to c_n = c_{n+1} \circ x_n$
+  \end{itemize}
+  with satisfies the universal property that for any other cocone $(Y,d,h)$ we get:
+  \begin{itemize}
+  \item a unique $f : \Cc(X_\omega, Y)$
+  \item with computation rule $f \circ c_n = d_n$
+  \end{itemize}
+\end{definition}
+
 \begin{theorem}[Ad\'amek]
   \label{adamek-thm}
   Let $\Cc : \Cat$ be a category with an endofunctor
@@ -324,27 +358,132 @@ these proofs can be performed inside type theory itself.
     &\hdots
   }
   $$
-  Observe that if we apply $F$ to this cochain, we end up with the
-  same cochain, as we can just put the initial object in front of it
-  without changing anything. Since $F$ preserves colimits of cochains,
-  the colimit of this is $F X_\omega$. This gives us an isomorphism
-  $X_\omega \simeq F X_\omega$, hence we get an algebra structure
-  $\theta_\omega$ on $X_\omega$.
+  We get the following:
+  \begin{itemize}
+  \item $c_n : \Cc(F^n \initobj , X_\omega)$
+  \item $g_n : c_n = c_{n+1} \circ F^n \inithom$
+  \end{itemize}
+  along with the universal property giving us a recursion
+  principle. Similarly for $F X_\omega$: since $F$ preserves
+  sequential colimits, we have that $F X_\omega$ is the colimit of the
+  cochain formed by applying $F$ to the one given above, hence we have:
+  \begin{itemize}
+  \item $F c_n : \Cc(F^{n+1} \initobj, F X_\omega)$
+  \item $F g_n : c'_n = F c_n \circ F^{n+1} \inithom$
+  \end{itemize}
+  We can define the algebra structure on $X_\omega$ by employing the
+  recursion principle of $F X_\omega$. We define $\theta$ to be the
+  morphism with computation rule, for any $n : \natty$:
+  $$
+  \theta \circ F c_n = c_{n+1}
+  $$
+  
+  Now that we have an algebra, we need to show that it is
+  initial. Suppose $(Y,\rho)$ is an $F$-algebra, then we first show
+  that we get an algebra morphism $(X_\omega , \theta) \to
+  (Y,\rho)$.
+  $Y$ comes equipped with a cocone by virtue of its algebra structure,
+  defined as follows:
+  $$
+  \xymatrix{
+    \initobj \ar[r]^{\inithom}
+    \ar[d]_{\inithom}
+    &F\ \initobj \ar[r]^{F \inithom} 
+    \ar[d]_{F \inithom}
+    &F^2\ \initobj \ar[r]^{F^2 \inithom} 
+    \ar[d]_{F^2 \inithom}
+    &F^3\ \initobj \ar[r]^{F^3 \inithom} 
+    \ar[d]_{F^3 \inithom}
+    &\hdots
+    \\
+    Y
+    &F\ Y \ar[l]^{\rho} 
+    &F^2\ Y \ar[l]^{F \rho} 
+    &F^3\ Y \ar[l]^{F^2 \rho} 
+    &\hdots \ar[l]^{F^3 \rho}  
+  }
+  $$
+  We have the cocone $(Y,y_n)$ where $y_n$ is defined recursively:
+  \begin{align*}
+    &y : (n : \natty) \to \Cc(F^n \initobj, Y) \\
+    &y\ 0 \ddefeq\ \inithom \\
+    &y\ (n+1) \ddefeq \rho \circ F y_n
+  \end{align*}
+  It is immediate from this definition that we have
+  $y_n = y_{n+1} \circ F^n \inithom$, hence $(Y,y_n)$ is indeed a
+  cocone.
 
-  We need to check whether $(X_\omega,\theta_\omega)$ is initial.
+  We can now define $f : \Cc(X_\omega, Y)$ by recursion, satisfying
+  the computation rule:
+  $$
+  f \circ c_n = y_n
+  $$
+  Now we need to establish whether $f \circ \theta = \rho \circ F
+  f$.
+  Both the left hand and right hand side are cocone morphisms
+  $(F X_\omega , F c_n) \to (Y , y_n)$:
+  \begin{align*}
+    f \circ \theta \circ F c_n &=& f \circ c_{n+1} \\
+    &=&y_{n+1}
+  \end{align*}
+  and
+  \begin{align*}
+    \rho \circ F f \circ F c_n &=& \rho \circ F (f \circ c_n) \\
+    &=&\rho \circ F y_n \\
+    &=&y_{n+1}
+  \end{align*}
+  By the universal property of $F X_\omega$ they are indeed equal. The
+  same line of reasoning can be used to established that if we have
+  another algebra morphism $f' : (X_\omega,\theta) \to (Y,\rho)$, then
+  $f = f'$, which shows initiality of $(X_\omega,\theta)$.
 \end{proof}
 
 \subsection{Internal sequential colimits}
 
-We can perform the construction of initial algebras inside type theory
-itself, given certain primitives. For colimits of $\omega$-chains, it
-is enough to have natural numbers and coequalisers at hand.
+The definition of sequential colimits is presented in such a way that
+we can straightforwardly formalise it in type theory. The same goes
+for Ad\'amek's theorem. We can also show internally that $\Set$ has
+sequential colimits, if we have an internal version of coequalisers at
+hand.
 
-\todoi{Show how natural numbers in $\Set$ and coequalisers in $\Cc$
-  (arbitrary coproducts?)  are enough to establish that $\Cc$ has
-  sequential colimits. Do this first in $\Set$ of course.}
+\begin{proposition}
+  We can construct sequential colimits in $\Set$ from the natural
+  numbers and coequalisers.
+\end{proposition}
 
-\subsection{$\Set$-sorted inductive-inductive definitions}
+\begin{proof}
+  Suppose we have $X : \natty \to \Set$ with
+  $x : (n : \natty) \to X_n \to X_{n+1}$. Define the function $f$:
+  \begin{align*}
+    &f : (n : \natty) \times X_n \to (n : \natty) \times X_n \\
+    &f\ (n , a) \ddefeq (n + 1 , x_n\ a)
+  \end{align*}
+  We define $X_\omega$ to be the coequaliser:
+  $$
+  \xymatrix{
+    (n : \natty) \times X_n
+    \ar@<.5ex>[r]^{\id}
+    \ar@<-.5ex>[r]_{f}
+    &(n : \natty) \times X_n
+    \ar[r]^{c}
+    &X_\omega
+  }
+  $$
+  We therefore get for any $(n , a) : (n : \natty) \times X_n$:
+  $$
+  c\ (n , a) = c\ (n + 1 , x_n\ a)
+  $$
+  Hence we get a cocone for the $\omega$-cochain. Its universal
+  property follows directly from the universal property of the
+  coequaliser.
+\end{proof}
+
+We can generalise the result to arbitrary categories easily, but this
+does not help us much as constructing coproducts in categories of
+algebras is rather involved, and already involves sequential colimits
+themselves.
+
+\subsection{$\Set$-sorted quotient inductive-inductive definitions}
 
 Before we try to tackle the general case, we will look at the
 simplified setting of $\Set$-sorted inductive-inductive
@@ -428,6 +567,180 @@ functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
   
 \end{proof}
 
+\subsubsection{1-constructors}
+\todo{This is related to the ``On the Construction of Free Algebras
+  for Equational Systems'' paper}
+
+Suppose we have a category $\Cc : \Cat$ with an adjunction
+$L \dashv U : \Func{\Cc}{\Set}$. In our case $\Cc$ will be a category
+of algebras and $U$ its forgetful functor. To describe a 1-constructor
+on $\Cc$, we need the following data:
+\begin{itemize}
+\item $F : \Func{\Cc}{\Set}$, describing the arguments of the constructor
+\item $l, r : \Nat{F}{U}$, giving the end points of the equations
+\end{itemize}
+
+\begin{proposition}
+  If $\Cc$ has sequential colimits and $F$ preserves them, then
+  subcategory $\Cc$ of objects $X : | \Cc |$ together with an equality
+  $l_X = r_X$ has an initial object.
+\end{proposition}
+
+\begin{proof}
+  Since we have $L \dashv U$, we have isomorphisms
+  $$
+  \phi_{X,Y} : \Cc(L X , Y) \to (X \to U Y)
+  $$
+  $\phi$ is natural in both $X$ and $Y$, hence we have natural
+  transformations:
+  $$
+  \phi \circ l , \phi \circ r : \Nat{L \circ F}{\id_{\Cc}}
+  $$
+  It suffices to show that we have an initial object in the
+  subcategory of $\Cc$ of objects $X : | \Cc |$ satisfying
+  $\phi \circ l_X = \phi \circ r_X$.
+
+  We define $X_\omega$ to be the colimit of the following cochain in $\Cc$:
+  $$
+  \xymatrix{
+    &LF X_0
+    \ar@<.5ex>[d]^{\phi \circ l_{X_0}}
+    \ar@<-.5ex>[d]_{\phi \circ r_{X_0}}
+    &LF X_1
+    \ar@<.5ex>[d]^{\phi \circ l_{X_1}}
+    \ar@<-.5ex>[d]_{\phi \circ r_{X_1}}
+    &LF X_2 
+    \ar@<.5ex>[d]^{\phi \circ l_{X_2}}
+    \ar@<-.5ex>[d]_{\phi \circ r_{X_2}}
+    &LF X_3
+    \ar@<.5ex>[d]^{\phi \circ l_{X_3}}
+    \ar@<-.5ex>[d]_{\phi \circ r_{X_3}}
+    &LF X_4
+    \ar@<.5ex>[d]^{\phi \circ l_{X_4}}
+    \ar@<-.5ex>[d]_{\phi \circ r_{X_4}}
+    \\
+    \initobj \ar@{}[r]|{\ddefeq} 
+    &X_0
+    \ar[r]_{x_0}
+    &X_1
+    \ar[r]_{x_1}
+    &X_2 
+    \ar[r]_{x_2}
+    &X_3
+    \ar[r]_{x_3}
+    &X_4
+    \ar[r]_{x_4}
+    &\hdots
+    }
+  $$
+  That is, the $\omega$-cochain $(X,x)$ is defined as:
+  \begin{align*}
+    &X : (n : \natty) \to | \Cc | \\
+    &X\ 0 \ddefeq \initobj \\
+    &X\ (n+1) \ddefeq \coeqty{\phi \circ l_{X_n}}{\phi \circ r_{x_n}}
+  \end{align*}
+  with $x_0$ the initial morphism and $x_{n+1}$ the constructor of
+  corresponding coequaliser.
+
+  We need to show that for $X_\omega$,
+  $\phi \circ l_{X_\omega} = \phi \circ r_{X_\omega}$. This we will
+  achieve by showing that $X_\omega$ has a cocone structure for the
+  cochain $(LFX_n, LFx_n)$. Both $\phi \circ l_{X_\omega}$ and
+  $\phi \circ r_{X_\omega}$ are cocone morphisms
+  $LF X_\omega \to X_\omega$, which means that by the universal
+  property of $LF X_\omega$ they must be equal.
+
+  For $X_\omega$ we have:
+  \begin{itemize}
+  \item constructors $d_n : \Cc(X_n, X_\omega)$
+  \item satisfying $d_n = d_{n+1} \circ x_n$
+  \end{itemize}
+
+  $F$ preserves sequential colimits and $L$ preserves all colimits as
+  it is a left adjoint, hence $L \circ F$ preserves sequential
+  colimits. We then have that $LFX_\omega$ is the colimit of the
+  $\omega$-cochain $(LFX_n,x_n)$ and therefore have:
+  \begin{itemize}
+  \item constructors $LFd_n : \Cc(LFX_n, LFX_\omega)$
+  \item satisfying $LFd_n = LFd_{n+1} \circ LFx_n)$
+  \end{itemize}
+
+  We define the $(LFX_n,LFx_n)$-cocone on $X_\omega$ with $z_n$ as the
+  composite:
+  $$
+  \xymatrix{
+    LFX_n
+    \ar[r]^{\phi \circ l_n}
+    &X_n
+    \ar[r]^{d_n}
+    &X_\omega
+  }
+  $$
+  Note that it does not matter whether we use $l$ or $r$ here, as
+  $d_n = x_n \circ d_{n+1}$ and $x_n$ is the coequaliser map, hence
+  precomposing with $\phi \circ l$ or $\phi \circ r$ is going to yield
+  the same result.
+
+  We have to check that $z_n = z_{n+1} \circ LFx_n$, which holds as we
+  have the following commutative diagram:
+  $$
+  \xymatrix{
+    LFX_n
+    \ar[r]^{\phi \circ l_n}
+    \ar[d]_{LF x_n}
+    &X_n
+    \ar[r]^{d_n}
+    \ar[d]^{x_n}
+    &X_\omega
+    \\
+    LFX_{n+1}
+    \ar[r]_{\phi \circ l_{n+1}}
+    &X_{n+1}
+    \ar[ur]_{d_{n+1}}
+  }
+  $$
+  The left square holds by naturality of $\phi \circ l$, the right
+  square holds as $X_\omega$ is a colimit with $d_n$ is constructors.
+  
+  Now we have constructed a $(LFX_n,LFx_n)$-cocone structure on
+  $X_\omega$, we need to check whether $\phi \circ l_{X_\omega}$ and
+  $\phi \circ r_{X_\omega}$ are indeed cocone morphisms. This amounts
+  to checking whether the following commutes:
+  $$
+  \xymatrix{
+    LFX_n
+    \ar[r]^{LF d_n}
+    \ar[d]_{\phi \circ l_{X_n}}
+    &LFX_\omega
+    \ar[d]^{\phi \circ l_{X_\omega}}
+    \\
+    X_n
+    \ar[r]_{d_n}
+    &X_\omega
+  }
+  $$
+
+  This square commutes by naturality of $\phi \circ l$. By the same
+  reasoning $\phi \circ r_{X_\omega}$ is a cocone morphism, hence by
+  the universal property of $LFX_\omega$ we get that
+  $\phi \circ l_{X_\omega} = \phi \circ r_{X_\omega}$.
+\end{proof}
+
+Now we have shown that the subcategory has an initial object, we need
+to strengthen the result to showing that we actually have an
+adjunction between the inclusion functor and some free functor that we
+have to construct. This free functor can be constructed in much the
+same way as one constructs the free algebra functor, \ie using the
+same sequential colimit techniques.
+
+\todoi{Prove that we get an adjunction between $\Cc$ and its subcategory}
+
+\subsubsection{Putting it all together}
+
+We have now given all the ingredients needed to show that the
+categories of algebras all have initial objects, given that the
+arguments functors preserve sequential colimits.
+
 \begin{proposition}
   Let $s : \specty$ be a specification of a
   $\Set$-sorted inductive-inductive definition. If every arguments
@@ -442,14 +755,5 @@ functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
   $L\ \initty$ is initial in $\Alg_s$.
 \end{proof}
 
-\subsection{Sort categories}
+\subsection{Moving to arbitrarily sorted inductive definitions}
 
-
-\subsection{Categories of algebras}
-
-\subsubsection{0-constructors}
-
-\subsubsection{1-constructors}
-
-\todo{This is related to the ``On the Construction of Free Algebras
-  for Equational Systems'' paper}
