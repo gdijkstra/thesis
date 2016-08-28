@@ -250,12 +250,40 @@ Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
 
 \end{proof}
 
+\begin{proposition}
+  There exists an adjunction between $S_0$ and $\Set$
+\end{proposition}
+
+\begin{proof}
+  Note that $S_0$ is equivalent to a category with objects
+  $A \to \Set$ for some $A : \Set$ and morphisms between
+  $P, Q : A \to \Set$ being dependent functions
+  $(x : A) \to P\ x \to Q\ x$. Usually $A = \unitty$, so we have a
+  trivial adjunction between $S_0$ and $\Set$. Whatever the choice of
+  $A$ is, we can construct the following pair of adjoint functors
+  between $\Set$ and $S_0$:
+  \begin{align*}
+    &\Pi : \Func{S_0}{\Set} \\
+    &\Pi\ P \ddefeq (x : A) \to P\ x \\
+    \\
+    &K : \Func{\Set}{S_0} \\
+    &K\ X \ddefeq (\lambda x . X)
+  \end{align*}
+  We then have for any $X : \Set$ and $P : A \to \Set$ the following equality
+  \begin{align*}
+  S_0(LX , P) &=& (x : A) \to X \to P\ x \\
+    &=& X \to (x : A) \to P\ x \\
+    &=& X \to \Pi\ P
+  \end{align*}
+  Therefore we have that $K \dashv \Pi$.
+\end{proof}
+
 We therefore get the following chain of adjunctions:
 $$
 \xymatrix{
-\termcat \ar@/^/[r]^{u_0}
+\Set \ar@/^/[r]^{K}
 \ar@{}[r]|{\top} 
-&S_0 \ar@/^/[l]^{t_0} \ar@/^/[r]^{u_1} 
+&S_0 \ar@/^/[l]^{\Pi} \ar@/^/[r]^{u_1} 
 \ar@{}[r]|{\top} 
 &S_1 \ar@/^/[l]^{t_1} \ar@/^/[r]^{u_2} 
 \ar@{}[r]|{\top} 
@@ -264,9 +292,8 @@ $$
 &S_n \ar@/^/[l]^{t_n}
 }
 $$
-
-\todoi{Explain how we get an adjunction with $\Set$ as well and how
-  this is our adjunction $L_0 \dashv U_0 : \Func{\Alg_0}{\Set}$}
+Since $\Set$ has an initial object, we get the initial object of any
+sort category $S_i$ by following the chain of left adjoints.
 
 \section{Initial objects via sequential colimits}
 \label{sequential-colimits}
