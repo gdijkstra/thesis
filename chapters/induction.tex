@@ -367,6 +367,7 @@ following proposition:
 \end{proof}
 
 \begin{remark}
+  \label{forgetful-into-sorts}
   Let $\termcat \from S_0 \from S_1 \from \hdots \from S_n$ be a chain
   of sort categories. All the forgetful functors
   $t_i : S_i \to S_{i-1}$ (with $S_{-1} \ddefeq \termcat$) preserve
@@ -376,17 +377,66 @@ following proposition:
 
 \subsection{Categories of algebras}
 For the categories of algebras, we will perform induction on the
-amount of constructors. We also need to simultaneously show that the
+number of constructors. We also need to simultaneously show that the
 forgetful functors into the category of sorts preserve the limits.
+
+The assumptions for the following lemmata are:
+\begin{itemize}
+\item $\Ss : \sortsty$ is the definition of the sorts
+\item $s : \specty_\Ss$ is the specification of the previous constructors, hence
+\item $\Alg_s$ will have products and equalisers
+\item $U_s : \Func{\Alg_s}{\SortCat{\Ss}}$ preserves these
+\item $\sortsin{S_i}{\Ss}$ is the sort of the constructor we are adding
+\end{itemize}
+
+The forgetful functor $U_s$ extends to
+$\bar{U_s} : \Func{\Alg_s}{S_i}$ since $S_i \in \Ss$. By
+\cref{forgetful-into-sorts} $\bar{U_s}$ also preserves products and
+equalisers.
+
+Note that $S_i \neq \unitty$.
 
 \subsubsection{Products}
 
 \begin{lemma}[Products of 0-constructors]
-  Let $\Ss : \sortsty$ and $s : \specty_{\Ss}$ with
+  Let $s' : \specty_\Ss$ be $s$ extended with a 0-constructor of sort
+  $S_i$ as specified by:
+  \begin{itemize}
+  \item $F : \Func{\Alg_s}{S_i}$, satisfying:
+  \item $t_i \circ F = t_i \circ \bar{U_s}$
+  \end{itemize}
+
+  The category $\Alg_{s'}$ has products and its forgetful functor
+  $U_{s'}$ preserves them.
 \end{lemma}
 
 \begin{proof}
-  
+  Suppose we have two algebras in $\Alg_{s'}$, \ie we have:
+  \begin{itemize}
+  \item $X, Y : | \Alg_s |$
+  \item $\theta : S_i(FX,\bar{U_s}X)$
+  \item $\rho : S_i(FY,\bar{U_s}Y)$
+  \item $t_i \theta = \id_{t_i (\bar{U_s} X)}$
+  \item $t_i \rho = \id_{t_i (\bar{U_s} Y)}$
+  \end{itemize}
+
+  By the assumption that $\bar{U_s}$ preserves products, we have an
+  isomorphism:
+  $$
+  \phi : \bar{U_s} X \times \bar{U_s} Y \to \bar{U_s}(X \times Y)
+  $$
+  Let $\Delta_X : X \to X \times X$ be the diagonal morphism. $\phi$
+  is the inverse of
+  $ \bar{U_s \pi_0} \times \bar{U_s \pi_1} \circ \Delta$. Using this
+  isomorphism we can then go on and define the algebra structure on
+  $X \times Y$ as the following composite:
+  $$
+  \xymatrix{ F(X \times Y) \ar[r]^{F \pi_0 \times F \pi_1 \circ \Delta} &
+    FX \times FY \ar[r]^{\theta \times \rho} 
+    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi} & \bar{U}(X \times Y) }
+  $$
+  We need to check whether this 
+
 \end{proof}
 
 \begin{lemma}[Products of 1-constructors]
@@ -399,13 +449,18 @@ forgetful functors into the category of sorts preserve the limits.
 
 \subsubsection{Equalisers}
 
-\begin{lemma}[Equality of 0-constructor morphisms]
-  
-\end{lemma}
-
-\begin{proof}
-  
-\end{proof}
+To talk about equalisers in a category of algebras, we need to know
+what equality of algebra morphisms is. An algebra morphism is a pair
+of a morphism in the underlying category and an equality stating that
+this morphism preserves the algebra structure. If we have two pairs,
+since equality of pairs is a pair of equalities, an equality between
+them consists of an equality between the morphisms and an equality
+between the proofs that they preserve the algebra structure. Since we
+are working with types that satisfy uniqueness of identity proofs, we
+can ignore the latter part, hence an equality between two algebra
+morphisms is just an equality of the two underlying morphisms. This
+reasoning applies to both 0-constructor algebra morphisms as well as
+1-constructor algebra morphisms.
 
 \begin{lemma}[Equalisers of 0-constructors]
   
@@ -414,10 +469,6 @@ forgetful functors into the category of sorts preserve the limits.
 \begin{proof}
   
 \end{proof}
-
-\begin{proposition}[Equality of 1-constructor morphisms]
-  
-\end{proposition}
 
 \begin{proof}
   
@@ -430,60 +481,6 @@ forgetful functors into the category of sorts preserve the limits.
 \begin{proof}
   
 \end{proof}
-
-\begin{lemma}[Limits in the category of algebras]
-  For each sort $\Ss : \sortsty$ and specification $s : \specty$, the
-  category of algebras $\Alg_s$ has products. Furthermore, the
-  forgetful functor $U_s : \Alg_s \to \SortCat{\Ss}$ preserves these products.
-\end{lemma}
-\begin{proof}
-  We prove both properties simultaneously by induction on
-  $s : \specty$.  For the empty quotient inductive-inductive type
-  specification, the first statement is \cref{sorts-products}, and the
-  forgetful functor of the category of algebras into the category of
-  sorts is the identity functor, which trivially preserves limits. By
-  the way the limits here are constructed, the functor
-  $t_i : S_i \to S_{i-1}$ also preserves them. This means that if we
-  have a forgetful functor $U : \Alg_s \to \Ss$ for some
-  $s : \specty$, then for any $S_i \in \Ss$, the extension
-  $\bar{U} : \Alg_s \to S_i$ of $U$ also preserves products and
-  equalisers.
-
-  For the induction step case, we have a specification $s : \specty$
-  such that $\Alg_s : \Cat$ has products and the forgetful functor
-  $U : \Alg_s \to \Ss$ preserves them. To define a constructor on $s$,
-  we need to specify its sort first. Suppose we have $S_i \in \Ss$,
-  then either $S_i = 1$ or $S_i$ is built out of $S_{i-1}$ with some
-  functor $R_i : S_{i-1} \to \Set$ and we have a forgetful functor
-  $t_i : S_i \to S_{i-1}$. In the first case, we are done: adding
-  constructors to an object in $1$ does not do anything. In the
-  remainder we will assume the latter is the case.
-
-  A 0-constructor of sort $S_i$ on a specification $s : \specty$ is
-  given by a functor $F : \Alg_s \to S_i$ such that
-  $t_i \circ F = t_i \circ \bar{U}$. The algebras we are interested in
-  are dialgebras $(X : \Alg_s) \times (\theta : S_i(FX, \bar{U}X))$
-  such that $t_i \theta = \id_{t_i (\bar{U}X)}$.
-
-  Let $(X,\theta), (Y,\rho) : | \dialgcat{F}{\bar{U}} |$, then by the
-  induction hypothesis we have that the projections map
-  $\bar{U}(X \times Y) \to \bar{U}X \times \bar{U}Y$ has an inverse
-  $\phi$. We can define the algebra structure on $X \times Y$ as
-  follows:
-  $$
-  \xymatrix{ F(X \times Y) \ar[r] &
-    FX \times FY \ar[ld]_{\theta \times \rho} \\
-    \bar{U}X \times \bar{U}Y \ar[r]^{\phi} & \bar{U}(X \times Y) }
-  $$
-
-  If $t_i\ \theta = \id_{t_i (\bar{U}X)}$ and
-  $t_i\ \rho = \id_{t_i (\bar{U}Y)}$, then the composite will also
-  satisfy this property, hence we are done. By the construction of
-  products, the forgetful functor out of the new category of algebras
-  preserves products.
-\end{proof}
-
-
 
 Together with \cref{initiality-to-section} and
 \cref{section-to-initiality}, this immediately gives the main theorem
