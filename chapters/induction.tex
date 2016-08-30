@@ -420,22 +420,24 @@ Note that $S_i \neq \unitty$.
   \item $t_i \rho = \id_{t_i (\bar{U_s} Y)}$
   \end{itemize}
 
-  By the assumption that $\bar{U_s}$ preserves products, we have an
-  isomorphism:
-  $$
-  \phi : \bar{U_s} X \times \bar{U_s} Y \to \bar{U_s}(X \times Y)
-  $$
-  Let $\Delta_X : X \to X \times X$ be the diagonal morphism. $\phi$
-  is the inverse of
-  $ \bar{U_s \pi_0} \times \bar{U_s \pi_1} \circ \Delta$. Using this
-  isomorphism we can then go on and define the algebra structure on
-  $X \times Y$ as the following composite:
+  By the assumptions we have that $\bar{U_s}$ preserves products.  Let
+  $\Delta_X : X \to X \times X$ be the diagonal morphism. We can then
+  go on and define the algebra structure on $X \times Y$ as the
+  following composite:
   $$
   \xymatrix{ F(X \times Y) \ar[r]^{F \pi_0 \times F \pi_1 \circ \Delta} &
     FX \times FY \ar[r]^{\theta \times \rho} 
-    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi} & \bar{U}(X \times Y) }
+    &\bar{U}X \times \bar{U}Y \ar[r]^{=} & \bar{U}(X \times Y) }
   $$
-  We need to check whether this 
+  We need to check whether applying $t_i$ to this gives us an identity
+  morphism, which can be done by the following equational reasoning:
+  \begin{align*}
+    &&t_i (\theta \times \rho \circ F \pi_0 \times F \pi_1 \circ \Delta_{F(X \times Y)} ) \\
+    &=&t_i (\theta \times \rho) \circ t_i (F \pi_0 \times F \pi_1 \circ t_i \Delta_{F(X \times Y)} ) \\
+    &=&t_i \theta \times t_i \rho \circ t_i (F \pi_0) \times t_i (F \pi_1) \circ t_i \Delta_{F (X \times Y)} \\
+    &=&t_i (F \pi_0) \times t_i (F \pi_1) \circ t_i \Delta_{F (X \times Y)} \\ 
+    &=&\id
+  \end{align*}
 
 \end{proof}
 
