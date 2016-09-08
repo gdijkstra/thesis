@@ -406,47 +406,162 @@ Note that $S_i \neq \unitty$.
   \item $t_i \circ F = t_i \circ \bar{U_s}$
   \end{itemize}
 
-  The category $\Alg_{s'}$ has products and its forgetful functor
-  $U_{s'}$ preserves them.
+  If $\Alg_s$ has products and $U_s$ preserves them, then the category
+  $\Alg_{s'}$ has products and its forgetful functor $U_{s'}$
+  preserves them.
 \end{lemma}
 
 \begin{proof}
   Suppose we have two algebras in $\Alg_{s'}$, \ie we have:
   \begin{itemize}
   \item $X, Y : | \Alg_s |$
-  \item $\theta : S_i(FX,\bar{U_s}X)$
-  \item $\rho : S_i(FY,\bar{U_s}Y)$
-  \item $t_i \theta = \id_{t_i (\bar{U_s} X)}$
-  \item $t_i \rho = \id_{t_i (\bar{U_s} Y)}$
+  \item $\theta : S_i(FX,\bar{U_s}X)$, $\rho : S_i(FY,\bar{U_s}Y)$
+  \item $t_i \theta = \id_{t_i (\bar{U_s} X)}$, $t_i \rho = \id_{t_i (\bar{U_s} Y)}$
   \end{itemize}
 
-  By the assumptions we have that $\bar{U_s}$ preserves products.  Let
-  $\Delta_X : X \to X \times X$ be the diagonal morphism. We can then
-  go on and define the algebra structure on $X \times Y$ as the
-  following composite:
+  We will proceed by showing that $X \times Y : \Alg_s$ has an algebra
+  structure. Let us define for $X, Y$ the morphism
+  $\phi_U : \Alg_s(U(X \times Y), UX \times UY)$ as
+  $\phi_u \ddefeq \langle U \pi_0 , U \pi_1 \rangle$. Per assumption
+  $\phi_U$ has an inverse $\phi_U^{-1}$. We can then define the
+  algebra structure $\zeta$ on $X \times Y$ as follows:
   $$
-  \xymatrix{ F(X \times Y) \ar[r]^{F \pi_0 \times F \pi_1 \circ \Delta} &
-    FX \times FY \ar[r]^{\theta \times \rho} 
-    &\bar{U}X \times \bar{U}Y \ar[r]^{=} & \bar{U}(X \times Y) }
+  \xymatrix{ 
+    F(X \times Y) \ar[r]^{\phi_F}
+    &FX \times FY \ar[r]^{\theta \times \rho} 
+    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi_U^{-1}} 
+    &\bar{U}(X \times Y) 
+  }
   $$
-  We need to check whether applying $t_i$ to this gives us an identity
-  morphism, which can be done by the following equational reasoning:
+  where $\phi_F \ddefeq \langle F \pi_0 , F \pi_1 \rangle$.
+  
+  For this to be an algebra structure, we need to establish that
+  $t_i \zeta = \id_{t_i (\bar{U_s} (X \times Y))}$. This holds as
+  $t_i$ preserves products definitionally. We have:
   \begin{align*}
-    &&t_i (\theta \times \rho \circ F \pi_0 \times F \pi_1 \circ \Delta_{F(X \times Y)} ) \\
-    &=&t_i (\theta \times \rho) \circ t_i (F \pi_0 \times F \pi_1 \circ t_i \Delta_{F(X \times Y)} ) \\
-    &=&t_i \theta \times t_i \rho \circ t_i (F \pi_0) \times t_i (F \pi_1) \circ t_i \Delta_{F (X \times Y)} \\
-    &=&t_i (F \pi_0) \times t_i (F \pi_1) \circ t_i \Delta_{F (X \times Y)} \\ 
-    &=&\id
+    &t_i (\theta \times \rho) = t_i \langle \theta \circ \pi_0 , \rho \circ \pi_1 \rangle \\
+    &=  \langle t_i (\theta \circ \pi_0) , t_i (\rho \circ \pi_1) \rangle \\
+    &= \langle \pi_0 , \pi_1 \rangle \\
+    &= \id_{t_I (\bar{U_s} (X \times Y))}
+  \end{align*}
+  and
+  \begin{align*}
+    &t_i \phi_F = t_i \langle F \pi_0 , F \pi_1 \rangle \\
+    &= \langle t_i F \pi_0 , t_i F \pi_1 \rangle \\
+    &= \langle t_i U \pi_0 , t_i U \pi_1 \rangle \\
+    &= t_i \phi_U
+  \end{align*}
+  Putting it all together, we get:
+  \begin{align*}
+    &t_i \zeta = t_i (\phi_u^{-1} \circ \theta \times \rho \circ \phi_F) \\
+    &= t_i \phi_u^{-1} \circ t_i (\theta \times \rho) \circ t_i \phi_F \\
+    &= t_i \phi_U^{-1} \circ \id_{t_i (\bar{U_s} (X \times Y))} \circ t_i \phi_U \\
+    &= \id_{t_i (\bar{U_s} (X \times Y))}
   \end{align*}
 
+  We furthermore have to check whether $\pi_0 : \Alg_s (X \times Y, X)$
+  and $\pi_1 : \Alg_s (X \times Y, Y)$ are algebra morphisms. To this
+  end, let us consider the following diagram:
+  $$
+  \xymatrix{
+    F(X \times Y) \ar[r]^{\phi_F} \ar[d]_{F \pi_0}
+    &FX \times FY \ar[r]^{\theta \times \rho} \ar[dl]_{\pi_0}
+    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi_U^{-1}} \ar[dr]_{\pi_0}
+    &\bar{U}(X \times Y) \ar[d]_{U \pi_0}
+    \\
+    FX \ar[rrr]_{\theta} &&&UX
+  }
+  $$
+  The triangle on the left holds by definition of $\phi_F$. The square
+  (trapezoid) in the middle holds by definition of
+  $\theta \times \rho$. The triangle on the right can be established
+  as follows: we have:
+  \begin{align*}
+    &\pi_0 \circ \phi_U \\
+    &= U \pi_0 \\
+    &= U \pi_0 \circ \phi_U^{-1} \circ \phi_U
+  \end{align*}
+  Since $\phi_U$ is an isomorphism it is in particular a monomorphism,
+  hence from this equation we get that
+  $\pi_0 = U \pi_0 \circ \phi_U{^-1}$. This shows that $\pi_0$ is an
+  algebra morphism $\zeta \to \theta$. The proof that $\pi_1$ is an
+  algebra morphism $\zeta \to \rho$ goes along the same lines.
+
+  Finally we have to show that the universal property is
+  satisfied. Suppose we have an algebra $(A,\alpha) : | \Alg_{s'} |$
+  with $f : \Alg_s(A,X)$ and $g : \Alg_s(A,Y)$ both algebra
+  morphisms. We get a unique arrow
+  $\langle f , g \rangle : \Alg_s(A , X \times Y)$. We then have to
+  ascertain that this is an algebra morphism $\alpha \to \zeta$, \ie
+  we have to show that the following commutes:
+  $$
+  \xymatrix{
+    FA \ar[rrr]_{\alpha} \ar[d]^{F \langle f , g \rangle} \ar[dr]_{\langle Ff , Fg \rangle}
+    &&&UA \ar[d]^{U \langle f , g \rangle}
+    \ar[dl]_{\langle Uf , Ug \rangle}
+    \\
+    F(X \times Y) \ar[r]^{\phi_F} 
+    &FX \times FY \ar[r]^{\theta \times \rho}
+    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi_U^{-1}}
+    &\bar{U}(X \times Y) 
+  }
+  $$
+  The left triangle holds by definition. The middle trapezoid holds as
+  $f$ and $g$ are algebra morphisms $\alpha \to \theta$ and
+  $\alpha \to \rho$ respectively. The right triangle can be shown to
+  hold by the following equational reasoning:
+  \begin{align*}
+    &\phi_U \circ U \langle f , g \rangle = \langle U f , U g \rangle \\
+    &= \phi_U \circ \phi_U^{-1} \circ \langle U f , U g \rangle
+  \end{align*}
+  Since $\phi_U$ is an isomorphism, it is also an epimorphism, which
+  means we get
+  $U \langle f , g \rangle = \phi_U^{-1} \circ \langle U f , U g
+  \rangle$.
+
+  Note that by construction, $\bar{U}_{s'}$ preserves products
+  definitionally.
 \end{proof}
 
 \begin{lemma}[Products of 1-constructors]
-  
+  Let $s' : \specty_\Ss$ be $s$ extended with a 0-constructor of sort
+  $S_i$ as specified by:
+  \begin{itemize}
+  \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
+  \item $l, r : \Nat{F}{\bar{U}_s}$ satisfying
+    $t_i\ l = t_i\ r = \id_{t_i \circ \bar{U}_s}$.
+  \end{itemize}
+
+  If $\Alg_s$ has products and $U_s$ preserves them, then the category
+  $\Alg_{s'}$ has products and its forgetful functor $U_{s'}$
+  preserves them.
 \end{lemma}
 
 \begin{proof}
-  
+  Suppose we have objects $X, Y : | \Alg_s |$ with algebra structures
+  $\theta : l_X = r_X$ and $\rho : l_Y = r_Y$. We will proceed by
+  constructing an algebra on the object $X \times Y$.
+
+  Note that by naturality of $l$, the following commutes:
+  $$
+  \xymatrix{
+    F(X \times Y) \ar[r]^{\phi_F} \ar[d]_{l_{X \times Y}} &FX \times FY \ar[d]^{l_X \times l_Y} \\
+    U(X \times Y) \ar[r]_{\phi_U} &UX \times UY
+  }
+  $$
+  Postcomposing with $\phi_U^{-1}$, we get the equation:
+  $$
+  l_{X \times Y} = \phi_U^{-1} \circ l_X \times l_Y \circ \phi_F
+  $$
+  Since we have $l_X = r_X$ and $l_Y = r_Y$, we also have
+  $l_{X \times Y} = r_{X \times Y}$.
+
+  Now the category of algebras $\Alg_{s'}$ is a full subcategory of
+  $\Alg_s$, hence we get automatically that the projections are
+  algebra morphisms and that the universal property is satisfied.
+
+  By construction of the products, the forgetful functor
+  $\bar{U}_{s'}$ preserves products definitionally.
 \end{proof}
 
 \subsubsection{Equalisers}
@@ -465,19 +580,34 @@ reasoning applies to both 0-constructor algebra morphisms as well as
 1-constructor algebra morphisms.
 
 \begin{lemma}[Equalisers of 0-constructors]
-  
+  Let $s' : \specty_\Ss$ be $s$ extended with a 0-constructor of sort
+  $S_i$ as specified by:
+  \begin{itemize}
+  \item $F : \Func{\Alg_s}{S_i}$, satisfying:
+  \item $t_i \circ F = t_i \circ \bar{U_s}$
+  \end{itemize}
+
+  If $\Alg_s$ has equalisers and $U_s$ preserves them, then the category
+  $\Alg_{s'}$ has equalisers and its forgetful functor $U_{s'}$
+  preserves them.
 \end{lemma}
 
 \begin{proof}
   
 \end{proof}
 
-\begin{proof}
-  
-\end{proof}
-
 \begin{lemma}[Equalisers of 1-constructors]
-  
+  Let $s' : \specty_\Ss$ be $s$ extended with a 1-constructor of sort
+  $S_i$ as specified by:
+  \begin{itemize}
+  \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
+  \item $l, r : \Nat{F}{\bar{U}_s}$ satisfying
+    $t_i\ l = t_i\ r = \id_{t_i \circ \bar{U}_s}$.
+  \end{itemize}
+
+  If $\Alg_s$ has equalisers and $U_s$ preserves them, then the category
+  $\Alg_{s'}$ has equalisers and its forgetful functor $U_{s'}$
+  preserves them.
 \end{lemma}
 
 \begin{proof}
