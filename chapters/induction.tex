@@ -421,7 +421,7 @@ Note that $S_i \neq \unitty$.
 
   We will proceed by showing that $X \times Y : \Alg_s$ has an algebra
   structure. Let us define for $X, Y$ the morphism
-  $\phi_U : \Alg_s(U(X \times Y), UX \times UY)$ as
+  $\phi_U : S_i(U(X \times Y), UX \times UY)$ as
   $\phi_u \ddefeq \langle U \pi_0 , U \pi_1 \rangle$. Per assumption
   $\phi_U$ has an inverse $\phi_U^{-1}$. We can then define the
   algebra structure $\zeta$ on $X \times Y$ as follows:
@@ -459,8 +459,8 @@ Note that $S_i \neq \unitty$.
     &= \id_{t_i (\bar{U_s} (X \times Y))}
   \end{align*}
 
-  We furthermore have to check whether $\pi_0 : \Alg_s (X \times Y, X)$
-  and $\pi_1 : \Alg_s (X \times Y, Y)$ are algebra morphisms. To this
+  We furthermore have to check whether $\pi_0 : S_i (X \times Y, X)$
+  and $\pi_1 : S_i (X \times Y, Y)$ are algebra morphisms. To this
   end, let us consider the following diagram:
   $$
   \xymatrix{
@@ -593,7 +593,83 @@ reasoning applies to both 0-constructor algebra morphisms as well as
 \end{lemma}
 
 \begin{proof}
-  
+  Suppose we have two algebras in $\Alg_{s'}$, \ie we have:
+  \begin{itemize}
+  \item $X, Y : | \Alg_s |$
+  \item $\theta : S_i(FX,\bar{U_s}X)$, $\rho : S_i(FY,\bar{U_s}Y)$
+  \item $t_i \theta = \id_{t_i (\bar{U_s} X)}$, $t_i \rho = \id_{t_i (\bar{U_s} Y)}$
+  \end{itemize}
+  along with morphisms $f, g : \Alg_s(X,Y)$ satisfying:
+  \begin{itemize}
+  \item $Uf \circ \theta = \rho \circ Ff$
+  \item $Ug \circ \theta = \rho \circ Fg$
+  \end{itemize}
+  \ie they are algebra morphisms $\theta \to \rho$.
+
+  Define $E : \Alg_s$ to be the equaliser of $f$ and $g$ with
+  inclusion $e : \Alg_s(E,X)$ which satisfies $f \circ e = g \circ e$.
+  We need to show that $E$ has an algebra structure and $e$ is an
+  algebra morphism of this structure into $\theta$. The following
+  diagram commutes by virtue of $E$ being an equaliser and $f$ and $g$
+  being algebra morphisms:
+  $$
+  \xymatrix{
+    FE \ar[r]^{Fe} &FX \ar[d]_{\theta} \ar@<-.5ex>[r]_-{Ff} \ar@<.5ex>[r]^-{Fg} &FY \ar[d]^{\rho} \\
+    UE \ar[r]^{Ue} &UX \ar@<-.5ex>[r]_-{Uf} \ar@<.5ex>[r]^-{Ug} &UY
+  }
+  $$
+  Since $U$ preserves equalisers, $UE$ is an equaliser, hence we get a
+  unique arrow $\epsilon : S_i(FE,UE)$. We need to check that we have
+  $t_i \epsilon = \id_{t_i (\bar{U}_s E)}$. We know that the following
+  commutes:
+  $$
+  \xymatrix{
+    t_i (FE) \ar[r]^{t_i (Fe)} \ar[d]_{t_i \epsilon} &t_i (FX) \ar[d]^{t_i \theta} \\
+    t_i (UE) \ar[r]^{t_i (Ue)} &t_i (UX) \ar@<-.5ex>[r]_-{t_i Uf} \ar@<.5ex>[r]^-{t_i Ug} &t_i (UY)
+  }
+  $$
+  Furthermore, $t_i \theta = \id_{t_i (\bar{U}_s X)}$ and
+  $t_i (Fe) = t_i (Ue)$, and since $t_i$ preserves equalisers, we
+  necessarily have that $t_i \epsilon = \id_{t_i (\bar{U}_s E)}$.
+
+  We still have to establish that the universal property is
+  satisfied. Suppose we have $(A, \alpha) : | \Alg_{s'} |$ along with
+  $a$ an algebra morphism $\alpha \to \theta$, by the universal
+  property of $E$, we get a unique arrow $h : \Alg_s(A,E)$, satisfying
+  $a = e \circ h$. We have to establish whether this is an algebra
+  morphism $\alpha \to \epsilon$. Consider the following diagram:
+  $$
+  \xymatrix{
+    FA
+    \ar[r]^{Fh}
+    \ar[d]_{\alpha}
+    \ar@/^2pc/[rr]^{Fa}
+    &FE 
+    \ar[r]^{Fe}
+    \ar[d]^{\epsilon}
+    &FX
+    \ar[d]^{\theta}
+    \\
+    UA
+    \ar[r]_{Uh}
+    \ar@/_2pc/[rr]_{Ua}
+    &UE
+    \ar[r]_{Ue}
+    &UX
+    \ar@<-.5ex>[r]_-{Uf} \ar@<.5ex>[r]^-{Ug}
+    &UY
+  }
+  $$
+  We have yet to establish whether the left square commutes, the other
+  subdiagrams have already been shown to commute. Observe that we have
+  two cones $(FA, \theta \circ Fa)$ and $(FA, Ua \circ \alpha)$ for
+  the fork $Uf, Ug$. Since $a$ is an algebra morphism, these two cones
+  are actually the same. Both $\epsilon \circ Fh$ and
+  $Uh \circ \alpha$ are then cone morphisms from this cone into
+  $(UE,Ue)$, which by the universal property of $UE$ means that
+  $Uh \circ \alpha = \epsilon \circ Fh$, which establishes the
+  commutativity of the left square and thereby the universal property
+  of equalisers in $\Alg_{s'}$.
 \end{proof}
 
 \begin{lemma}[Equalisers of 1-constructors]
@@ -611,7 +687,29 @@ reasoning applies to both 0-constructor algebra morphisms as well as
 \end{lemma}
 
 \begin{proof}
-  
+  Suppose we have objects $X, Y : | \Alg_s |$ with algebra structures
+  $\theta : l_X = r_X$ and $\rho : l_Y = r_Y$ and morphisms
+  $f, g : \Alg_s(X,Y)$. We claim that the equaliser $E : \Alg_s$ of
+  $f$ and $g$ has an algebra structure, \ie we can show that
+  $l_E = r_E$.
+
+  Since $l_X = r_X$ and the naturality of $l$ and $r$, we have that
+  the following commutes:
+  $$
+  \xymatrix{
+    FE \ar[r]^{Fe} \ar[d]_{l_E} &FX \ar@<-.5ex>[d]_-{l_X} \ar@<.5ex>[d]^-{r_X} \\
+    UE \ar[r]^{Ue} &UX \ar@<-.5ex>[r]_-{Uf} \ar@<.5ex>[r]^-{Ug} &UY
+  }
+  $$
+  We observe that $(FE, l_X \circ Fe)$ is a cone for the fork
+  $Uf,Ug$. By $l_X = r_X$, $(FE, r_X \circ Fe)$ is the same fork. We
+  then have that by naturality, both $l_E$ and $r_E$ are cone
+  morphisms from $(FE, l_X \circ Fe)$ into the terminal cone
+  $(UE,Ue)$, hence by universality we get that $l_E = r_E$.
+
+  Since $\Alg_{s'}$ is a full subcategory of $\Alg_s$, $E$ with its
+  proof $\epsilon : l_E = r_E$ inherits its universal property
+  directly from $\Alg_s$.
 \end{proof}
 
 Together with \cref{initiality-to-section} and
