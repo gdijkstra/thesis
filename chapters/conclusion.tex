@@ -1,2 +1,79 @@
 \chapter{Concluding remarks}
 \label{conclusion}
+
+In this thesis we have given a formal specification of quotient
+inductive-inductive definitions, intended as a stepping stone towards
+a theory of higher inductive(-inductive) types. 
+
+\Cref{qits} was devoted to giving examples and intuition for quotient
+inductive-inductive types, before diving into the formal
+definition. We argued that even only considering higher
+inductive(-inductive) types truncated to sets, and therefore naturally
+limiting ourselves to point and path constructors, is already a useful
+extension over ordinary inductive types. In these examples we
+uncovered that quotient inductive-inductive types set itself apart
+from ordinary inductive definitions in the following regards:
+\begin{itemize}
+\item apart from defining a single type, we have a collection of \emph{dependent sorts}
+\item any constructor may \emph{refer to any previous constructor}
+\item the result type of a constructor may be an \emph{equation} in
+  any of the sorts, \ie we allow for \emph{path constructors}
+\end{itemize}
+Both inductive-inductive definitions as well as higher inductive types
+have the property of allowing for references to previous constructors,
+which prompted our investigations into a uniform treatment of both
+classes of inductive definitions.
+
+In \cref{describing} we give the formal specification of quotient
+inductive-inductive definitions, which is given simultaneously with
+its interpretation as categories of algebras: we characterise quotient
+inductive-inductive definitions roughly as iterated
+dialgebras. Dealing with dependent sorts means that ordinary
+dialgebras do not suffice: the categories of dialgebras are fibred
+over all sorts below the sort of the current constructor. Dealing with
+this means we define the category of algebras as an equaliser category
+of a category of dialgebras.
+
+The algebras corresponding to path constructors are also given as
+objects of an equaliser category, which at least in the set truncated
+setting is a natural way of describing them. They are treated
+separately from point constructors, however. Future work would be to
+find a way to uniformly deal with both point and path constructors,
+possibly finding a generalisation of dialgebras suitable for this. We
+have attempted such an approach by considering \emph{dependent
+  dialgebras}, \ie given $F : \Func{\Cc}{\Set}$ and
+$G : \Func{\int_{\Cc} F}{\Set}$ a dependent dialgebra is an object
+$X : | \Cc |$ along with:
+$$
+\theta : (x : FX) \to G (X , x)
+$$
+This turned out not to be a nice notion to work with, as the category
+$\int_{\Cc} F$ is not a well-behaved category to work with for our
+purposes. In particular, when defining what morphisms between these
+algebras should be, we need to lift a morphism in $\Cc$ to one in
+$\int_{\Cc} F$. There is a canonical way of doing so, but this is not
+functorial in the untruncated setting, which makes the approach
+unattractive if we want to generalise to higher inductive types.
+
+Given that our definition of quotient inductive-inductive types can be
+formulated inside type theory, one avenue for future work would be
+applying this definition to generic programming ideas. Having this
+definitions as the basis of the implementation of inductive
+definitions in your theory is useful when one wants to use
+metaprogramming techniques to define programs abstracting over data
+types. One aspect of our approach is that we stay with the idea of an
+inductive definition being given as a list of constructors, as opposed
+to simplifying the situation to being a code of a single
+endofunctor. Staying with the list of constructors idea also means
+that we could build a system for writing attribute grammars internally
+without needing any external tools, allowing for aspect oriented
+programming.
+
+Since we have not focussed on our specifications of inductive
+definitions being sound in the sense of the categories of algebras
+having initial objects, the system can also be used to work with
+equational theories in type theory. While there are plenty of
+equational theories that are nicely behaved in the sense that the
+corresponding category of models has an initial object, this is not
+always the case: fields being a notable example.
+
