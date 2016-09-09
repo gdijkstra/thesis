@@ -961,7 +961,118 @@ The family structure on $\Set$ is the usual one. We can derive
 definitions of the family structure on categories of algebras by
 induction. Since they are defined ``on top of'' $\Set$, we can use the
 specification and the family structure on $\Set$ to derive appropriate
-definitions.
+definitions. We will start out by considering the induction principles
+for the contexts and types example and the interval type.
+
+\subsubsection{Induction principle for $(\ttconty, \tttyty)$}
+
+The induction principle consists of four parts:
+\begin{itemize}
+\item the \emph{motive}, which is intuitively the property that we are
+  trying to prove holds for every element of the inductive definition
+\item the \emph{methods}: we show for every constructor that the
+  motive holds for that constructor, given the assumption that the
+  motive holds for the recursive arguments
+\item given the motive and methods, we get a \emph{dependent morphism}
+  from the inductive type into the motive
+\item this dependent morphism comes with \emph{computation rules},
+  telling us how this dependent morphism behaves in conjunction with
+  the constructors.
+\end{itemize} 
+
+Consider the inductive definition of the syntax of type theory,
+restricting ourselves to contexts and types in a context, \ie we have
+sorts $\ttconty : \Set$ and $\tttyty : \ttconty \to \Set$ with
+constructors:
+\begin{align*}
+  \constr{\ttnil}{\ttconty} \\
+  \constr{\ttcons{\_}{\_}}{(\Gamma : \ttconty) \to \tttyty\ \Gamma \to \ttconty} \\
+  \constr{\ttpi}{(\Gamma : \ttconty)\ (A : \tttyty\ \Gamma)\ (B : \tttyty\ (\ttcons{\Gamma}{A})) \to \tttyty\ \Gamma}
+\end{align*}
+
+The motives for this definition are:
+\begin{align*}
+&P : \ttconty \to \Set \\
+&Q : (\Gamma : \ttconty) \to P\ \Gamma \to \tttyty\ \Gamma \to \Set
+\end{align*}
+$P$ is a family over $\ttconty$ and $Q$ is a family over both $P$ and
+$\tttyty$. In the motive for $\tttyty$ we are allowed to refer to
+results of the induction principle applied to the context at hand.
+
+The methods are as follows:
+\begin{align*}
+  &m_{\ttnil} &&: &&P\ \ttnil \\
+  &m_{\ttcons{\_}{\_}} &&: &&(\Gamma : \ttconty)\ (x : P\ \Gamma) \\
+  &&&&&(A : \tttyty\ \Gamma)\ (y : Q\ \Gamma\ x\ A)  \\
+  &&&&&\to P\ (\ttcons{\Gamma}{A}) \\
+  &m_{\ttpi} &&: &&(\Gamma : \ttconty)\ (x : P\ \Gamma) \\
+  &&&&&(A : \tttyty\ \Gamma)\ (y : Q\ \Gamma\ x\ A) \\
+  &&&&&(B : \tttyty\ (\ttcons{\Gamma}{A}))\ (z : Q\ (\ttcons{\Gamma}{A})\ (m_{\ttcons{\_}{\_}}\ \Gamma\ x\ A\ y)\ B) \\
+  &&&&&\to Q\ \Gamma\ x\ (\ttpi\ \Gamma\ A\ B)
+\end{align*}
+
+The method for the constructor $\ttnil$ is unsurprising. For
+$\ttcons{\_}{\_}$ we see that its method, just like the constructor
+itself, refers to the motive of $\tttyty$. The method for $\ttpi$
+refers to a previous \emph{method}, reflecting the reference to the
+corresponding previous constructor.
+
+Given these motives and methods, the induction principle gives us the
+following dependent functions:
+\begin{align*}
+&\ttconind : (\Gamma : \ttconty) \to P\ \Gamma \\
+&\tttyind : (\Gamma : \ttconty)\ (A : \tttyty\ \Gamma) \to Q\ \Gamma\ (\ttconind\ \Gamma)\ A
+\end{align*}
+with computation rules:
+\begin{align*}
+  &\ttconind\ \ttnil = m_{\ttnil} \\
+  &\ttconind\ (\ttcons{\Gamma}{A}) = m_{\ttcons{\_}{\_}}\ \Gamma\ (\ttconind\ \Gamma)\ A\ (\tttyind\ \Gamma\ A) \\
+  &\tttyind\ \Gamma\ (\ttpi\ \Gamma\ A\ B) = m_{\ttpi}\ \Gamma\ (\ttconind\ \Gamma)\ A\ (\tttyind\ \Gamma\ A)\ B\ (\tttyind\ (\ttcons{\Gamma}{A})\ B)
+\end{align*}
+
+Reading these equations as a recursive definition of the morphisms, we
+see that it is a mutual definition. Another thing to note is that the
+last equation, for the constructor $\ttpi$, has repeating variables on
+the left hand side, so we cannot read it strictly as a pattern
+matching definition, but instead it is a definition given by dependent
+pattern matching. Unifying the type of the constructor $\ttpi$ with
+the signature of $\tttyind$, we see that the two variables of type
+$\ttconty$ have to be the same.
+
+\subsubsection{Induction principle for the interval type}
+
+Let us recall the inductive definition of the interval $\intty$ with
+constructors:
+\begin{align*}
+  \constr{\intzero}{\intty} \\
+  \constr{\intone}{\intty} \\
+  \constr{\intseg}{\intzero = \intone}
+\end{align*}
+
+Since it is just a $\Set$-sorted inductive definition, a motive for
+induction on $\intty$ is a family $P : \intty \to \Set$. The methods
+are:
+\begin{align*}
+  &m_{\intzero} : P\ \intzero \\
+  &m_{\intone} : P\ \intone \\
+  &m_{\intseg} : \pathover{P}{\intseg}{m_{\intzero}}{m_{\intone}}
+\end{align*}
+
+which gives us a dependent function $\intind : (x : \intty) \to P\ x$
+with computation rules:
+\begin{align*}
+  &\intind\ \intzero = m_{\intzero} \\
+  &\intind\ \intone = m_{\intone} \\
+\end{align*}
+
+The induction principle for $\intty$ is not very different from its
+recursion principle. The most interesting difference is that the
+method for $\intseg$ is a \emph{dependent equality}, as $m_{\intzero}$
+and $m_{\intone}$ have definitionally different types.
+
+Since we are working with sets, we do not need to add a computation
+rule for the path constructor $\intseg$, as that would introduce a
+path between equalities, \ie it would not introduce anything new.
 
 \subsubsection{Family and dependent morphism structure on $\Fam$}
 
