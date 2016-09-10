@@ -47,6 +47,12 @@
 
 \newcommand{\AgdaPragma}[1]{\mathsf{\{-\#\ #1\ \#-\}}}
 
+% Hack to deal with dashes/hyphens in \mathsf.
+% From: http://tex.stackexchange.com/a/196529
+\makeatletter
+\DeclareRobustCommand{\ident}[1]{\begingroup\newmcodes@\mathsf{#1}\endgroup}
+\makeatother
+
 % Keywords
 \newcommand{\data}{\AgdaKeyword{data}}
 \newcommand{\where}{\AgdaKeyword{where}}
@@ -55,28 +61,28 @@
 % Primitives
 \newcommand{\emptyty}{\AgdaPrimitiveType{0}}
 \newcommand{\unitty}{\AgdaPrimitiveType{1}}
-\newcommand{\unitval}{\AgdaInductiveConstructor{\mathsf{tt}}}
+\newcommand{\unitval}{\AgdaInductiveConstructor{\ident{tt}}}
 
 \newcommand{\initty}{\AgdaPrimitiveType{0}}
 
 % Identity types
-\newcommand{\refl}{\AgdaInductiveConstructor{\mathsf{refl}}}
-\newcommand{\J}{\AgdaFunction{\mathsf{J}}}
+\newcommand{\refl}{\AgdaInductiveConstructor{\ident{refl}}}
+\newcommand{\J}{\AgdaFunction{\ident{J}}}
 \newcommand{\sym}[1]{#1\AgdaFunction{^{-1}}}
 
 % Universes
-\newcommand{\Set}{\AgdaPrimitiveType{\mathsf{Set}}}
-\newcommand{\Type}{\AgdaPrimitiveType{\mathsf{Type}}}
-\newcommand{\Prop}{\AgdaPrimitiveType{\mathsf{Prop}}}
-\newcommand{\Fam}{\AgdaFunction{\mathsf{Fam}}}
-\newcommand{\Rel}{\AgdaFunction{\mathsf{Rel}}}
+\newcommand{\Set}{\AgdaPrimitiveType{\ident{Set}}}
+\newcommand{\Type}{\AgdaPrimitiveType{\ident{Type}}}
+\newcommand{\Prop}{\AgdaPrimitiveType{\ident{Prop}}}
+\newcommand{\Fam}{\AgdaFunction{\ident{Fam}}}
+\newcommand{\Rel}{\AgdaFunction{\ident{Rel}}}
 
-\newcommand{\Level}{\AgdaPrimitiveType{\mathsf{Level}}}
+\newcommand{\Level}{\AgdaPrimitiveType{\ident{Level}}}
 
-\newcommand{\isset}{\AgdaFunction{\mathsf{is-set}}}
-\newcommand{\isprop}{\AgdaFunction{\mathsf{is-prop}}}
-\newcommand{\iscontr}{\AgdaFunction{\mathsf{is-contr}}}
-\newcommand{\istrunc}[1]{\AgdaFunction{\mathsf{is-#1-trunc}}}
+\newcommand{\isset}{\AgdaFunction{\ident{is-set}}}
+\newcommand{\isprop}{\AgdaFunction{\ident{is-prop}}}
+\newcommand{\iscontr}{\AgdaFunction{\ident{is-contr}}}
+\newcommand{\istrunc}[1]{\AgdaFunction{\ident{is-#1-trunc}}}
 
 % Equational reasoning
 \newcommand{\reasontext}[1]{\{\ \textsf{#1}\ \}}
@@ -104,9 +110,9 @@
 
 % Equality and its operations
 \newcommand{\pathover}[4]{#3 =^{#1}_{#2} #4}
-\newcommand{\ap}{\AgdaFunction{\mathsf{ap}}}
-\newcommand{\apd}{\AgdaFunction{\mathsf{apd}}}
-\newcommand{\transport}{\AgdaFunction{\mathsf{transport}}}
+\newcommand{\ap}{\AgdaFunction{\ident{ap}}}
+\newcommand{\apd}{\AgdaFunction{\ident{apd}}}
+\newcommand{\transport}{\AgdaFunction{\ident{transport}}}
 \newcommand{\defeq}{\equiv}
 \newcommand{\ddefeq}{:\defeq}
 
@@ -122,68 +128,68 @@
 
 
 % is-prop, is-equiv, etc.
-\newcommand{\isequiv}{\AgdaFunction{\mathsf{is-equiv}}}
+\newcommand{\isequiv}{\AgdaFunction{\ident{is-equiv}}}
 
 % Naturals
 \newcommand{\natty}{\AgdaDatatype{\mathbb{N}}}
-\newcommand{\natzero}{\AgdaInductiveConstructor{\mathsf{zero}}}
-\newcommand{\natsucc}{\AgdaInductiveConstructor{\mathsf{succ}}}
+\newcommand{\natzero}{\AgdaInductiveConstructor{\ident{zero}}}
+\newcommand{\natsucc}{\AgdaInductiveConstructor{\ident{succ}}}
 
-\newcommand{\natrec}{\AgdaFunction{\mathbb{N}\mathsf{-rec}}}
-\newcommand{\natind}{\AgdaFunction{\mathbb{N}\mathsf{-ind}}}
+\newcommand{\natrec}{\AgdaFunction{\mathbb{N}\ident{-rec}}}
+\newcommand{\natind}{\AgdaFunction{\mathbb{N}\ident{-ind}}}
 
 % Booleans
-\newcommand{\boolty}{\AgdaDatatype{\mathsf{Bool}}}
-\newcommand{\booltrue}{\AgdaInductiveConstructor{\mathsf{true}}}
-\newcommand{\boolfalse}{\AgdaInductiveConstructor{\mathsf{false}}}
+\newcommand{\boolty}{\AgdaDatatype{\ident{Bool}}}
+\newcommand{\booltrue}{\AgdaInductiveConstructor{\ident{true}}}
+\newcommand{\boolfalse}{\AgdaInductiveConstructor{\ident{false}}}
 
-\newcommand{\boolnot}{\AgdaFunction{\mathsf{not}}}
+\newcommand{\boolnot}{\AgdaFunction{\ident{not}}}
 
 
 % Interval type
-\newcommand{\intty}{\AgdaDatatype{\mathsf{I}}}
-\newcommand{\intzero}{\AgdaInductiveConstructor{\mathsf{zero}}}
-\newcommand{\intone}{\AgdaInductiveConstructor{\mathsf{one}}}
-\newcommand{\intseg}{\AgdaInductiveConstructor{\mathsf{seg}}}
+\newcommand{\intty}{\AgdaDatatype{\ident{I}}}
+\newcommand{\intzero}{\AgdaInductiveConstructor{\ident{zero}}}
+\newcommand{\intone}{\AgdaInductiveConstructor{\ident{one}}}
+\newcommand{\intseg}{\AgdaInductiveConstructor{\ident{seg}}}
 
-\newcommand{\intrec}{\AgdaFunction{\mathsf{I-rec}}}
-\newcommand{\intrecbetazero}{\AgdaFunction{\mathsf{I-rec-\beta}}_{\intzero}}
-\newcommand{\intrecbetaone}{\AgdaFunction{\mathsf{I-rec-\beta}}_{\intone}}
-\newcommand{\intrecbetaseg}{\AgdaFunction{\mathsf{I-rec-\beta}}_{\intseg}}
+\newcommand{\intrec}{\AgdaFunction{\ident{I-rec}}}
+\newcommand{\intrecbetazero}{\AgdaFunction{\ident{I-rec-\beta}}_{\intzero}}
+\newcommand{\intrecbetaone}{\AgdaFunction{\ident{I-rec-\beta}}_{\intone}}
+\newcommand{\intrecbetaseg}{\AgdaFunction{\ident{I-rec-\beta}}_{\intseg}}
 
-\newcommand{\intind}{\AgdaFunction{\mathsf{I-ind}}}
+\newcommand{\intind}{\AgdaFunction{\ident{I-ind}}}
 
 % Quotient type
 \newcommand{\quotty}[2]{#1 \AgdaDatatype{/} #2}
 \newcommand{\quotproj}[1]{\AgdaInductiveConstructor{[}\,#1\,\AgdaInductiveConstructor{]}}
 \newcommand{\quoteq}{\AgdaInductiveConstructor{q}}
 
-\newcommand{\quotind}[2]{\AgdaFunction{\mathsf{#1 / #2 -ind}}}
+\newcommand{\quotind}[2]{\AgdaFunction{\ident{#1 / #2 -ind}}}
 
 % Coequaliser
-\newcommand{\coeqty}[2]{\AgdaDatatype{\mathsf{coeq}}_{#1, #2}}
+\newcommand{\coeqty}[2]{\AgdaDatatype{\ident{coeq}}_{#1, #2}}
 \newcommand{\coeqproj}{\AgdaInductiveConstructor{c}}
-\newcommand{\coeqeq}{\AgdaInductiveConstructor{\mathsf{eq}}}
+\newcommand{\coeqeq}{\AgdaInductiveConstructor{\ident{eq}}}
 
-\newcommand{\coeqind}[2]{\AgdaDatatype{\mathsf{coeq}}\ #1\ #2 -ind}
+\newcommand{\coeqind}[2]{\AgdaDatatype{\ident{coeq}}\ #1\ #2 -ind}
 
 % Infinitely branching tree
-\newcommand{\treety}{\AgdaDatatype{\mathsf{Tree}}}
-\newcommand{\treeleaf}{\AgdaInductiveConstructor{\mathsf{leaf}}}
-\newcommand{\treenode}{\AgdaInductiveConstructor{\mathsf{node}}}
-\newcommand{\treeperm}{\AgdaInductiveConstructor{\mathsf{perm}}}
+\newcommand{\treety}{\AgdaDatatype{\ident{Tree}}}
+\newcommand{\treeleaf}{\AgdaInductiveConstructor{\ident{leaf}}}
+\newcommand{\treenode}{\AgdaInductiveConstructor{\ident{node}}}
+\newcommand{\treeperm}{\AgdaInductiveConstructor{\ident{perm}}}
 
-\newcommand{\pretreety}{\AgdaDatatype{\mathsf{Tree}_0}}
-\newcommand{\pretreeleaf}{\AgdaInductiveConstructor{\mathsf{leaf}_0}}
-\newcommand{\pretreenode}{\AgdaInductiveConstructor{\mathsf{node}_0}}
+\newcommand{\pretreety}{\AgdaDatatype{\ident{Tree}_0}}
+\newcommand{\pretreeleaf}{\AgdaInductiveConstructor{\ident{leaf}_0}}
+\newcommand{\pretreenode}{\AgdaInductiveConstructor{\ident{node}_0}}
 
 \newcommand{\treerel}{\sim}
 \newcommand{\treerelty}[2]{#1 \AgdaDatatype{\treerel} #2}
-\newcommand{\treerelnode}{\AgdaInductiveConstructor{\mathsf{rel-node}}}
+\newcommand{\treerelnode}{\AgdaInductiveConstructor{\ident{rel-node}}}
 
 % Syntax of type theory
-\newcommand{\ttconty}{\AgdaDatatype{\mathsf{Con}}}
-\newcommand{\tttyty}{\AgdaDatatype{\mathsf{Ty}}}
+\newcommand{\ttconty}{\AgdaDatatype{\ident{Con}}}
+\newcommand{\tttyty}{\AgdaDatatype{\ident{Ty}}}
 
 \newcommand{\ttnil}{\AgdaInductiveConstructor{\epsilon}}
 \newcommand{\ttcons}[2]{#1 \AgdaInductiveConstructor{,} #2}
@@ -192,12 +198,12 @@
 \newcommand{\ttone}{\AgdaInductiveConstructor{`1}}
 \newcommand{\ttpi}{\AgdaInductiveConstructor{`\Pi}}
 
-\newcommand{\tttmty}{\AgdaDatatype{\mathsf{Tm}}}
-\newcommand{\ttapp}{\AgdaInductiveConstructor{\mathsf{app}}}
-\newcommand{\ttlam}{\AgdaInductiveConstructor{\mathsf{lam}}}
+\newcommand{\tttmty}{\AgdaDatatype{\ident{Tm}}}
+\newcommand{\ttapp}{\AgdaInductiveConstructor{\ident{app}}}
+\newcommand{\ttlam}{\AgdaInductiveConstructor{\ident{lam}}}
 
-\newcommand{\ttconind}{\AgdaFunction{\mathsf{ind}}_{\ttconty}}
-\newcommand{\tttyind}{\AgdaFunction{\mathsf{ind}}_{\tttyty}}
+\newcommand{\ttconind}{\AgdaFunction{\ident{ind}}_{\ttconty}}
+\newcommand{\tttyind}{\AgdaFunction{\ident{ind}}_{\tttyty}}
 
 % Arbitrary inductive type T
 \newcommand{\Tty}{\AgdaDatatype{T}}
@@ -205,13 +211,13 @@
 \newcommand{\Tb}{\AgdaInductiveConstructor{b}}
 
 % Families
-\newcommand{\total}{\AgdaFunction{\mathsf{total}}}
-\newcommand{\proj}{\AgdaFunction{\mathsf{proj}}}
-\newcommand{\preimage}{\AgdaFunction{\mathsf{preimage}}}
-\newcommand{\DepHom}{\AgdaFunction{\mathsf{DepHom}}}
-\newcommand{\Sect}{\AgdaFunction{\mathsf{Sect}}}
-\newcommand{\grph}{\AgdaFunction{\mathsf{graph}}}
-\newcommand{\snd}{\AgdaFunction{\mathsf{snd}}}
+\newcommand{\total}{\AgdaFunction{\ident{total}}}
+\newcommand{\proj}{\AgdaFunction{\ident{proj}}}
+\newcommand{\preimage}{\AgdaFunction{\ident{preimage}}}
+\newcommand{\DepHom}{\AgdaFunction{\ident{DepHom}}}
+\newcommand{\Sect}{\AgdaFunction{\ident{Sect}}}
+\newcommand{\grph}{\AgdaFunction{\ident{graph}}}
+\newcommand{\snd}{\AgdaFunction{\ident{snd}}}
 
 % Categories
 % From: http://tex.stackexchange.com/questions/140978/arrow-accented-with-a-dot-natural-transformation
@@ -228,14 +234,14 @@
 \newcommand{\inftygrpds}{$\infty$-groupoids\xspace}
 \newcommand{\inftycat}{$(\omega,1)$-category\xspace}
 \newcommand{\inftycats}{$(\omega,1)$-categories\xspace}
-\newcommand{\Cat}{\AgdaPrimitiveType{\mathsf{Cat}}}
+\newcommand{\Cat}{\AgdaPrimitiveType{\ident{Cat}}}
 \newcommand{\Aa}{\mathcal{A}}
 \newcommand{\Cc}{\mathcal{C}}
 \newcommand{\Dd}{\mathcal{D}}
-\newcommand{\id}{\mathsf{id}}
-\newcommand{\algcat}[1]{#1\mathsf{-alg}}
-\newcommand{\dialgcat}[2]{(#1,#2)\mathsf{-dialg}}
-\newcommand{\monalgcat}[1]{#1\mathsf{-Alg}}
+\newcommand{\id}{\ident{id}}
+\newcommand{\algcat}[1]{#1\ident{-alg}}
+\newcommand{\dialgcat}[2]{(#1,#2)\ident{-dialg}}
+\newcommand{\monalgcat}[1]{#1\ident{-Alg}}
 \newcommand{\initcat}{\mathbb{0}}
 \newcommand{\termcat}{\mathbb{1}}
 \newcommand{\Func}[2]{#1 \Rightarrow #2}
@@ -248,47 +254,47 @@
 \newcommand{\termhom}{!`}
 
 % Coherence
-\newcommand{\leftid}{\mathsf{left-id}}
-\newcommand{\rightid}{\mathsf{right-id}}
-\newcommand{\assoc}{\mathsf{assoc}}
+\newcommand{\leftid}{\ident{left-id}}
+\newcommand{\rightid}{\ident{right-id}}
+\newcommand{\assoc}{\ident{assoc}}
 
 % Functor coherence
-\newcommand{\Fid}{F\mathsf{-id}}
-\newcommand{\Fcomp}{F\mathsf{-}\circ}
-\newcommand{\Fleftid}{F\mathsf{-left-id}}
-\newcommand{\Fassoc}{F\mathsf{-assoc}}
-\newcommand{\Gid}{G\mathsf{-id}}
-\newcommand{\Gcomp}{G\mathsf{-}\circ}
-\newcommand{\Gleftid}{G\mathsf{-left-id}}
-\newcommand{\Gassoc}{G\mathsf{-assoc}}
+\newcommand{\Fid}{F\ident{-id}}
+\newcommand{\Fcomp}{F\ident{-}\circ}
+\newcommand{\Fleftid}{F\ident{-left-id}}
+\newcommand{\Fassoc}{F\ident{-assoc}}
+\newcommand{\Gid}{G\ident{-id}}
+\newcommand{\Gcomp}{G\ident{-}\circ}
+\newcommand{\Gleftid}{G\ident{-left-id}}
+\newcommand{\Gassoc}{G\ident{-assoc}}
 
 
 % Sorts
-\newcommand{\sortsty}{\AgdaDatatype{\mathsf{Sorts}}}
+\newcommand{\sortsty}{\AgdaDatatype{\ident{Sorts}}}
 \newcommand{\Ss}{\mathcal{S}}
 \newcommand{\SortCat}[1]{\AgdaFunction{\llbracket}\ #1\ \AgdaFunction{\rrbracket}}
-\newcommand{\sortsnil}{\AgdaInductiveConstructor{\mathsf{nil}}}
-\newcommand{\sortssnoc}{\AgdaInductiveConstructor{\mathsf{snoc}}}
+\newcommand{\sortsnil}{\AgdaInductiveConstructor{\ident{nil}}}
+\newcommand{\sortssnoc}{\AgdaInductiveConstructor{\ident{snoc}}}
 
 % Sort membership
 \newcommand{\sortsin}[2]{#1\ \AgdaDatatype{\in}\ #2}
-\newcommand{\sortsinhere}{\AgdaInductiveConstructor{\mathsf{here}}}
-\newcommand{\sortsinthere}{\AgdaInductiveConstructor{\mathsf{there}}}
+\newcommand{\sortsinhere}{\AgdaInductiveConstructor{\ident{here}}}
+\newcommand{\sortsinthere}{\AgdaInductiveConstructor{\ident{there}}}
 
 % Spec
-\newcommand{\specty}{\AgdaDatatype{\mathsf{Spec}}}
-\newcommand{\specnil}{\AgdaInductiveConstructor{\mathsf{nil}}}
-\newcommand{\specsnoc}{\AgdaInductiveConstructor{\mathsf{snoc}}}
-\newcommand{\Alg}{\AgdaFunction{\mathsf{Alg}}}
-\newcommand{\Und}{\AgdaFunction{\mathsf{U}}}
-\newcommand{\Constr}{\AgdaFunction{\mathsf{Constr}}}
+\newcommand{\specty}{\AgdaDatatype{\ident{Spec}}}
+\newcommand{\specnil}{\AgdaInductiveConstructor{\ident{nil}}}
+\newcommand{\specsnoc}{\AgdaInductiveConstructor{\ident{snoc}}}
+\newcommand{\Alg}{\AgdaFunction{\ident{Alg}}}
+\newcommand{\Und}{\AgdaFunction{\ident{U}}}
+\newcommand{\Constr}{\AgdaFunction{\ident{Constr}}}
 
-\newcommand{\specaltty}{\AgdaDatatype{\mathsf{Spec'}}}
-\newcommand{\specaltiscorrect}{\AgdaFunction{\mathsf{is-correct}}}
-\newcommand{\specaltnil}{\AgdaInductiveConstructor{\mathsf{nil}}}
-\newcommand{\specaltsnoc}{\AgdaInductiveConstructor{\mathsf{snoc}}}
-\newcommand{\Algalt}{\AgdaFunction{\mathsf{Alg'}}}
-\newcommand{\Undalt}{\AgdaFunction{\mathsf{U'}}}
+\newcommand{\specaltty}{\AgdaDatatype{\ident{Spec'}}}
+\newcommand{\specaltiscorrect}{\AgdaFunction{\ident{is-correct}}}
+\newcommand{\specaltnil}{\AgdaInductiveConstructor{\ident{nil}}}
+\newcommand{\specaltsnoc}{\AgdaInductiveConstructor{\ident{snoc}}}
+\newcommand{\Algalt}{\AgdaFunction{\ident{Alg'}}}
+\newcommand{\Undalt}{\AgdaFunction{\ident{U'}}}
 
 % Containers
 \newcommand{\cont}[2]{#1 \lhd #2}
@@ -311,41 +317,41 @@
 \newcommand{\Pty}{\AgdaDatatype{P}}
 \newcommand{\Pc}{\AgdaInductiveConstructor{c}}
 
-\newcommand{\Arec}{\AgdaFunction{A\mathsf{-rec}}}
+\newcommand{\Arec}{\AgdaFunction{A\ident{-rec}}}
 
 % Real numbers
 \newcommand{\realty}{\AgdaDatatype{\mathbb{R}}}
 \newcommand{\realrel}[2]{#1 \AgdaDatatype{\sim} #2}
 
 % Field
-\newcommand{\fieldty}{\AgdaDatatype{\mathsf{Field}}}
-\newcommand{\fieldinv}{\AgdaInductiveConstructor{\mathsf{inv}}}
+\newcommand{\fieldty}{\AgdaDatatype{\ident{Field}}}
+\newcommand{\fieldinv}{\AgdaInductiveConstructor{\ident{inv}}}
 \newcommand{\fieldzero}{\AgdaInductiveConstructor{0}}
 
 % Free monad
 \newcommand{\Fstareta}{\AgdaInductiveConstructor{\eta}}
 \newcommand{\Fstarc}{\AgdaInductiveConstructor{c}}
 
-\newcommand{\List}{\AgdaDatatype{\mathsf{List}}}
-\newcommand{\listcons}{\AgdaInductiveConstructor{\mathsf{cons}}}
-\newcommand{\listnil}{\AgdaInductiveConstructor{\mathsf{nil}}}
-\newcommand{\listmap}{\AgdaFunction{\mathsf{map}}}
-\newcommand{\listfoldr}{\AgdaFunction{\mathsf{foldr}}}
+\newcommand{\List}{\AgdaDatatype{\ident{List}}}
+\newcommand{\listcons}{\AgdaInductiveConstructor{\ident{cons}}}
+\newcommand{\listnil}{\AgdaInductiveConstructor{\ident{nil}}}
+\newcommand{\listmap}{\AgdaFunction{\ident{map}}}
+\newcommand{\listfoldr}{\AgdaFunction{\ident{foldr}}}
 
 % W-types
-\newcommand{\wty}{\AgdaDatatype{\mathsf{W}}}
-\newcommand{\wsup}{\AgdaInductiveConstructor{\mathsf{sup}}}
-\newcommand{\welim}{\AgdaFunction{\mathsf{W-elim}}}
-\newcommand{\welimbeta}{\AgdaFunction{\mathsf{W-elim-\beta}}}
+\newcommand{\wty}{\AgdaDatatype{\ident{W}}}
+\newcommand{\wsup}{\AgdaInductiveConstructor{\ident{sup}}}
+\newcommand{\welim}{\AgdaFunction{\ident{W-elim}}}
+\newcommand{\welimbeta}{\AgdaFunction{\ident{W-elim-\beta}}}
 
 % Circle
 \newcommand{\circlety}{\AgdaDatatype{S^1}}
-\newcommand{\circlebase}{\AgdaInductiveConstructor{\mathsf{base}}}
-\newcommand{\circleloop}{\AgdaInductiveConstructor{\mathsf{loop}}}
+\newcommand{\circlebase}{\AgdaInductiveConstructor{\ident{base}}}
+\newcommand{\circleloop}{\AgdaInductiveConstructor{\ident{loop}}}
 
 % Torus
 \newcommand{\torusty}{\AgdaDatatype{T^2}}
-\newcommand{\torusbase}{\AgdaInductiveConstructor{\mathsf{base}}}
-\newcommand{\torusp}{\AgdaInductiveConstructor{\mathsf{p}}}
-\newcommand{\torusq}{\AgdaInductiveConstructor{\mathsf{q}}}
-\newcommand{\torusr}{\AgdaInductiveConstructor{\mathsf{r}}}
+\newcommand{\torusbase}{\AgdaInductiveConstructor{\ident{base}}}
+\newcommand{\torusp}{\AgdaInductiveConstructor{\ident{p}}}
+\newcommand{\torusq}{\AgdaInductiveConstructor{\ident{q}}}
+\newcommand{\torusr}{\AgdaInductiveConstructor{\ident{r}}}
