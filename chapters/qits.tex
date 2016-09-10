@@ -157,7 +157,7 @@ follows:
 &\quotind{A}{R} : \\
 &(P : \quotty{A}{R} \to \Type) \\
 &(m_{\quotproj{\_}} : (a : A) \to P\ \quotproj{a}) \\
-&(m_{\quoteq} : (x\ y : A) (p : R\ x\ y) \to \pathover{P}{\quoteq\ x\ y}{m_{\quotproj{\_}}\ x}{m_{\quotproj{\_}}\ y})\\
+&(m_{\quoteq} : (x\ y : A) (p : R\ x\ y) \to \pathover{P}{\quoteq\ x\ y\ p}{m_{\quotproj{\_}}\ x}{m_{\quotproj{\_}}\ y})\\
 &\to (x : \quotty{A}{R}) \to P\ x
 \end{align*}
 %
@@ -321,20 +321,33 @@ $\treenode$ if we have the axiom of choice at our disposal:
 \end{proposition}
 
 \begin{proof}
-  some proof
+  We can show that the function $\quotproj{\_}$ is a surjection, \ie
+  using induction on $\quotty{\pretreety}{\treerel}$ we can define a
+  dependent function:
+  $$
+  (y : \quotty{\pretreety}{\treerel} \to \proptrunc{(x : \pretreety) \times \quotproj{x} = y}
+  $$
+  The axiom of choice gives us an inverse to $\quotproj{\_}$:
+  $$
+  s : \quotty{\pretreety}{\treerel} \to \pretreety
+  $$
+  satisfying for any $x : \quotty{\pretreety}{\treerel}$,
+  $\quotproj{s\ x} = x$. We can then go on and lift the constructor
+  $\pretreenode$ to the quotient:
+  $$
+  \widetilde{\pretreenode} f \ddefeq \quotproj{\pretreenode\ (s \circ f)}
+  $$
 \end{proof}
 
-We can then show that the quotient has the same elimination principle
-as the quotient inductive type $\treety$:
-
-\begin{proposition}
-  Assuming the axiom of choice, $\quotty{\pretreety}{\treerel}$
-  satisfies the same elimination principle as $\treety$.
-\end{proposition}
-
-\begin{proof}
-  some proof
-\end{proof}
+In the presence of choice, it seems that
+$\quotty{\pretreety}{\treerel}$ and $\treety$ are equivalent. The
+axiom of choice in type theory is a constructive taboo in and of
+itself, it also has the law of excluded middle as a consequence
+\cite{Diaconescu1975}. Going in the other direction, having an inverse
+to the quotient projection function in general implies the axiom of
+choice \cite{Hofmann1995}. Having quotient inductive types available
+allows us to work with definitions such as $\treety$, avoiding the
+need for choice principles to use them.
 
 \subsection{Cauchy reals}
 
