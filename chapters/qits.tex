@@ -360,73 +360,117 @@ that is Cauchy complete, we need to have countable choice at our
 disposal.
 
 Instead of taking that approach, one can define the reals as the
-following quotient inductive-inductive definition:
-
+following quotient \emph{inductive-inductive} definition. We define
+the real numbers along with a closeness relation on it inductively and
+mutually:
 \begin{sorts}
   \sortnamety{\realty}{\Set} \\
-  \sortnamety{\realrel{\_}{\_}}{\realty \to \realty \to \Set}
+  \sortnamety{\realrel{\_}{\_}{\_}}{\ratty_+ \to \realty \to \realty \to \Set}
 \end{sorts}
 
+Note that $\ratty^+$ denotes the type of positive rationals. The
+rationals can be defined as a quotient themselves or directly
+\cite{Altenkirch2011ii}. $\realty$ is inductively defined by the
+following constructors:
+
 \begin{datatype}{\realty}{}
-  \constrdots
+  \constr{\realrat}{\ratty \to \realty} \\
+  \constr{\reallim}{(f : \ratty^+ \to \realty) \to ((\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{x\ \delta}{x\ \epsilon}) \to \realty} \\
+  \constr{\realeq}{(u\ v : \realty) \to ((\epsilon : \ratty^+) \to \realrel{\epsilon}{u}{v} \to u = v} \\
 \end{datatype}
 
-\begin{datatype}{\realrel{\_}{\_}}{}
+The first constructor $\realrat$ is the inclusion of the rationals
+into the reals. The second constructor ``adds'' all the \emph{limit
+  points} for Cauchy approximations and the third (path) constructor
+$\realeq$ tells us that any two real numbers are equal if they are
+arbitrarily close to eachother via the relation we inductively define
+simultaneously.
+%
+\begin{datatype}{\realrel{\epsilon}{\_}{\_}}{}
   \constrdots
 \end{datatype}
-
-% \begin{align*}
-% &\data\ \Real\ \where \\
-% &\ \ \ \ \rat : \Rat \to \Real \\
-% &\ \ \ \ \lim : (\AB{x} : \RatP \to \Real) \to ((\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \to \Real \\
-% &\ \ \ \ \eq : (\AB{u}\ \AB{v} : \Real) \to ((\AB{\epsilon} : \RatP) \to \AB{u} \sim_{\AB{\epsilon}} \AB{v}) \to \AB{u} = \AB{v} \\
-% \\
-% &\data\ \AgdaDatatype{\_\sim_{\_}\_}\ \where \\
-% &\ \ \ \ \ \ \vdots \\
-% &\ \ \ \ \limrat : (\AB{x} : \RatP \to \Real) (p : (\AB{\delta}\ \AB{\epsilon} : \RatP) \to \AB{x}\ \AB{\delta} \sim_{\AB{\delta} + \AB{\epsilon}} \ \AB{x}\ \AB{\epsilon}) \\
-% &\ \ \ \ \ \ \ \ \ \ \ \ (\AB{r} : \Rat) (\AB{\epsilon}\ \AB{\delta} : \RatP) \\
-% &\ \ \ \ \ \ \ \to \AB{x}\ \AB{\delta} \sim_{\AB{\epsilon} - \AB{\delta}} \rat\ \AB{r} \to (\lim\ \AB{x}\ \AB{p}) \sim_{\AB{\epsilon}} (\rat\ \AB{r}) \\
-% &\ \ \ \ \ \ \vdots
-% \end{align*}
-% %
+%
+The constructors of the relation tell us when rational points are
+close, when a rational point is close to a limit point and when two
+limit points are close. For more details, we refer the reader to
+\cite{UFP2013}.
 
 \subsection{Syntax of type theory}
 
+One of the classic examples of an inductive-inductive definition
+\cite{NordvallForsberg2013} is the definition of the syntax of type
+theory in type theory itself \cite{Danielsson2006}
+\cite{Chapman2009}. We see the need of a mutual/inductive-inductive
+definition already popping up when formalising the notion of contexts
+and types in a context:
+%
 \begin{sorts}
   \sortnamety{\ttconty}{\Set} \\
   \sortnamety{\tttyty}{\ttconty \to \Set}
 \end{sorts}
-
+%
+Contexts are either empty or can be extended by a type in a given
+context:
+%
 \begin{datatype}{\ttconty}{}
   \constr{\ttnil}{\ttconty} \\
   \constr{\ttcons{\_}{\_}}{(\Gamma : \ttconty) \to \tttyty\ \Gamma \to \ttconty}
 \end{datatype}
-
-
+%
+Types in a context $\Gamma$ can be defined inductively with
+constructors such as the following, \ie we have constructors for
+atomic types and constructors for type formers such as $\Pi$-types,
+which gives us a type for any pair type $A$ in context $\Gamma$ and
+type $B$ in the extended context $\ttcons{\Gamma}{A}$:
+%
 \begin{datatype}{\tttyty}{}
   \constr{\ttzero}{(\Gamma : \ttconty) \to \tttyty\ \Gamma} \\
   \constr{\ttone}{(\Gamma : \ttconty) \to \tttyty\ \Gamma} \\
-  \constr{\ttpi}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) \to \tttyty\ (\ttcons{\Gamma}{A}) \to \tttyty\ \Gamma}
+  \constrdots \\
+  \constr{\ttpi}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) \to \tttyty\ (\ttcons{\Gamma}{A}) \to \tttyty\ \Gamma} \\
+  \constrdots
 \end{datatype}
+%
+The constructor for $\Pi$-types is where we see one of the defining
+characteristics of inductive-inductive definitions: $\ttpi$ refers to
+a previous constructor $\ttcons{\_}{\_}$. This sets it aside from
+mutual inductive definitions which only refer to the \emph{elements}
+of the types being defined. While the latter can be reduced to
+ordinary inductive definitions, inductive-inductive definitions do not
+admit such a translation.
 
+Continuing formalising the syntax of type theory, we need to have a
+type of terms:
+%
 \begin{sorts}
   \sortnamety{\tttmty}{(\Gamma : \ttconty) \to \tttyty\ \Gamma \to \Set}
 \end{sorts}
-
+%
+For example, the constructors for lambda terms and the application of
+one term to another may be given as follows:
 \begin{datatype}{\tttmty}{}
+  \constrdots \\
   \constr{\ttapp}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
     \tttmty\ \Gamma\ (\ttpi\ A\ B) \to \tttmty\ (\ttcons{\Gamma}{A})\ B} \\
   \constr{\ttlam}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
     \tttmty\ (\ttcons{\Gamma}{A}) B \to \tttmty\ \Gamma\ (\ttpi\ A\ B)} \\
+  \constrdots
 \end{datatype}
-
-% %\intertext{Equations on terms:}
-% %  &\ \ \ \ \ \ \vdots \\
-%   &\ \ \ \ \AgdaInductiveConstructor{\Pi\beta} : (\AB{\Gamma} : \Con) (\AB{A} : \Ty\ \AB{\Gamma}) (\AB{B} : \Ty\ (\AB{\Gamma}\AgdaInductiveConstructor{,}\, \AB{A})) \\
-%   &\ \ \ \ \ \     \to (\AB{t} : \Tm\ (\AB{\Gamma}, \AB{A})\ \AB{B}) \to \app\ \AB{\Gamma}\ \AB{A}\ \AB{B}\ (\lam\ \AB{\Gamma}\ \AB{A}\ \AB{B}\ \AB{t}) = \AB{t} \\
-%   &\ \ \ \ \ \ \vdots
-% \end{align*}
-% %
+%
+One important aspect of the syntax of type theory is that it comes
+with an equivalence relation on it defined by $\beta$- and
+$\eta$-equalities, \ie the definitional or judgmental equality of the
+syntax. One way to deal with this is to separately define the
+equivalence relation on the terms and quotient by this relation. In
+the presence of quotient inductive-inductive definitions, we can
+simply add the equations as path constructors, as is done in
+\cite{Kaposi2016} \cite{Altenkirch2016ii}. For example, we can add the
+following constructor to $\tttmty$ as a witness of $\beta$-equality
+for $\lambda$-terms:
+\begin{align*}
+&\ttpibeta &:& (\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \\ 
+&&&\to (t : \tttmty\ (\ttcons{\Gamma}{A})\ B) \to \ttapp\ \Gamma\ A\ B\ (\ttlam\ \Gamma\ A\ B\ t) = t
+\end{align*}
 
 \section{Implementation}
 
@@ -467,6 +511,7 @@ Using these, a type such as the interval can be
 ``implemented'' as follows:
 \begin{align*}
   &\postulate \\
+  &\ \ \ \ \intty : \Set \\
   &\ \ \ \ \intzero : \intty \\
   &\ \ \ \ \intone : \intty \\
   &\ \ \ \ \intseg : \intzero = \intone \\
@@ -476,15 +521,29 @@ Using these, a type such as the interval can be
   &\ \ \ \ \ \ \ \ \to \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero = a_{\intzero} \\
   &\ \ \ \ \intrecbetaone : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone})  \\
   &\ \ \ \ \ \ \ \ \to \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone = a_{\intone}\\
-  \\
+\end{align*}
+We can turn the $\beta$-equalities for the recursion principle into
+definitional ones using rewrite pragmas as follows:
+\begin{align*}
   &\AgdaPragma{REWRITE\ \intrecbetazero} \\
   &\AgdaPragma{REWRITE\ \intrecbetaone}
 \end{align*}
-Obviously these rewrite pragmas are not safe in anyway: we can easily
-add rules that make the type checker loop or that allow us to inhabit
-the empty type.
+This approach has the advantage that Agda does not see $\intty$ as an
+inductive type and does not recognise $\intzero$ and $\intone$ as
+constructors. Therefore we cannot accidentally pattern match on them
+and define functions that do not respect $\intseg$: $\intrec$ is our
+only way to write (non-trivial) functions out of the interval.
+
+As Agda does not perform checks on the rewrite rules, these rewrite
+pragmas are not safe in anyway: we can easily add rules that make the
+type checker loop or that allow us to inhabit the empty
+type. Nonetheless they provide a good platform for experimentation.
 
 \subsection{Cubical type theory}
+
+\url{https://github.com/mortberg/cubicaltt}
+
+\cite{Cohen2015}
 
 \section{Related concepts}
 
@@ -493,15 +552,21 @@ quotient types. Quotient types have been studied in several forms in
 type theory.
 
 Inductive definitions with equalities have been studied in Miranda
-(data types with laws) and as non-free data types in 
+\cite{Turner1985} under the name of ``data types with laws''
+\cite{Thompson1986} \cite{Thompson1990}. In Miranda, the ``path
+constructors'' were interpreted as rewrite rules. However, data types
+with laws were later abandoned as they interfered with equational
+reasoning.
+
+Non-free data types \cite{Blanqui2007}
 
 One way to think about quotient inductive-inductive definitions is to
-view the constructors as atoms and function symbols of some (algebraic)
-theory. The path constructors are then equations on the theory. The
-types then give us the syntactic model of that particular theory. One
-difference with quotient inductive-inductive definitions is that we
-can mix point and path constructors, as opposed to first listing all
-the point constructors and then listing all the path
+view the constructors as function symbols of some (algebraic)
+theory. The path constructors are then the equations of the
+theory. The types then give us the syntactic model of that particular
+theory. One difference with quotient inductive-inductive definitions
+is that we can mix point and path constructors, as opposed to first
+listing all the point constructors and then listing all the path
 constructors. This means that point or path constructors may also
 refer to a previous path constructor. For quotient inductive-inductive
 definitions being able to do this may turn out not to be terribly
