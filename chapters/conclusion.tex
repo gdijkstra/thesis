@@ -51,9 +51,10 @@ This turned out not to be a nice notion to work with, as the category
 $\int_{\Cc} F$ is not a well-behaved category to work with for our
 purposes. In particular, when defining what morphisms between these
 algebras should be, we need to lift a morphism in $\Cc$ to one in
-$\int_{\Cc} F$. There is a canonical way of doing so, but this is not
-functorial in the untruncated setting, which makes the approach
-unattractive if we want to generalise to higher inductive types.
+$\int_{\Cc} F$. There is a canonical way of doing so, given an
+$x : FX$ for some $X : | \Cc |$, but this operation is not functorial
+in the untruncated setting, which makes the approach unattractive if
+we want to generalise to higher inductive types.
 
 Given that our definition of quotient inductive-inductive types can be
 formulated inside type theory, one avenue for future work would be
@@ -76,4 +77,119 @@ equational theories in type theory. While there are plenty of
 equational theories that are nicely behaved in the sense that the
 corresponding category of models has an initial object, this is not
 always the case: fields being a notable example.
+
+As we have given a specification of quotient inductive-inductive
+definitions, we ought to prove properties about them. In this thesis
+we investigate several properties: the logical equivalence of
+initiality and induction and the construction of some initial algebras
+via sequential colimits. Another important property that should hold
+is that the definitions should be invariant under equivalence of
+constructors. If we have two specifications $s, s' : \specty$ with the
+same dependent sorts, such that if $| \Alg_s | = | \Alg_{s'} |$, \ie
+all the constructors combined of $s$ are equivalent to those of $s'$,
+then the initial object of $\Alg_s$ should have an isomorphic carrier
+to that of $\Alg_{s'}$. This is an important property that is used
+often to reason about equivalence of inductive definitions. For
+example, it implies that the definitions are invariant under
+reordering of constructors. In the wider setting of higher inductive
+types, such a property would allow us to formally prove the hub-spokes
+construction correct.
+
+In \cref{induction} we give a categorical characterisation of the
+induction principle as the section principle: every algebra
+fibration/display map has a section. We then go on to show that in the
+presence of binary products and equalisers this principle is logically
+equivalent to initiality. This proof follows what one would
+intuitively do in type theory if one shows that some induction
+principle implies initiality: you first show that weak initiality
+holds for which we need to produce a constant algebra family (this is
+the construction of products). Establishing that the resulting
+morphism is unique can be done by employing the induction principle
+again with the motive being the pointwise equivalence of the two
+morphisms. Giving the methods then amounts to given the equaliser of
+the two morphisms. Since we already know the categorical structure of
+the algebras, proving that the section principle and initiality
+coincide then amounts to giving constructions products and
+equalisers. This approach saves us from first having to come up with
+an induction principle.
+
+Interesting to note is that while initiality is a property of a
+category that requires us only to have the objects and morphisms at
+hand, the section principle requires the full categorical structure,
+\ie we need composition, identity morphisms and laws and
+associativity. Initiality is an attractive property in the light of
+working in an untruncated setting, \ie working with hom-types as
+opposed to hom-sets, as we do not have to bother with the category
+laws and hence do not have to deal with any further coherence
+laws. However, it seems that as soon as we want to do something useful
+with the algebras, we need to have all category structure and laws
+available.
+
+The second part of \cref{induction} gives a derivation of the
+induction principle for quotient inductive-inductive
+definitions. Since we know what display maps and sections amount to in
+$\Set$ in a type theoretic sense, \ie they are type families and
+dependent functions, and given that all our categories are in some way
+built upon $\Set$, we can use this information to derive the type
+theoretic induction principle for our quotient inductive-inductive
+definitions.
+
+In \cref{constructing} we consider the existence of inductive
+definitions, \ie the existence of initial objects in the categories of
+algebras. The way we set things up in \cref{describing} allows us to
+give inductive definitions of which the corresponding category of
+algebras does not necessarily have an initial object. As our quotient
+inductive-inductive definitions subsume ordinary inductive types in
+the sense of providing an endofunctor on $\Set$, we can consider the
+double powerset functor which does not have an initial algebra. We
+therefore need to make sure that our definitions are \emph{strictly
+  positive}. There are several ways to define what strict positivity
+means: we can look at the syntactic expression of the functor and
+check whether the arguments do not occur to the left of an arrow. For
+endofunctors on $\Set$, there is the semantic characterisation of
+strictly positive functors as \emph{containers}. We give a
+generalisation of these to functors from any category into $\Set$,
+which allows us to express the data needed for a $\Set$-sorted
+quotient inductive definition. We also present a generalisation of
+this to situations where the category of sorts is a presheaf category
+over $\Set$. An avenue for future work would be to try to extend this
+to arbitrary sort categories and that the resulting notion agrees with
+the syntactic formulation.
+
+We give constructions of initial algebras for a class of inductive
+definitions where the functors are $\omega$-cocontinuous. These
+constructions can be performed inside the type theory, which gives us
+the result that having natural numbers and coequalisers/quotients is
+enough to be able to construct a wide range of quotient
+inductive-inductive definitions. Generalising this result to other
+ordinals is future work. It would be interesting to investigate
+whether having W-types present, along with quotients, is enough to
+construct all quotient inductive-inductive definitions which are
+strictly positive, similar to deriving indexed W-types from ordinary
+W-types.
+
+In \cref{untruncated} we try to lift the restriction to sets, which
+would turn our theory of quotient inductive-inductive types into one
+of higher inductive-inductive types with 0- and 1-constructors. (By
+the hub-spokes construction this would mean that this is enough to
+express also any higher inductive type with higher constructors.) As
+opposed to moving to \inftycats straight away, we move from hom-sets
+to hom-types and go through all the constructions to see where we run
+into coherence issues. Somewhat surprisingly issues already show up
+when considering only point constructors for $\Type$ sorted
+definitions, \ie 0-HITs. The category of $F$-algebras for an
+endofunctor on $\Type$ is no longer a category that satisfies the
+category laws strictly, unlike $\Type$ itself. Even if $F$ happens to
+be a strict functor, we still do not end up with a strict
+\inftycat. If we add a point constructor to this category of algebras,
+we increase the level of coherence needed. Therefore the number of
+coherence problems we have to deal with increases with the number of
+constructors, whether they are point constructors of path
+constructors. To uniformly deal with this, we need to move on to full
+\inftycats. The definition of these in type theory seems to require an
+internal notion of strict equality.
+
+
+
+
 
