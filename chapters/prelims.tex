@@ -34,7 +34,7 @@ $\beta$-equality:
 $$
 (\lambda x . e)\ y \defeq e[x/y]
 $$
-where $e[x/y]$ denotes the substitution of every occurence in $e$ of
+where $e[x/y]$ denotes the substitution of every occurrence in $e$ of
 $x$ with $y$. We use the symbol $\defeq$ to denote definitional
 equality on terms.
 
@@ -281,13 +281,13 @@ equality between terms in the type theory itself, referred to as
 Since identity types are types again, they themselves are also
 equipped with a groupoid structure. We can always consider identity
 types of identity types of identity types, et cetera. Such an infinite
-tower of groupoids on top of eachother is called an \inftygrpd. An
+tower of groupoids on top of each other is called an \inftygrpd. An
 external proof of the fact that every type gives rise to an \inftygrpd
 has been given \cite{VanDenBerg2011,Lumsdaine2009}.
 
 \subsection{Dependent equality}
 
-When considering type familes $B : A \to \Type$ over some type $A$, we
+When considering type families $B : A \to \Type$ over some type $A$, we
 sometimes find ourselves in the situation that we want to talk about
 equality of $a : B\ x$ and $b : B\ y$ where $x = y$ but not
 necessarily $x \defeq y$. In this case the term $a = b$ is
@@ -516,9 +516,9 @@ $\boolty \logequiv \boolty$ has two distinct inhabitants:
 $(\id_{\boolty} , \id_{\boolty})$ and $(\boolnot , \boolnot)$.
 
 The notion of isomorphism also requires the two functions to be
-eachother's inverses:
+each other's inverses:
 \begin{definition}[Isomorphism]
-  Types $A$ and $B$ are \emph{isomorphic} if they are eachother's
+  Types $A$ and $B$ are \emph{isomorphic} if they are each other's
   inverse:
   \begin{align*}
     &\Iso{A}{B} : \Type \\
@@ -656,7 +656,7 @@ We have similar properties for $\Sigma$-types:
 \item $(a : A) \times ((b : B) \times C\ (a , b)) = (x : (a : A) \times B\ a) \times C\ x$
 \end{itemize}
 Commutativity only makes sense when the types do not depend on
-eachother, so we do not have such a statement for $\Sigma$-types. In
+each other, so we do not have such a statement for $\Sigma$-types. In
 equational reasoning we will not be explicit about applying
 associativity or other laws and often will neglect parentheses.
 
@@ -676,7 +676,7 @@ The type $(x : A) \times (x = a)$ is called a \emph{singleton}. This
 fact is very useful in equational reasoning. It is comparable to high
 school algebra where multiplying by $\frac{a}{a}$ for a cleverly
 chosen expression $a$, or recognising that two factors cancel
-eachother out, are a useful techniques.
+each other out, are a useful techniques.
 
 \begin{proposition}[Equality of inhabitants of $\Sigma$-types]
   Equality between inhabitants of a $\Sigma$-type is equivalent to a
@@ -912,7 +912,7 @@ but hom-\emph{types}. Composition and identity morphisms still make
 sense with this generalisation. We may run into issues with the
 category \emph{laws}: in some situations it is not enough to simply
 have the laws, they also need to be coherent in some sense: the
-interaction of the laws with eachother needs to satisfy certain laws
+interaction of the laws with each other needs to satisfy certain laws
 as well. Naturally, how these coherence laws interact also has to
 adhere to additional higher coherence laws, ad infinitum. In
 \cref{untruncated} we will describe the problems and possible
