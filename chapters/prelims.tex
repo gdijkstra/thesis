@@ -2,10 +2,13 @@
 \label{prelims}
 
 In this chapter we will introduce the type theoretic background
-material for the thesis. We introduce notation and basic propositions
-and lemmata that we will use throughout the thesis. As we will be
-using category theoretic approaches, the chapter is concluded with our
-approach to category theory in type theory.
+material for the thesis. We will not give a detailed overview of
+Martin-L\"of Type Theory in this chapter. For such an overview, we
+refer the reader to the first chapter of \cite{UFP2013}. Instead, we
+introduce notation and basic propositions and lemmata that we will use
+throughout the thesis. As we will be using category theoretic
+approaches, the chapter is concluded with our approach to category
+theory in type theory.
 
 \section{Basic type formers}
 In type theory we can form $\Pi$-types, or dependent functions, given
@@ -13,8 +16,12 @@ a type $A$ and for every $a : A$ a type $B\ a$, we have the type:
 $$
 (x : A) \to B\ a
 $$
-Traditionally this is denoted as $\Pi (x : A) . B\ a$. We will use
-Agda's notation for $\Pi$-types instead. The introduction rule for
+Traditionally this is denoted as $\Pi (x : A) . B\ a$ or $\Pi A . B$.
+We will use Agda's notation for $\Pi$-types instead, along with its
+convention of leaving out arrows in the case of nested $\Pi$-types,
+where convenient, \eg we may write
+$(a : A) \to (b : B\ a) \to C\ a\ b$ as
+$(a : A)\ (b : B\ a) \to C\ a\ b$. The introduction rule for
 $\Pi$-types is that if we have $x : A$ in our context and a term
 $b : B\ x$, then we can form the term:
 $$
@@ -28,8 +35,10 @@ $$
 (\lambda x . e)\ y \defeq e[x/y]
 $$
 where $e[x/y]$ denotes the substitution of every occurence in $e$ of
-$x$ with $y$. Furthermore we have $\eta$-equality, for every
-$f : (x : A) \to B\ x$:
+$x$ with $y$. We use the symbol $\defeq$ to denote definitional
+equality on terms.
+
+Furthermore we have $\eta$-equality, for every $f : (x : A) \to B\ x$:
 $$
 f \defeq \lambda x . f\ x
 $$
@@ -44,8 +53,8 @@ context, the term $B\ a$ is a type, then we have that the following is a type:
 $$
 (x : A) \times B\ a
 $$
-This is traditionally written as $\Sigma (x : A) . B\ a$, but we are
-using the \emph{Capriotti notation} here, which mimicks Agda's
+This is traditionally written as $\Sigma (x : A) . B\ a$ or
+$\Sigma A . B$, but we are using a notation here which mirrors Agda's
 notation for $\Pi$-types.
 
 The type $(x : A) \times B\ x$ comes with two projection functions:
@@ -57,7 +66,7 @@ Since we are explicitly giving a name to the first element of the
 pair, we do not explicitly use the first projection in the type of the
 second projection. Using the ``anonymous'' notation we would instead have:
 $$
-\pi_1 : (z : \Sigma A B) \to (\pi_0\ z)
+\pi_1 : (z : \Sigma A B) \to B\ (\pi_0\ z)
 $$
 The $\eta$-law for $\Sigma$-types gives us the following definitional
 equality for every pair $z : \Sigma A B$:
@@ -83,9 +92,9 @@ While avoiding the paradox, this hierarchy brings a lot of complexity
 to our language in terms of usability. Every time we use a universe,
 we have to explicitly indicate its level, cluttering our terms.
 
-One solution to this problem is to leave the level indices implicit
-and let the type checker infer them, if there exists a valid
-substitution. This is the approach Coq takes.
+One solution to this problem is to leave the level indices as implicit
+variables with constraints. One can then let the type checker attempt
+to solve this system, which is the approach Coq takes. 
 
 Another problem is that we may want to give definitions that can be
 instantiated to more than one level. If we want to define a function
@@ -93,20 +102,18 @@ composition operator, we would like that it works for functions
 between types of any level. In Agda, we have the notion of
 \emph{universe polymorphism}. We can define terms such as:
 \begin{align*}
-  &\id : (n : \Level) (A : \Type_n) \to A \to A \\
+  &\id : (n : \Level)\ (A : \Type_n) \to A \to A \\
   &\id\ n\ A\ x \ddefeq x
 \end{align*}
 The function $\id$ is polymorphic over all levels $n$. While this
 saves us from having to define $\id$ for any level, universe
 polymorphism does introduce some complexity of its own. $\Level$ is
 \emph{not} a type, which means that while
-$(n : \Level) (A : \Type_n) \to A \to A$ is a valid Agda
+$(n : \Level)\ (A : \Type_n) \to A \to A$ is a valid Agda
 \emph{expression}, it is not a type, \ie it is not an inhabitant of
 $\Type_i$ for any $i : \Level$.
 
-In this thesis we will leave the universe levels implicit. The
-formalisation in Agda of course makes them explicit and uses universe
-polymorphism where applicable.
+In this thesis we will leave the universe levels implicit.
 
 \subsection{Implicit arguments}
 
@@ -115,15 +122,15 @@ function as being an \emph{implicit argument}. One use case is the
 aforementioned universe levels. If we consider again the type and
 definition of $\id$, with implicit arguments, we can write:
 \begin{align*}
-&\id : {n : \Level} {A : \Type_n} \to A \to A \\
+&\id : \{\ n : \Level\ \}\ \{\ A : \Type_n\ \} \to A \to A \\
 &\id\ x \ddefeq x
 \end{align*}
 The idea here is that the context in which a function is called gives
 information we can use to fill in the blanks: if we call $\id$ with a
 certain argument, we know the type of the argument and in turn also
-know the universe level of that type. Sometimes the context does not
-contain enough information to resolve the holes left by the implicit
-arguments.
+know the universe level of that type. To improve readability we will
+oftentimes implicitly pass around parameters, while sometimes making
+them explicit by adding subscripts.
 
 \subsection{Inductive data types}
 
@@ -155,16 +162,26 @@ inductively:
   \constr{\boolfalse}{\boolty}
 \end{datatype}
 
-Such a declaration in Agda does not give us the elimination principle
-directly. Instead Agda has a notion of \emph{dependent pattern
-  matching}: we write our functions out of inductive types by matching
-against the possible constructors of said types. These function
-definitions may be recursive, as long as the recursive occurrences are
-on a subterm of the pattern. Dependent pattern matching has been shown
-to be equivalent to having eliminators, assuming all types satisfy
-uniqueness of identity proofs. Moreover, the translation of pattern
-matching definitions into definitions with eliminators does not always
-preserve definitional equalities.
+Inductive definitions may also be parametrised. We may define the
+coproduct of two types as follows:
+\begin{datatype}{\coproduct{\_}{\_}\ (A\ B : \Set)}{\Set}
+  \constr{\inl}{A \to \coproduct{A}{B}} \\
+  \constr{\inr}{B \to \coproduct{A}{B}}
+\end{datatype}
+
+Inductive data type declarations in Agda do not give us elimination
+principles directly. Instead Agda has a notion of \emph{dependent
+  pattern matching} \cite{Coquand1992}: we write our functions out of
+inductive types by matching against the possible constructors of said
+types. These function definitions may be recursive, as long as the
+recursive occurrences are on a subterm of the pattern. Dependent
+pattern matching has been shown to be equivalent to having
+eliminators, assuming all types satisfy uniqueness of identity proofs
+\cite{Goguen2006}. However, with some further restrictions on pattern
+matching, translations to eliminators without requiring uniqueness of
+identity proofs do exist \cite{Cockx2014}. Moreover, the translation
+of pattern matching definitions into definitions with eliminators does
+not always preserve definitional equalities \cite{McBride2006ii}.
 
 As opposed to adding inductive types to the theory in an ad hoc
 manner, one can add W-types as a primitive and define all inductive
@@ -174,28 +191,41 @@ ordinary inductive types as well as indexed inductive types.
 In this thesis, the inductive definitions we need to formalise the
 theory of quotient inductive-inductive types, can all be written using
 W-types. However, for sake of convenience and presentational clarity,
-we will use Agda its notation to present these.
+we will use Agda its notation to present these. We will also sometimes
+give function definitions by pattern matching, but these can be
+trivially rewritten using just the eliminators.
 
 \section{Equality}
 
+So far we have mentioned definitional equality between terms. This
+equality is a metatheoretic notion, it is external to the type theory,
+\ie $x \defeq y$ is not a type nor a term. We can define a notion of
+equality between terms in the type theory itself, referred to as
+\emph{propositional equality}:
+
 \begin{definition}
   Given a type $A : \Type$ and $x, y : A$, we define the type
-  $x = y : \Type$, with constructor:
+  $x = y : \Type$, inductively with constructor:
   $$
   \refl : (x : A) \to x = x
   $$
 
   The elimination principle for the identity type is:
   \begin{align*}
-  \J : &(A : \Type)\ (P : (x\ y : A) \to x = y \to \Type)\ \\
-  &(m : (x : A) \to P\ x\ x\ (\refl\ x)) \\
-  &\to (x\ y : A)\ (p : x = y) \to P\ x\ y\ p
+  \J : &\ (A : \Type)\ (P : (x\ y : A) \to x = y \to \Type)\ \\
+  &\ (m : (x : A) \to P\ x\ x\ (\refl\ x)) \\
+  &\ \to (x\ y : A)\ (p : x = y) \to P\ x\ y\ p
   \end{align*}
   which satisfies the computation rule:
   $$
   \J\ A\ P\ m\ x\ x\ (\refl\ x) \defeq m\ x
   $$
 \end{definition}
+
+\begin{remark}
+  While it is called \emph{propositional} equality, the type $x = y$
+  need not be propositional in general.
+\end{remark}
 
 \begin{lemma}
   Given a type $A : \Type$, the identity types form an equivalence
@@ -253,8 +283,7 @@ equipped with a groupoid structure. We can always consider identity
 types of identity types of identity types, et cetera. Such an infinite
 tower of groupoids on top of eachother is called an \inftygrpd. An
 external proof of the fact that every type gives rise to an \inftygrpd
-has been given. Internally this has not been shown yet, as one first
-needs an internal definition of \inftygrpd.
+has been given \cite{VanDenBerg2011,Lumsdaine2009}.
 
 \subsection{Dependent equality}
 
@@ -374,7 +403,7 @@ $\ap$ is also functorial in its first argument:
 \begin{proposition}
   For any $p : x = y$, the following holds:
   \begin{itemize}
-  \item $\ap\ \id_A p = p$
+  \item $\ap\ \id_A\ p = p$
   \item $\ap\ (g \circ f)\ p = \ap\ g\ (\ap\ f\ p)$
   \end{itemize}
 \end{proposition}
@@ -390,7 +419,7 @@ similar operation for dependent functions:
   \begin{align*}
     &\apd : (f : (x : A) \to B\ x) \to (p : x = y) \to \pathover{B}{p}{f\ x}{f\ y}
   \end{align*}
-  is defined by path induction
+  is defined by path induction similar to $\ap$.
 \end{definition}
 
 \subsection{Truncation levels}
@@ -442,7 +471,8 @@ From this characterisation, we immediately see that if $A$ is
 propositional, then it is either empty or contractible, \ie uniquely
 inhabited up to propositional equality. Of course, we do not have an
 internal proof of
-$(A : \Type) \to \isprop\ A \to (A \to \emptyty) + (\iscontr\ A)$.
+$(A : \Type) \to \isprop\ A \to (A \to \emptyty) + (\iscontr\ A)$,
+which is essentially the law of excluded middle.
 
 The next truncation level, level $0$, are the so called sets:
 \begin{definition}
@@ -501,13 +531,37 @@ The type of isomorphisms is not necessarily propositional: the
 examples given for logical equivalence can be shown to be distinct
 isomorphisms as well.
 
+One downside of the notion of isomorphism is that given a function
+$f : A \to B$, the ``proposition'' whether $f$ is an isomorphism or
+not is not propositional, \ie the following type is not in general a
+proposition:
+$$
+(g : B \to A) \times (f \circ g = \id_B) \times (g \circ f = \id_A)
+$$
+A more well-behaved notion is the notion of equivalence:
 \begin{definition}[Equivalence]
+  A function $f : A \to B$ is an \emph{equivalence} if the following
+  type is inhabited:
+  $$
+  (g : B \to A) \times f \circ g = \id_B \times (h : B \to A) \times h \circ f = \id_A
+  $$
   
+  If there exists an equivalence between types $A$ and $B$, we denote
+  this as $\Equiv{A}{B}$.
 \end{definition}
 
 \begin{proposition}
   Every isomorphism gives rise to an equivalence.
 \end{proposition}
+
+\begin{proposition}
+  Given a function $f : A \to B$, the property of $f$ being an
+  equivalence is a proposition.
+\end{proposition}
+
+For a function to be an equivalence is a proposition, but for two
+types to be equivalent is not propositional. The same example as for
+logical equivalence and isomorphism can be used to show this.
 
 Note that all these relations are equivalence relations. We can also
 show that composing them is associative. Isomorphisms and
@@ -531,13 +585,15 @@ under equivalence.
 \begin{definition}
   Every equality between types gives rise to an isomorphism:
   \begin{align*}
-    &idtoequiv : (A = B) \to \Iso{A}{B} \\
-    &idtoequiv \ddefeq \J\ (\lambda A\ B\ p . \Iso{A}{B}))\ (\lambda A \to id-iso\ A)\ 
+    &\idtoequiv : (A = B) \to \Equiv{A}{B} \\
+    &\idtoequiv \ddefeq \J\ (\lambda A\ B\ p . \Equiv{A}{B}))\ (\lambda A \to \idequiv\ A)
   \end{align*}
+
+  where $\idequiv$ is the identity equivalence $\Equiv{A}{A}$.
 \end{definition}
 
 \begin{definition}[Univalence]
-  A universe of types is \emph{univalent} if the function $idtoequiv$
+  A universe of types is \emph{univalent} if the function $\idtoequiv$
   is an equivalence.
 \end{definition}
 
@@ -668,44 +724,45 @@ different computational properties. This formulation is based on the
 insight that functions on $\Type$ do satisfy the associativity and
 unit laws definitionally with respect to function composition. We define:
 $$
-x =_{A}^{'} y \ddefeq (z : A) \to z = x \to z = y
+x \alteq_{A} y \ddefeq (z : A) \to z = x \to z = y
 $$
 Reflexivity is then redefined as the identity function and
 transitivity is given by function composition. There are functions to
 and fro between the two formulations:
 \begin{align*}
-  &to : x = y \to x =^{'} y \\
+  &to : x = y \to x \alteq y \\
   &to\ p = \lambda z\ q . \trans{q}{p} \\
   \\
-  &from : x =^{'} y \to x = y \\
+  &from : x \alteq y \to x = y \\
   &from\ p = p\ x\ \refl_{x}
 \end{align*}
-
-We can think of a function $\lambda z . z = x$ as a representible
-functor. A function of type $(z : A) \to z = x \to z = y$ is
-necessarily a natural transformation. Under this association, we can
-formulate the Yoneda lemma for identity types:
-
-\begin{lemma}[Yoneda lemma for identity types]
-  
-\end{lemma}
-
-\begin{proof}
-  Straightforward proof by path induction.
-\end{proof}
 
 \begin{proposition}
   Given a type $A : \Type$ with elements $x, y : A$, we have an equivalence:
   $$
-  (x =^{'}_{A} y) = (x =_{A} y)
+  (x \alteq_{A} y) = (x =_{A} y)
   $$
 \end{proposition}
 
-The equivalence we get from the Yoneda lemma for identity types. This
-equivalence also maps reflexivitiy and transitivity of the original
-identity types onto composition of the alternative version and vice
-versa. The alternative identity types also satisfy the path induction
-principle.
+\begin{proof}
+  The functions $to$ and $from$ give us an isomorphism. Let $p : x = y$, then we have that:
+  $$
+  from\ (to\ p) = from\ (\lambda z\ q . \trans{q}{p}) = \trans{\refl}{p} = p
+  $$
+  In the other direction we get for $p : x \alteq y$:
+  $$
+  to\ (from\ p) = to\ (p\ x\ \refl) = \lambda z\ q . \trans{q}{p\ x\ \refl}
+  $$
+  Showing that this is equal to $p$ can be done by employing function
+  extensionality and applying path induction on the second
+  argument. This is essentially showing that $p$ is a natural
+  transformation.
+\end{proof}
+
+This equivalence also maps reflexivitiy and transitivity of the
+original identity types onto composition of the alternative version
+and vice versa. The alternative identity types also satisfy the path
+induction principle.
 
 \section{Category theory in type theory}
 
@@ -716,7 +773,13 @@ $$
 \Cat \ddefeq (obj : \Type) \times (hom : obj \to obj \to \Type) \times (\hdots)
 $$
 where on the place of the ellipsis one would have to fill in the
-category structure and laws. 
+category structure and laws. This definition of category gives rise to
+certain problems, which we briefly mention in \cref{higher-cats} and
+in more detail in \cref{untruncated}.
+
+We will use the definition of category as in
+\cite{Ahrens2015}. (However, what we call ``category'' here is called
+``precategory'' in that article.)
 
 \begin{definition}[Category]
   We define the type $\Cat : \Type$ as the following $\Sigma$-type:
@@ -724,11 +787,11 @@ category structure and laws.
   \begin{align*}
     \Cat &\ddefeq &&(obj : \Type) \\
          &\times &&(hom : obj \to obj \to \Type) \\
-         &\times &&(hom-is-set : (X\ Y : obj) \to \isset (hom\ X\ Y)) \\
+         &\times &&(\identalt{hom-is-set} : (X\ Y : obj) \to \isset (hom\ X\ Y)) \\
          &\times &&(id : (X : obj) \to hom\ X\ X) \\
          &\times &&(comp : \{\ X\ Y\ Z : obj\ \} \to hom\ Y\ Z \to hom\ X\ Y \to hom\ X\ Z) \\
-         &\times &&(left-id : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ (id\ Y)\ f = f) \\
-         &\times &&(right-id : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ f\ (id\ X) = f) \\
+         &\times &&(\identalt{left-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ (id\ Y)\ f = f) \\
+         &\times &&(\identalt{right-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ f\ (id\ X) = f) \\
          &\times &&(assoc : \{\ X\ Y\ Z\ W : obj\ \}\ (h : hom\ Z\ W) (g : hom\ Y\ Z) (f : hom\ X\ Y) \\
          & &&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \to comp\ (comp\ h\ g)\ f = comp\ h\ (comp\ g\ f))
   \end{align*}
@@ -757,7 +820,8 @@ $\Cc(X,Y)$.
     \Func{\Cc}{\Dd} &\ddefeq &&(obj : | \Cc | \to | \Dd |) \\
     &\times &&(hom : \{\ X\ Y : | \Cc |\ \} \to \Cc(X,Y) \to \Cc(obj\ X, obj\ Y)) \\
     &\times &&(id : \{\ X : | \Cc |\ \} \to hom\ (\id_{\Cc}\ X) = \id_{\Dd}\ (obj\ X)) \\
-    &\times &&(comp : \{\ X\ Y\ Z : | \Cc |\ \}\ (g : \Cc(Y,Z))\ (h : \Cc(X,Y)) \to hom\ (g \circ_{\Cc} f) = hom\ g \circ_{\Dd} hom\ f)
+    &\times &&(comp : \{\ X\ Y\ Z : | \Cc |\ \}\ (g : \Cc(Y,Z))\ (h : \Cc(X,Y)) \\
+    &&&\ \ \to hom\ (g \circ_{\Cc} f) = hom\ g \circ_{\Dd} hom\ f)
   \end{align*}
 \end{definition}
 
@@ -781,11 +845,10 @@ leave the rest implicit.
 The categories $\initcat$ and $\termcat$ are respectively initial and
 terminal in the category of categories.
 
-In ordinary category theory, done in a set theoretic metatheory,
-talking about equality between \emph{objects} is \emph{evil}: doing so
-allows us to write propositions that are not invariant under
-equivalence of categories. In type theory we have a type of equalities
-between any type, so ...
+As the objects are given by a type, propositional equality gives us a
+way to talk about equality between objects. When doing category
+theory, we should always work with isomorphism if we want to talk
+about objects being equal:
 
 \begin{definition}[Isomorphism]
   Let $X, Y : | \Cc |$ for some $\Cc : \Cat$, then the type of
@@ -793,10 +856,14 @@ between any type, so ...
   \begin{align*}
     \Iso{X}{Y} &\ddefeq &&(to : X \to Y) \\
                &\times &&(from : Y \to X) \\
-               &\times &&(from-to : from \circ to = \id_{\Cc}\ X) \\
-               &\times &&(to-from : to \circ to = \id_{\Cc}\ Y)
+               &\times &&(\identalt{from-to} : from \circ to = \id_{\Cc}\ X) \\
+               &\times &&(\identalt{to-from} : to \circ to = \id_{\Cc}\ Y)
   \end{align*}
 \end{definition}
+
+The univalence axiom gives us that for sets the notions of isomorphism
+and propositional equality coincide. We can state this property for
+any category:
 
 \begin{definition}[Univalent category]
   A category $\Cc$ is called \emph{univalent} if for any two objects
@@ -832,6 +899,7 @@ predicate'':
 \end{align*}
 
 \subsection{Higher categories}
+\label{higher-cats}
 
 As mentioned before, the universe of types $\Type$ does not form a
 category if we take functions as morphisms. Function spaces will in
@@ -846,19 +914,6 @@ category \emph{laws}: in some situations it is not enough to simply
 have the laws, they also need to be coherent in some sense: the
 interaction of the laws with eachother needs to satisfy certain laws
 as well. Naturally, how these coherence laws interact also has to
-adhere to additional higher coherence laws, ad infinitum.
-
-Stating all these coherence properties in a uniform way in type theory
-itself is currently still an open problem. One approach to solve this
-problem is to extend the theory with an \emph{internal} notion of
-strict equality. This then allows us to define Segal \emph{types},
-mimicking the usual constructions on bisimplicial sets.
-
-Alternatively, one can define simplicial sets and bisimplicial sets in
-type theory and use these to define \inftycats with. This means
-however that we the type of objects is a bisimplicial set, which is
-not a convenient object to work with in type theory.
-
-In some cases, such as $\Type$ and $\Fam$ the category of families,
-the category laws are satisfied strictly, which means all the
-coherence laws are also satisfied trivially.
+adhere to additional higher coherence laws, ad infinitum. In
+\cref{untruncated} we will describe the problems and possible
+solutions in greater detail.

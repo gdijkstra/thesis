@@ -51,6 +51,7 @@
 % From: http://tex.stackexchange.com/a/196529
 \makeatletter
 \DeclareRobustCommand{\ident}[1]{\begingroup\newmcodes@\mathsf{#1}\endgroup}
+\DeclareRobustCommand{\identalt}[1]{\begingroup\newmcodes@#1\endgroup}
 \makeatother
 
 % Keywords
@@ -117,6 +118,7 @@
 \newcommand{\apd}{\AgdaFunction{\ident{apd}}}
 \newcommand{\transport}{\AgdaFunction{\ident{transport}}}
 \newcommand{\defeq}{\equiv}
+\newcommand{\alteq}{='}
 \newcommand{\ddefeq}{:\defeq}
 
 % Path composition from The Book.
@@ -363,3 +365,12 @@
 \newcommand{\torusp}{\AgdaInductiveConstructor{\ident{p}}}
 \newcommand{\torusq}{\AgdaInductiveConstructor{\ident{q}}}
 \newcommand{\torusr}{\AgdaInductiveConstructor{\ident{r}}}
+
+% Sum type
+\newcommand{\coproduct}[2]{#1 \AgdaDatatype{+} #2}
+\newcommand{\inl}{\AgdaInductiveConstructor{\ident{inl}}}
+\newcommand{\inr}{\AgdaInductiveConstructor{\ident{inr}}}
+
+% Equiv stuff
+\newcommand{\idtoequiv}{\AgdaFunction{\ident{idtoequiv}}}
+\newcommand{\idequiv}{\AgdaFunction{\ident{id-equiv}}}
