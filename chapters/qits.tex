@@ -541,39 +541,42 @@ type. Nonetheless they provide a good platform for experimentation.
 
 \subsection{Cubical type theory}
 
-\url{https://github.com/mortberg/cubicaltt}
-
-\cite{Cohen2015}
+As a way to study the computational behaviour of univalence and also
+higher inductive types, the cubical set model of type theory has been
+investigated \cite{Bezem2014}. Turning this model back into type
+theory has lead to cubical type theory \cite{Cohen2015}, which has an
+implementation \verb+cubicaltt+\footnote{See
+  \url{https://github.com/mortberg/cubicaltt}}. This implementation
+has some support for higher inductive types.
 
 \section{Related concepts}
 
 As mentioned, quotient inductive-inductive definitions are related to
 quotient types. Quotient types have been studied in several forms in
-type theory.
+type theory \cite{Hofmann1995,Altenkirch2011ii,Nuo2015}.
 
 Inductive definitions with equalities have been studied in Miranda
 \cite{Turner1985} under the name of ``data types with laws''
 \cite{Thompson1986} \cite{Thompson1990}. In Miranda, the ``path
-constructors'' were interpreted as rewrite rules. However, data types
-with laws were later abandoned as they interfered with equational
-reasoning.
+constructors'' were interpreted as rewrite rules that would ensure
+that the inhabitants of an inductive type would be of a certain normal
+form or satisfy a certain property. For example, the type of sorted
+lists would be the usual list type along with a rewrite rule that
+rewrites $y :: x :: xs$ to $x :: y :: xs$ whenever $x < y$. However, data
+types with laws in Miranda were later abandoned as they made the usual
+equational reasoning about functions defined by pattern matching
+difficult. The idea was later explored further in the context of OCaml
+\cite{Blanqui2007}.
 
-Non-free data types \cite{Blanqui2007}
-
-One way to think about quotient inductive-inductive definitions is to
-view the constructors as function symbols of some (algebraic)
-theory. The path constructors are then the equations of the
-theory. The types then give us the syntactic model of that particular
-theory. One difference with quotient inductive-inductive definitions
-is that we can mix point and path constructors, as opposed to first
-listing all the point constructors and then listing all the path
-constructors. This means that point or path constructors may also
-refer to a previous path constructor. For quotient inductive-inductive
-definitions being able to do this may turn out not to be terribly
-interesting, but when we move to higher inductive types, being able to
-do so is essential: without it we would not be able to give the
-definition of things like the torus in the usual way.
-
-Since quotient inductive-inductive definitions can be thought of as
-syntactic models of certain theories, concepts such as monads,
-essentially algebraic theories and Lawvere theories are related.
+With quotient inductive-inductive types we do not read the path
+constructors as rewrite rules. If we were to define a type of
+unordered pairs $\AgdaDatatype{P_X}$ with values in some type $X$,
+having constructors
+$\AgdaInductiveConstructor{\ident{pair}} : X \to X \to
+\AgdaDatatype{P_X}$
+and
+$\AgdaInductiveConstructor{\ident{swap}} : (x\ y : X) \to
+\AgdaInductiveConstructor{\ident{pair}}\ x\ y =
+\AgdaInductiveConstructor{\ident{pair}}\ y\ x$,
+treating $\AgdaInductiveConstructor{\ident{swap}}$ as a rewriting rule
+would make the system loop.
