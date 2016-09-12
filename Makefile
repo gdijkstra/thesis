@@ -8,8 +8,8 @@ default: thesis
 
 thesis: dirs $(src)
 	xelatex -file-line-error -output-directory=build --halt-on-error $(TEX)
+	cd build; biber thesis
 	xelatex -file-line-error -output-directory=build --halt-on-error $(TEX)
-	cd build; bibtex thesis
 	sh -c ' \
 	  i=2; \
 	  while [ $$i -lt 5 ] && ( \
