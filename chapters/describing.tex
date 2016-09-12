@@ -1,65 +1,75 @@
 \chapter{Describing inductive definitions}
 \label{describing}
 
-When we give an inductive definition, we have to give four sets of
-rules:
+In order to specify an inductive definition, we have to give four sets
+of rules:
 \begin{itemize}
 \item \emph{type formation rules}: we have to specify the \emph{sorts}
   of the definition. For example, for the contexts and types
   definition we have a rule stating that $\ttconty$ is a type and that
   for every $\Gamma : \ttconty$, $\tttyty\ \Gamma$ is a type.
 \item \emph{introduction rules}: we have to have means of creating
-  instances of the data: we need \emph{constructors}
-\item \emph{elimination rules}: we also need means to manipulate the
-  data: we need an induction principle
-\item \emph{computation rules}: these specify how the elimination
-  rules interact with the introduction rules
+  instances of the inductive data we are defining: we need
+  \emph{constructors}.
+\item \emph{elimination rules}: we also need means to inspect the
+  data: we need an induction principle.
+\item \emph{computation rules}: the elimination rules and introduction
+  rules need to interact in a certain way.
 \end{itemize}
 
-It has been shown that the type formation and introduction rules are
-enough to derive the rest from\cite{Backhouse1989}. This is also
-reflected in how one gives an inductive definition in proof assistants
-such as Agda and Coq: we give the type signature of the inductive
-definition (its type formation rules) and a list of constructors (its
-introduction rules).
+As soon as we have the first two sets of rules, the latter two follow
+from these in a systematic way \cite{Backhouse1989}. This is also
+reflected in how one declares an inductive definition in proof
+assistants such as Agda and Coq: we provide the type signature of the
+inductive definition (its type formation rules) and a list of
+constructors (its introduction rules).
 
-There are several equivalent ways to describe inductive definitions:
-we can formulate a syntax of constructors and describe the elimination
-principle by induction on terms in this syntax. This syntax is a
-subset of the syntax of type theory: we need to be able to write down
-a list of constructors which is just a list of types of a certain
-form. One can take an ``analytic'' approach to this: take the syntax
-of type theory and define a predicate on it that tells us whether a
-term is in the appropriate subset. This is effectively what systems
-like Agda do: you can write down a list of constructors and Agda
-checks whether it makes sense, \eg whether the result types of the
-constructors are correct and whether the arguments are strictly
-positive. Doing this in type theory itself will be rather involved, as
-formalising the syntax of type theory in type theory is generally not
-something lightweight. 
+There are several equivalent ways to characterise inductive
+definitions formally: we can formulate a syntax of constructors and
+describe the elimination principle by induction on terms in this
+syntax. This syntax is a subset of the syntax of type theory as a
+whole: we need to be able to write down a list of constructors which
+is just a sequence of types of a certain form. One can take an
+``analytic'' approach to this: take the syntax of type theory and
+define a predicate on it that tells us whether a term is in the
+appropriate subset. This is effectively what systems like Agda do: you
+can write down a list of constructors and Agda checks whether it makes
+sense, \eg whether the result types of the constructors are correct
+and whether the arguments are strictly positive. Doing this in type
+theory itself will be rather involved, as formalising the syntax of
+type theory in type theory is generally not something lightweight.
 
 A more semantic approach is to start from the characterisation of
 inductive definitions as the initial algebra given some endofunctor on
 an appropriately chosen category. Ordinary inductive types can be
 explained as initial algebras of strictly positive endofunctors on
-$\Set$, which is something we can concisely formalise in type
-theory. The functors can be described as \emph{containers} and the
-category of algebras on a container can also be readily
-formalised. Stating that it is initial only requires us to have
-defined the objects and morphisms of this category. 
+$\Set$. These functors can be described as \emph{containers}
+\cite{Abbott2005}, which can be easily formalised in type theory. The
+initiality property only uses the objects and morphisms of the
+category. Algebras of a container and algebra morphisms can be readily
+stated in type theory. It has been shown in type theory that for these
+inductive types, the property of being an initial algebra and that of
+satisfying the induction principle are logically equivalent
+\cite{Awodey2012}. In this case this concretely means that having
+W-types available is the same as having initial algebras of
+containers.
 
 From the initial algebra semantics we can directly read off the
 introduction rules along with the recursion principle and its
-computation rules. This categorical setting allows us to generalise
-without having to keep track of too many moving parts, but on the
-other hand also is not so overly abstract that it sacrifices intuition
-for conciceness.
+computation rules. Algebras package the type along with its
+constructors. Algebra morphisms package the functions between the
+types along with a proof that the functions preserve the algebra
+structure. This categorical setting is on the one hand close to the
+syntax, but it also abstracts enough that it allows us to generalise
+without having to keep track of too many moving parts.
 
 While the recursion principle can be straightforwardly recovered from
 initiality, the induction principle is another story. Formulating the
-induction principle generally requires a bit more machinery, as does
-showing its logical equivalence to initiality. This is covered in
-\cref{induction}.
+induction principle requires a bit more machinery, as does showing its
+logical equivalence to initiality. This is covered in
+\cref{induction}. In this chapter we will concern ourselves uncovering
+what a description of a quotient inductive-inductive definition ought
+to be in a formal way.
 
 We have seen in the examples in \cref{qits} that quotient
 inductive-inductive definitions differ from ordinary inductive
@@ -72,43 +82,52 @@ definitions in three ways:
 \item apart from point constructors we also have path constructors
 \end{itemize}
 
-We start out by reviewing initial algebra semantics of ordinary
-inductive types in \cref{algebraic-semantics}. In
+The goal of this chapter is to find a notion of algebra that supports
+all of this. We start out by reviewing initial algebra semantics of
+ordinary inductive types in \cref{algebraic-semantics}, as well as
+generalisations of this . In
 \cref{set-sorted-inductive-inductive-definitions} we see how this
 approach can be generalised to support having constructors that refer
-to previous constructors. \Cref{dependent-sorts} formalises the notion
-of \emph{dependent sorts}, which deals with the type formation rules
-for quotient inductive-inductive definitions. In
+to previous constructors by considering iterated
+dialgebras. \Cref{dependent-sorts} formalises the notion of
+\emph{dependent sorts}, which deals with the type formation rules for
+quotient inductive-inductive definitions. In
 \cref{categories-of-algebras} the full formal definition of
 declarations of quotient inductive-inductive definitions is given as a
-form of iterated dialgebras with equations. This is followed by a
-discussion on whether we can generalise this idea to a larger class of
-dialgebras in \cref{other-forms-of-constructors}, allowing for a more
-general shape of constructors. \cref{from-syntax-to-functors} how the
-formal inductive definitions differ from what one would like to write
-down in type theory itself. In
-\cref{application-to-equational-theories} we see how the formalisation
-of quotient inductive-inductive definitions can also be used to talk
-about equational theories.
+form of iterated dialgebras with equations. In this formal definition,
+we only consider certain functors for the result type of the
+functors. In \cref{other-forms-of-constructors} we discuss whether we
+can generalise this to a larger class of functors. In
+\cref{from-syntax-to-functors} how the formal inductive definitions
+differ from what one would like to write down in type theory
+itself. In \cref{application-to-equational-theories} we see how the
+formalisation of quotient inductive-inductive definitions can also be
+used to talk about equational theories.
 
 \section{Algebraic semantics}
 \label{algebraic-semantics}
 
 Let us look at a list of constructors of an ordinary data type, \eg:
+%
 \begin{datatype}{\Aty}{\Set}
   \constr{\Aco}{F_0\ \Aty \to \Aty} \\
   \constr{\Aci}{F_1\ \Aty \to \Aty} \\
   \constrdots \\
   \constr{\Ack}{F_k\ \Aty \to \Aty}
 \end{datatype}
+%
 with every $F_i : \Set \to \Set$ being a function that gives us the
-arguments of the constructors. One observation is that if we have
-coproducts, we can rewrite the definition into one having a single
-constructor:
+arguments of the constructors. Note that we have to rewrite
+constructors with no arguments to $\Ac : \unitty \to \Aty$ and have to
+uncurry constructors with multiple arguments. One observation is that
+if we have coproducts, we can rewrite the definition into one with
+just a single constructor:
+%
 \begin{datatype}{\Aty}{\Set}
   \constr{\Ac}{F_0\ \Aty + F_1\ \Aty + \hdots + F_k\ \Aty \to \Aty}
 \end{datatype}
-Hence for ordinary inductive types, it is enough to just consider
+%
+For ordinary inductive types it is therefore sufficient to consider
 definitions with a single constructor. The type formation rule for
 such a definition is always the same: $\Aty$ is a type. The
 introduction rule is given by supplying a function
@@ -120,7 +139,7 @@ structure on the function $F$. The recursion principle gives us a way
 to define a function $\Aty \to X$ for some type $X$, given some
 additional structure on $X$. Intuitively we need to specify for every
 constructor what the corresponding ``constructor'' in the target type
-is. For example, for the natural numbers we have:
+of the recursion is. For example, for the natural numbers we have:
 $$
 \natrec : (A : \Set)\ (\theta_0 : A)\ (\theta_1 : A \to A) \to \natty \to A
 $$
@@ -142,9 +161,10 @@ $$
 $$
 with as its computation rule:
 $$
-\Arec\ X\ \theta\ (\Ac\ x) = \theta\ (F\ f\ x)
+\Arec\ X\ \theta\ (\Ac\ x) = \theta\ (F\ (\Arec\ X\ \theta)\ x)
 $$
-
+The type $\Aty$ along with its constructor $\Ac$ and the $X$ and
+$\theta$ in the recursion principle are both $F$-algebras:
 
 \begin{definition}
   Given an endofunctor $F$ on $\Cc$, an \emph{$F$-algebra} is an
@@ -152,6 +172,10 @@ $$
   $\theta : \Cc(F X, X)$. The object $X$ is also referred to as the
   \emph{carrier} or \emph{underlying object} of the algebra.
 \end{definition}
+
+The function $\Arec\ X\ \theta$ is a function between the carriers of
+the algebras $(A,c)$ and $(X,\theta)$. Its computation rule states
+that it respects the algebra structure: it is an algebra morphism:
 
 \begin{definition}
   Given $F$-algebras $(X,\theta)$ and $(Y,\rho)$ an \emph{$F$-algebra
@@ -165,10 +189,13 @@ $$
   $$
 \end{definition}
 
-\begin{proposition}
-  Given an endofunctor $F$, $F$-algebras and $F$-algebra morphisms
-  form a category, denoted as $\algcat{F}$.
-\end{proposition}
+Algebra morphisms can be composed and we have identity algebra
+morphisms: algebras form a category:
+
+\begin{definition}
+  The category $\algcat{F}$ is the category with as $F$-algebras as
+  objects and $F$-algebra morphisms as morphisms.
+\end{definition}
 
 \subsection{Monad algebras}
 
@@ -180,11 +207,14 @@ Given an endofunctor $F$ on $\Set$, we can consider its \emph{free
   \constr{\Fstarc}{F (F^* X) \to F^* X}
 \end{datatype}
 
+Note that free monad need not exist: $F$ is required to be an strictly
+positive functor.
+
 $F^* X$ along with its constructors form an initial object in the
 category of $\bar{F}_X$-algebras, where $\bar{F}_X Y \ddefeq X + FY$.
 
 \begin{proposition}
-  $F^*$ is a monad on $\Set$
+  $F^*$, if it exists, is a monad on $\Set$
 \end{proposition}
 
 \begin{proof}
@@ -199,7 +229,7 @@ category of $\bar{F}_X$-algebras, where $\bar{F}_X Y \ddefeq X + FY$.
   $$
   \algcat{F}(L X , (Y,\rho)) = (X \to Y)
   $$
-  using the following equation reasoning:
+  using the following equational reasoning:
   \begin{align*}
     &&&X \to Y \\
     &&=&\ \reasontext{initiality of $F^* X$} \\
@@ -218,8 +248,8 @@ category of $\bar{F}_X$-algebras, where $\bar{F}_X Y \ddefeq X + FY$.
 
 Note that since $L$ is a left adjoint it preserves colimits, in
 particular initial objects, hence $L \initobj$ is the initial object
-of $\algcat{F}$ whose carrier is $F^* \initobj$, which is the
-inductive type as defined by the endofunctor $F$.
+of $\algcat{F}$. The carrier of $L \initobj$ is $F^* \initobj$, which
+is the inductive type as defined by the endofunctor $F$.
 
 $F^*$ is called the \emph{free} monad as it is a free object with
 regards to the forgetful functor of the category of monads on $\Set$
@@ -252,11 +282,9 @@ endofunctor is. To this end, let us first recall the definition of
   algebras of an endofunctor.
 \end{definition}
 
-\begin{proposition}
-  Monad algebras and monad algebra morphisms form a category, denoted
-  $\monalgcat{M}$, also called the \emph{Eilenberg-Moore category} of
-  $M$.
-\end{proposition}
+Monad algebras and monad algebra morphisms form a category, denoted
+$\monalgcat{M}$, also called the \emph{Eilenberg-Moore category} of
+$M$.
 
 \begin{theorem}[\cite{Gambino2013}]
   Let $F : \Func{\Cc}{\Cc}$ be an endofunctor on $\Cc$ with
@@ -266,18 +294,29 @@ endofunctor is. To this end, let us first recall the definition of
 
 If we associate ordinary inductive types with free monads, then a
 generalisation of this would be to consider not just free monads, but
-any \emph{presented monad}\cite{Shulman2011}, \ie a monad that is
-defined in terms of generators and relations. In \cite{Lumsdaine2013},
-the authors give semantics of 1-HITs by constructing these presented
-monads. As these constructions are done in a wide class of model
-categories, it is a construction external to type theory.
+any \emph{presented monad} \cite{Shulman2011}, \ie a monad that is
+defined in terms of generators and relations, or in HIT terminology:
+point and path constructors. In \cite{Lumsdaine2013}, the authors give
+semantics of HITs by constructing these presented monads. As these
+constructions are done in a wide class of model categories, it is a
+construction external to type theory.
 
 As opposed to constructing the monads directly, we will first define
-the categories of algebras in this chapter. In \cref{constructing} we
-show how one can construct initial algebras and left adjoints to the
-forgetful functors of categories of algebras. The reason why we chose
-to do it this way is that it allows us to talk about algebras (the
-``syntax'') separately from their existence (``semantics'').
+the categories of algebras in this chapter. The reason for this is
+twofold. In the case of algebras of of an endofunctor we have fewer
+equations to work with: they only pop up in the definition algebra
+morphisms. The definition of monads already requires us to talk about
+functors that satisfy certain equalities. Monad algebras also come
+with equations. Generalising from the endofunctor situation, we hope
+that we also do not have to introduce equations, which might lead to
+more coherence issues.
+
+The other reason why we chose to do it this way is that it allows us
+to talk about algebras (the ``syntax'') separately from their
+existence (``semantics''). This chapter we talk give a definition of
+the algebras and in \cref{constructing} we show how one can construct
+initial algebras and left adjoints to the forgetful functors of
+categories of algebras.
 
 \section{$\Set$-sorted inductive-inductive definitions}
 \label{set-sorted-inductive-inductive-definitions}
@@ -317,7 +356,7 @@ every constructor. The domain of the $n$-th functor will then be the
 \end{example}
 
 The first constructor $\Ta$ can be described as being an $F_0$-algebra
-structure on $\Tty$, with $F_0 : \Set \to \Set$ being defined as
+structure on $\Tty$, with $F_0 : \Func{\Set}{\Set}$ being defined as
 $F_0 X \ddefeq \unitty$. The arguments of $\Tb$ are described by the
 functor $F_1 : \algcat{F_0} \to \Set$ with:
 $$
@@ -325,10 +364,10 @@ F_1 (X,a) \ddefeq (x : X) \times a\ \unitval = x
 $$
 Since $F_1$ is not an endofunctor, $\Tb$ cannot be described as an
 $F_1$-algebra structure. However, $\algcat{F_0}$ comes with a
-forgetful functor $V_0 : \Func{\algcat{F_0}}{\Set}$ which gives us the
+forgetful functor $U_0 : \Func{\algcat{F_0}}{\Set}$ which gives us the
 carrier of the algebra. We therefore have that
-$\Tb : F_1(\Tty,\Ta) \to V_0(\Tty,\Ta)$, \ie $\Tb$ is an
-$(F_1,V_0)$-\emph{dialgebra}~\cite{Hagino1987} structure on
+$\Tb : F_1(\Tty,\Ta) \to U_0(\Tty,\Ta)$, \ie $\Tb$ is an
+$(F_1,U_0)$-\emph{dialgebra}~\cite{Hagino1987} structure on
 $(\Tty,\Ta) : \algcat{F_0}$.
 %
 \begin{definition}
@@ -346,26 +385,30 @@ $(\Tty,\Ta) : \algcat{F_0}$.
 \end{definition}
 %
 
-As $\specty$ is essentially a list type, we will use list notation for
-its values, \eg we denote $\specsnoc\ (\specsnoc\ F_0\ \specnil)\ F_1$
-as $[F_0,F_1]$.
+\begin{remark}
+  Any dialgebra category $\dialgcat{F}{G}$ comes with a forgetful
+  functor $V : \dialgcat{F}{G} \to \Cc$ which projects out the carrier
+  of the algebra.
+\end{remark}
 
-Any dialgebra category $\dialgcat{F}{G}$ comes with a forgetful
-functor $V : \dialgcat{F}{G} \to \Cc$ which projects out the carrier
-of the algebra. This means in particular that we have a forgetful
-functor $V_1 : \dialgcat{F_1}{V_0} \to \algcat{F_0}$. If we were to
-add a third and a fourth constructor, we would have to define a
-functors $F_2 : \dialgcat{F_1}{V_0} \to \Set$ and
-$F_3 : \dialgcat{F_2}{U_1} \to \Set$ to describe their
-arguments. The objects we are interested in are \emph{iterated}
-dialgebras. For the situation described above we have:
+Recall the example $\Tty$ with constructors $\Ta$ and $\Tb$, where
+have given functors $F_0 : \Func{\Set}{\Set}$ and
+$F_1 : \Func{\algcat{F_0}}{\Set}$. We have a forgetful functor
+$V_1 : \dialgcat{F_1}{U_0} \to \algcat{F_0}$ which we can compose with
+the forgetful functor $U_0 : \Func{\algcat{F_0}}{\Set}$, which we will
+denote as $U_1$. If we were to add a third and a fourth constructor,
+we would have to define a functors
+$F_2 : \dialgcat{F_1}{U_0} \to \Set$ and
+$F_3 : \dialgcat{F_2}{U_1} \to \Set$ to describe their arguments. The
+objects we are interested in are \emph{iterated} dialgebras. For the
+situation described above we have:
 $$
 \xymatrix@!C{
 \Set 
 \ar[d]_{F_0}
 &\algcat{F_0} 
 \ar[d]_{F_1}
-\ar[l]_{V_0}
+\ar[l]_{U_0}
 &\dialgcat{F_1}{U_0}
 \ar[d]_{F_2}
 \ar[l]_{V_1}
@@ -384,10 +427,13 @@ $$
 $$
 
 Note that we build the category of dialgebras over another category of
-dialgebras, \ie we are working with \emph{iterated} dialgebras. All of
-the categories of dialgebras have a forgetful functor into $\Set$. We
-can formalise the concept $\Set$-sorted inductive-inductive
-definitions as a inductive-recursive type:
+dialgebras, \ie we are working with \emph{iterated} dialgebras. A
+constructor has arguments described by a functor out of the category
+of algebras containing all the previous constructors. We can formalise
+the concept $\Set$-sorted inductive-inductive definitions as a
+inductive-recursive type, defining the specification and the
+interpretation of the specification as a category of algebras
+simultaneously:
 %
 \begin{definition}
   \label{type-sorted-spec}
@@ -412,16 +458,20 @@ definitions as a inductive-recursive type:
   and $\Alg$ and $\Und$ are defined by
   %
   \begin{align*}
-    \Alg\ \specnil &\ddefeq \Set \\
-    \Alg\ (\specsnoc\ s\ F) &\ddefeq \dialgcat{F}{U_s} \\
+    \Alg_{\specnil} &\ddefeq \Set \\
+    \Alg_{(\specsnoc\ s\ F)} &\ddefeq \dialgcat{F}{U_s} \\
     \\
-    \Und\ \specnil &\ddefeq\ \id \\
-    \Und\ (\specsnoc\ s\ F) &\ddefeq U_s \circ V
+    \Und_{\specnil} &\ddefeq\ \id \\
+    \Und_{(\specsnoc\ s\ F)} &\ddefeq U_s \circ V
   \end{align*}
   %
   where $V$ is the forgetful functor that gives the underlying object of
   a dialgebra.
 \end{definition}
+
+As $\specty$ is essentially a list type, we will use list notation for
+its values, \eg we denote $\specsnoc\ (\specsnoc\ F_0\ \specnil)\ F_1$
+as $[F_0,F_1]$.
 
 \begin{example}
   The example in \cref{silly-type} can be represented by the
@@ -435,12 +485,13 @@ definitions as a inductive-recursive type:
 \label{avoiding-induction-recursion}
 
 The type of specifications in \cref{type-sorted-spec} is given
-inductive-recursively. Intuitively the type is just a snoc-list of
-functors. The induction-recursion allows us to succinctly make sure
-that the domain of the functors is always a category of algebras. We
-can avoid induction-recursion by separately defining the snoc-list of
-functors and a predicate on that list that ensures the domain of the
-functors is correct:
+inductive-recursively. In this section we will show that the use of
+induction-recursion is not essential to the definition. Intuitively
+the type is just a snoc-list of functors. The induction-recursion
+allows us to succinctly make sure that the domain of the functors is
+always a category of algebras. We can avoid induction-recursion by
+separately defining the snoc-list of functors and a predicate on that
+list that ensures the domain of the functors is correct:
 
 \begin{definition}
   % 
@@ -482,11 +533,24 @@ functors is correct:
 \end{proposition}
 
 \begin{proof}
-  This is a straightforward proof by induction on the types involved.
+  This is a straightforward proof by induction on the types involved
+  and applying singleton contraction where needed.
 \end{proof}
 
 \section{Dependent sorts}
 \label{dependent-sorts}
+
+In the previous section we saw how we can deal with referring to
+previous constructors. In this section we will tackle the issue of
+generalising the form of the type formation rules, which were hitherto
+just of the form ``$A$ is a set''. We want to generalise this to
+arbitrary lists of types and type families. Such a list is referred to
+as the \emph{dependent sorts} of the inductive definition. Examples
+can be something simple like $A : \Set, B : A \to \Set$, which we have
+seen in the example of contexts and type in a context in
+\cref{syntax-of-type-theory}, or something more involved like:
+$A : \natty \to \natty \to \Set, B : (x : \natty) \to A\ n\ n \to
+\Set$.
 
 Describing how a sort depends the previous sorts can be done by
 providing a functor of the previous category of sorts into $\Set$. A
@@ -578,15 +642,20 @@ specification the list $[R_0]$ with $R_0\ x \ddefeq \natty$.
 
 \subsection{Sort membership}
 
-Given a specification $s : \sortsty$ and a functor
-$R : \Func{\SortCat{s}}{\Set}$, we can define a forgetful functor
-$t : \Func{\SortCat{\sortssnoc\ s\ R}}{\SortCat{s}}$ which maps an object
+When we have multiple sorts, we need a way to select a particular sort
+from this collection. When defining a constructor, we first have to
+say what its sort is. To this end we define in this section a sort
+membership relation.
+
+Given a specification $\Ss : \sortsty$ and a functor
+$R : \Func{\SortCat{\Ss}}{\Set}$, we can define a forgetful functor
+$t : \Func{\SortCat{\sortssnoc\ s\ R}}{\SortCat{\Ss}}$ which maps an object
 $(X , P) : \SortCat{\sortssnoc\ s\ R}$ to $X$. A specification
 $\Ss = [R_0, \ldots, R_n] : \sortsty$ therefore defines a chain of
 categories:
 $$
 \xymatrix{
-1 &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_i}
+\termcat &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_i}
 }
 $$
 where $n$ is the number of functors in the list and
@@ -598,25 +667,24 @@ the previous category.
 In the case of $\Rel$, we get the sequence
 \[
 \xymatrix{
-1 &\Set \ar[l]_{t_0} &\Rel \ar[l]_{t_1}
+\termcat &\Set \ar[l]_{t_0} &\Rel \ar[l]_{t_1}
 }
 \]
 \end{example}
 
-When giving a quotient inductive-inductive definition, we start out by
-defining its sorts. When specifying a constructor, we need to say what
-sort we want to construct points or paths in. To this end, we can
-define a membership relation
+We define a membership relation
 $$
   \sortsin{\_}{\_} : \Cat \to \sortsty \to \Set
 $$
-where $\sortsin{\Cc}{\Ss}$ means that $\Cc$ is one of the $S_i$ in the chain
-${S_0 \leftarrow \ldots \leftarrow S_n}$. We can formalise this with
-the following inductive type:
+where $\sortsin{\Cc}{\Ss}$ means that $\Cc$ is one of the $S_i$ in the
+chain ${S_0 \leftarrow \ldots \leftarrow S_n}$. We do not want
+$\sortsin{\termcat}{\Ss}$, as adding a constructor of that sort does
+not add anything to the inductive definition. We formalise the
+membership relation as the following inductive type:
 %
 \begin{datatype}{\sortsin{\_}{\_}}{\Cat \to \sortsty \to \Set}
-  \constr{\sortsinhere}{(s : \sortsty)\ (R : \Func{\SortCat{s}}{\Set}) \to \sortsin{\SortCat{\sortssnoc\ s\ R}}{\sortssnoc\ s\ R}} \\
-  \constr{\sortsinthere}{(s : \sortsty)\ (R : \Func{\SortCat{s}}{\Set})\ (\Cc : \Cat) \to \sortsin{\Cc}{s} \to \sortsin{\Cc}{\sortssnoc\ s\ R}}
+  \constr{\sortsinhere}{(\Ss : \sortsty)\ (R : \Func{\SortCat{\Ss}}{\Set}) \to \sortsin{\SortCat{\sortssnoc\ \Ss\ R}}{\sortssnoc\ \Ss\ R}} \\
+  \constr{\sortsinthere}{(\Ss : \sortsty)\ (R : \Func{\SortCat{\Ss}}{\Set})\ (\Cc : \Cat) \to \sortsin{\Cc}{\Ss} \to \sortsin{\Cc}{\sortssnoc\ \Ss\ R}}
 \end{datatype}
 %
 \begin{example}
@@ -625,71 +693,64 @@ the following inductive type:
   $\SortCat{[R_0]}$ is equivalent to $\Set$), then we can do so by
   giving the following term:
   $$
-  \sortsinthere\ [R_0]\ R_1\ \SortCat{R_0}\ (\sortsinhere\ \sortsnil\ R_0)
+  \sortsinthere\ [R_0]\ R_1\ \SortCat{R_0}\ (\sortsinhere\ \sortsnil\ R_0) : \sortsin{\SortCat{ [ R_0 ] }}{[R_0,R_1]}
   $$
 \end{example}
 %
-For a quotient inductive-inductive definition with sorts
-$\Ss : \sortsty$, specifying the sort for a constructor is done by
-giving a category $\Aa : \Cat$ along with a proof of
-$\sortsin{\Aa}{\Ss}$. Note that with this definition,
-$\sortsin{\termcat}{s}$ is uninhabited for any $s : \sortsty$. This is
-useful as adding constructors of sort $\termcat$ does not do anything,
-so we need not consider this case.
 
 Suppose we have a chain of sorts
-$S_1 \from S_2 \from \hdots \from S_n$ and a functor
+$S_0 \from S_1 \from \hdots \from S_n$ and a functor
 $U : \Func{\Cc}{S_n}$, then naturally we can extend this functor to
 $\hat{U_i} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by composing
-with the forgetful functors. We can formalise this operation with sort
-membership, \ie for every specification $s : \sortsty$ with a functor
-$U : \Func{\Cc}{\SortCat{s}}$, we can define the function:
+with the forgetful functors. We can implement this operation with sort
+membership, \ie for every specification $\Ss : \sortsty$ with a
+functor $U : \Func{\Cc}{\SortCat{\Ss}}$, we can define the function:
 $$
-\hat{U} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{s}} \to \Func{\Cc}{S_i}
+\hat{U} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to \Func{\Cc}{S_i}
 $$
 This function is defined by induction over the proof of
-$\sortsin{S_i}{\SortCat{s}}$.
-
+$\sortsin{S_i}{\SortCat{\Ss}}$. We will usually just write
+$\hat{U} X$, leaving the membership proof implicit.
 
 \subsection{Makkai's dependent sorts}
 
 As mentioned before, giving an inductive definition is similar to
-defining a theory: we specify the type formation rules, or the sorts,
-we specify the point constructors, or the function symbols and we
-specify the path constructors, or the equations. One important aspect
-of our inductive definitions is that our type formation rules do not
-just give us a collection of types, but also type \emph{families}: we
-do have \emph{dependent sorts}.
+defining an equational theory: we specify the type formation rules, or
+the sorts, we specify the point constructors, or the function symbols
+and we specify the path constructors, or the equations. The inductive
+types themselves are the term models of the theory described by the
+constructors. One important aspect of our inductive definitions is
+that our type formation rules do not just give us a collection of
+types, but also type \emph{families}: we do have \emph{dependent
+  sorts}.
 
 In Makkai's FOLDS (first-order logic with dependent sorts), these
 dependent sorts are represented as presheaves over certain
 categories. Observe that the category of families $\Fam$ can either be
 defined as having objects $(X : \Set) \times (P : X \to \Set)$ or as
-having as objects $(X Y : \Set) \times (p : Y \to X)$. The latter
+having as objects $(X\ Y : \Set) \times (p : Y \to X)$. The latter
 category can be explained as the presheaf category $\Set^I$, where $I$
 is the arrow category $\cdot \to \cdot$.
 
-Suppose we have an inductive definition with sorts
+\begin{example}
+  Suppose we have an inductive definition of a category, which has
+  sorts
 %
-\begin{itemize}
-\item $O : \Set$
-\item $A : O \to O \to \Set$ (a family of arrows)
-\item $T : (x y z : O) \to A\ x\ y \to A\ y\ z \to A\ x\ z \to \Set$ (a family of triangles)
-\end{itemize}
+  \begin{itemize}
+  \item $O : \Set$
+  \item $A : O \to O \to \Set$ (a family of arrows)
+  \item $T : (x y z : O) \to A\ x\ y \to A\ y\ z \to A\ x\ z \to \Set$
+    (a family of triangles)
+  \end{itemize}
 %
-The corresponding category of sorts can be represented as presheaves over the category:
+  The corresponding category of sorts can be represented as presheaves
+  over the category:
 $$
-\xymatrix{
-\cdot     
-\ar@<-.5ex>[r]
-\ar@<.5ex>[r]
-&\cdot
-\ar@<-.75ex>[r]
-\ar@<.0ex>[r]
-\ar@<.75ex>[r]
-&\cdot
-}
+\xymatrix{ \cdot \ar@<-.5ex>[r] \ar@<.5ex>[r] &\cdot \ar@<-.75ex>[r]
+  \ar@<.0ex>[r] \ar@<.75ex>[r] &\cdot }
 $$
+\end{example}
+
 In Makkai, they consider dependent sorts to be specified by presheaves
 on a \emph{direct category}.
 \begin{definition}[Direct category]
@@ -700,8 +761,8 @@ Intuitively this means that all the arrows go in the ``same
 direction'' and that there are no non-trivial automorphisms.
 
 There is also no finiteness restriction on this, so one could also
-talk about presheaves from the simplex category (without the
-degeneracies) $\Delta^+$.
+talk about presheaves from the simplex category, without the
+degeneracies, $\Delta^+$:
 $$
 \xymatrix{
 \cdot     
@@ -735,8 +796,7 @@ setting, there is not such a straightforward translation possible.
 
 We have chosen our specific definition of sorts in this way as it
 follows our syntax closely. Most importantly, the sort membership
-relation can be defined in a straightforward manner and used in a
-similarly straightforward manner.
+relation can be defined easily and used in a straightforward manner.
 
 
 \section{Categories of algebras}
@@ -745,12 +805,13 @@ similarly straightforward manner.
 Now that we have a way of specifying the type formation rules of an
 inductive definitions, we can talk about the introduction rules. We
 have also seen how to deal with constructors referring to previous
-constructors. In this section we will generalise that construction to
-0-constructors of arbitrary sort as well as introduce 1-constructors.
+constructors in a $\Set$-sorted setting. We move on to the final two
+pieces of the puzzle: constructors of arbitrary sort and path
+constructors.
 
 \subsection{A $\Rel$-sorted quotient inductive-inductive type}
 
-As a warm-u we will give an example of how the specification and the
+As a warm-up we will give an example of how the specification and the
 categories of algebras look like for the following quotient
 inductive-inductive definition:
 %
@@ -769,32 +830,36 @@ inductive-inductive definition:
   \constr{\Bciii}{(n : \natty) \to \Bcii\ n = \Bcii\ (n+1)}
 \end{datatype}
 
-In this section we will show what all the categories of algebras are
-and how they can be characterised. We will get a chain of categories:
+In this section we will show step by step, \ie constructor by
+constructor, how the category of algebras of the above inductive
+definition is built up. We will get a chain of categories:
 $$
 \xymatrix{
 \Alg_0
 &\Alg_1
-\ar[l]
+\ar[l]_{V_0}
 &\Alg_2
-\ar[l]
+\ar[l]_{V_1}
 &\Alg_3
-\ar[l]
+\ar[l]_{V_2}
 &\Alg_4
-\ar[l]
+\ar[l]_{V_3}
 }
 $$
 where $\Alg_i$ is the category that ``contains'' the first $i$
-constructors. The functors are the forgetful functors. $\Alg_4$ is the
-category we are ultimately interested in: this is the category of
-algebras that is associated with the full inductive definition.
+constructors. The functors $V_i$ are the forgetful functors. $\Alg_4$
+is the category we are ultimately interested in: this is the category
+of algebras that is associated with the full inductive definition.
 
 \subsubsection{Sorts: $(A : \Set) \times (B : A \to A \to \Set)$} 
 
-The category of sorts is the category $\Rel$. In \cref{rel-sorts} we
-saw how this can be represented as a list of functors. This category
-is also the first category of algebras, \ie algebras with no
-constructors, and will as such also be referred to as $\Alg_0$.
+The category of sorts is the category $\Rel$ of (proof-relevant)
+relations. In \cref{rel-sorts} we saw how this can be represented as a
+list of functors. This category is also the first category of
+algebras, \ie the algebras with no constructors, and will as such also
+be referred to as $\Alg_0$. It is important to note that we a the
+forgetful functor $t_1 : \Func{\Rel}{\Set}$, giving us the underlying
+set of a relation.
 
 \subsubsection{First constructor: $\Aco : \Aty$}
 
@@ -805,47 +870,53 @@ category of algebras for the first constructor is then
 $\dialgcat{F_0}{t_1}$, where $t_1 : \Func{\Rel}{\Set}$ is the
 forgetful functor. Strictly speaking, an $(F_0,t_1)$-dialgebra
 structure on a relation $(X,R)$ is a function $1 \to X$, but for this
-example we will work with the equivalent definition
-$| \Alg_1 | \equiv (X : \Set) \times (R : X \to X \to \Set) \times
-(\theta_0 : X)$.
-Morphisms $(X,R,\theta_0) \to (Y,S,\rho_0)$ consist of:
-%
+example we will work with the equivalent definition: the category
+$\Alg_1$ has:
 \begin{itemize}
-\item $f : X \to Y$
-\item $g : (x\ y : X) \to R\ x\ y \to S\ (f\ x)\ (f\ y)$
-\item $f_0 : f\ \theta_0 = \rho_0$
+\item objects: $(X : \Set) \times (R : X \to X \to \Set) \times (\theta_0 : X)$.
+\item morphisms $(X,R,\theta_0) \to (Y,S,\rho_0)$ consist of:
+  \begin{itemize}
+  \item a function $f : X \to Y$
+  \item a dependent function $g : (x\ y : X) \to R\ x\ y \to S\ (f\ x)\ (f\ y)$
+  \item an equality $f_0 : f\ \theta_0 = \rho_0$
+  \end{itemize}
 \end{itemize}
 %
-We see that we get a morphism in $\Rel$ along with a computation rule
-that tells us that the morphism in $\Rel$ preserves the
-$(F_0,t_1)$-dialgebra structure.
+We see that we get a morphism $(f,g)$ in $\Rel$ along with a
+computation rule $f_0$ that tells us that the morphism in $\Rel$
+preserves the $(F_0,t_1)$-dialgebra structure.
 %
 Note that $F_0$ is a functor from $\Rel$ to $\Set$ and is not an
 endofunctor on $\Set$: the constructor may refer to elements of fibres
 of the relation $X \to X \to \Set$ being defined. The category
-$\Alg_1$ also comes with a forgetful functor $U_1 : \Func{\Alg_1}{\Alg_0}$
-defined by $U_1 ((X,R),\theta_0) \ddefeq (X,R)$ --- in fact, every
-category of algebras $\Alg_{i+1}$ has a similarly defined forgetful
-functor $U_{i+1} : \Func{\Alg_{i+1}}{\Alg_0$}.
+$\Alg_1$ also comes with a forgetful functor
+$V_1 : \Func{\Alg_1}{\Alg_0}$ defined by
+$V_1 ((X,R),\theta_0) \ddefeq (X,R)$ --- in fact, every category of
+algebras $\Alg_{i+1}$ has a similarly defined forgetful functor
+$V_{i+1} : \Func{\Alg_{i+1}}{\Alg_i$}. Chaining all these together
+until we get to $\Rel$, we get functors
+$V_i : \Func{Alg_{i+1}}{\Rel}$.
 
 \subsubsection{Second constructor: $\Aci : \Aty$}
 
 For the second constructor $\Aci$, the specification is largely
 similar: it is given by the functor $F_1 : \Func{\Alg_1}{\Set}$
-defined by $F_1\ (X, R, \theta_0) \ddefeq \unitty$. $\Alg_2$ has
-objects $(X : \Set) \times (\theta_0 : X) \times (\theta_1 : X)$, or
-equivalently: $\Alg_2$ can be thought of as being the dialgebra
+defined by $F_1\ (X, R, \theta_0) \ddefeq \unitty$. $\Alg_2$ has the
+same objects as $\Alg_1$, but extended with an extra point:
+$| \Alg_2 | = ((X,R,\theta_0) : | \Alg_1 |) \times (\theta_1 : X)$.
+Equivalently, $\Alg_2$ can be thought of as being the dialgebra
 category $\dialgcat{F_1}{t_1 \circ U_1}$.
 
 \subsubsection{Third constructor: $\Bcii : \natty \to \Bty\ \Aco\ \Aci$}
 
-The third constructor $\Bcii$ maps into a different sort, hence its
-definition will be slightly different. We want the resulting category
-$\Alg_3$ of algebras for constructors $\Aco, \Aci, \Bcii$ to have
-objects
-$((X,R) : \Rel) \times (\theta_0 : X) \times (\theta_1 : X) \times
-(\theta_2 : \natty \to R\ \theta_0\ \theta_1)$,
-and we want morphisms
+The third constructor $\Bcii$ maps into a different sort which is not
+$\Set$, hence its definition will be slightly different. We want the
+resulting category $\Alg_3$ of algebras for constructors
+$\Aco, \Aci, \Bcii$ to have as objects:
+$$
+((X,R,\theta_0,\theta_1) : | \Alg_2 |) \times (\theta_2 : \natty \to R\ \theta_0\ theta_1)
+$$
+The morphisms is where it gets a bit hairy: we want morphisms
 $((X,R),\theta_0,\theta_1,\theta_2) \to ((Y,S),\rho_0,\rho_1,\rho_2)$
 to consist of
 $(f,g,f_0,f_1) :
@@ -854,8 +925,7 @@ together with an equality
 $$
 g_2 : (n : \natty)  \to \pathover{S}{(f_0,f_1)}{g\ \theta_0\ \theta_1\ (\theta_2\ n)}{\rho_2\ n}
 $$
-%WAS: g_2 : (x\ y: X) (n : \natty)  \to g\ x\ y\ (\theta_2\ n) = \rho_2\ n
-% -- CHECK new version is correct!
+
 Note how we have to use the equalities $f_0 : f\ \theta_0 = \rho_0$ and
 $f_1 : f\ \theta_1 = \rho_1$ to reconcile the types of
 $$
@@ -865,94 +935,99 @@ and
 $$
 \rho_2 : S\ \rho_0\ \rho_1 .
 $$
-Realising the above directly as a dialgebra category is a bit
-tricky. Observe however that if we have the following type
+Realising the above as a dialgebra category is a bit tricky. We now
+have to deal with dependent functions and dependent equalities. The
+situation can be simplified however. Observe that if we have the
+following type
 $$
 (x : A) \to P\ (e\ x)
 $$
 for some $P : B \to \Set$ and $e : A \to B$, we can rewrite it to the
 equivalent type:
 $$
-(x : A) (b : B) \to b = e\ x \to P\ b
+(x : A)\ (b : B) \to b = e\ x \to P\ b
 $$
-By singleton contraction, we see that the two types are indeed
+By singleton contraction, we can show that the two types are indeed
 equivalent. The latter version is sometimes referred to as the ``Henry
 Ford''-style type (you can have any $b : B$ you want, as long as it is
-$e\ x$). Along these lines, we can rewrite the type of $\theta_2$ to:
+$e\ x$). Along these lines, we can rewrite the type of $\theta_2$ to the equivalent:
 $$
-\theta_2' : (x\ y : X) \to \big((x = \theta_0) \times (y = \theta_1) \times \natty\big) \to R\ x\ y 
+\hat{\theta_2} : (x\ y : X) \to ((x = \theta_0) \times (y = \theta_1) \times \natty) \to R\ x\ y 
 $$
-and define the functor $F_2 : Alg_2 \to \Rel$ by
+and define the functor $F_2 : \Func{\Alg_2}{\Rel}$ by
 $F_2 ((X,Y),\theta_0,\theta_1) \ddefeq (X , \lambda x\ y . (x =
 \theta_0) \times (y = \theta_1) \times \natty)$
-in order to see that $\theta_2'$ is a $(F_2,U_2)$-dialgebra. The
+in order to see that $\hat{\theta_2}$ is a $(F_2,U_2)$-dialgebra. The
 objects in this category give us ``too much'': such a dialgebra gives
 us a morphism $F_2((X,Y),\theta_0,\theta_1) \to (X,Y)$ in $\Rel$, so
 we also get a function $X \to X$. We can solve this problem by adding
 an equation that the function $X \to X$ need be the identity. $\Alg_3$
-is therefore not a category of dialgebras directly, but an equaliser
-of one, as we will elucidate later on in some section.
+is therefore not a category of dialgebras, but a subcategory of one,
+as we will elucidate later on in \cref{point-constructors}.
 
 \subsubsection{Fourth constructor: $\Bciii : (n : \natty) \to \Bcii\ n = \Bcii\ (n+1)$}
 
-The fourth constructor $\Bciii$ is a path constructor. Hence, not only
-do we need to supply a functor $F_3 : \Func{\Alg_3}{\Alg_0}$ to
-specify the arguments, but we also need to specify the endpoints of
-the path. Just as for $\Bcii$, we will first need to rewrite the type
-of the constructor. We denote again by $\theta_2'$ the Henry
+The fourth constructor $\Bciii$ is a path constructor, hence do we not
+only need to supply a functor $F_3 : \Func{\Alg_3}{\Alg_0}$ to specify
+the arguments, but we also need to specify the endpoints of the
+path. Just as for $\Bcii$, we will first need to rewrite the type of
+the constructor. We denote again by $\hat{\theta_2}$ the Henry
 Ford-version of $\theta_2$.  We then have that the type
 $(n : \natty) \to \theta_2\ n = \theta_2\ (n+ 1)$ is equivalent to the
 type
 %
 \begin{multline*}
 (x\ y : X) \to \big((p : x =  \theta_0) \times (q : y = \theta_1) \times (n : \natty)\big) \\
-\ \ \ \ \to \theta_2'\ x\ y\ p\ q\ n = \theta_2'\ x\ y\ p\ q\ (n+1)
+\ \ \ \ \to \hat{\theta_2}\ x\ y\ p\ q\ n = \hat{\theta_2}\ x\ y\ p\ q\ (n+1)
 \end{multline*}
 %
 The endpoints can then be specified as natural transformations
 $\ell, r : \Nat{F_3}{U_3}$, where $F_3 : \Func{\Alg_3}{\Rel}$ is defined in a
 way similar to $F_2$. Given an algebra $A : \Alg_3$, $\ell_A$ and $r_A$
 both define a morphism in
-$\Rel$. $\ell_{((X,Y),\theta_0,\theta_1,\theta_2)}$ and
-$r_{((X,Y),\theta_0,\theta_1,\theta_2)}$ are defined as
-$(\id_X, \ell^1_{((X,Y),\theta_0,\theta_1,\theta_2)})$ and
-$(\id_X,r^1_{((X,Y),\theta_0,\theta_1,\theta_2)})$ respectively, with
+$\Rel$. $\ell_{(X,R,\theta_0,\theta_1,\theta_2)}$ and
+$r_{(X,R,\theta_0,\theta_1,\theta_2)}$ are defined as
+$(\id_X, \ell^1_{(X,R,\theta_0,\theta_1,\theta_2)})$ and
+$(\id_X,r^1_{(X,R,\theta_0,\theta_1,\theta_2)})$ respectively, with
 %
 \begin{align*}
-&\ell^1_{((X,Y),\theta_0,\theta_1,\theta_2)}\ a\ b\ (p, q, n) \ddefeq \theta_2'\ a\ b\ p\ q\ n \\
-&r^1_{((X,Y),\theta_0,\theta_1,\theta_2)}\ a\ b\ (p, q, n) \ddefeq \theta_2'\ a\ b\ p\ q\ (n+1)
+&\ell^1_{(X,R,\theta_0,\theta_1,\theta_2)}\ a\ b\ (p, q, n) \ddefeq \hat{\theta_2}\ a\ b\ p\ q\ n \\
+&r^1_{(X,R,\theta_0,\theta_1,\theta_2)}\ a\ b\ (p, q, n) \ddefeq \hat{\theta_2}\ a\ b\ p\ q\ (n+1)
 \end{align*}
 %
 By function extensionality, we can then say the category of algebras
-$\Alg_3$ has objects $(X : | \Alg_2 |) \times (\theta_3 : \ell_X = r_X)$,
-\ie it is an equaliser category. The morphisms are just morphisms in
-$\Alg_2$ with no extra structure. For higher inductive types, one
+$\Alg_4$ has objects
+$(X : | \Alg_4 |) \times (\theta_3 : \ell_X = r_X)$, which can be
+described as an equaliser category. The morphisms are just morphisms
+in $\Alg_3$ with no extra structure. For higher inductive types, one
 usually expects a path computation rule for any path constructor, but
 as we are working with sets, equalities between paths are trivial.
 
-\subsection{Inductive-recursive definition of specifications}
+\subsection{Specification of a quotient inductive-inductive definition}
 
-We have already seen how $\Set$-sorted inductive-inductive definitions
-can be formalised. Generalising this to arbitrary quotient
-inductive-inductive definitions means that we have to generalise in
-two aspects: we have to be able to deal arbitrary sorts, as well as
-with path constructors.
+So far we have seen how to specify dependent sorts, deal with
+constructors referring to previous ones and have worked out how the
+category of algebras for a specific example, exhibiting point and path
+constructors of arbitrary sort, can be built up. In this section we
+will put everything together, arriving at our formal definition of a
+specification of a quotient inductive-inductive definition.
 
-Let $\Ss : \sortsty$ be a specification of sorts. Recall that we have a
-predicate $\sortsin{\Aa}{\Ss}$ that tells us that $\Aa : \Cat$ is one of the
-sort categories in $\Ss$. Specifying a constructor now requires us to
-specify a sort, which is done by using the predicate. The type of
-quotient inductive-inductive specifications is then refined to the
-following definition:
+A quotient inductive-inductive definition is given by a specification
+of its sorts $\Ss : \sortsty$ plus a list of constructors, which may
+be point or path constructors, each of which has a sort
+$\sortsin{\Aa}{\SortCat{\Ss}}$ and builds upon the category of
+algebras of the previous constructors. We can formalise this as
+follows:
 
 \begin{definition}[Specification of quotient
 inductive-inductive types]
-The specification of a quotient inductive-inductive type and its
-category of algebras and underlying carrier functor is given by the
-following inductive-recursive definition of
+The specification of a quotient inductive-inductive definition with
+sorts $\Ss : \sortsty$, along with its category of algebras and
+underlying carrier functor is given by the following
+inductive-recursive definition of
 \begin{sorts}
   \sortnamety{\specty}{\Set} \\
-  \functy{\Constr}{(s : \specty)\ (\Aa: \Cat) \to \sortsin{\Aa}{\Ss} \to \Set} \\
+  \functy{\Constr}{(s : \specty)\ (\Aa: \Cat) \to \sortsin{\Aa}{\SortCat{\Ss}} \to \Set} \\
   \functy{\Alg}{\specty \to \Cat} \\
   \functy{\Und}{(s : \specty) \to \Func{\Alg_s}{\SortCat{\Ss}}} \\
 \end{sorts}
@@ -964,14 +1039,15 @@ with
   \constr{\specsnoc}{(s : \specty) (\Aa: \Cat) (p : \sortsin{\Aa}{\Ss}) \to \Constr\ s\ \Aa\ p \to \specty}
 \end{datatype}
 %
-where $\Constr\ s\ \Aa\ p$ is defined by recursion on $p : \sortsin{\Aa}{\Ss}$ such that
-\begin{align*}
-&\Constr\ s\ 1\ p \ddefeq 0 \\
-&\Constr\ s\ \Aa\ p \ddefeq \Constr_0\ s\ \Aa\ p + \Constr_1\ s\ \Aa\ p
-\end{align*}
+where $\Constr\ s\ \Aa\ p$ is defined as:
+$$
+\Constr\ s\ \Aa\ p \ddefeq \Constr_0\ s\ \Aa\ p + \Constr_1\ s\ \Aa\ p
+$$
 %
 The functions $\Constr_0$, $\Constr_1$, $\Alg$ and $\Und$ will be
-defined in the remainder of this section.
+defined in the remainder of this section, treating point constructors
+in \cref{point-constructors} and path constructors in \cref{path-constructors}.
+
 \end{definition}
 
 Let us briefly discuss the defining clauses for $\Constr\ s\ \Aa\ p$,
@@ -983,10 +1059,20 @@ $\Constr_0\ s\ \Aa\ p$, or a path constructor specified by
 $\Constr_1\ s\ \Aa\ p$. The next two subsections will describe the
 data needed for point and path constructors respectively.
 
-\subsection{0-constructors}
+\subsection{Point constructors}
+\label{point-constructors}
 
-Suppose we have $\sortsin{S_i}{\Ss}$ and $s : \specty$, and we have already
-constructed
+In this section we will define three things:
+%
+\begin{itemize}
+\item what the data for a point constructor is, \ie we will define $\Constr_0$,
+\item how given these data, what the category of algebras is,
+\item what the forgetful functor from this new category of algebras
+  into the category of sorts is.
+\end{itemize}
+%
+Suppose we have $\sortsin{S_i}{\Ss}$ and $s : \specty$, and we have
+already constructed
 %
 \begin{itemize}
 \item $\Alg_s : \Cat$,
@@ -995,7 +1081,14 @@ constructed
   get from $\sortsin{S_i}{\Ss}$.
 \end{itemize}
 %
-To make more concrete: suppose $\Ss$ contains $n$ sorts and $s$
+From the proof that $\sortsin{S_i}{\Ss}$, we get some information
+about the category $S_i$. We know that we get a functor
+$t_i : \Func{S_i}{S_{i-1}}$ for some category $S_{i-1}$ and that the
+objects of $S_i$ are of the form
+$(X : | S_{i-1} |) \times (R_i X \to \Set)$ for some functor
+$R_i : \Func{S_{i-1}}{\Set}$.
+
+To make this more concrete: suppose $\Ss$ contains $n$ sorts and $s$
 describes $m$ constructors, then an object in $X : \Alg_s$ is a tuple
 $(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)$. The functor $U_s$
 gives us back all underlying carriers, \ie
@@ -1011,24 +1104,24 @@ Recall that $R_i : \Func{S_{i-1}}{\Set}$ is the functor that describes how
 the family $X_i$ depends on the previous sorts $X_0, \hdots,
 X_{i-1}$. A point constructor structure on $X$ is of the form
 $$
-\theta : (x : R_i (X_0, \hdots, X_{i-1})) \to F_1\ (X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)\ x \to X_i\ x
+\theta : (x : R_i (X_0, \hdots, X_{i-1})) \to F^1\ (X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)\ x \to X_i\ x
 $$
 where
 $$
-F_1 : ((X_0,\hdots,X_n,\theta_0,\hdots,\theta_m) : | \Alg_s |) \to R_i (X_0, \hdots, X_{i-1}) \to \Set
+F^1 : ((X_0,\hdots,X_n,\theta_0,\hdots,\theta_m) : | \Alg_s |) \to R_i (X_0, \hdots, X_{i-1}) \to \Set
 $$
 Note that the functor $\bar{U}_s$ can be decomposed into two parts: we
-have $\bar{U}_0 : \Alg_s \to S_{i-1}$ and
-$\bar{U}_1 : (X : \Alg_s) \to R_i\ (\bar{U}_0\ X) \to \Set$.
-$\bar{U}_0$ can also be written as $t_i \circ \bar{U}_s$, where
+have $\bar{U}^0 : \Alg_s \to S_{i-1}$ and
+$\bar{U}_1 : (X : \Alg_s) \to R_i\ (\bar{U}^0\ X) \to \Set$.
+$\bar{U}^0$ can also be written as $t_i \circ \bar{U}_s$, where
 $t_i : S_i \to S_{i-1}$ is the forgetful functor of $S_i$. In order
-for the point constructor specified by $F_1$ to be well-defined, \ie
+for the point constructor specified by $F^1$ to be well-defined, \ie
 to make sense of its computation rule, we need
-$F X \ddefeq (\bar{U}_0\ X, F_1\ X)$ to be a functor
+$F X \ddefeq (\bar{U}^0\ X, F^1\ X)$ to be a functor
 $\Func{\Alg_s}{S_i}$.  This leads us to the definition of a point
 constructor specification:
 
-\begin{definition}
+\begin{definition}[Data for a point constructor]
   Given a specification $s : \specty$, a point constructor of sort
   $\sortsin{S_i}{\Ss}$ is specified by giving a functor
   $F : \Func{\Alg_s}{S_i}$ such that the following commutes:
@@ -1051,17 +1144,18 @@ We now explain how to construct the category $\Alg_{s'}$ of algebras
 for a an specification with an additional point constructor. Suppose
 the specification $s'$ has been obtained as the extension of a
 specification $s$ by a point constructor given by a functor
-$F : \Alg_s \to S_i$, which decomposes as $F = (\bar{U}_0, F_1)$. The
+$F : \Alg_s \to S_i$, which decomposes as $F = (\bar{U}^0, F^1)$. The
 previous characterisation of a point constructor algebra structure on
 an object $X : | \Alg_s |$ can be summarised as having a dependent
 function of morphisms
 \[
-\theta : (x : R_i (\bar{U}_0\ X)) \to F_1\ X\ x \to \bar{U}_1\ X\ x
+\theta : (x : R_i (\bar{U}^0\ X)) \to F^1\ X\ x \to \bar{U}_1\ X\ x
 \]
 A morphism $(X,\theta) \to (Y,\rho)$ consists of a morphism
 $f : \Alg_s(X,Y)$ along with a ``computation rule'':
 \begin{multline*}
-f_0 : (x : R_i \ (\bar{U}_0\ X))\ (y : F_1\ X\ x) \to \\ \bar{U}_1(f)\ x\ (\theta\ x\ y) = \rho\ (R_i(\bar{U}_0(f))\ x)\ (F_1(f)\ x\ y)
+f_0 : (x : R_i \ (\bar{U}^0\ X))\ (y : F^1\ X\ x) \to \\ 
+\bar{U}_1\ f\ x\ (\theta\ x\ y) = \rho\ (R_i(\bar{U}^0\ f\ x)\ (F^1\ f\ x\ y)
 \end{multline*}
 This category of algebras look similar to
 $\dialgcat{F}{\bar{U}_s}$. However, as we have seen previously, the
@@ -1074,9 +1168,9 @@ $V^I$ that gives us algebra structure on the carrier, which is a
 morphism in $S_i$ or equivalently, an object in the arrow category
 $S_i^I$. The definition of the new category of algebras is as follows:
 
-\begin{definition}
+\begin{definition}[Category of algebras for a point constructor]
   Let $s' : \specty$ be the specification $s$ extended with a
-  0-constructor of sort $S_i$ given by a functor $F : \Alg_s \to S_i$
+  point constructor of sort $S_i$ given by a functor $F : \Alg_s \to S_i$
   satisfying $t_i \circ F = t_i \circ \bar{U}_s$. The category of
   algebras $\Alg_{s'}$ is as the following equaliser in $\Cat$:
   \[
@@ -1089,13 +1183,18 @@ $S_i^I$. The definition of the new category of algebras is as follows:
   categories and $\id$ is the functor that assigns to each object the
   identity morphism of that object.
 
-The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite:
-\[
-\xymatrix{
-    \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\bar{U}_s} \ar[r]^-{V} &\Alg_s \ar[r]^-{U_s} &\SortCat{\Ss}
-}
-\]
+  The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite:
+  \[
+    \xymatrix{
+      \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\bar{U}_s} \ar[r]^-{V} &\Alg_s \ar[r]^-{U_s} &\SortCat{\Ss}
+    }
+  \]
 \end{definition}
+
+Note that usually the construction of equalisers in the category
+$\Cat$ is \emph{evil} as it uses equality on objects. Since we are
+working with univalent categories, equality of objects coincides with
+isomorphism of objects, hence this is not an issue in our setting.
 
 \begin{remark}
   To explicate the phenomenon of a category of dialgebras containing
@@ -1149,11 +1248,13 @@ The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the com
   function. For the inductive definition on its own, we are just
   interested in the initial object of the category of algebras. Here
   we see that the initial object of the dialgebra category is the
-  natural numbers with a constantly empty family over it.
+  natural numbers with a constantly empty family over it, which is
+  different from what we want: a \emph{unit type} with a constantly
+  empty family over it.
 \end{remark}
 
-
-\subsection{1-constructors}
+\subsection{Path constructors}
+\label{path-constructors}
 
 Specifying the arguments for a path constructor is done in exactly the
 same way as for a point constructor, while the endpoints of the path
@@ -1161,23 +1262,20 @@ is given by natural transformations. Suppose $s : \specty$, then a path
 constructor structure of sort $\sortsin{S_i}{\Ss}$ on an object
 $(X_0, \hdots, X_n, \theta_0,\hdots,\theta_m) : | \Alg_s |$ is of the
 form:
-\begin{align}
-\label{eq:theta}
-  \begin{split}
-    &\theta : (x : R_i (X_0, \hdots, X_{i-1})) \\
-    &\ \ \to (y : F_1\ (X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)\ x \\
-    &\ \ \to \ell^1_{(X_0,\hdots,X_n,\theta_0,\hdots,\theta_m)}\ x\ y =_{X_i\ x} r^1_{(X_0,\hdots,X_n,\theta_0,\hdots,\theta_m)}\ x\ y 
-  \end{split}
-\end{align}
+\begin{align*}
+  &\theta : (x : R_i (X_0, \hdots, X_{i-1})) \\
+  &\ \ \to (y : F^1\ (X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)\ x \\
+  &\ \ \to \ell^1_{(X_0,\hdots,X_n,\theta_0,\hdots,\theta_m)}\ x\ y =_{X_i\ x} r^1_{(X_0,\hdots,X_n,\theta_0,\hdots,\theta_m)}\ x\ y 
+\end{align*}
 where
 \begin{itemize}
-\item $F_1 : (X : | \Alg_s |) \to R_i (\bar{U}_0 X) \to \Set$, such
-  that $F X \ddefeq (\bar{U}_0 X, F_1 X)$ is a functor $\Alg_s \to S_i$, and
+\item $F^1 : (X : | \Alg_s |) \to R_i (\bar{U}^0 X) \to \Set$, such
+  that $F X \ddefeq (\bar{U}^0 X, F^1 X)$ is a functor $\Alg_s \to S_i$, and
 \item
-  $\ell^1, r^1 : (X : | \Cc |) (x : R_i (\bar{U}_0\ X)) (y : F_1\ X\ x)
+  $\ell^1, r^1 : (X : | \Cc |) (x : R_i (\bar{U}^0\ X)) (y : F^1\ X\ x)
   \to \bar{U}_1\ X\ x$
-  such that $\ell_X \ddefeq (\id_{\bar{U}_0 X}, \ell^1)$ and
-  $r_X \ddefeq (\id_{\bar{U}_0 X}, r^1)$ are natural transformations
+  such that $\ell_X \ddefeq (\id_{\bar{U}^0 X}, \ell^1)$ and
+  $r_X \ddefeq (\id_{\bar{U}^0 X}, r^1)$ are natural transformations
   $\Nat{F}{\bar{U}_s}$.
 \end{itemize}
 Algebra morphisms $(X,\theta) \to (Y,\rho)$ are simply morphisms
@@ -1186,16 +1284,18 @@ computation rules for the paths: any equation between paths is
 trivial.
 
 Summarising the above, we get to the following definition of
-1-constructor specification:
+path constructor specification:
 
-\begin{definition}
-  Given a specification $s : \specty$, a 1-constructor of sort
-  $\sortsin{S_i}{\Ss}$ is specified by a functor
-  $F : \Alg_s \to S_i$ satisfying $t_i \circ F = t_i \circ \bar{U}_s$
-  and two natural transformations $\ell, r : F \to \bar{U}_s$ satisfying
-  $t_i\ \ell = t_i\ r = \id_{t_i \circ \bar{U}_s}$, \ie
+\begin{definition}[Data for a path constructor]
+  Given a specification $s : \specty$, a path constructor of sort
+  $\sortsin{S_i}{\Ss}$ is specified by a functor $F : \Alg_s \to S_i$
+  satisfying $t_i \circ F = t_i \circ \bar{U}_s$ and two natural
+  transformations $\ell, r : F \to \bar{U}_s$ satisfying
+  $t_i\ \ell = t_i\ r = \id_{t_i \circ \bar{U}_s}$, \ie:
 \begin{align*}
-\Constr_1\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \bar{U}_s) \\ \times (\ell : F \to \bar{U}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \bar{U}_s}) \\ \times (r : F \to \bar{U}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \bar{U}_s}) \enspace .
+  \Constr_1\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \bar{U}_s) \\ 
+  \times (\ell : F \to \bar{U}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \bar{U}_s}) \\ 
+  \times (r : F \to \bar{U}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \bar{U}_s}) \enspace .
 \end{align*}
 \end{definition}
 
@@ -1203,21 +1303,18 @@ The restriction on the natural transformations $\ell$ and $r$ is the
 same kind of restriction as the restriction on $F$: the natural
 transformations must leave the sorts below $S_i$ untouched.
 
-Note that by function extensionality, the type of $\theta$ in
-\eqref{eq:theta} is equivalent to $\ell^1_X = r^1_X$. Since
-$t_i\ (l\ X) = t_i\ (r\ X) = \id_{t_i \circ
-  \bar{U}}$, %: S_{i-1} (t_i(\bar{U} X), t_i (\bar{U} X))$,
-the equality $\ell_1\ X = r_1\ X$ of dependent functions in
-$\Set$ is equivalent to the equality $l\ X = r\ X
-$ of morphisms in
-$S_i$. We also observe that a natural transformation $\alpha : F \to
-\bar{U}$ gives rise to a functor $\hat{\alpha} : \Alg_s \to
-S_i^I$, mapping $X : | \Alg_s |$ to $\alpha_X : S_i(F\ X,\bar{U}\
-X)$. Functoriality of this functor comes from the naturality of
-$\alpha$. This leads us to the definition of the category of algebras
-for a path constructor:
+Note that by function extensionality, the type of $\theta$ is
+equivalent to $\ell^1_X = r^1_X$. Since
+$t_i\ (l\ X) = t_i\ (r\ X) = \id_{t_i \circ \bar{U}}$ the equality
+$\ell_1\ X = r_1\ X$ of dependent functions in $\Set$ is equivalent to
+the equality $l\ X = r\ X $ of morphisms in $S_i$. We also observe
+that a natural transformation $\alpha : F \to \bar{U}$ gives rise to a
+functor $\hat{\alpha} : \Alg_s \to S_i^I$, mapping $X : | \Alg_s |$ to
+$\alpha_X : S_i(F\ X,\bar{U}\ X)$. Functoriality of this functor comes
+from the naturality of $\alpha$. This leads us to the definition of
+the category of algebras for a path constructor:
 
-\begin{definition}
+\begin{definition}[Category of algebras for a path constructor]
   Let $s' : \specty$ be the specification
   $s$ extended with a path constructor of sort
   $S_i$ given by a functor $F : \Alg_s \to S_i$ satisfying $t_i \circ
@@ -1243,7 +1340,10 @@ The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the com
 \section{Other forms of constructors}
 \label{other-forms-of-constructors}
 
-If we look at the 0-constructors we have seen so far, they all are of
+We have characterised quotient inductive-inductive definitions as
+(subcategories of) iterated dialgebras. For the dialgebras we have
+looked at, we only had the freedom to choose the left functor, \ie if
+we look at the point constructors we have seen so far, they all are of
 the shape:
 $$
 \Ac : \Alg_s(F X , U X)
@@ -1300,16 +1400,17 @@ $(x\ y : \Aty) \to x = y$.
 \label{from-syntax-to-functors}
 
 We have presented a way to specify an inductive definition by giving a
-list of functors and natural transformations, whilst at the same time
-defining the categories of algebras that correspond these
-definitions. In a proof assistant, we expect to specify an inductive
-definition by giving a list of constructors, \ie a list of types that
-adhere to certain rules. Our approach is somewhat similar to this: we
-essentially have to give a functor for each constructor specifying the
-arguments and give natural transformations to indicate the end points
-if it happens to be a path constructor we are describing. To give
-these data, we may need to massage our types before we can describe
-them as functors. 
+list of functors and natural transformations that satisfy certain
+properties, whilst at the same time defining the categories of
+algebras that correspond these definitions. In a proof assistant, we
+expect to specify an inductive definition by giving a list of
+constructors, \ie a list of types that adhere to certain rules. Our
+approach is somewhat similar to this: we essentially have to give a
+functor for each constructor specifying the arguments and give natural
+transformations to indicate the end points if it happens to be a path
+constructor we are describing. To give these data, we may need to
+massage our types before we can describe them as functors and natural
+transformations.
 
 \subsection{Currying}
 
@@ -1353,15 +1454,19 @@ subcategory of dialgebras and saves us from having to deal with
 dependent functions in a more direct way. 
 
 Usually such a translation affects the computational behaviour of the
-recursion principle, but as we only talk about computational behaviour
-up to propositional equality, this does not matter in our setting.
+recursion principle, since we in essence replace definitional
+equalities with propositional ones. However, as we only talk about
+computational behaviour up to propositional equality, this does not
+make a difference in our setting.
 
 \subsection{Positivity}
 
-Other limitations are that the arguments part must be functorial:
-recursive occurrences may only be in positive positions. One example
-of a data type where this is not the case is the higher order abstract
-syntax embedding of untyped lambda calculus:
+Not all expressions of the type $\Set \to \Set$ are functorial: the
+arguments may only be in positive positions in the result. As we have
+mentioned in \cref{intro}, $\lambda X . (X \to X)$ is
+problematic. Whilst problematic, such negative occurrences can be
+useful. One example of is the higher order abstract syntax embedding
+of untyped lambda calculus:
 %
 \begin{datatype}{\tttmty}{\Set}
   \constr{\ttapp}{\tttmty \to \tttmty \to \tttmty} \\
@@ -1373,7 +1478,7 @@ negative as well as a positive position. The map
 $\lambda X . (X \to X)$ is therefore not functorial: it is neither
 contravariant nor covariant. 
 
-This is problematic with pattern matching ``semantics''. Having an
+This is problematic with pattern matching semantics. Having an
 inductive type such as $\tttmty$ along with pattern matching (even
 when recursion is restricted to structurally smaller subterms), is
 unsound and allows us to write diverging terms.
@@ -1396,11 +1501,18 @@ the datatype is that the constructor $\fieldinv$ has a recursive
 occurrence in a negative position: the constructor $\fieldzero$ occurs
 in a negative position.
 
-\subsection{Comparison to Agda's inductive definition}
-One difference between how one writes down inductive definitions in
-Agda and our specification type is that in Agda we have to group all
-the constructors per sort, \ie we cannot write down a definition with
-sorts $\Aty : \Set$, $\Bty : \Aty \to \Set$ and constructors:
+\subsection{Comparison to Agda's inductive definitions}
+Our framework allows us to specify most of the inductive definitions
+we can write down in Agda. The notable exception is that we do not
+support induction-recursion. However, some forms of
+induction-recursion can be simulated, using the methods described in
+\cite{Hancock2013}.
+
+Apart from the absence of induction-recursion, there is another
+fundamental difference between our framework and that of Agda. In Agda
+we have to group all the constructors per sort, \ie we cannot write
+down a definition with sorts $\Aty : \Set$, $\Bty : \Aty \to \Set$ and
+constructors:
 %
 \begin{itemize}
 \item $\Aco : \Aty$
@@ -1408,31 +1520,30 @@ sorts $\Aty : \Set$, $\Bty : \Aty \to \Set$ and constructors:
 \item $\Acii : \Bci = \Bci \to \Aty$
 \end{itemize}
 %
-In Agda we cannot alternate between the sorts, which prevents us from
-defining types as the one given above.
+We cannot alternate between the sorts in Agda, which prevents us from
+defining types as the one given above. Our framework has no such
+restriction.
 
 \section{Application to equational theories}
 \label{application-to-equational-theories}
 
-\todo{Move this to a final concluding chapter?} Now that we have a
-mechanism that gives us the category of algebras given a list of
-constructors, we can also use this to create the category of models
-for an equational theory. For example, if we take the axioms of
-setoids as constructors, the corresponding category of algebras is
-equivalent to the category of setoids. A setoid consists of the
-following data:
+Now that we have a mechanism that gives us the category of algebras
+given a list of constructors, we can also use this to create the
+category of models for an equational theory. For example, if we take
+the axioms of setoids as constructors, the corresponding category of
+algebras is equivalent to the category of setoids. A setoid consists
+of the following data:
 \begin{itemize}
 \item $X : \Set$
 \item $R : X \to X \to \Set$
-\item $\mathsf{refl} : (x : X) \to R\ x\ x$
-\item $\mathsf{sym} : (x\ y : X) \to R\ x\ y \to R\ y\ x$
-\item $\mathsf{trans} : (x\ y\ z : R) \to R\ x\ y \to R\ y\ z \to R\ x\ z$
-\item $\mathsf{is-prop} : (x\ y : R) \to (p\ q : R\ x\ y) \to p = q$
+\item $\ident{refl} : (x : X) \to R\ x\ x$
+\item $\ident{sym} : (x\ y : X) \to R\ x\ y \to R\ y\ x$
+\item $\ident{trans} : (x\ y\ z : R) \to R\ x\ y \to R\ y\ z \to R\ x\ z$
+\item $\ident{is-prop} : (x\ y : R) \to (p\ q : R\ x\ y) \to p = q$
 \end{itemize}
-As an inductive definition, this is not terribly interesting as the
-initial algebra for this would consist of the empty type with an
-equivalence relation.
-
-\todoi{Explain why what we get is really the category of setoids: for
-  this we just need to look at the morphisms in the sort category, \ie
-  $\Rel$}
+We can read this as an inductive definition with its category of sorts
+being $\Rel$ and $\ident{refl}$, $\ident{sym}$, $\ident{trans}$ and
+$\ident{is-prop}$ as its constructors. As an inductive definition,
+this is not terribly interesting as the initial algebra for this would
+consist of the empty type with an equivalence relation. The category
+of algebras is the category of setoids.
