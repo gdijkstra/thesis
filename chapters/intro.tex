@@ -2,10 +2,11 @@
 \label{intro}
 
 In this thesis we set out to develop a theory of \emph{quotient
-  inductive-inductive definitions}. This first chapter we will give
-some context of the problem, prior art and related concepts. The
-chapter is concluded by an overview of the thesis and a list
-contributions.
+  inductive-inductive definitions}, which are an inductive-inductive
+definitions \cite{NordvallForsberg2013} extended with path
+constructors. This first chapter we will give some context of the
+problem and discuss prior art and related concepts. The chapter is
+concluded by an overview of the thesis and a list of contributions.
 
 \section{Inductive definitions in mathematics and computer science}
 
@@ -22,14 +23,14 @@ inductive definitions in type theory.
 
 \subsection{In mathematics}
 In mathematics, induction is an important proof technique. The most
-common and perhaps oldest form of induction is induction on the
-natural numbers\footnote{Early applications of this principle go back
-  to Parmenides?}: if we want to prove that a formula $\phi(n)$ holds
-for any $n \in \natty$, it suffices to prove $\phi(0)$ and for any
-$n \in \natty$ that $\phi(n) \to \phi(n+1)$. In fact, the fact that
+common and perhaps oldest form (dating back to at least Plato
+\cite{Acerbi2000}) of induction is induction on the natural numbers:
+if we want to prove that a formula $\phi(n)$ holds for any
+$n \in \natty$, it suffices to prove $\phi(0)$ and for any
+$n \in \natty$ that $\phi(n)$ implies $\phi(n+1)$. In fact, the fact that
 the natural numbers satisfy this property can be seen as one of the
 defining properties of the natural numbers. This was first written
-down formally by Guiseppe Peano. He defined the natural numbers to be
+down formally by Guiseppe Peano \cite{Peano1889}. He defined the natural numbers to be
 a set $\natty$ with the properties such as:
 \begin{itemize}
 \item $0 \in \natty$
@@ -49,14 +50,7 @@ Interesting inductive definitions are those of the surreal numbers,
 where one also introduces an equivalence relation inductively at the
 same time as its elements.
 
-Formal treatment of schemes of inductive definitions in first order
-logic. ``Hauptsatz for the intuitionistic theory of iterated inductive
-definitions'' by Martin-L\"of.
-
-\todoi{something about quotients in set theory and how this is not
-  always straightforward, \eg comments from Conway about defining
-  surreal numbers in ZFC. Also how one typically needs choice in order
-  to do things.}
+Schemes for inductive definitions in first order logic \cite{MartinLof1971}
 
 \subsection{In type theory}
 In this thesis, we are concerned with inductive definitions in type
@@ -81,10 +75,9 @@ these classes. However, as observed by Backhouse, it is enough to give
 the type formation rules and introduction rules: the elimination
 principle along with its computation rules can be derived from
 them. This fact is also reflected in how one declares inductive
-definitions in type theory-based proof assistants such as Coq and Agda
-by simply giving a list of constructors, \ie introduction rules.
-
-
+definitions in type theory-based proof assistants such as Coq
+\cite{Bertot2004} and Agda \cite{Norell2007} by simply giving a
+sequence of constructors, \ie introduction rules.
 
 \subsection{In category theory}
 Apart from the type theoretic perspective, the categorical perspective
@@ -118,7 +111,7 @@ theories, the existence of an initial object is not always
 important. Consider the theory of fields, the category of fields does
 not have an initial object. However, presenting the theory of fields
 categorically also means we have to move from algebraic theories to
-generalised varieties. 
+generalised varieties \cite{Adamek2001}. 
 
 Also the syntax of type theory itself can be thought of as an
 inductive definition. One way of describing the semantics of type
@@ -135,7 +128,7 @@ are often defined in terms of themselves, for example a binary tree is
 either a leaf or a pair of binary trees. Functions defined on binary
 trees are then naturally also recursive themselves. In functional
 programming languages one usually has a mechanism available to define
-recursive data structures, called algebraic data types. In Haskell,
+recursive data structures, called algebraic data types. In Haskell \cite{Jones2003},
 one can define (linked) lists as the algebraic data type:
 $$
 \data\ \List\ a = \listnil\ |\ \listcons\ a\ (\List\ a)
@@ -203,10 +196,10 @@ subset of definitions that can be translated to the corresponding
 invocations of the elimination principles. There are some caveats with
 this translation however. For ordinary inductive types, it is the case
 that such a translation cannot always preserve the definitional
-computational behaviour of the original function. (See Berry's
-minority function.) When we move to indexed inductive definitions, the
-translation becomes more involved and in general requires uniqueness
-of identity proofs of the equality used in the translation.
+computational behaviour of the original function
+\cite{McBride2006ii}. When we move to indexed inductive definitions,
+the translation becomes more involved and in general requires
+uniqueness of identity proofs of the equality used in the translation.
 
 The latter is a problem when we want to use pattern matching
 definitions in homotopy type theory, where uniqueness of identity
@@ -214,7 +207,6 @@ proofs does not hold. Luckily there exist further restrictions that we
 can make on the pattern matching definitions to ensure that a
 translation to eliminators is possible, without having to use
 uniqueness of identity proofs. This is implemented in Agda.
-
 
 \section{Homotopy type theory and higher inductive types}
 
