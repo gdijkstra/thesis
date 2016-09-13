@@ -9,9 +9,6 @@ problem and discuss prior art and related concepts. The chapter is
 concluded by an overview of the thesis and a list of contributions.
 
 \section{Induction in mathematics}
-\todoi{Add quote from Aczel1977 (find copy of this) for an
-introductory definition of induction}
-
 In mathematics, induction is an important proof technique. The most
 common and perhaps oldest form of induction is induction on the
 natural numbers, dating back to at least Plato
@@ -171,14 +168,23 @@ inductive-recursive definitions \cite{Dybjer1999} respectively.
 
 \section{Formal treatment of induction}
 
-So far we have given several examples of inductive types and recursive
-definitions, but have not given a formal definition of what an
-inductive definition is. In \cite{MartinLof1971}, Martin-L\"of gives a
-scheme of the rules that comprise an inductive definition in
-first-order logic. In this thesis we are concerned with inductive
-definitions in Martin-L\"of Type Theory \cite{MartinLof1972}, but we
-will also look at category theoretic characterisations in
-\cref{in-category-theory}, to guide us to appropriate generalisations.
+So far we have given several examples of inductive sets and types and
+recursive definitions, but have not given a formal definition of what
+an inductive definition is. In \cite{Aczel1977}, the author writes:
+
+\begin{quote}
+  Inductive definitions of sets are often informally presented by
+  giving some rules for generating elements of the set and then adding
+  that an object is to be in the set only if it has been generated
+  according to the rules.
+\end{quote}
+
+In \cite{MartinLof1971}, the author gives a scheme of the kind of
+rules that comprise inductive definitions in first-order logic. In
+this thesis we are concerned with inductive definitions in
+Martin-L\"of Type Theory \cite{MartinLof1972}, but we will also look
+at category theoretic characterisations in \cref{in-category-theory},
+to guide us to appropriate generalisations.
 
 \subsection{In type theory}
 \label{in-type-theory}
@@ -251,66 +257,76 @@ stemming from homotopy type theory, where apart from the usual
 constructors, called \emph{point constructors}, we may also have
 equations as constructors, called \emph{path constructors}.
 
-This notion of equality is \emph{external} to the theory, it is a
-meta-theoretic property. For example, we cannot write down a type:
-$$
-(A : \Type) \to (x\ y : A) \to x \equiv y \to A
-$$
-However, using an indexed inductive definition we can ``internalise''
-it: given a type $A$ we define:
+Before we go on and give some examples, we will give a brief recap of
+homotopy type theory. For a more in depth introduction, we refer the
+reader to the usual book \cite{UFP2013}.
+
+In type theory, we can define an equality relation on any type
+inductively, as follows: suppose $A$ is a type, we define:
 %
 \begin{datatype}{\_=_A\_}{A \to A \to \Type}
   \constr{\refl}{(x : A) \to x =_A x}
 \end{datatype}
 %
 If we have a term $\refl\ x : x =_A y$ for some $x, y : A$ then this
-only type checks if $x \equiv y$. From a pattern matching point of
-view, it seems like this equality really matches up with definitional
-equality. If we normalise a closed term of an identity type $x = y$,
-it normalises to $\refl$, hence it gives us that $x \equiv y$. As
-such, one would expect that if we have two terms $p, q : x = y$, then
-also $p = q$, \ie we have \emph{uniqueness of identity proofs}. Using
+only type checks if $x$ is \emph{definitionally} equal to $y$, \ie
+they are the same up to $\beta$- and $\eta$-equality (and possibly
+more equalities). 
+
+The equality defined above is usually referred to as
+\emph{propositional} equality. This name comes from the idea that
+equality is propositional, \ie any two terms of that type are
+equal. If we normalise a closed term of an identity type $x = y$, it
+normalises to $\refl$, hence it gives us that $x \equiv y$. As such,
+one would expect that if we have two terms $p, q : x = y$, then also
+$p = q$, \ie we have \emph{uniqueness of identity proofs}. Using
 dependent pattern matching this is easy to prove:
+%
 \begin{align*}
   &uip : (A : \Type)\ (x\ y : A)\ (p\ q : x = y) \to p = q \\
   &uip\ A\ x\ .x\ (\refl\ x)\ (\refl\ x) \ddefeq \refl\ (\refl\ x)
 \end{align*}
-Pattern matching on $p$ forces $x$ and $y$ to be definitionally equal,
-yielding $p \equiv \refl\ x$. Pattern matching on $q$, which now has
-type $x = x$, also gives us $q \equiv \refl\ x$. We then have
-$p \equiv \refl\ x \equiv q$, hence $\refl\ (\refl\ x)$ type checks.
+%
+However, if we consider the induction principle for this type, called
+the $J$ rule, this is not so clear at all. What we can show with $J$
+is that given a type $A$, the relation $=_A$ is an equivalence
+relation. Furthermore we can show that it forms a groupoid with
+transitivity as its binary operation, reflexivity as its unit and
+symmetry as its inverse operation. Using $J$, we can show that these
+operations all satisfy the groupoid laws up to propositional equality
+again, but not definitionally. Using this idea of types as groupoids,
+a model of type theory has been given in the category of groupoids
+\cite{Hofmann1998}. Since there are non-trivial groupoids, the
+groupoid model contains types which refute the uniqueness of identity
+types principle.
 
-However, translating this proof of uniqueness of identity proofs to
-one that only makes use of the elimination principle of identity
-types, called the $\J$ eliminator, is impossible. It has been shown
-that there exists a model of type theory with identity types, in which
-types are modelled as groupoids. There exist groupoids in which there
-are non-trivial automorphisms, hence this model violates uniqueness of
-identity proofs.
+The story does not end with groupoids, however. Since the groupoid
+laws are satisfied up to propositional equality, a type itself again,
+we get a tower of groupoids: we get \inftygrpds. \inftygrpds are also
+the object of study in homotopy theory: they can be thought of as
+topological spaces up to homotopy. Types can therefore be thought of
+as \inftygrpds \cite{VanDenBerg2011,Lumsdaine2009} and therefore also
+as topological spaces up to homotopy. This correspondence leads to a
+geometric intuition for type theory: types can be seen as spaces with
+its identity types as the paths in said type.
 
-The idea to model types as groupoids comes from the fact that $J$
-allows us to show that the identity types form not only an equivalence
-relation on a type, but that the transitivity and symmetry operations,
-along with $\refl$ also satisfy the groupoid laws. These laws are
-satisfied again up to propositional equality, so the identity types
-themselves are groupoids, ad infinitum. In fact, types can be seen as
-\inftygrpds. Since \inftygrpds are a model of homotopy theory, which
-studies topological spaces up to homotopy, types themselves can also
-be thought of as topological spaces up to homotopy. This observation
-has given rise to the field of \emph{homotopy type theory}.
+One important axiom that is considered in homotopy type theory, is the
+univalence axiom, which roughly tells us that isomorphic types are
+also propositionally equal. This axiom is inspired by and holds in the
+simplicial sets model of type theory \cite{Kapulkin2012}. A univalent
+universe is then one example of a type that does not satisfy
+uniqueness of identity proofs: we may have different isomorphisms,
+giving rise to different propositional equalities between types. An
+example of this are the identity map and the negation map on the
+booleans: these are two distinct isomorphisms, yielding by univalence
+two distinct propositional equalities $\boolty = \boolty$.
 
-A model of type theory emphasising its relationship to homotopy
-theory, is the simplicial set model. Simplicial sets have a notion of
-\emph{equivalence} which coincides with equality. In this model the
-\emph{univalence axiom} is valid, which roughly means that
-(coherently) isomorphic types are also propositionally equal.
-
-Now we know we can think of types as topological spaces up to
-homotopy, we need a way to define the usual examples, such as the
-circle and the torus, in a type theoretic way. As we have seen, we
-define new data types in type theory usually as an inductive
+Apart from univalent universes of types invalidating uniqueness of
+identity proofs, there are also plenty of geometric examples to take
+from homotopy theory, such as the circle and the torus. As we have
+seen, we define new data types in type theory usually as an inductive
 type. However, ordinary inductive definitions do not give us a way to
-create new paths between points that was not already there. The
+create new paths between points that were not already there. The
 solution is to generalise the idea of constructor to also allow for
 paths to be constructed. We can then define the circle, which is just
 a point with a non-trivial loop, as the following \emph{higher
@@ -319,113 +335,117 @@ a point with a non-trivial loop, as the following \emph{higher
   \constr{\circlebase}{\circlety} \\
   \constr{\circleloop}{\circlebase = \circlebase}
 \end{datatype}
-The constructor $\circleloop$ is a \emph{path constructor}: it
-constructs a new path from $\circlebase$ to $\circlebase$. 
+In higher inductive types, we have the ordinary constructors, such as
+$\circlebase$ in this example. These are called \emph{point
+  constructors}, as they can be thought of as constructing points in
+the space we are defining inductively. The constructor $\circleloop$
+is a \emph{path constructor}: it constructs a new path from
+$\circlebase$ to $\circlebase$.
 
-\todoi{something about an recursion principle for this}
+The induction principle for the circle is as follows:
+$$
+\circleind : (P : \circlety \to \Type)\ (m_{\circlebase} : P\ \circlebase)\ (m_{\circleloop} : \pathover{P}{\circleloop}{m_{\circlebase}}{m_{\circlebase}}) \to (x : \circlety) \to P\ x
+$$
+To show that $P$ holds for any $x : \circlety$, we need to show that
+it holds for the base point and that transporting this value along the
+loop is equal to the value itself. 
 
-Note that to show that $\circleloop \neq \refl_{\circlebase}$, we need
-to have a universe of types which is univalent. This is similar to how
-we cannot show that $\boolt \neq \boolf$ if we cannot eliminate into a
-universe.
+The induction principle for the circle can also be used to show that
+the $\circleloop$ is in fact a non-trivial loop, \ie
+$\circleloop \neq \refl_{\circlebase}$. To prove this, we need to have
+a universe at hand which is univalent. This is similar to how we
+cannot show that $\boolt \neq \boolf$, if there is no universe to
+eliminate into, with the additional requirement of that universe being
+univalent.
 
 Apart from allowing constructors to construct paths between points,
 higher inductive types also allow for \emph{higher} path constructors
 which construct paths between paths. For example, we can describe the
 torus as the following higher inductive type:
+%
 \begin{datatype}{\torusty}{\Type}
   \constr{\torusbase}{\torusty} \\
   \constr{\torusp}{\torusbase = \torusbase} \\
   \constr{\torusq}{\torusbase = \torusbase} \\
   \constr{\torusr}{\torusp \ct \torusq = \torusq \ct \torusp}
 \end{datatype}
+%
+The approach of using higher inductive types to define these
+topological spaces (up to homotopy) has been used successfully to
+formalise various results of homotopy theory in type theory, leading
+to the field of \emph{synthetic homotopy theory}. Formalisations
+include the fundamental group of circle \cite{Licata2013} and more
+general results on the homotopy groups of spheres
+\cite{Licata2013ii,Brunerie2016}, the Blakers-Massey theorem
+\cite{Favonia2016} and the Mayer-Vietoris sequence \cite{Cavallo2015}.
 
-This approach has been succesfully used to formalise various results
-of homotopy theory in type theory, leading to the field of
-\emph{synthetic homotopy theory}.
-
-While people have succesfully used certain particular higher inductive
-types and shown that they behave nicely. There are informal proofs
-that higher inductive types in general have certain properties, \eg we
-can reduce any $n$-constructor with $n > 1$ to a 1-constructor by
-iterating the so called hub-spokes construction. However, a general
-theory or formal definition of higher inductive types is missing so
-far. There is a draft by Lumsdaine and Shulman that discusses the
-semantics of higher inductive types, but leaves out the syntactic
-details. Sojakova has worked out that initial algebra semantics for
-certain higher inductive types along with a more general form called
-W-suspensions coincides with the corresponding induction principles.
-
-Furthermore some results have been made by expressing certain higher
-inductive types in terms of a small set of primitive (higher)
-inductive types.
-
-\todoi{something about path constructors and algebraic theories}
+Applications aside, as of yet a general definition and theory of
+higher inductive types is still lacking. There is a note on the
+semantics of higher inductive types \cite{Lumsdaine2013}, \ie a
+metatheoretic and semantic treatment. The ideas in this thesis are
+very much inspired by this note. In \cite{Sojakova2014}, the author
+gives an internal specification of a class of higher inductive types
+called W-suspensions, \ie the author defines an induction principle
+and the category of algebras and shows that initiality in the category
+of algebras coincides with satisfying the induction principle. This is
+all carried out inside type theory itself, which is also a goal of
+this thesis.
 
 \section{A theory of quotient inductive-inductive definitions}
 
-Our goal is not only to devise a theory of quotient
-inductive-inductive definitions, but also make sure we can formalise
-it in type theory itself. With the definition being internal we mean
-that in order to formalise it, we do not first have to formalise the
-ordinary metatheory of type theory itself, which is already a
-gargantuan undertaking of its own, and then build upon that. Instead
-we have a more direct definition.
+Our goal in this thesis is to give a theory of quotient
+inductive-inductive definitions, which can be seen as a stepping stone
+towards a theory of higher inductive types. Quotient
+inductive-inductive types can either be seen as a generalisation of
+inductive-inductive types or as a subclass of higher
+inductive-inductive types. We extend inductive-inductive definitions
+with path constructors, but we truncate the result to be a set: our
+definitions satisfy uniqueness of identity proofs. As such, they can
+be seen as a subclass of higher inductive-inductive types. Since we
+work with sets, we only consider path constructors that construct
+paths between points, as any higher path constructors would not add
+anything new.
 
-\todoi{something about how we can define a predicate on a type saying
-  that it satisfies the induction principle or is the initial object
-  in the category of algebras: this kind of internal def is the one we want}
+Another goal of this thesis is to give a theory that can be expressed
+inside type theory itself. While formalising the theory is already a
+good idea on its own, having an internal definition of the inductive
+definitions means that anything we prove about them internally
+automatically holds for all models of type theory. Furthermore, if the
+theory happens to be expressible in a small core theory and we manage
+to construct the inductive types also in this core, we have an
+implementation of our inductive definitions in this small type theory.
 
-The advantage of this approach that we have a stronger guarantee that
-our proofs are correct if we have formalised them. Another advantage
-is that having an internal definition of inductive definitions is that
-we can perform induction on them, \ie we can do metaprogramming or
-generic programming.
+From a programming point of view, having the specification of
+inductive definitions as a first-class citizen in your language allows
+for meta-programming: we can write generic programs by recursion on
+the structure of the inductive definitions \cite{Benke2003}.
 
-Having the theory internal to type theory also allows us to check
-whether we have a valid implementation of quotient inductive-inductive
-definitions. To show that the implementation is correct is to show
-that we get initial objects in the appropriate category of
-algebras. If we manage to show that it is enough to implement a small
-set of primitive quotient inductive types to be able to implement
-arbitrary quotient inductive-inductive definitions, this amounts to
-using these primitives to constructing initial objects in the
-categories of algebras.
+Working on the theory of inductive definitions internal to type theory
+is not without problems, however. When we talk about the computation
+rules of type theoretic inductive definitions, we talk about
+\emph{definitional} equalities. These definitional equalities have
+none of the non-trivial structure that its internal counterpart,
+propositional equality, may have. They are equalities \emph{on the
+  nose}. In type theory itself, we can only talk about the weaker
+notion of propositional equality. This complicates the situation
+already when we talk about ordinary inductive types: in
+\cite{Awodey2012} the authors internally prove for W-types that
+initiality and the induction principle coincide. Doing so requires
+some involved reasoning about equalities between propositional
+equalities: there are so called coherence problems one needs to
+solve. In this thesis we observe in \cref{untruncated} that these
+coherence problems grow in number with the number of constructors,
+even if they are all just point constructors.
 
-There are downsides to an internal approach however. When talking
-about inductive definitions for type theory, we often expect the
-computation rules to hold definitionally. In type theory we only have
-the weaker notion of propositional equality at our disposal. Replacing
-definitional equality with propositional equality is not always
-straightforward: one frequently runs into \emph{coherence
-  issues}.
-
-There are several solutions to this problem. One solution is to change
-the type theory to also have an internal notion of definitional
-equality. Such a theory has as of yet not been worked out fully yet,
-but progress has been made so far. Now there are two approaches to
-define the category of algebras: we can take the original definition
-and use definitional equality where needed. Doing this is not without
-problems: one is bound to run into issues of resulting ``types'' not
-fibrant, hence not being types but \emph{pretypes}. Another approach
-is to deal with the coherence issues in a uniform way using techniques
-from \inftycat theory, which can be performed in type theory using the
-internal definitional equalities.
-
-Another solution to the coherence issues is to restrict one self to
-\emph{sets}, \ie types that satisfy the uniqueness of identity proofs
-principle, as a first approximation. This is the approach we will use
-in the main parts of this thesis. This allows us to focus on the
-essential parts of the theory and defer the coherence issues to a
-later point in time.
-
-Opposed to tackling the coherence conditions uniformly using the heavy
-handed methods from \inftycat theory, one can deal with the coherence
-lazily, \ie as they pop up. For our purposes we usually do not need
-the full set of coherence conditions from the categories we work with,
-so we can just manually use those that we need to prove our theorems
-about inductive definitions. This approach is explored in one of the
-last chapters.
+Dealing with these coherences in a uniform way means that we have to
+talk about \inftycats \cite{Camarena2013}. Formalising the usual
+notions of \inftycat in type theory requires us to work with
+simplicial sets in type theory. However, we want to work with
+\emph{types}, not simplicial sets. A more promising approach is
+extending type theory with a strict equality
+\cite{Altenkirch2016ii,Altenkirch2016iii}. In this thesis, we will
+deal with the coherences by simply working with the truncated types:
+we work with sets instead.
 
 \section{Overview of the thesis and contributions}
 
@@ -466,7 +486,4 @@ thesis is organised as follows:
 
 \section{Declaration of authorship}
 
-A lot of the research leading up to this thesis has been a joint
-effort with fellow researchers.
-
-\todoi{Mention Thorsten, Paolo and Fredrik}
+\todoi{Declare authorship}
