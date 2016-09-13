@@ -2,222 +2,254 @@
 \label{intro}
 
 In this thesis we set out to develop a theory of \emph{quotient
-  inductive-inductive definitions}, which are an inductive-inductive
+  inductive-inductive definitions}, which are inductive-inductive
 definitions \cite{NordvallForsberg2013} extended with path
 constructors. This first chapter we will give some context of the
 problem and discuss prior art and related concepts. The chapter is
 concluded by an overview of the thesis and a list of contributions.
 
-\section{Inductive definitions in mathematics and computer science}
+\section{Induction in mathematics}
+\todoi{Add quote from Aczel1977 (find copy of this) for an
+introductory definition of induction}
 
-Inductive definitions occur in various forms in both mathematics and
-computer science. We will start out by going through some examples in
-a classical (set theoretic) mathematical setting. We will then show
-what role induction plays in type theory and mention the various forms
-of induction that have been explored in that area. We also spend some
-time talking about the categorical treatment of (algebraic) theories
-and its relation to inductive definitions. After this we talk about
-the use of induction in programming in the form of algebraic data
-types and pattern matching definitions and mention how it relates to
-inductive definitions in type theory.
-
-\subsection{In mathematics}
 In mathematics, induction is an important proof technique. The most
-common and perhaps oldest form (dating back to at least Plato
-\cite{Acerbi2000}) of induction is induction on the natural numbers:
-if we want to prove that a formula $\phi(n)$ holds for any
-$n \in \natty$, it suffices to prove $\phi(0)$ and for any
-$n \in \natty$ that $\phi(n)$ implies $\phi(n+1)$. In fact, the fact that
-the natural numbers satisfy this property can be seen as one of the
-defining properties of the natural numbers. This was first written
-down formally by Guiseppe Peano \cite{Peano1889}. He defined the natural numbers to be
-a set $\natty$ with the properties such as:
+common and perhaps oldest form of induction is induction on the
+natural numbers, dating back to at least Plato
+\cite{Acerbi2000}. Induction on the natural numbers gives us a way
+want to prove that a formula $\phi(n)$ holds for any $n \in \natty$:
+we have to prove $\phi(0)$ and prove that for any $n \in \natty$ that
+$\phi(n)$ implies $\phi(n+1)$. In fact, the fact that the natural
+numbers satisfy this property can be seen as one of the defining
+properties of the natural numbers. This was first written down
+formally by Guiseppe Peano \cite{Peano1889}. He defined the natural
+numbers to be a set $\natty$ with the properties such as:
 \begin{itemize}
 \item $0 \in \natty$
 \item for any $n \in \natty$, $\natsucc(n) \in \natty$.
 \item $\natty$ satisfies the induction principle
 \end{itemize}
 The remaining axioms describe the equality relation on the natural
-numbers and postulate the injectivity of the $\natsucc$ constructor
-and that $\natzero \neq \natsucc\ n$ for all $n \in \natty$.
+numbers and postulate the injectivity of the $\natsucc$ function
+symbol and that $\natzero \neq \natsucc\ n$ for all $n \in \natty$.
 
-Such a definition is an \emph{inductive definition}.
+A consequence of the induction principle for natural numbers, is that
+we can define functions $\natty \to X$, for some set $X$,
+\emph{recursively}: it suffices to define $f\ 0$ and
+$f\ (\natsucc(n))$, where we may refer to $f\ n$. We can use this to
+define addition $n + m$ on the natural numbers, by recursion on the
+second argument $m$, \ie we define $n + 0 \ddefeq n$ and
+$n + \natsucc(m) \ddefeq \natsucc(n+m)$.
 
-There are other forms of induction in mathematics: transfinite
-induction (induction over ordinals other than the natural numbers?) 
+In mathematics, the construction of new sets is often done by taking
+the natural numbers as a given and building upon this and quotienting
+where needed, as opposed to giving an inductive definition
+directly. For example, the rational numbers can be constructed as
+$\natty \times \natty$ quotiented by the relation
+$(a , b) \sim (c , d)$ if and only $ad = bc$. When quotienting
+infinite sets is not always unproblematic. The usual construction of
+the real numbers as a quotient of Cauchy sequences of rational numbers
+requires the axiom of choice to show that it forms a complete metric
+space. Direct inductive definitions (with equations) can avoid such
+problems, as we will see in \cref{cauchy-reals}.
 
-Interesting inductive definitions are those of the surreal numbers,
-where one also introduces an equivalence relation inductively at the
-same time as its elements.
-
-Schemes for inductive definitions in first order logic \cite{MartinLof1971}
-
-\subsection{In type theory}
-In this thesis, we are concerned with inductive definitions in type
-theory. In Martin-L\"of Type Theory, types are usually defined
-inductively. They are defined by four sets of rules:
-\begin{itemize}
-\item \emph{type formation rules} ($\natty$ is a type)
-\item \emph{introduction rules} ($\natzero : \natty$)
-\item \emph{elimination rules} (given $P : \natty \to \Type$, $m_{\natzero} : P\ \natzero$, $m_{\natsucc} : (n : \natty) \to P\ n \to P\ (\natsucc\ n)$, we get $\natind\ P\ m_{\natzero}\ m_{\natsucc} : (x : \natty) \to P\ x$)
-\item \emph{computation rules} ($\natind\ P\ m_{\natzero}\ m_{\natsucc}\ \natzero = m_{\natzero}$, $\natind\ P\ m_{\natzero}\ m_{\natsucc}\ (\natsucc\ n) = m_{\natsucc}\ n\ (\natind\ P\ m_{\natzero}\ m_{\natsucc} n)$)
-\end{itemize}
-The type formation, introduction and elimination rules are not
-essentially different from Peano's rules. Missing however are rules
-defining an equality relation on $\natty$. As we will see, we can
-define the equality relation as a single parametric inductive
-definition uniformly for all types. Given this notion of equality and
-given that we have a universe of types, one can derive that the
-constructors are disjoint and injective.
-
-The declaration of an inductive definition involves given rules in all
-these classes. However, as observed by Backhouse, it is enough to give
-the type formation rules and introduction rules: the elimination
-principle along with its computation rules can be derived from
-them. This fact is also reflected in how one declares inductive
-definitions in type theory-based proof assistants such as Coq
-\cite{Bertot2004} and Agda \cite{Norell2007} by simply giving a
-sequence of constructors, \ie introduction rules.
-
-\subsection{In category theory}
-Apart from the type theoretic perspective, the categorical perspective
-is also relevant. Inductive definitions such as the natural numbers
-can be explained as being an initial object in the category of
-$F$-algebras, for some endofunctor $F$. The specification of an
-inductive definition then amounts to giving the appropriate
-endofunctor on the appropriately chosen category.
-
-As observed by Shulman, since given an endofunctor $F$ the category of
-$F$-algebras is equivalent to the category of \emph{monad algebras} on
-$F^*$ the free monad of $F$ (if it exists), generalising inductive
-definitions ought to involve moving from free monads to a larger class
-of monads. A related concept to inductive definitions are algebraic
-theories. An algebraic theory consists of a set of \emph{operations},
-which are much like \emph{constructors} of an inductive
-definition. Another ingredient to algebraic theories are
-\emph{equations}, which is traditionally not considered to be a part
-of inductive definitions. Models of algebraic theories such as the
-theory of groups can be specified as being monad algebras of the monad
-that corresponds to the theory. For groups, this is the monad on
-$\Set$ which sends a set to the underlying set of the free group on
-that set.
-
-The quotient inductive-inductive definitions we present in this thesis
-are inductive definitions with equations and as such can also be
-thought of as algebraic theories. There is a difference however with
-theories in general. With inductive definitions we are interested in
-the \emph{initial} object of the category of algebras or models. For
-theories, the existence of an initial object is not always
-important. Consider the theory of fields, the category of fields does
-not have an initial object. However, presenting the theory of fields
-categorically also means we have to move from algebraic theories to
-generalised varieties \cite{Adamek2001}. 
-
-Also the syntax of type theory itself can be thought of as an
-inductive definition. One way of describing the semantics of type
-theory is as \emph{categories with families}. These objects themselves
-form a category in which the syntax, given as the \emph{syntactic
-  model}, is the initial object. As such, the category of categories
-with families can be thought of as a category of algebras. Realising
-type theory in type theory as an inductive definition is done in ...
-
-\subsection{In computer science}
+\section{Induction in computer science}
 
 Recursion is a central concept to computer science. Data structures
-are often defined in terms of themselves, for example a binary tree is
-either a leaf or a pair of binary trees. Functions defined on binary
-trees are then naturally also recursive themselves. In functional
-programming languages one usually has a mechanism available to define
-recursive data structures, called algebraic data types. In Haskell \cite{Jones2003},
-one can define (linked) lists as the algebraic data type:
+are often defined in terms of themselves: for example, a binary tree
+is either a leaf or a pair of binary trees. Functional programming
+languages therefore often come with a mechanism to express definitions
+such as these, usually under the name of \emph{algebraic data types}.
+
+In Haskell \cite{Jones2003}, one can define (linked) lists as the
+algebraic data type:
 $$
 \data\ \List\ a = \listnil\ |\ \listcons\ a\ (\List\ a)
 $$
-Using \emph{pattern matching} on the constructors, we can define
-functions on algebraic data types, \eg:
+As opposed to having a recursion principle associated with the
+algebraic data type, we have \emph{pattern matching} and general
+recursion. For example, we can define a function as follows:
+%
 \begin{align*}
   &\listmap : (a \to b) \to \List\ a \to \List\ b \\
   &\listmap\ f\ \listnil = \listnil \\
   &\listmap\ f\ (\listcons\ x\ xs) = \listcons\ (f\ x)\ (\listmap\ f\ xs)
 \end{align*}
-In languages like Haskell, we only get a way to pattern matching on an
-algebraic data type: we do not get an induction principle as a
-primitive. However, as we are allowed to use recursion to our heart's
-content, we can derive the (non-dependent) induction principle. For
-lists this is usually called $\listfoldr$:
+%
+Pattern matching and general recursion are powerful enough to let us
+implement the recursion operator associated with the inductive
+type. In the case of lists, this is usually called $\listfoldr$:
+%
 \begin{align*}
   &\listfoldr : b \to (a \to b \to b) \to \List\ a \to b \\
   &\listfoldr\ e\ op\ \listnil = e \\
   &\listfoldr\ e\ op\ (\listcons\ x\ xs) = op\ x\ (\listfoldr\ e\ op\ xs)
 \end{align*}
+%
 
-If we move to a dependently typed programming language that we want to
-be total, we cannot take this approach to algebraic data types /
-inductive definitions. In such a setting one can do it the type
-theoretic way and use elimination principles instead of pattern
-matching.  In Agda (or as first implemented in ALF) one can have
-pattern matching with recursion as long as one makes sure that the
-definitions are \emph{structurally} recursive: the recursive
-occurrences are on subterms of the arguments of the clause.
-
-Restricting recursive function definitions is not enough however: one
-also has to make sure that the inductive definitions themselves are of
-the right shape: they have to be \emph{strictly positive}. If we were
-to have an inductive type:
+If we care about the totality of our definitions, pattern matching and
+general recursion are too powerful. First of all we have to restrict
+ourselves to \emph{structurally} recursive definitions: recursive
+calls may only be done on subterms of the patterns on the left hand
+side of the pattern matching clause. This is however not enough to
+ensure termination of definitions. The inductive types themselves also
+have to be of the right shape:: they have to be \emph{strictly
+positive}. If we were to have an inductive type:
+%
 \begin{datatype}{\Tty}{\Type}
   \constr{\Ta}{(\Tty \to \Tty) \to \Tty}
 \end{datatype}
 then we can define:
 \begin{align*}
   &uh : T \to \emptyty \\
-  &uh (\Ta\ f) \ddefeq uh\ (f\ (\lambda x . x)) \\
+  &uh\ (\Ta\ f) \ddefeq uh\ (f\ (\lambda x . x)) \\
   \\
   &oh : T \\
-  &oh \ddefeq (\lambda x . x)
+  &oh \ddefeq \Ta\ (\lambda x . x)
 \end{align*}
+%
 Since $f\ (\lambda x . x)$ is structurally smaller than $\Ta\ f$, the
 definition of $uh$ is structurally recursive. However, it does give us
 a term that does not have a normal form, namely $uh\ oh$.
 
-Indexed inductive types, or generalised algebraic data types as they
-are called in Haskell, are useful in programming as they allow us to
-encode properties in the types. Examples being well-scoped and
-well-typed abstract syntax trees and red-black trees. Pattern matching
-in this setting, which is called dependent pattern matching, also
-becomes a powerful tool. As we have to unify the type of the function
-that is being defined with that of the constructor of a clause, we
-actually get more information about the variables present in the
-patterns. This may rule out impossible clauses or tell us that certain
-variables are definitionally equal.
+Algebraic data types allow us to specify types or a family of types
+parametrised by type variables. As these are \emph{parameters}, we are
+not allowed to vary them in the result type of the
+constructors. Lifting this restriction, \ie turning the parameters
+into \emph{indices}, gives us \emph{generalised algebraic data types}
+(GADTs) or \emph{inductive families}. We can use the indices to store
+extra information in the type, allowing us to encode invariants. They
+have been used to implement a type of well-typed abstract syntax trees
+\cite{Pavsalic2004} and red-black trees \cite{Kahrs2001}, among many
+other uses.
 
-When we restrict ourselves to strictly positive inductive definitions
-and structurally recursive function definitions, we end up with a
-subset of definitions that can be translated to the corresponding
-invocations of the elimination principles. There are some caveats with
-this translation however. For ordinary inductive types, it is the case
-that such a translation cannot always preserve the definitional
-computational behaviour of the original function
-\cite{McBride2006ii}. When we move to indexed inductive definitions,
-the translation becomes more involved and in general requires
-uniqueness of identity proofs of the equality used in the translation.
+Inductive families are especially powerful in a dependently typed
+setting in conjunction with \emph{dependent pattern matching}
+\cite{Coquand1992}, such as it is implemented in Agda
+\cite{Norell2007}. The information encoded in the indices may tell us
+that certain cases are impossible and need not be treated, or they may
+tell us that certain variables in the patterns are equal. We can
+define the type of length-indexed lists, also referred to as vectors
+as follows:
+%
+\begin{datatype}{\vecty\ (A : \Type)}{\natty \to \Type}
+  \constr{\vecnil}{\vecty\ A\ \natzero} \\
+  \constr{\veccons}{A \to (n : \natty)\ (xs : \vecty\ A\ n) \to \vecty\ A\ (\natsucc\ n)}
+\end{datatype}
+%
+We can define a function that returns the first element of a non-empty
+list as follows:
+%
+\begin{align*}
+  &\vechead : (A : \Type)\ (n : \natty) \to \vecty\ A\ (\natsucc\ n) \to A \\
+  &\vechead\ A\ n\ (\veccons\ x\ .n\ xs) = x
+\end{align*}
+%
+By pattern matching on the argument of type
+$\vecty\ A\ (\natsucc\ n)$, we get two cases: the value is either
+constructed with constructor $\vecnil$ or $\veccons$. If we unify the
+type of the argument with that of the constructors, we see that the
+argument can never be $\vecnil$, as that produces something of type
+$\vecty\ A\ \natzero$. Furthermore, if we consider the $\veccons$
+case, we notice that the natural number argument of the constructor
+has to coincide with the one we already had in our context, hence we
+get the non-linear pattern $\vechead\ A\ n\ (\veccons\ x\ .n\ xs)$,
+where the dot indicates that it is a repeated variable.
 
-The latter is a problem when we want to use pattern matching
-definitions in homotopy type theory, where uniqueness of identity
-proofs does not hold. Luckily there exist further restrictions that we
-can make on the pattern matching definitions to ensure that a
-translation to eliminators is possible, without having to use
-uniqueness of identity proofs. This is implemented in Agda.
+It has been shown that under certain assumptions, \ie if the data
+types are strictly positive and the recursion is structural, along
+with certain assumptions about the equality in the type theory, then
+these dependent pattern matching definitions can be translated to ones
+using only elimination principles \cite{Goguen2006}. The restrictions
+on the type of equality used can be relaxed in certain cases
+\cite{Cockx2014}, giving us a form of dependent pattern matching which
+is compatible with homotopy type theory.
 
-\section{Homotopy type theory and higher inductive types}
+In Agda, apart from inductive families, we can also define inductive
+types mutually with other inductive types/families or functions,
+giving us inductive-inductive \cite{NordvallForsberg2013} and
+inductive-recursive definitions \cite{Dybjer1999} respectively.
 
-In type theory we have a notion of equality defined on \emph{terms}
-called \emph{definitional} equality, which we refer to with the symbol
-$\equiv$:
+\section{Formal treatment of induction}
+
+So far we have given several examples of inductive types and recursive
+definitions, but have not given a formal definition of what an
+inductive definition is. In \cite{MartinLof1971}, Martin-L\"of gives a
+scheme of the rules that comprise an inductive definition in
+first-order logic. In this thesis we are concerned with inductive
+definitions in Martin-L\"of Type Theory \cite{MartinLof1972}, but we
+will also look at category theoretic characterisations in
+\cref{in-category-theory}, to guide us to appropriate generalisations.
+
+\subsection{In type theory}
+\label{in-type-theory}
+Extending a type theory with a particular inductive definition means
+that we have the extend the theory with four sets of inference rules:
+%
 \begin{itemize}
-\item $\lambda x . e\ x \equiv \lambda y . e\ y$: $\alpha$-equivalence
-\item $\lambda x . f\ x \equiv f$: $\eta$-equivalence
-\item $(\lambda x . e) a \equiv e[x/a]$: $\beta$-equivalence
+\item \emph{type formation rules} ($\natty$ is a type)
+\item \emph{introduction rules} ($\natzero : \natty$, $\natsucc : \natty \to \natty$)
+\item \emph{elimination rules} (given $P : \natty \to \Type$, $m_{\natzero} : P\ \natzero$, $m_{\natsucc} : (n : \natty) \to P\ n \to P\ (\natsucc\ n)$, we get $\natind\ P\ m_{\natzero}\ m_{\natsucc} : (x : \natty) \to P\ x$)
+\item \emph{computation rules} ($\natind\ P\ m_{\natzero}\ m_{\natsucc}\ \natzero = m_{\natzero}$, $\natind\ P\ m_{\natzero}\ m_{\natsucc}\ (\natsucc\ n) = m_{\natsucc}\ n\ (\natind\ P\ m_{\natzero}\ m_{\natsucc} n)$)
 \end{itemize}
+%
+In the case of the natural numbers, the type formation, introduction
+and elimination rules are not essentially different from Peano's
+rules. Missing however are rules defining an equality relation on
+$\natty$. As we will see, we can define the equality relation as a
+single parametric inductive definition uniformly for all types. Given
+this notion of equality and given that we have a universe of types
+available, one can derive that the constructors are disjoint and
+injective.
+
+The declaration of an inductive definition involves given rules in all
+these classes. However, as observed by Backhouse et
+al. \cite{Backhouse1989}, it is enough to give the type formation
+rules and introduction rules: the elimination principle along with its
+computation rules can be derived from them. This fact is also
+reflected in how one declares inductive definitions in type
+theory-based proof assistants such as Coq \cite{Bertot2004} and Agda
+by simply giving a sequence of constructors, \ie introduction rules.
+
+\subsection{In category theory}
+\label{in-category-theory}
+
+Inductive definitions can be characterised in category theory as
+\emph{initial $F$-algebras}, for some endofunctor $F$ on an
+appropriately chosen category. For example, the set of natural numbers
+with its operations $\natzero$ and $\natsucc$ form an initial algebra
+for the functor $F X \ddefeq \unitty + X$. The property of being an
+initial algebra contains the same information as given by the four
+classes of rules, for the appropriately chosen endofunctor. 
+
+The perspective on inductive definitions as initial algebras allows us
+to generalise easily. If we associate ordinary inductive types with
+initial algebras of endofunctors on a category $\Cc$, which is a model
+of type theory, \eg $\Set$, then inductive families correspond to
+initial algebras of endofunctors on slice categories of
+$\Cc$. 
+
+
+Another way to generalise is based on the observation that
+$F$-algebras for an endofunctor $F$ coincide with $F^*$-monad
+algebras, where $F^*$ is the free monad of $F$. (Note that $F^*$ may
+not exist: $F$ needs to be a strictly positive functor.) As is
+described in \cite{Shulman2011}, we can interpret this as ordinary
+inductive types being associated with free monads. Generalising these
+inductive types would be the same as considering a larger class of monads. 
+
+As monads and monad algebras are also used to talk about algebraic
+theories, such as the theory of groups, the aforementioned observation
+makes clear the relationship between inductive definitions and
+algebraic theories. An essential ingredient of algebraic theories is
+the ability to talk about equations. This is something which is
+lacking in the inductive definitions we have seen so far.
+
+\section{Higher inductive types and homotopy type theory}
+
+Higher inductive types are a generalisation of inductive types,
+stemming from homotopy type theory, where apart from the usual
+constructors, called \emph{point constructors}, we may also have
+equations as constructors, called \emph{path constructors}.
 
 This notion of equality is \emph{external} to the theory, it is a
 meta-theoretic property. For example, we cannot write down a type:
@@ -330,7 +362,7 @@ inductive types.
 
 \todoi{something about path constructors and algebraic theories}
 
-\section{Internalising the theory of quotient inductive-inductive definitions}
+\section{A theory of quotient inductive-inductive definitions}
 
 Our goal is not only to devise a theory of quotient
 inductive-inductive definitions, but also make sure we can formalise
