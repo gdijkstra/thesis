@@ -798,6 +798,36 @@ We have chosen our specific definition of sorts in this way as it
 follows our syntax closely. Most importantly, the sort membership
 relation can be defined easily and used in a straightforward manner.
 
+\subsection{Sort categories via comma categories}
+
+Another perspective on sort categories is seeing them as comma
+categories. Recall that the category $\Fam$ can be seen as the arrow
+category $\Set^I$. $\Set^I$ is a presheaf category having as objects
+functors $\Func{I}{\Set}$. Alternatively, this arrow category is the
+comma category $\Set \downarrow \Set$. By considering other functors
+into $\Set$ on the right of this comma category instead of just the
+identity functor, we arrive at our sort categories. For example,
+suppose we have the following sequence of sort categories:
+$$
+\xymatrix{
+\termcat
+\ar[d]^{R_0}
+&S_0
+\ar[d]^{R_1}
+\ar[l]_{t_0}
+&S_1
+\ar[d]^{R_2}
+\ar[l]_{t10}
+&S_2
+\ar[l]_{t_2} \\
+\Set
+&\Set
+&\Set
+}
+$$
+where $R_i$ are the defining functors of the sorts. We have that
+$S_0 = \Set \downarrow R_0$, $S_1 = \Set \downarrow R_1$ and
+$S_2 = \Set \downarrow R_2$.
 
 \section{Categories of algebras}
 \label{categories-of-algebras}
@@ -914,7 +944,7 @@ $\Set$, hence its definition will be slightly different. We want the
 resulting category $\Alg_3$ of algebras for constructors
 $\Aco, \Aci, \Bcii$ to have as objects:
 $$
-((X,R,\theta_0,\theta_1) : | \Alg_2 |) \times (\theta_2 : \natty \to R\ \theta_0\ theta_1)
+((X,R,\theta_0,\theta_1) : | \Alg_2 |) \times (\theta_2 : \natty \to R\ \theta_0\ \theta_1)
 $$
 The morphisms is where it gets a bit hairy: we want morphisms
 $((X,R),\theta_0,\theta_1,\theta_2) \to ((Y,S),\rho_0,\rho_1,\rho_2)$
