@@ -72,9 +72,9 @@ to formally specify strictly positive functors. We can use a syntactic
 way to describe them as the class of functors that contains all
 constant functor, closed under sums and products of strictly positive
 functors, exponentiation with a constant on the left of the arrow, and
-taking fixpoints\todo{refer to morris constructing universes phd}. A
-more compact way to characterise strictly positive functors on $\Set$
-in type theory is as \emph{containers}:
+taking fixpoints \cite{Morris2007}. A more compact way to characterise
+strictly positive functors on $\Set$ in type theory is as
+\emph{containers}:
 %
 \begin{definition}
   A \emph{container} on $\Set$ consists of:
@@ -114,16 +114,15 @@ instance of the more general notion of \emph{polynomial functor},
 which describes strictly positive functors between slices categories
 of a locally cartesian closed category. We cannot expect $\Alg_s$ to
 be locally cartesian closed in general: if we take $s$ to be the
-specification corresponding to setoids\todo{have this as an example in
-  ``describing'' chapter to refer to}, then $\Alg_s$ is equivalent to
-the category setoids, which is not locally cartesian closed\todo{refer
-  to note by Nicolai and Thorsten}.
+specification corresponding to setoids (as in
+\cref{application-to-equational-theories}, then $\Alg_s$ is equivalent
+to the category setoids, which is not locally cartesian closed
+\cite{Altenkirch2012}.
 
 If we look at containers a bit more closely, we see that they are
 coproduct of a family of representable functors. This observation
 leads us to \emph{generalised containers}, also known as
-\emph{famillialy representable functors}\todo{ref to artin gluing
-  paper}:
+\emph{famillialy representable functors} \cite{Carboni1995}:
 %
 \begin{definition}
   A \emph{generalised container} on a category $\Cc$ consists of:
@@ -196,16 +195,92 @@ for generalised containers:
   Naturality follows from the associativity law of $\Cc$.
 \end{definition}
 
-\todoi{Formulate and establish completeness for container morphisms}
-
 \subsection{Containers for arbitrarily sorted definitions}
 We have given a way to describe strictly positive functors and natural
 transformations needed to describe $\Set$-sorted quotient
-inductive-inductive definitions.
+inductive-inductive definitions. However, the functors we work with
+are not generally functors into $\Set$, but may also be into any sort
+category.
 
-\todoi{Explain $\Fam$ case via presheaf formulation}
+In this section we will show how this can be done for the special case
+$\Fam$. Suppose we have a category $\Cc$, which we can think of as
+being a category of $\Fam$-sorted algebras. It is therefore equipped
+with a forgetful functor $U : \Func{\Cc}{\Fam}$. Describing the
+arguments of a $\Fam$-sorted constructor over $\Cc$ requires us to
+give a functor $F : \Func{\Cc}{\Fam}$ such that
+$t_1 \circ F = t_1 \circ U$, where $t_1 : \Func{\Fam}{\Set}$ is its
+forgetful functor.
+
+Note that we have $\Fam = \Set^I$, therefore by the
+cartesian-closedness of $\Cat$, we have
+$\Func{\Cc}{\Set^I} = \Func{\Cc \times I}{\Set}$. To give a functor
+$F : \Func{\Cc}{\Fam}$ is to give two functors
+$F^0, F^1 : \Func{\Cc}{\Set}$ along with a natural transformation
+$\alpha : \Nat{F^1}{F^0}$.
+
+Furthermore, we have the requirement that $F^0 = t_1 \circ U$. If we
+assume that we have an adjunction $L \dashv U : \Func{\Cc}{\Fam}$,
+$t_1 \circ U$ will also have a left adjoint (as $t_1$ also has a left
+adjoint). If $t_1 \circ U$ has a left adjoint, it is a representible
+functor, which means it is also a container.
 
 \subsection{Generalising W-types}
+
+Let $\Cont_{\Set}$ be the type of containers on $\Set$. W-types give
+us a primitive $\wty : \Cont_{\Set} \to \Set$ along with a constructor
+$\wsup : (F : \Cont_{\Set}) \to \context{F}\ \wty_F \to \wty$. For
+every container $F$, $(\wty_F,\wsup_F)$ satisfy the induction
+principle, \ie we have:
+$$
+\welim : (F : \Cont_{\Set}) \to (P : \Fam_{\algcat{F}}\ (\wty_F,\wsup_F)) \to \DepHom_{\algcat{F}}\ P
+$$
+Generalising this idea to quotient inductive-inductive definitions would be to have a primitive:
+$$
+\wty : (\Ss : \sortsty)\ (s : \Cont_{\Ss}) \to \Alg_s
+$$
+with induction principle:
+$$
+\welim : (\Ss : \sortsty)\ (s : \Cont_{\Ss}) \to (P : \Fam_{\Alg_s}\ (\wty\ \Ss\ s,\wsup\ \Ss\ s)) \to \DepHom_{\Alg_s}\ P
+$$
+where $\Cont_{\Ss}$ is the same as $\specty_{\Ss}$ but instead of
+having arbitrary functors, we have containers instead. The
+interpretation of $\Cont_{\Ss}$ as a category of algebras is then also
+the same as for $\specty_{\Ss}$, but then composed with the extension
+operation on containers.
+
+However, unlike ordinary W-types, this is a rather heavy handed
+definition, as $\Cont_{\Ss}$ can be arbitrarily complicated. As such
+it would be a bit silly to call such a notion \emph{primitive}. In a
+following section we will instead try to construct initial algebras
+from more primitive notions, namely the notions of natural numbers and
+quotients.
+
+\subsection{Limitations of containers}
+
+While in the traditional setting, containers (on $\Set$) seem to be an
+adequate way to characterise strictly positive functors, it has its
+limitations. Let us consider the propositional truncation operation on
+$\Set$: $\proptrunc{\_} : \Set \to \Set$. Let $\cont{S}{P}$ be its
+container representation, then the following holds:
+$$
+\unitty = \proptrunc{\unitty} = (s : S) \times (P\ s \to \unitty) = S
+$$
+Therefore we know that that the shapes $S = \unitty$, hence
+$\proptrunc{\_}$ has to be a representable functor. Let $P : \Set$ be
+its representing object. $P$ has to either be empty or inhabited. If
+it is empty, then we have
+$\emptyty = \proptrunc{\emptyty} = \emptyty \to \emptyty = \unitty$, a
+contradiction. If it is inhabited, we have
+$\unitty = \proptrunc{\boolty} = P \to \boolty$, however
+$P \to \boolty$ has at least two distinct inhabitants:
+$\lambda x . \boolt$ and $\lambda x . boolf$, also a contradiction.
+
+Now this limitation is not necessarily bad for the expressiveness of
+our system. If we wanted to express a constructor of a type $\Aty$
+such as $\Ac : \proptrunc{\Aty} \to \Aty$, we could simply ``inline''
+propositional truncation, \ie add another sort $\Bty : \Set$ which has
+a constructor $\Bd : \Aty \to \Bty$ and a constructor of type
+$(x\ y : \Bty) \to x = y$.
 
 \section{Initial objects in sort categories}
 
@@ -300,15 +375,16 @@ sort category $S_i$ by following the chain of left adjoints.
 
 Initial algebras of endofunctors can be constructed via sequential
 colimits, given some reasonable assumptions on the endofunctor. In
-this section we will review this result due to Ad\'amek and see how we
-can use it to construct initial dialgebras. We will also discuss how
-these proofs can be performed inside type theory itself.
+this section we will review this result due to Ad\'amek
+\cite{Adamek1979} and see how we can use it to construct initial
+dialgebras. We will also discuss how these proofs can be performed
+inside type theory itself.
 
 \begin{definition}[$\omega$-cochain]
   An $\omega$-cochain in a category $\Cc$ consists of:
   \begin{itemize}
   \item $X : \natty \to | \Cc |$
-  \item $x : \natty \to \Cc(X_n , X_{n+1})$
+  \item $x : (n : \natty) \to \Cc(X_n , X_{n+1})$
   \end{itemize}
   \ie, we have the following diagram:
   $$
@@ -465,7 +541,7 @@ hand.
     \ar@<.5ex>[r]^{\id}
     \ar@<-.5ex>[r]_{f}
     &(n : \natty) \times X_n
-    \ar[r]^{c}
+    \ar[r]^-{c}
     &X_\omega
   }
   $$
@@ -487,37 +563,40 @@ themselves.
 
 Before we try to tackle the general case, we will look at the
 simplified setting of $\Set$-sorted inductive-inductive
-definitions. The categories of algebras in this case are categories of
-dialgebras. As it turns out, these categories are equivalent to
-ordinary categories of algebras for some endofunctor.
+definitions. Our ultimate goal is to show that for any $\Set$-sorted
+$s : \specty$, where all the functors preserve sequential colimits, we
+have a left adjoint to the forgetful functor
+$U : \Func{\Alg_s}{\Set}$. We can do this by induction on the
+specification $s$. To construct this left adjoint for a category
+$\Alg_s$ extended with a point or path constructor, we need to have
+sequential colimits, coequalisers and binary coproducts in $\Alg_s$.
 
-Observe that if we have $F : \Func{\Cc}{\Cc}$ such that $F$ and $\Cc$
-satisfy the conditions of \cref{adamek-thm}, then the forgetful
-functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
+$\Set$ satisfies all these conditions, so the base case of the
+induction holds. In the next two sections we will to the inductive
+step for point and path constructors respectively.
+
+\subsubsection{Point constructors}
+
+If we have $\Alg_s$ with an adjunction
+$L \dashv U : \Func{\Alg_s}{\Set}$ and a functor
+$F : \Func{\Alg_s}{\Set}$, then the category of $(F,U)$-dialgebras is
+equivalent to the category of $(L \circ F)$-algebras. As such, we can
+focus our attention on the properties of categories of algebras of
+endofunctors. Also note that since $L$ is a left adjoint, it preserves
+colimits, hence $L \circ F$ also preserves sequential colimits.
+
+It suffices to show that if a category $\Cc$ has sequential colimits,
+binary coproducts and coequalisers and $F$ is an endofunctor on $\Cc$
+preserving colimits, then $\algcat{F}$ also has sequential colimits,
+binary coproducts and coequalisers and furthermore a left adjoint from
+$\Cc$ to the forgetful functor.
+
+In the following we will assume that $\Cc$ is a category with
+sequential colimits, binary coproducts and coequalisers and that $F$
+is an endofunctor on $\Cc$ preserving sequential colimits.
 
 \begin{proposition}
-  Let $F : \Func{\Cc}{\Cc}$ be an endofunctor on a category
-  $\Cc : \Cat$ which has initial object, binary coproducts and
-  sequential colimits. Suppose furthermore that $F$ preserves
-  sequential colimits, then the forgetful functor
-  $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint.
-\end{proposition}
-
-\begin{proof}
-  The left adjoint is defined pointwise: for $A : \Cc$, $L A$ is
-  defined as the initial algebra of the functor $\lambda X . A + FX$.
-  This functor again satisfies the conditions of \cref{adamek-thm}, so
-  these initial algebras exist.
-
-  We then need to check whether 
-  
-  
-\end{proof}
-
-\begin{proposition}
-  Let $\Cc$ be a category with sequential colimits and
-  $F : \Func{\Cc}{\Cc}$ be a functor that preserves them. The category
-  $\algcat{F}$ has sequential colimits.
+  The category $\algcat{F}$ has sequential colimits.
 \end{proposition}
 
 \begin{proof}
@@ -557,17 +636,27 @@ functor $U : \Func{\algcat{F}}{\Cc}$ has a left adjoint:
 \end{proof}
 
 \begin{proposition}
-  Let $s : \specty$ be a specification of a $\Set$-sorted
-  inductive-inductive definition. If every arguments functor $F_i$
-  preserves sequential colimits, the forgetful functor
-  $U : \Func{\Alg_s}{\Set}$ has a left adjoint.
+  The category $\algcat{F}$ has binary coproducts.
 \end{proposition}
 
 \begin{proof}
-  
+  \todoi{do this}
 \end{proof}
 
-\subsubsection{1-constructors}
+\begin{proposition}
+  The category $\algcat{F}$ has coequalisers.
+\end{proposition}
+
+\begin{proposition}
+  The forgetful functor $U : \Func{\algcat{F}}{\Cc}$ has a left
+  adjoint.
+\end{proposition}
+
+\begin{proof}
+  \todoi{do this}
+\end{proof}
+
+\subsubsection{Path constructors}
 \todo{This is related to the ``On the Construction of Free Algebras
   for Equational Systems'' paper}
 
@@ -742,25 +831,8 @@ same sequential colimit techniques.
 
 \todoi{Establish existence of coequalisers in categories of algebras}
 
-\subsubsection{Putting it all together}
+\subsection{Related concepts}
 
-We have now given all the ingredients needed to show that the
-categories of algebras all have initial objects, given that the
-arguments functors preserve sequential colimits.
-
-\begin{proposition}
-  Let $s : \specty$ be a specification of a
-  $\Set$-sorted inductive-inductive definition. If every arguments
-  functor $F_i$ preserves sequential colimits, then
-  $\Alg_s$ has an initial object.
-\end{proposition}
-
-\begin{proof}
-  The category $\Set$ has an initial object $\initty$. There exists an
-  adjunction $L \dashv U : \Alg_s$ where $U$ is the
-  forgetful functor. Left adjoints preserve colimits, hence
-  $L\ \initty$ is initial in $\Alg_s$.
-\end{proof}
-
-\subsection{Moving to arbitrarily sorted inductive definitions}
-
+The constructions here are similar to those found in the literature in
+slightly different settings. The construction of colimits in are found
+in \todoi{this}.
