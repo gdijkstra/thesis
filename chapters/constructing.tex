@@ -77,6 +77,7 @@ strictly positive functors on $\Set$ in type theory is as
 \emph{containers}:
 %
 \begin{definition}
+\label{def-container}
   A \emph{container} on $\Set$ consists of:
   \begin{itemize}
   \item $S : \Set$, a type of \emph{shapes}
@@ -115,7 +116,7 @@ which describes strictly positive functors between slices categories
 of a locally cartesian closed category. We cannot expect $\Alg_s$ to
 be locally cartesian closed in general: if we take $s$ to be the
 specification corresponding to setoids (as in
-\cref{application-to-equational-theories}, then $\Alg_s$ is equivalent
+\cref{application-to-equational-theories}), then $\Alg_s$ is equivalent
 to the category setoids, which is not locally cartesian closed
 \cite{Altenkirch2012}.
 
@@ -125,6 +126,7 @@ leads us to \emph{generalised containers}, also known as
 \emph{famillialy representable functors} \cite{Carboni1995}:
 %
 \begin{definition}
+\label{def-gen-container}
   A \emph{generalised container} on a category $\Cc$ consists of:
   \begin{itemize}
   \item $S : \Set$, a type of shapes,
@@ -657,22 +659,23 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
 \end{proof}
 
 \subsubsection{Path constructors}
-\todo{This is related to the ``On the Construction of Free Algebras
-  for Equational Systems'' paper}
-
 Suppose we have a category $\Cc : \Cat$ with an adjunction
-$L \dashv U : \Func{\Cc}{\Set}$. In our case $\Cc$ will be a category
-of algebras and $U$ its forgetful functor. To describe a 1-constructor
+$L \dashv U : \Func{\Cc}{\Set}$. To describe a path constructor
 on $\Cc$, we need the following data:
 \begin{itemize}
 \item $F : \Func{\Cc}{\Set}$, describing the arguments of the constructor
-\item $l, r : \Nat{F}{U}$, giving the end points of the equations
+\item $\ell, r : \Nat{F}{U}$, giving the end points of the equations
 \end{itemize}
 
+In the following we will assume that $\Cc$ is a category with
+sequential colimits, binary coproducts and coequalisers and that $F$
+is an endofunctor on $\Cc$ preserving sequential colimits.
+
+Let us define the category $\Cc'$ as the full subcategory of $\Cc$
+with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
+
 \begin{proposition}
-  If $\Cc$ has sequential colimits and $F$ preserves them, then
-  subcategory $\Cc$ of objects $X : | \Cc |$ together with an equality
-  $l_X = r_X$ has an initial object.
+  $\Cc'$ has an initial object.
 \end{proposition}
 
 \begin{proof}
@@ -683,29 +686,29 @@ on $\Cc$, we need the following data:
   $\phi$ is natural in both $X$ and $Y$, hence we have natural
   transformations:
   $$
-  \phi \circ l , \phi \circ r : \Nat{L \circ F}{\id_{\Cc}}
+  \phi \circ \ell , \phi \circ r : \Nat{L \circ F}{\id_{\Cc}}
   $$
   It suffices to show that we have an initial object in the
   subcategory of $\Cc$ of objects $X : | \Cc |$ satisfying
-  $\phi \circ l_X = \phi \circ r_X$.
+  $\phi \circ \ell_X = \phi \circ r_X$.
 
   We define $X_\omega$ to be the colimit of the following cochain in $\Cc$:
   $$
   \xymatrix{
     &LF X_0
-    \ar@<.5ex>[d]^{\phi \circ l_{X_0}}
+    \ar@<.5ex>[d]^{\phi \circ \ell_{X_0}}
     \ar@<-.5ex>[d]_{\phi \circ r_{X_0}}
     &LF X_1
-    \ar@<.5ex>[d]^{\phi \circ l_{X_1}}
+    \ar@<.5ex>[d]^{\phi \circ \ell_{X_1}}
     \ar@<-.5ex>[d]_{\phi \circ r_{X_1}}
     &LF X_2 
-    \ar@<.5ex>[d]^{\phi \circ l_{X_2}}
+    \ar@<.5ex>[d]^{\phi \circ \ell_{X_2}}
     \ar@<-.5ex>[d]_{\phi \circ r_{X_2}}
     &LF X_3
-    \ar@<.5ex>[d]^{\phi \circ l_{X_3}}
+    \ar@<.5ex>[d]^{\phi \circ \ell_{X_3}}
     \ar@<-.5ex>[d]_{\phi \circ r_{X_3}}
     &LF X_4
-    \ar@<.5ex>[d]^{\phi \circ l_{X_4}}
+    \ar@<.5ex>[d]^{\phi \circ \ell_{X_4}}
     \ar@<-.5ex>[d]_{\phi \circ r_{X_4}}
     \\
     \initobj \ar@{}[r]|{\ddefeq} 
@@ -726,15 +729,15 @@ on $\Cc$, we need the following data:
   \begin{align*}
     &X : (n : \natty) \to | \Cc | \\
     &X\ 0 \ddefeq \initobj \\
-    &X\ (n+1) \ddefeq \coeqty{\phi \circ l_{X_n}}{\phi \circ r_{x_n}}
+    &X\ (n+1) \ddefeq \coeqty{\phi \circ \ell_{X_n}}{\phi \circ r_{x_n}}
   \end{align*}
   with $x_0$ the initial morphism and $x_{n+1}$ the constructor of
   corresponding coequaliser.
 
   We need to show that for $X_\omega$,
-  $\phi \circ l_{X_\omega} = \phi \circ r_{X_\omega}$. This we will
+  $\phi \circ \ell_{X_\omega} = \phi \circ r_{X_\omega}$. This we will
   achieve by showing that $X_\omega$ has a cocone structure for the
-  cochain $(LFX_n, LFx_n)$. Both $\phi \circ l_{X_\omega}$ and
+  cochain $(LFX_n, LFx_n)$. Both $\phi \circ \ell_{X_\omega}$ and
   $\phi \circ r_{X_\omega}$ are cocone morphisms
   $LF X_\omega \to X_\omega$, which means that by the universal
   property of $LF X_\omega$ they must be equal.
@@ -759,7 +762,7 @@ on $\Cc$, we need the following data:
   $$
   \xymatrix{
     LFX_n
-    \ar[r]^{\phi \circ l_n}
+    \ar[r]^{\phi \circ \ell_n}
     &X_n
     \ar[r]^{d_n}
     &X_\omega
@@ -767,7 +770,7 @@ on $\Cc$, we need the following data:
   $$
   Note that it does not matter whether we use $l$ or $r$ here, as
   $d_n = x_n \circ d_{n+1}$ and $x_n$ is the coequaliser map, hence
-  precomposing with $\phi \circ l$ or $\phi \circ r$ is going to yield
+  precomposing with $\phi \circ \ell$ or $\phi \circ r$ is going to yield
   the same result.
 
   We have to check that $z_n = z_{n+1} \circ LFx_n$, which holds as we
@@ -775,7 +778,7 @@ on $\Cc$, we need the following data:
   $$
   \xymatrix{
     LFX_n
-    \ar[r]^{\phi \circ l_n}
+    \ar[r]^{\phi \circ \ell_n}
     \ar[d]_{LF x_n}
     &X_n
     \ar[r]^{d_n}
@@ -783,25 +786,25 @@ on $\Cc$, we need the following data:
     &X_\omega
     \\
     LFX_{n+1}
-    \ar[r]_{\phi \circ l_{n+1}}
+    \ar[r]_{\phi \circ \ell_{n+1}}
     &X_{n+1}
     \ar[ur]_{d_{n+1}}
   }
   $$
-  The left square holds by naturality of $\phi \circ l$, the right
+  The left square holds by naturality of $\phi \circ \ell$, the right
   square holds as $X_\omega$ is a colimit with $d_n$ is constructors.
   
   Now we have constructed a $(LFX_n,LFx_n)$-cocone structure on
-  $X_\omega$, we need to check whether $\phi \circ l_{X_\omega}$ and
+  $X_\omega$, we need to check whether $\phi \circ \ell_{X_\omega}$ and
   $\phi \circ r_{X_\omega}$ are indeed cocone morphisms. This amounts
   to checking whether the following commutes:
   $$
   \xymatrix{
     LFX_n
     \ar[r]^{LF d_n}
-    \ar[d]_{\phi \circ l_{X_n}}
+    \ar[d]_{\phi \circ \ell_{X_n}}
     &LFX_\omega
-    \ar[d]^{\phi \circ l_{X_\omega}}
+    \ar[d]^{\phi \circ \ell_{X_\omega}}
     \\
     X_n
     \ar[r]_{d_n}
@@ -809,27 +812,99 @@ on $\Cc$, we need the following data:
   }
   $$
 
-  This square commutes by naturality of $\phi \circ l$. By the same
+  This square commutes by naturality of $\phi \circ \ell$. By the same
   reasoning $\phi \circ r_{X_\omega}$ is a cocone morphism, hence by
   the universal property of $LFX_\omega$ we get that
-  $\phi \circ l_{X_\omega} = \phi \circ r_{X_\omega}$.
+  $\phi \circ \ell_{X_\omega} = \phi \circ r_{X_\omega}$.
   \todo{Check whether this object is initial}
 
 \end{proof}
 
-\todo{Show that this construction is a generlisation to the
-  construction of prop. truncation as a colimit}
+\begin{proposition}
+  The inclusion/forgetful functor $U' : \Func{\Cc'}{\Cc}$ has a left
+  adjoint.
+\end{proposition}
 
-Now we have shown that the subcategory has an initial object, we need
-to strengthen the result to showing that we actually have an
-adjunction between the inclusion functor and some free functor that we
-have to construct. This free functor can be constructed in much the
-same way as one constructs the free algebra functor, \ie using the
-same sequential colimit techniques.
+\begin{proof}
+  \todoi{Mention that this goes along the same lines as the above proof}
+\end{proof}
 
-\todoi{Prove that we get an adjunction between $\Cc$ and its subcategory}
+\begin{proposition}
+  $\Cc'$ has coproducts.
+\end{proposition}
 
-\todoi{Establish existence of coequalisers in categories of algebras}
+\begin{proof}
+  \todoi{proof}
+\end{proof}
+
+\begin{proposition}
+  $\Cc'$ has coequalisers.
+\end{proposition}
+
+\begin{proof}
+  \todoi{proof}
+\end{proof}
+
+\begin{proposition}
+  $\Cc'$ has sequential colimits.
+\end{proposition}
+
+\begin{proof}
+  Suppose we have a cochain in $\Cc'$, \ie we have:
+  \begin{itemize}
+  \item $X : \natty \to | \Cc |$
+  \item $\theta : (n : \natty) \to \ell_{X_n} = r_{X_n}$
+  \item $x : (n : \natty) \to \Cc(X_n,X_{n+1})$
+  \end{itemize}
+
+  By the assumptions on $\Cc$, we the colimit of the cochain $(X,x)$ in $\Cc$: we have:
+  \begin{itemize}
+  \item $X_{\omega} : | \Cc |$
+  \item $c : (n : \natty) \to \Cc(X_n, X_{\omega})$
+  \item $g : c_n = c_{n+1} \circ x_n$
+  \end{itemize}
+  Similarly, as $F$ preserves sequential colimits $F X_{\omega}$ with
+  $Fc$ is a colimiting cocone of the cochain $(FX, Fx)$.
+
+  Note that the natural transformation $\ell$ gives rise to the
+  following cocone of the cochain $(FX,Fx)$:
+  \begin{itemize}
+  \item $U X_{\omega} : | \Cc |$
+  \item $d : \Cc(FX_n , UX_{\omega})$ defined as
+    $U c_n \circ \ell_{X_n}$
+    \item $h : d_n = d_{n+1} \circ Fx_n$
+  \end{itemize}
+  The equality $h$ holds by the considering the following diagram:
+  $$
+  \xymatrix{
+    FX_n
+    \ar[r]^{\ell_{X_n}}
+    \ar[d]_{F x_n}
+    &UX_n
+    \ar[d]^{U x_n}
+    \ar[r]^{U c_n}
+    &UX_{\omega}
+    \\
+    FX_{n+1}
+    \ar[r]_{\ell_{X_{n+1}}}
+    &UX_{n+1}
+    \ar[ru]_{U c_{n+1}}
+  }
+  $$
+  The left square holds by naturality of $\ell$ and the right triangle
+  commutes due to the fact that $X_{\omega}$ is the colimit of the
+  cochain $(X,x)$.
+
+  We claim that both $l_{X_{\omega}}$ and $r_{X_{\omega}}$ are cocone
+  morphisms from colimiting $FX_{\omega}$ with $Fc$ into $UX_{\omega}$
+  with $Uc$, as we have
+  $Uc_n \circ \ell_{X_n} = \ell_{X_{\omega}} \circ Fc_n$ by
+  naturality. Since $\ell_{X_n} = r_{X_n}$ for every $n : \natty$,
+  $l_{X_{\omega}}$ and $r_{X_{\omega}}$ are cocone morphisms from the
+  same cocone, hence $l_{X_{\omega}} = r_{X_{\omega}}$. This gives us
+  that $X_{\omega}$ is in the subcategory $\Cc'$. Since it is a full
+  subcategory, we also get the universality from $\Cc$.
+\end{proof}
 
 \subsection{Related concepts}
 
