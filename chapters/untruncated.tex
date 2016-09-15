@@ -3,24 +3,33 @@
 
 In the previous chapters, we have mostly worked with sets. In this
 chapter we show what kind of issues one encounters if we work in an
-untruncated setting instead. The first issue is to make precise what
-we mean when we talk about \emph{categories}. Previously it was a
-\emph{type} of objects equipped with hom-\emph{sets} that satisfy
-category laws. If we want to generalise to hom-\emph{types}, just
-having the category laws may no longer be enough: we may need so
-called \emph{coherence conditions}. For example, if we have four
-composable morphisms:
+untruncated setting instead, motivating why we went with the choice to
+work in the set truncated setting in the first place. If we want to
+generalise the theory to higher inductive types, we have to lift this
+restriction and somehow deal with these issues.
+
+The place where we had to ensure that certain types were sets, was in
+the definition of category: we worked with \emph{sets} of
+morphisms. This means that the category laws are \emph{propositions}
+and saves us from having to worry too much about reasoning about
+equality of morphisms: any two such proves will be equal.
+
+If we have categories with hom-\emph{types}, then we have no
+guarantees that the category laws interact nicely. For example, if we
+have four composable morphisms:
 $$
 \xymatrix{
   X \ar[r]^{f} &Y \ar[r]^{g} &Z \ar[r]^{h} &W \ar[r]^{i} &V
 }
 $$
-there are different ways to use associativity to show
+If we want to show that the following equation holds:
 $$
 ((i \circ h) \circ g) \circ f = i \circ (h \circ (g \circ f))
 $$
-The \emph{coherence condition for associativity} is the condition that
-states that these different ways be equal.
+then we have a choice in what order we apply the category laws. There
+is a priori no guarantee that these choices yield equal proofs: we
+need to add this assumption as an extra \emph{coherence condition}. In
+the case of associativity interacting with itself, it is as follows:
 
 \begin{definition}[Coherence condition for associativity]
   The witness of associativity
@@ -40,15 +49,45 @@ states that these different ways be equal.
 
 We can formulate similar conditions for the interactions between the
 identity laws and associativity. The story does not end there however:
-the witnesses of the coherence conditions themselves also need to
-be coherent, ad infinitum. 
+there is no reason to assume that the equality between equalities of
+morphism is propositional. The coherence condition of associativity
+needs to behave nicely in harmony with the other category laws and
+coherence conditions: the coherence conditions themselves require
+further coherence conditions. This phenomenon does not stop: we get an
+infinite tower of coherence conditions.
 
-In type theory we may find examples of categories which satisfy the
-category laws up to definitional equality, which means all the
-coherence conditions are trivially satisfied. Examples of such
-categories are $\Type$ and $\Fam$. As we will see in this chapter, the
-categories we are interested in, namely the categories of algebras,
-will generally speaking not satisfy the category laws strictly.
+Sometimes we are lucky with the concrete categories we are working
+with, in that the category laws hold up to definitional equality: they
+are satisfied \emph{strictly}. Examples of such categories are $\Type$
+and $\Fam$. In these cases, as the category laws themselves are
+satisfied trivially, any higher coherence law will also be satisfied
+trivially.
+
+For categories of algebras, this is not the case. Even if we consider
+$F$-algebras with $F$ a strict endofunctor on $\Type$, $\algcat{F}$
+will not satisfy the category laws strictly, with the usual
+definition. In \cite{Cranch2013}, the author shows essentially that we
+cannot find a definition of the category of pointed types that
+satisfies the category laws strictly. Since pointed types are a
+special case of $F$-algebras, we therefore cannot hope to find a nice
+of $\algcat{F}$ that is strict.
+
+The way to deal with coherences is by considering \inftycats
+\cite{Camarena2013}. The usual definitions/models of \inftycats are
+given by using simplicial sets. This is not a practical approach for
+our purposes, as we cannot easily move between simplicial sets and
+types. Another approach is to consider simplicial \emph{types}, which
+is as of yet an open problem in homotopy type theory. One attempt to
+solve this and give a definition of \inftycats is by extending the
+type theory with an internal notion of strict equality
+\cite{Altenkirch2016,Altenkirch2016iii}.
+
+However, as we are only concerned with a finite amount of categorical
+structure: we are really only interested in the category of algebras
+satisfying the identity and associativity laws, we will in this
+chapter see how far we get by taking a \emph{lazy} approach. We will
+only add those coherence conditions we actually need to show that the
+categorical laws are satisfied in all the categories of algebras.
 
 \section{Coherence laws for functors}
 
@@ -93,81 +132,48 @@ The coherence law for the right identity law is defined similarly.
   $$
 \end{definition}
 
-\section{Generalised containers}
+\subsection{Generalised containers}
 
 Although we are not able to internally define the type of strict
 functors, there is a definable class of functors that happen to be
-strict: containers.
+strict: containers on $\Type$ (see \cref{def-container}). As the
+functorial action of containers are defined in terms of composition of
+functions in $\Type$, the functor laws reduce to the identity and
+associativity laws of $\Type$, which are satisfied strictly. As such,
+containers on $\Type$ form a class of strict functors.
 
-\begin{definition}
-  A \emph{container} on $\Type$ is a type of \emph{shapes} $S : \Type$
-  along with a family of \emph{positions} $P : S \to \Type$, denoted
-  as $\cont{S}{P}$.
-\end{definition}
-
-\begin{definition}
-  The \emph{extension} of a container $\cont{S}{P}$ is a functor
-  $\context{\cont{S}{P}} : \Func{\Type}{\Type}$, with its action on
-  objects defined as
-  $\context{\cont{S}{P}}_0\ X \ddefeq (s : S) \times (P\ s \to X)$ and
-  its action on morphisms as
-  $\context{\cont{S}{P}}_1\ f \ddefeq \lambda (s , t) . (s , f \circ
-  t)$
-\end{definition}
-
-Looking at the action on morphisms of a container, we see that it is
-defined in terms of composition in $\Type$, so the functor laws
-translate to the category laws of $\Type$, hence they are satisfied
-strictly.
-
-However, to define the category of sorts, we need not only
-endofunctors on $\Type$ but also functors with as its domain another
-category of sorts. We can generalise the notion of containers as
-follows:
-
-\begin{definition}
-  A \emph{generalised container} on a category $\Cc$ is a type of
-  \emph{shapes} $S : \Type$ along with a family of \emph{positions}
-  $P : S \to | \Cc | $, denoted as $\cont{S}{P}$.
-\end{definition}
-
-\begin{definition}
-  The \emph{extension} of a generalised container $\cont{S}{P}$ on
-  $\Cc$ is a functor $\context{\cont{S}{P}} : \Func{\Cc}{\Type}$, with
-  its action on objects defined as
-  $\context{\cont{S}{P}}_0\ X \ddefeq (s : S) \times (\Cc(P\ s, X))$
-  and its action on morphisms as
-  $\context{\cont{S}{P}}_1\ f \ddefeq \lambda (s , t) . (s , f \circ
-  t)$
-\end{definition}
-
-As before, the functor laws of a container depend on the category laws
-of the domain of the functor. If we have a definition of a sort
-category in which all the functors are given as containers, the
-resulting category will satisfy the category laws strictly.
-
-
+For generalised containers (\cref{def-gen-container}), the functors
+again inherit the functor laws from the category laws of the domain of
+the functor. If the generalised container maps out of a strict
+category, then it defines a strict functor. However, in practice,
+these categories will not be strict as they will be categories of
+algebras.
 
 \section{Sort categories}
+\label{coherence-sort-categories}
 
 The categories $\Type$ and $\Fam$ are satisfy the category laws and
 their (higher) coherences definitionally. Whether a sorts category
-$\SortCat{s}$ given by a $s : \sortsty$ depends on the functors in the
-list $s$. Looking at the definition of the sorts categories, if all
-the functors involved satisfy the functor laws definitionally then the
-resulting categories will be strict as well.
+$\SortCat{\Ss}$ given by a $\Ss : \sortsty$ depends on the functors in
+the list $\Ss$. Looking at the definition of the sorts categories, if
+all the functors involved satisfy the functor laws definitionally then
+the resulting categories will be strict as well. This means that if we
+give all the functors in $\Ss$ as generalised containers, we end up
+with strict sort categories, which is quite a reasonable assumption to
+make.
 
 \section{Categories of dialgebras}
 
 So far we have not given a precise definition of $\dialgcat{F}{G}$ for
-some functors $F, G : \Cc \to \Dd$. In \cref{dialg}, we have defined
-the category its objects and morphisms. The objects are defined in
-terms of objects from $\Cc$ and morphisms from $\Dd$. Morphisms are
-defined in terms of morphisms in $\Cc$ and $\Dd$ along with equalities
-between them. If we are only interested in objects and morphisms of
-$\dialgcat{F}{G}$, we need to know what the objects and morphisms of
-$\Cc$ and $\Dd$ are and the actions of $F$ and $G$ on those. Once we
-go beyond morphisms, we run into trouble.
+some functors $F, G : \Cc \to \Dd$: we have not formally defined
+composition and so on. In \cref{dialg}, we have defined the category
+its objects and morphisms. The objects are defined in terms of objects
+from $\Cc$ and morphisms from $\Dd$. Morphisms are defined in terms of
+morphisms in $\Cc$ and $\Dd$ along with equalities between them. If we
+are only interested in objects and morphisms of $\dialgcat{F}{G}$, we
+need to know what the objects and morphisms of $\Cc$ and $\Dd$ are and
+the actions of $F$ and $G$ on those. Once we go beyond morphisms, we
+run into trouble.
 
 To illustrate these issues, we will look at the definition of the
 $\dialgcat{F}{G}$ in detail. 
@@ -274,7 +280,7 @@ $\Cc$ and $\Dd$ are strict categories, with $F$ and $G$ being strict
 functors, \eg when we consider $F$-algebras on $\Type$ with $F$ given
 as a container, composition will not be strictly associative.
 
-\subsection{Identity laws}
+\subsection{Category laws}
 
 If we want to talk about the identity laws in a category of
 dialgebras, we need to know what equality between dialgebra morphisms
@@ -334,80 +340,93 @@ $$
   &\rho \circ F\ f
 }
 $$
-For $p$ we can fill in $\leftid_{\Cc}\ f$. We get the following
-diagram:
+We will work this out in detail, assuming the category $\Dd$ is
+strict. This assumption is reasonable as per the reasons given in
+\cref{coherence-sort-categories}.
+
+For $p$ we can fill in $\leftid_{\Cc}\ f$. Furthermore we know that,
+assuming the functors $F$ and $G$ preserve the left identity laws:
 $$
-\xymatrix{
-G f \circ \theta
-\ar@{-}[rr]^{G (\leftid_{\Cc} f) \circ \theta}
-\ar@{-}[dd]_{\leftid_{\Dd} (G f)) \circ \theta}
-\ar@{}[ddrr]|{first}
-&&G (\id_{\Cc}\ Y \circ f) \circ \theta
-\ar@{-}[dd]^{(\Gcomp (\id_{\Cc} Y) f) \circ \theta}
-\\
-\\
-(\id_{\Dd} (G Y) \circ G f) \circ \theta
-\ar@{-}[rr]^{(\Gid Y \circ G f) \circ \theta}
-\ar@{-}[dd]_{\assoc_{\Dd} (\id_{Dd} (G Y)) (G f) \theta}
-\ar@{}[ddrr]|{second}
-&&(G (\id_{\Cc} Y) \circ G f) \circ \theta
-\ar@{-}[dd]
-\\
-\\
-\id_{\Dd} (G Y) \circ (G f \circ \theta)
-\ar@{-}[rr]
-\ar@{-}[dd]
-\ar@{}[ddrr]|{third}
-&&G (\id_{\Cc} Y) \circ (G f \circ \theta)
-\ar@{-}[dd]
-\\
-\\
-\id_{\Dd} (G Y) \circ (\rho \circ F f)
-\ar@{-}[rr]
-\ar@{-}[dd]
-\ar@{}[ddrr]|{fourth}
-&&G (\id_{\Cc} Y) \circ (\rho \circ F f)
-\ar@{-}[dd]
-\\
-\\
-((\id_{\Dd} (G Y)) \circ \rho) \circ F f
-\ar@{-}[rr]
-\ar@{-}[dd]
-\ar@{}[ddrr]|{fifth}
-&&(G (\id_{\Cc} Y) \circ \rho) \circ F f
-\ar@{-}[dd]
-\\
-\\
-(\rho \circ \id_{\Dd} (F Y)) \circ F f
-\ar@{-}[rr]
-\ar@{-}[dd]
-\ar@{}[ddrr]|{sixth}
-&&(\rho \circ F (\id_{\Cc} Y)) \circ F f
-\ar@{-}[dd]
-\\
-\\
-\rho \circ (\id_{\Dd} (F Y) \circ F f)
-\ar@{-}[rr]
-\ar@{-}[dd]
-\ar@{}[ddrr]|{seventh}
-&&\rho \circ (F (\id_{\Cc} Y) \circ F f)
-\ar@{-}[dd]
-\\
-\\
-\rho \circ F f
-\ar@{-}[rr]
-&&\rho \circ F ((\id_{\Cc} Y) \circ f)
-}
+F (\leftid_{\Cc}\ f) = \trans{\Fcomp\ (\id_{\Cc}\ Y)\ f}{\Fid\ Y \circ Ff}
+$$
+and similarly for $G$. The diagram we end up with is the one shown in
+\cref{left-identity-calculation}.
+
+As we see, even when we simplify the situation by assuming that $\Dd$
+is strict, we end up with a rather involved calculation.  Working out
+the associativity law in detail is even more strenuous. It seems that
+we can show that the category $\dialgcat{F}{G}$ has all the category
+laws that are preserved by the functors $F$ and $G$.
+
+\begin{figure}
+  \centering
+  $$
+\xymatrix{ G f \circ \theta \ar@{-}[rr]^{G (\leftid_{\Cc} f) \circ
+    \theta} \ar@{-}[dd]_{\leftid_{\Dd} (G f)) \circ \theta}
+  \ar@{}[ddrr]|{first} &&G (\id_{\Cc}\ Y \circ f) \circ \theta
+  \ar@{-}[dd]^{(\Gcomp (\id_{\Cc} Y) f) \circ \theta}
+  \\
+  \\
+  (\id_{\Dd} (G Y) \circ G f) \circ \theta \ar@{-}[rr]^{(\Gid Y \circ
+    G f) \circ \theta} \ar@{-}[dd]_{\assoc_{\Dd} (\id_{Dd} (G Y)) (G
+    f) \theta} \ar@{}[ddrr]|{second} &&(G (\id_{\Cc} Y) \circ G f)
+  \circ \theta \ar@{-}[dd]
+  \\
+  \\
+  \id_{\Dd} (G Y) \circ (G f \circ \theta) \ar@{-}[rr] \ar@{-}[dd]
+  \ar@{}[ddrr]|{third} &&G (\id_{\Cc} Y) \circ (G f \circ \theta)
+  \ar@{-}[dd]
+  \\
+  \\
+  \id_{\Dd} (G Y) \circ (\rho \circ F f) \ar@{-}[rr] \ar@{-}[dd]
+  \ar@{}[ddrr]|{fourth} &&G (\id_{\Cc} Y) \circ (\rho \circ F f)
+  \ar@{-}[dd]
+  \\
+  \\
+  ((\id_{\Dd} (G Y)) \circ \rho) \circ F f \ar@{-}[rr] \ar@{-}[dd]
+  \ar@{}[ddrr]|{fifth} &&(G (\id_{\Cc} Y) \circ \rho) \circ F f
+  \ar@{-}[dd]
+  \\
+  \\
+  (\rho \circ \id_{\Dd} (F Y)) \circ F f \ar@{-}[rr] \ar@{-}[dd]
+  \ar@{}[ddrr]|{sixth} &&(\rho \circ F (\id_{\Cc} Y)) \circ F f
+  \ar@{-}[dd]
+  \\
+  \\
+  \rho \circ (\id_{\Dd} (F Y) \circ F f) \ar@{-}[rr] \ar@{-}[dd]
+  \ar@{}[ddrr]|{seventh} &&\rho \circ (F (\id_{\Cc} Y) \circ F f)
+  \ar@{-}[dd]
+  \\
+  \\
+  \rho \circ F f \ar@{-}[rr] &&\rho \circ F ((\id_{\Cc} Y) \circ f) }
 $$
 
+\caption{Establishing the left identity law}
+\label{left-identity-calculation}
+\end{figure}
 
-\subsection{Associativity}
+\section{Untruncated $\Set$-sorted inductive-inductive definitions}
 
-\section{Equaliser categories}
+In the previous section we have sketched how the category laws can be
+established in the untruncated dialgebra categories, assuming the
+codomain of the functors is a strict category. This means that it
+explains what we need from of a $\Set$-sorted inductive-inductive
+definition to be able to show that the resulting category of algebras
+does in fact satisfy the category laws: all the arguments functors
+have to preserve the category laws.
 
-\section{Categories of algebras}
+While it seems that the coherence data is constant in the amount of
+constructors, in practice we see that this is not the case. To show
+that a functor preserves category laws, we may need more structure
+from the domain category. For generalised containers, we see that to
+show it preserves identity morphisms, we need to have identity laws in
+the domain category, \ie we need coherence ``one level up''. To show
+that it preserves the identity laws, we need the higher coherence
+condition for identity laws from the domain category. This means that
+the amount of coherence levels needed stacks up every time we add a
+constructor to the definition.
 
-For our applications, we do not need the full generality of dialgebra categories. 
-
-\section{Coherence in a cubical setting}
-
+What is somewhat suprising about this, is that we have not even
+considered path constructors yet. The coherence issues grow in the
+number of constructors no matter whether they are point or path
+constructors.
