@@ -350,7 +350,24 @@ $$
 F (\leftid_{\Cc}\ f) = \trans{\Fcomp\ (\id_{\Cc}\ Y)\ f}{\Fid\ Y \circ Ff}
 $$
 and similarly for $G$. The diagram we end up with is the one shown in
-\cref{left-identity-calculation}.
+\cref{left-identity-calculation}, where the double lines indicate a
+$\refl$ path. What we end up with is having to establish that the
+following square commutes:
+$$
+\xymatrix{
+G (\id_{\Cc} Y) \circ Gf \circ \theta
+\ar@{-}[rr]^{G (\id_{\Cc} Y) \circ f_0}
+\ar@{-}[d]_{\Gid Y \circ G f \circ \theta}
+&&G (\id_{\Cc} Y) \circ \rho \circ Ff
+\ar@{-}[d]^{\Gid Y \circ \rho \circ Ff}
+\\
+Gf \circ \theta
+\ar@{-}[rr]_{f_0}
+&&\rho \circ Ff
+}
+$$
+Since we have $f_0 = \id_{\Dd} GY \circ f_0$, the above square follows
+from the naturality property enjoyed by homotopies.
 
 As we see, even when we simplify the situation by assuming that $\Dd$
 is strict, we end up with a rather involved calculation.  Working out
@@ -361,44 +378,37 @@ laws that are preserved by the functors $F$ and $G$.
 \begin{figure}
   \centering
   $$
-\xymatrix{ G f \circ \theta \ar@{-}[rr]^{G (\leftid_{\Cc} f) \circ
-    \theta} \ar@{-}[dd]_{\leftid_{\Dd} (G f)) \circ \theta}
-  \ar@{}[ddrr]|{first} &&G (\id_{\Cc}\ Y \circ f) \circ \theta
-  \ar@{-}[dd]^{(\Gcomp (\id_{\Cc} Y) f) \circ \theta}
-  \\
-  \\
-  (\id_{\Dd} (G Y) \circ G f) \circ \theta \ar@{-}[rr]^{(\Gid Y \circ
-    G f) \circ \theta} \ar@{-}[dd]_{\assoc_{\Dd} (\id_{Dd} (G Y)) (G
-    f) \theta} \ar@{}[ddrr]|{second} &&(G (\id_{\Cc} Y) \circ G f)
-  \circ \theta \ar@{-}[dd]
-  \\
-  \\
-  \id_{\Dd} (G Y) \circ (G f \circ \theta) \ar@{-}[rr] \ar@{-}[dd]
-  \ar@{}[ddrr]|{third} &&G (\id_{\Cc} Y) \circ (G f \circ \theta)
-  \ar@{-}[dd]
-  \\
-  \\
-  \id_{\Dd} (G Y) \circ (\rho \circ F f) \ar@{-}[rr] \ar@{-}[dd]
-  \ar@{}[ddrr]|{fourth} &&G (\id_{\Cc} Y) \circ (\rho \circ F f)
-  \ar@{-}[dd]
-  \\
-  \\
-  ((\id_{\Dd} (G Y)) \circ \rho) \circ F f \ar@{-}[rr] \ar@{-}[dd]
-  \ar@{}[ddrr]|{fifth} &&(G (\id_{\Cc} Y) \circ \rho) \circ F f
-  \ar@{-}[dd]
-  \\
-  \\
-  (\rho \circ \id_{\Dd} (F Y)) \circ F f \ar@{-}[rr] \ar@{-}[dd]
-  \ar@{}[ddrr]|{sixth} &&(\rho \circ F (\id_{\Cc} Y)) \circ F f
-  \ar@{-}[dd]
-  \\
-  \\
-  \rho \circ (\id_{\Dd} (F Y) \circ F f) \ar@{-}[rr] \ar@{-}[dd]
-  \ar@{}[ddrr]|{seventh} &&\rho \circ (F (\id_{\Cc} Y) \circ F f)
-  \ar@{-}[dd]
-  \\
-  \\
-  \rho \circ F f \ar@{-}[rr] &&\rho \circ F ((\id_{\Cc} Y) \circ f) }
+\xymatrix@!C@!R{
+G f \circ \theta % C
+\ar@{-}[r]^{\Gid Y \circ Gf \circ \theta}
+\ar@{-}[ddddd]_{f_0}
+&
+G (\id_{\Cc} Y) \circ Gf \circ \theta % B
+\ar@{-}[r]^{\Gcomp (\id_{\Cc} Y) f \circ \theta}
+\ar@{=}[rd]
+&G (\id_{\Cc} Y \circ f) \circ \theta % A
+\ar@{-}[d]^{\Gcomp (\id_{\Cc} Y) f \circ \theta}
+\\
+&&G (\id_{\Cc} Y) \circ Gf \circ \theta % D
+\ar@{-}[d]^{G (\id_{\Cc} Y) \circ f_0}
+\\
+&&G (\id_{\Cc} Y) \circ \rho \circ Ff % E
+\ar@{-}[d]^{\Gid Y \circ \rho \circ Ff}
+\\
+&&\rho \circ Ff % F
+\ar@{-}[d]^{\rho \circ \Fid Y \circ Ff}
+\\
+&&\rho \circ F (\id_{\Cc} Y) \circ Ff % G
+\ar@{-}[d]^{\rho \circ \Fcomp (\id_{\Cc} Y) f}
+\\
+\rho \circ Ff % J
+\ar@{-}[r]_{\rho \circ \Fid Y \circ Ff}
+\ar@{=}[uurr]
+&\rho \circ F (\id_{\Cc}) \circ Ff % I
+\ar@{-}[r]_{\rho \circ \Fcomp (\id_{\Cc} Y) f}
+\ar@{=}[ur]
+&\rho \circ F (\id_{\Cc} Y \circ f) % H
+}
 $$
 
 \caption{Establishing the left identity law}
