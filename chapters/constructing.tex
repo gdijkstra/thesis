@@ -561,13 +561,12 @@ does not help us much as constructing coproducts in categories of
 algebras is rather involved, and already involves sequential colimits
 themselves.
 
-\subsection{$\Set$-sorted quotient inductive-inductive definitions}
+\subsection{Constructing $\Set$-sorted quotient inductive-inductive definitions}
 
-Before we try to tackle the general case, we will look at the
-simplified setting of $\Set$-sorted inductive-inductive
-definitions. Our ultimate goal is to show that for any $\Set$-sorted
-$s : \specty$, where all the functors preserve sequential colimits, we
-have a left adjoint to the forgetful functor
+In this section we will look at the simplified setting of $\Set$-sorted quotient
+inductive-inductive definitions. Our ultimate goal is to show that for
+any $\Set$-sorted $s : \specty$, where all the functors preserve
+sequential colimits, we have a left adjoint to the forgetful functor
 $U : \Func{\Alg_s}{\Set}$. We can do this by induction on the
 specification $s$. To construct this left adjoint for a category
 $\Alg_s$ extended with a point or path constructor, we need to have
@@ -631,10 +630,39 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
     &\hdots
   }
   $$
-  We can take the colimit of the bottom sequence $(X_i,x_i)$, which
-  will have an algebra structure as $F$ preserves colimits of
-  cochains. However, we need to make sure that all the inclusion maps
-  $X_i \to X_\omega$ are algebra morphisms.
+  To be precise, we have:
+  \begin{itemize}
+  \item $X : \natty \to | \Cc |$ with algebras $\theta : (n : \natty) \to \Cc(F X_n, X_n)$
+  \item $x : (n : \natty) \to \Cc(X_n,X_{n+1})$ satisfying $x_n \circ \theta_n = \theta_{n+1} \circ Fx_n$
+  \end{itemize}
+
+  We can take the colimit of the cochain $(X,x)$ in $\Cc$ and we get
+  $X_{\omega} : | \Cc |$ with
+  $c : (n : \natty) \to \Cc(X_n,X_{\omega})$ satisfying
+  $c_n = c_{n+1} \circ x_n$, satisfying the universal property of
+  sequential colimits. Similarly, as $F$ preserves sequential
+  colimits, we get that $FX_{\omega}$ with
+  $Fc : (n : \natty) \to \Cc(FX_n,FX_{\omega})$ is a colimit of the
+  cochain $(FX,Fx)$. This allows us to construct an algebra structure
+  on $X_{\omega}$, which is the map $\theta_{\omega}$ defined by the
+  computation property:
+  $$
+  \theta_{\omega} \circ Fc_n = c_n \circ \theta_n
+  $$
+  For this to work, we have to make sure that $c_n \circ \theta_n$
+  does in fact form a cocone, \ie we need to check whether
+  $c_n \circ \theta_n = c_{n+1} \circ \theta_{n+1} \circ Fx_n$. This
+  follows from the fact that $X_{\omega}$ is a colimit of $(X,x)$,
+  giving us $c_n = c_{n+1} \circ x_n$. Every $x_n$ is an algebra
+  morphism: $x_n \circ \theta_n = \theta_{n+1} \circ Fx_n$, so we are
+  done.
+
+  By definition of $\theta_{\omega}$, every $c_n$ is an algebra
+  morphism.
+
+  Finally we have to check whether $(X_{\omega},\theta_{\omega}$
+  satisfies the universal property. This follows from the universal
+  property of $X_{\omega}$.
 \end{proof}
 
 \begin{proposition}
@@ -642,12 +670,16 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
 \end{proposition}
 
 \begin{proof}
-  \todoi{do this}
+  \todoi{TODO: proof}
 \end{proof}
 
 \begin{proposition}
   The category $\algcat{F}$ has coequalisers.
 \end{proposition}
+
+\begin{proof}
+  \todoi{TODO: proof}
+\end{proof}
 
 \begin{proposition}
   The forgetful functor $U : \Func{\algcat{F}}{\Cc}$ has a left
@@ -655,7 +687,10 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
 \end{proposition}
 
 \begin{proof}
-  \todoi{do this}
+  This is a straightforward generalisation of
+  \cref{free-monad-thm}. Since $F$ preserves sequential colimits, so
+  does $\bar{F}_X$ for any $X : | \Cc |$, hence the initial algebra
+  $F^* X$ exists.
 \end{proof}
 
 \subsubsection{Path constructors}
@@ -731,8 +766,7 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
     &X\ 0 \ddefeq \initobj \\
     &X\ (n+1) \ddefeq \coeqty{\phi \circ \ell_{X_n}}{\phi \circ r_{x_n}}
   \end{align*}
-  with $x_0$ the initial morphism and $x_{n+1}$ the constructor of
-  corresponding coequaliser.
+  with $x_{n}$ the constructor of corresponding coequaliser.
 
   We need to show that for $X_\omega$,
   $\phi \circ \ell_{X_\omega} = \phi \circ r_{X_\omega}$. This we will
@@ -816,8 +850,6 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
   reasoning $\phi \circ r_{X_\omega}$ is a cocone morphism, hence by
   the universal property of $LFX_\omega$ we get that
   $\phi \circ \ell_{X_\omega} = \phi \circ r_{X_\omega}$.
-  \todo{Check whether this object is initial}
-
 \end{proof}
 
 \begin{proposition}
@@ -826,7 +858,10 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
 \end{proposition}
 
 \begin{proof}
-  \todoi{Mention that this goes along the same lines as the above proof}
+  We can take the proof of initiality and replace the object $X_0$
+  with any $X : | \Cc |$. We define the left adjoint
+  $L' : \Func{\Cc}{\Cc'}$ with $L' X$ being the colimit of this
+  sequence.
 \end{proof}
 
 \begin{proposition}
@@ -834,7 +869,7 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
 \end{proposition}
 
 \begin{proof}
-  \todoi{proof}
+  \todoi{TODO: proof}
 \end{proof}
 
 \begin{proposition}
@@ -842,7 +877,7 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
 \end{proposition}
 
 \begin{proof}
-  \todoi{proof}
+  \todoi{TODO: proof}
 \end{proof}
 
 \begin{proposition}
@@ -905,9 +940,3 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
   that $X_{\omega}$ is in the subcategory $\Cc'$. Since it is a full
   subcategory, we also get the universality from $\Cc$.
 \end{proof}
-
-\subsection{Related concepts}
-
-The constructions here are similar to those found in the literature in
-slightly different settings. The construction of colimits in are found
-in \todoi{this}.

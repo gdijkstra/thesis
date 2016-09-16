@@ -398,8 +398,8 @@ Note that $S_i \neq \unitty$.
 
 \subsubsection{Products}
 
-\begin{lemma}[Products of 0-constructors]
-  Let $s' : \specty_\Ss$ be $s$ extended with a 0-constructor of sort
+\begin{lemma}[Products of point constructors]
+  Let $s' : \specty_\Ss$ be $s$ extended with a point constructor of sort
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying:
@@ -523,8 +523,8 @@ Note that $S_i \neq \unitty$.
   definitionally.
 \end{proof}
 
-\begin{lemma}[Products of 1-constructors]
-  Let $s' : \specty_\Ss$ be $s$ extended with a 0-constructor of sort
+\begin{lemma}[Products of path constructors]
+  Let $s' : \specty_\Ss$ be $s$ extended with a point constructor of sort
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
@@ -576,11 +576,11 @@ between the proofs that they preserve the algebra structure. Since we
 are working with types that satisfy uniqueness of identity proofs, we
 can ignore the latter part, hence an equality between two algebra
 morphisms is just an equality of the two underlying morphisms. This
-reasoning applies to both 0-constructor algebra morphisms as well as
-1-constructor algebra morphisms.
+reasoning applies to both point constructor algebra morphisms as well as
+path constructor algebra morphisms.
 
-\begin{lemma}[Equalisers of 0-constructors]
-  Let $s' : \specty_\Ss$ be $s$ extended with a 0-constructor of sort
+\begin{lemma}[Equalisers of point constructors]
+  Let $s' : \specty_\Ss$ be $s$ extended with a point constructor of sort
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying:
@@ -672,8 +672,8 @@ reasoning applies to both 0-constructor algebra morphisms as well as
   of equalisers in $\Alg_{s'}$.
 \end{proof}
 
-\begin{lemma}[Equalisers of 1-constructors]
-  Let $s' : \specty_\Ss$ be $s$ extended with a 1-constructor of sort
+\begin{lemma}[Equalisers of path constructors]
+  Let $s' : \specty_\Ss$ be $s$ extended with a path constructor of sort
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
@@ -1155,12 +1155,15 @@ We can derive this formulation by the following equational reasoning:
 \end{align*}
 
 The dependent morphism structure on $\Fam$ is then:
+$$
+\DepHom_{\Fam}\ (X , P)\ (V , W) \ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x))
+$$
 %
-\begin{align*}
-  \DepHom_{\Fam}\ (X , P)\ (V , W) &\ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x)) \\
-  \grph_{\Fam}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ((\lambda x . (x , f\ x) , \lambda x\ y . y , (g\ x\ y)) , \refl) \\
-  \snd_{\Fam}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
-\end{align*}
+% \begin{align*}
+%   \DepHom_{\Fam}\ (X , P)\ (V , W) &\ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x)) \\
+%   \grph_{\Fam}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ((\lambda x . (x , f\ x) , \lambda x\ y . y , (g\ x\ y)) , \refl) \\
+%   \snd_{\Fam}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
+% \end{align*}
 %
 \subsubsection{Sort categories}
 
@@ -1194,26 +1197,30 @@ side of the equation above:
 \end{align*}
 
 The family structure on $S_i$ is then:
+$$
+  \Fam_{S_i}\ (X , P) \ddefeq (V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \to \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
+$$
+with
 %
 \begin{align*}
-  \Fam_{S_i}\ (X , P) &\ddefeq \\
-  \total_{S_i}\ (X , P)\ (V , W) &\ddefeq \\
-  \proj_{S_i}\ (X, P)\ (V, W) &\ddefeq \\
-  \preimage_{S_i}\ (X, P)\ ((C,D),(p, q)) &\ddefeq  
+  \total_{S_i}\ (X , P)\ (V , W) &\ddefeq (\total_{S_{i-1}}\ X\ V, \lambda x . (y : P\ (R_i\ (\proj_{S_{i-1}}\ X\ V)\ x)) \times (W (\phi\ x)\ y)) \\
+  \proj_{S_i}\ (X, P)\ (V, W) &\ddefeq (\proj_{S_{i-1}}\ X\ V, \lambda x (y , z) . y)
 \end{align*}
 %
-The dependent morphism structure on $S_i$ is then:
-%
-\begin{align*}
-  \DepHom_{S_i}\ (X , P)\ (V , W) &\ddefeq ?\\
-  \grph_{S_i}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ? \\
-  \snd_{S_i}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
-\end{align*}
-%
+where
+$\phi : (x : R_i X) \times \Box_{R_i}\ X\ V x \to R_i\
+(\total_{S_{i-1}}\ X\ V)$
+is the isomorphism we get from the definition of $\Box$.
 
-\subsubsection{0-constructors}
+The dependent morphism structure on $S_i$ can be derived in a similar
+way that of $\DepHom_{\Fam}$, arriving at:
+$$
+  \DepHom_{S_i}\ (X , P)\ (V , W) \ddefeq (f : \DepHom_{S_{i-1}}\ X\ V) \times (g : (x : R_i\ X)\ (y : P\ x) \to W\ (x , \bar{R}_i\ f\ x)\ y)\\
+$$
 
-Suppose we have the following data describing a 0-constructor:
+\subsubsection{Point constructors}
+
+Suppose we have the following data describing a point constructor:
 %
 \begin{itemize}
 \item $\Ss : \sortsty$
@@ -1224,33 +1231,24 @@ Suppose we have the following data describing a 0-constructor:
 \end{itemize}
 
 Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
-specification, which is $s$ extended with the 0-constructor given by
+specification, which is $s$ extended with the point constructor given by
 the data above. We want to derive the family structure on this
 category $\Alg_{s'}$:
 $$
 \hdots
 $$
 The family structure on $\Alg_{s'}$ is then:
-%
-\begin{align*}
-  \Fam_{\Alg_{s'}}\ (X , \theta) &\ddefeq \\
-  \total_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
-  \proj_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
-  \preimage_{\Alg_{s'}}\ (X,  \theta)\ ((Y , \rho),(p , p_0)) &\ddefeq  
-\end{align*}
-%
+$$
+  \Fam_{\Alg_{s'}}\ (X , \theta) \ddefeq ? \\
+$$
 The dependent morphism structure on $\Alg_{s'}$ is then:
-%
-\begin{align*}
-  \DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq ?\\
-  \grph_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ (f , f_0) &\ddefeq ? \\
-  \snd_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ ((s , s_0) , s_1) &\ddefeq ?
-\end{align*}
-%
+$$  
+\DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) \ddefeq ?
+$$
 
-\subsubsection{1-constructors}
+\subsubsection{Path constructors}
 
-Suppose we have the following data describing a 1-constructor:
+Suppose we have the following data describing a path constructor:
 %
 \begin{itemize}
 \item $\Ss : \sortsty$
@@ -1262,26 +1260,15 @@ Suppose we have the following data describing a 1-constructor:
 \end{itemize}
 
 Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
-specification, which is $s$ extended with the 1-constructor given by
+specification, which is $s$ extended with the path constructor given by
 the data above. We want to derive the family structure on this
 category $\Alg_{s'}$:
 $$
 \hdots
 $$
 The family structure on $\Alg_{s'}$ is then:
-%
-\begin{align*}
-  \Fam_{\Alg_{s'}}\ (X , \theta) &\ddefeq \\
-  \total_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
-  \proj_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq \\
-  \preimage_{\Alg_{s'}}\ (X,  \theta)\ ((Y , \rho),(p , p_0)) &\ddefeq  
-\end{align*}
-%
-The dependent morphism structure on $\Alg_{s'}$ is then:
-%
-\begin{align*}
-  \DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) &\ddefeq ?\\
-  \grph_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ (f , f_0) &\ddefeq ? \\
-  \snd_{\Alg_{s'}}\ (X , \theta)\ (P , m)\ ((s , s_0) , s_1) &\ddefeq ?
-\end{align*}
-%
+$$
+  \Fam_{\Alg_{s'}}\ (X , \theta) \ddefeq ? \\
+$$
+Since $\Alg_{s'}$ is a full subcategory of $\Alg_s$, the dependent
+morphisms are simply inherited from $\Alg_s$.
