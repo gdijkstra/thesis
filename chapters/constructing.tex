@@ -865,19 +865,31 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
 \end{proof}
 
 \begin{proposition}
-  $\Cc'$ has coproducts.
+  $\Cc'$ has coproducts and coequalisers.
 \end{proposition}
 
 \begin{proof}
-  \todoi{TODO: proof}
-\end{proof}
+  We claim that the left adjoint $L'$ to the inclusion functor of the
+  subcategory $\Cc'$ into $\Cc$ gives us coproducts and coequalisers. 
 
-\begin{proposition}
-  $\Cc'$ has coequalisers.
-\end{proposition}
+  Let $X, Y : | \Cc |$ with $\theta : \ell_X = \rho_X$ and
+  $\rho : \ell_Y = \rho_Y$. By assumption, $\Cc$ has coproducts. The
+  object $L' (X + Y)$ is the coproduct of $(X,\theta)$ and $(Y,\rho)$,
+  as we have for any $(Z,\zeta) : | \Cc' |$:
+  $$
+  \Cc'(L'(X+Y),(Z,\zeta)) = \Cc(X+Y,Z) = \Cc(X,Z) \times \Cc(Y,Z) = \Cc'((X,\theta),(Z,\zeta)) \times \Cc'((Y,\rho),(Z,\zeta))
+  $$
 
-\begin{proof}
-  \todoi{TODO: proof}
+  Similarly for coequalisers, suppose that we again have
+  $(X,\theta), (Y,\rho) : | \Cc' |$ with
+  $f, g : \Cc'((X,\theta),(Y,\rho))$, so we really just have
+  $f, g : \Cc(X,Y)$, then taking the coequaliser to be
+  $L' (\coeqty\ f\ g)$, we can calculate for any $(Z,\zeta) : | \Cc' |$:
+  $$
+  \Cc'(L'(\coeqty\ f\ g),(Z,\zeta)) = \Cc(\coeqty\ f\ g, Z) = (h : \Cc(Y,Z)) \times (h \circ f = h \circ g)
+  $$
+  which again by $\Cc'$ being a full subcategory means that
+  $L'(\coeqty\ f\ g)$ is indeed a coequaliser in $\Cc'$ of $f$ and $g$.
 \end{proof}
 
 \begin{proposition}
