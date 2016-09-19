@@ -440,3 +440,42 @@ What is somewhat suprising about this, is that we have not even
 considered path constructors yet. The coherence issues grow in the
 number of constructors no matter whether they are point or path
 constructors.
+
+\section{Path constructors and their computation rules}
+
+In the set truncated setting we could ignore the computation rules for
+path constructors, as all paths between equalities were trivial. In
+the untruncated setting they need to be accounted for. Suppose we have
+a category of algebras $\Cc$ with forgetful functor
+$U : \Func{\Cc}{\Set}$. A path constructor defined on this category is
+given by a functor $F : \Func{\Cc}{\Set}$ along with two natural
+transformations $l,r : \Nat{F}{U}$. Let $X, Y : | \Cc |$, with
+$\theta : l_X = r_X$ and $\rho : l_Y = r_Y$. A morphism $f : X \to Y$
+preserves the algebra structures $\theta$ and $\rho$, if ``applying''
+the equality $\theta$ first and then the morphism yields the same
+equality as first applying the morphism and then the equality
+$\rho$. We would like to say:
+$$
+U f \circ \theta = \rho \circ F f
+$$
+but this does not type check as we have
+$U f \circ \theta : U f \circ l_X = U f \circ r_X$ and
+$\rho \circ Ff : l_Y \circ F f = r_Y \circ F f$. We have to appeal to
+naturality in order for this equation to make sense. Let us denote for
+the witnesses of naturality as $l_f : Uf \circ l_X = l_Y \circ
+Ff$.
+For $f$ to be an algebra morphism requires us to have a witness of the
+following:
+$$
+\xymatrix{
+U f \circ l_X
+\ar@{-}[r]^{U f \circ \theta}
+\ar@{-}[d]_{l_f}
+&U f \circ r_X
+\ar@{-}[d]^{r_f}
+\\
+l_Y \circ Ff
+\ar@{-}[r]_{\rho \circ Ff}
+&r_Y \circ Ff
+}
+$$
