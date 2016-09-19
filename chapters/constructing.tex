@@ -660,7 +660,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   By definition of $\theta_{\omega}$, every $c_n$ is an algebra
   morphism.
 
-  Finally we have to check whether $(X_{\omega},\theta_{\omega}$
+  Finally we have to check whether $(X_{\omega},\theta_{\omega})$
   satisfies the universal property. This follows from the universal
   property of $X_{\omega}$.
 \end{proof}
@@ -670,7 +670,164 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
 \end{proposition}
 
 \begin{proof}
-  \todoi{TODO: proof}
+  Let $(X,\theta),(Y,\rho) : | \algcat{F} |$. Observe that by
+  assumption we have the coproduct $\coproduct{X}{Y}$ in $\Cc$, but there is no
+  evidence that this will carry an algebra structure, let alone one
+  such that the inclusions $X \to \coproduct{X}{Y}$ and $Y \to \coproduct{X}{Y}$ will
+  preserve this structure.
+
+  Instead, we will create a sequence of objects $A_n$ in $\Cc$, which
+  have an approximate algebra structure (a map
+  $\alpha_n : FA_n \to A_{n+1}$). For every $A_n$, we also have
+  $\inln{n} : X \to A_n$ and $\inrn{n} : Y \to A_n$, such that
+  $\inln{n+1} \circ \theta = \alpha_n \circ F \inl_{n}$, and similarly
+  for $\inrn{n}$ and $\rho$. In other words: the inclusions preserve
+  the approximate algebra structure.
+
+  We define the objects $A_n$ inductively:
+  \begin{itemize}
+  \item $A_0 \ddefeq \coproduct{X}{Y}$ with $\inln{0} \ddefeq \ident{inl}$ and $\inrn{n}{0} \ddefeq \ident{inr}$
+  \item
+    $A_n+1 \ddefeq \pushout{\langle F \inln{n}, F \inrn{n}
+      \rangle}{(\theta + \rho)}$
+    with
+    $\langle \inln{n+1}, \inrn{n+1} \rangle : \coproduct{X}{Y} \to
+    A_{n+1}$
+    and $\alpha_n : FA_n \to A_{n+1}$ being its two inclusion
+    maps. (We have pushouts in $\Cc$ as it has binary coproducts and
+    coequalisers.)
+  \end{itemize}
+
+  The corresponding pushout diagram for $A_{n+1}$ is the following:
+  $$
+  \xymatrix{
+    \coproduct{FX}{FY} \ar[r]^{\theta + \rho} \ar[d]_{\langle F \inln{n} , F \inrn{n} \rangle} 
+    &\coproduct{X}{Y} \ar[d]^{\langle \inln{n+1} , \inr{n+1} \rangle} \\
+    FA_n \ar[r]_{\alpha_n}
+    &A_{n+1}
+  }
+  $$
+
+  The morphisms $a_n : A_n \to A_{n+1}$ are also defined inductively:
+  \begin{itemize}
+  \item $a_0 \ddefeq \langle \inln{1}, \inrn{1} \rangle$, which
+    satisfies by definition $a_0 \circ \inln{0} = \inln{1}$ and
+    $a_0 \circ \inrn{0} = \inrn{1}$.
+  \item $a_{n+1}$ is defined using the universal property of
+    $A_{n+1}$:
+    $$
+    \xymatrix{
+      \coproduct{FX}{FY} \ar[rr]^{\theta + \rho} \ar[d]^{\langle F \inln{n} , F \inrn{n} \rangle} 
+      \ar@/_2pc/[dd]_{\langle F \inln{n+1} , F \inrn{n+1} \rangle}
+      &&\coproduct{X}{Y} \ar[d]^{\langle \inln{n+1} , \inrn{n+1} \rangle} \ar@{=}[rr]
+      &&\coproduct{X}{Y} \ar[dd]^{\langle \inln{n+2} , \inrn{n+2} \rangle} \\
+      FA_n \ar[rr]_{\alpha_n} \ar[d]^{F a_n}
+      &&A_{n+1} \ar[drr]_{a_{n+1}}
+      \\
+      FA_{n+1} \ar[rrrr]_{\alpha_{n+1}}
+      &&&&A_{n+2}
+    }
+    $$
+  \end{itemize}
+  Note that we can assume that the left ``triangle'' commutes by
+  induction hypothesis. As we have seen, it holds for $n = 0$. We then
+  have to show that for the $a_{n+1}$ we define here, it again
+  holds. By the computation rules of $a_{n+1}$ we have
+  $a_{n+1} \circ \langle \inln{n+1} , \inrn{n+1} \rangle = \langle
+  \inln{n+2} , \inrn{n+2} \rangle$.
+
+  If we take the colimit of the cochain $(A,a)$, we get an object
+  $A_{\omega}$ in $\Cc$ with constructors $c_n : A_n \to A_{\omega}$
+  satisfying $c_n = c_{n+1} \circ a_n$, such that it satisfies the
+  universal property of sequential colimits. Similarly, since $F$
+  preserves sequential colimits, we also have that $FA_{\omega}$ with
+  $Fc_n$ forms a colimiting cocone of the cochain $(FA,Fa)$.
+
+  We now have to construct and check for several things on $A_{\omega}$:
+  \begin{itemize}
+  \item an algebra structure $F A_{\omega} \to A_{\omega}$
+  \item inclusions $\inln{\omega} : X \to A_{\omega}$ and $\inrn{\omega}$, such that they are algebra morphisms $\theta \to \alpha_{\omega}$ and $\rho \to \alpha_{\omega}$ respectively
+  \item $(A_{\omega} , \alpha_{\omega})$ should have the universal
+    property of being a coproduct of $(X,\theta)$ and $(Y,\rho)$
+  \end{itemize}
+
+
+  To construct the algebra structure on $A_{\omega}$, we define a
+  cocone with carrier $A_{\omega}$ on the cochain $(FA, Fa)$ with a
+  family of morphisms $d_n : FA_n \to A_{\omega}$ defined as the
+  composite:
+  $$
+  \xymatrix{
+    FA_n \ar[r]^{\alpha_n}
+    &A_{n+1}
+    \ar[r]^{c_{n+1}}
+    &A_{\omega}
+  }
+  $$
+  In order for this to be a cocone, we have to check whether
+  $d_n = d_{n+1} \circ F a_n$.
+
+  For $n = 0$, we have that it follows from the computation rule of
+  $a_1$ and from the fact that $c_1$ and $c_2$ are constructors of the
+  colimit $A_{\omega}$:
+  $$
+  c_1 \circ \alpha_0 = c_2 \circ a_1 \circ \alpha_0 = c_2 \circ \alpha_1 \circ Fa_0
+  $$
+  From this we get a unique morphism
+  $\alpha_{\omega} : FA_{\omega} \to A_{\omega}$ with computation
+  rules $\alpha_{\omega} \circ Fc_n = c_{n+1} \circ \alpha_n$.
+
+  The inclusions maps $\inln{\omega}, \inrn{\omega}$ from $X$ and $Y$
+  respectively into $A_{\omega}$ are defined as composing $\inln{0}$
+  and $\inrn{0}$ with $c_0$. We then have to establish that these maps
+  are in fact algebra morphisms. We will show this here for
+  $\inl{\omega}$:
+  %
+  \begin{align*}
+    \inln{\omega} \circ \theta &=& c_0 \circ \inln{0} \circ \theta \\
+    &=& c_1 \circ a_0 \circ \theta \\
+    &=& c_1 \circ \inln{1} \circ \theta \\
+    &=& c_1 \circ \alpha_0 \circ F \inln{0} \\
+    &=&\alpha_{\omega} \circ F c_0 \circ F \inln{0} \\
+    &=&\alpha_{\omega} \circ F (c_0 \circ \inln{0}) \\
+    &=&\alpha_{\omega} \circ F \inln{\omega}
+  \end{align*}
+  %
+  By the same reasoning $\inr{\omega}$ is an algebra morphism
+  $\rho \to \alpha_{\omega}$.
+
+  Finally we have to show that given an algebra $(Z,\zeta)$ with
+  algebra morphisms $f : \theta \to \zeta$ and $g : \rho \to \zeta$,
+  we get a unique algebra morphism $h : \alpha_{\omega} \to \zeta$
+  satisfying $h \circ \inln{\omega} = f$ and $h \circ \inrn{\omega}$.
+
+  Observe that $Z$comes with a cocone for the cochain $(A,a)$ with
+  $z_n : A_n \to Z$ defined inductively:
+  \begin{itemize}
+  \item $z_0  : A_0 \to Z$ defined as $\langle f , g \rangle$, as $A_0 \ddefeq \coproduct{X}{Y}$.
+  \item $z_{n+1}$ is defined using the universal property of
+    $A_{n+1}$:
+    $$
+    \xymatrix{
+      \coproduct{FX}{FY} \ar[r]^{\theta + \rho} \ar[d]_{\langle F \inln{n} , F \inrn{n} \rangle} 
+      &\coproduct{X}{Y} \ar[d]^{\langle \inln{n+1} , \inrn{n+1} \rangle} \ar@{=}[r]
+      &\coproduct{X}{Y} \ar[dd]^{\langle f , g \rangle} \\
+      FA_n \ar[r]_{\alpha_n} \ar[d]_{z_n}
+      &A_{n+1} \ar[dr]_{z_{n+1}}
+      \\
+      FZ \ar[rr]_{\zeta}
+      &&Z
+    }
+    $$
+  \end{itemize}
+
+  In order for the definition of $z_{n+1}$ to make sense, we have to
+  check whether outer square commutes. For $n = 0$, it commutes as $f$
+  and $g$ are algebra morphisms. For the inductive step, it follows
+  from the computation rule of $z_{n+1}$ and the fact that $f$ and $g$
+  are algebra morphisms.
+
+  
 \end{proof}
 
 \begin{proposition}
@@ -874,7 +1031,7 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
 
   Let $X, Y : | \Cc |$ with $\theta : \ell_X = \rho_X$ and
   $\rho : \ell_Y = \rho_Y$. By assumption, $\Cc$ has coproducts. The
-  object $L' (X + Y)$ is the coproduct of $(X,\theta)$ and $(Y,\rho)$,
+  object $L' (\coproduct{X}{Y})$ is the coproduct of $(X,\theta)$ and $(Y,\rho)$,
   as we have for any $(Z,\zeta) : | \Cc' |$:
   $$
   \Cc'(L'(X+Y),(Z,\zeta)) = \Cc(X+Y,Z) = \Cc(X,Z) \times \Cc(Y,Z) = \Cc'((X,\theta),(Z,\zeta)) \times \Cc'((Y,\rho),(Z,\zeta))
@@ -884,12 +1041,12 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
   $(X,\theta), (Y,\rho) : | \Cc' |$ with
   $f, g : \Cc'((X,\theta),(Y,\rho))$, so we really just have
   $f, g : \Cc(X,Y)$, then taking the coequaliser to be
-  $L' (\coeqty\ f\ g)$, we can calculate for any $(Z,\zeta) : | \Cc' |$:
+  $L' (\coeqty{f}{g})$, we can calculate for any $(Z,\zeta) : | \Cc' |$:
   $$
-  \Cc'(L'(\coeqty\ f\ g),(Z,\zeta)) = \Cc(\coeqty\ f\ g, Z) = (h : \Cc(Y,Z)) \times (h \circ f = h \circ g)
+  \Cc'(L'(\coeqty{f}{g}),(Z,\zeta)) = \Cc(\coeqty{f}{g}, Z) = (h : \Cc(Y,Z)) \times (h \circ f = h \circ g)
   $$
   which again by $\Cc'$ being a full subcategory means that
-  $L'(\coeqty\ f\ g)$ is indeed a coequaliser in $\Cc'$ of $f$ and $g$.
+  $L'(\coeqty{f}{g})$ is indeed a coequaliser in $\Cc'$ of $f$ and $g$.
 \end{proof}
 
 \begin{proposition}

@@ -164,9 +164,9 @@ inductively:
 
 Inductive definitions may also be parametrised. We may define the
 coproduct of two types as follows:
-\begin{datatype}{\coproduct{\_}{\_}\ (A\ B : \Set)}{\Set}
-  \constr{\inl}{A \to \coproduct{A}{B}} \\
-  \constr{\inr}{B \to \coproduct{A}{B}}
+\begin{datatype}{\sumty{\_}{\_}\ (A\ B : \Set)}{\Set}
+  \constr{\suminl}{A \to \sumty{A}{B}} \\
+  \constr{\suminr}{B \to \sumty{A}{B}}
 \end{datatype}
 
 Inductive data type declarations in Agda do not give us elimination

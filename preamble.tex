@@ -390,9 +390,22 @@
 \newcommand{\torusr}{\AgdaInductiveConstructor{\ident{r}}}
 
 % Sum type
-\newcommand{\coproduct}[2]{#1 \AgdaDatatype{+} #2}
-\newcommand{\inl}{\AgdaInductiveConstructor{\ident{inl}}}
-\newcommand{\inr}{\AgdaInductiveConstructor{\ident{inr}}}
+\newcommand{\sumty}[2]{#1 \AgdaDatatype{+} #2}
+\newcommand{\suminl}{\AgdaInductiveConstructor{\ident{inl}}}
+\newcommand{\suminr}{\AgdaInductiveConstructor{\ident{inr}}}
+
+% Coproducts
+\newcommand{\coproduct}[2]{#1 \AgdaFunction{+} #2}
+\newcommand{\inl}{\ident{inl}}
+\newcommand{\inr}{\ident{inr}}
+\newcommand{\inln}[1]{\ident{inl}_{#1}}
+\newcommand{\inrn}[1]{\ident{inr}_{#1}}
+
+% Pushout
+\newcommand{\pushout}[2]{\AgdaFunction{\ident{pushout}}\ #1\ #2}
+
+% From: http://xy-pic.tug.narkive.com/qhjfQd0l/pullback-symbols
+\newcommand{\pushoutcorner}[1][dr]{\save*!/#1-1.2pc/#1:(-1,1)@^{|-}\restore} 
 
 % Equiv stuff
 \newcommand{\idtoequiv}{\AgdaFunction{\ident{idtoequiv}}}
