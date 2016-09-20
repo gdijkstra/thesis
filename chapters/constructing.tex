@@ -702,7 +702,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   $$
   \xymatrix{
     \coproduct{FX}{FY} \ar[r]^{\theta + \rho} \ar[d]_{\langle F \inln{n} , F \inrn{n} \rangle} 
-    &\coproduct{X}{Y} \ar[d]^{\langle \inln{n+1} , \inr{n+1} \rangle} \\
+    &\coproduct{X}{Y} \ar[d]^{\langle \inln{n+1} , \inrn{n+1} \rangle} \\
     FA_n \ar[r]_{\alpha_n}
     &A_{n+1}
   }
@@ -746,7 +746,10 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   We now have to construct and check for several things on $A_{\omega}$:
   \begin{itemize}
   \item an algebra structure $F A_{\omega} \to A_{\omega}$
-  \item inclusions $\inln{\omega} : X \to A_{\omega}$ and $\inrn{\omega}$, such that they are algebra morphisms $\theta \to \alpha_{\omega}$ and $\rho \to \alpha_{\omega}$ respectively
+  \item inclusions $\inln{\omega} : X \to A_{\omega}$ and
+    $\inrn{\omega}$, such that they are algebra morphisms
+    $\theta \to \alpha_{\omega}$ and $\rho \to \alpha_{\omega}$
+    respectively
   \item $(A_{\omega} , \alpha_{\omega})$ should have the universal
     property of being a coproduct of $(X,\theta)$ and $(Y,\rho)$
   \end{itemize}
@@ -781,7 +784,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   respectively into $A_{\omega}$ are defined as composing $\inln{0}$
   and $\inrn{0}$ with $c_0$. We then have to establish that these maps
   are in fact algebra morphisms. We will show this here for
-  $\inl{\omega}$:
+  $\inln{\omega}$:
   %
   \begin{align*}
     \inln{\omega} \circ \theta &=& c_0 \circ \inln{0} \circ \theta \\
@@ -793,7 +796,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
     &=&\alpha_{\omega} \circ F \inln{\omega}
   \end{align*}
   %
-  By the same reasoning $\inr{\omega}$ is an algebra morphism
+  By the same reasoning $\inr_{\omega}$ is an algebra morphism
   $\rho \to \alpha_{\omega}$.
 
   Finally we have to show that given an algebra $(Z,\zeta)$ with
@@ -801,7 +804,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   we get a unique algebra morphism $h : \alpha_{\omega} \to \zeta$
   satisfying $h \circ \inln{\omega} = f$ and $h \circ \inrn{\omega}$.
 
-  Observe that $Z$comes with a cocone for the cochain $(A,a)$ with
+  Observe that $Z$ comes with a cocone for the cochain $(A,a)$ with
   $z_n : A_n \to Z$ defined inductively:
   \begin{itemize}
   \item $z_0  : A_0 \to Z$ defined as $\langle f , g \rangle$, as $A_0 \ddefeq \coproduct{X}{Y}$.
@@ -812,7 +815,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
       \coproduct{FX}{FY} \ar[r]^{\theta + \rho} \ar[d]_{\langle F \inln{n} , F \inrn{n} \rangle} 
       &\coproduct{X}{Y} \ar[d]^{\langle \inln{n+1} , \inrn{n+1} \rangle} \ar@{=}[r]
       &\coproduct{X}{Y} \ar[dd]^{\langle f , g \rangle} \\
-      FA_n \ar[r]_{\alpha_n} \ar[d]_{z_n}
+      FA_n \ar[r]_{\alpha_n} \ar[d]_{F z_n}
       &A_{n+1} \ar[dr]_{z_{n+1}}
       \\
       FZ \ar[rr]_{\zeta}
@@ -825,9 +828,61 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   check whether outer square commutes. For $n = 0$, it commutes as $f$
   and $g$ are algebra morphisms. For the inductive step, it follows
   from the computation rule of $z_{n+1}$ and the fact that $f$ and $g$
-  are algebra morphisms.
-
+  are algebra morphisms. As for the inductive step, we consider the
+  following diagram:
+  $$
+  \xymatrix{
+    \coproduct{FX}{FY} \ar[rr]^{\theta + \rho} \ar[d]^{\langle F \inln{n} , F \inrn{n} \rangle} 
+    \ar@/_2pc/[dd]_{\langle F \inln{n+1} , F \inrn{n+1} \rangle}
+    &&\coproduct{X}{Y} \ar[d]^{\langle \inln{n+1} , \inrn{n+1} \rangle} \ar@{=}[rr]
+    &&\coproduct{X}{Y} \ar[dd]^{\langle \inln{n+2} , \inrn{n+2} \rangle} \ar@{=}[rr]
+    &&\coproduct{X}{Y} \ar[ddd]^{\langle f , g \rangle}
+    \\
+    FA_n \ar[rr]_{\alpha_n} \ar[d]^{F a_n}
+    &&A_{n+1} \ar[drr]_{a_{n+1}}
+    \\
+    FA_{n+1} \ar[rrrr]_{\alpha_{n+1}} \ar[d]_{F z_{n+1}}
+    &&&&A_{n+2} \ar[drr]_{z_{n+2}}
+    \\
+    FZ \ar[rrrrrr]_{\zeta}
+    &&&&&&Z
+  }
+  $$
+  The triangle on the left commutes as before. This means that the
+  outer square is the cocone on $Z$ that defines $z_{n+1}$. By the
+  universal property of $A_{n+1}$ we then get that $z_{n+1}$ and
+  $z_{n+1} \circ a_{n+1}$ are equal.
   
+  We therefore get a unique morphism $z_{\omega} : A_{\omega} \to Z$
+  satisfying $z_{\omega} \circ c_n = z_n$. Showing that this is an
+  algebra morphism $\alpha_{\omega} \to \zeta$ can be done by showing
+  that we have a cocone of the cochain $(FA,Fa)$ with carrier $Z$ and
+  that both $\zeta \circ F z_{\omega}$ and
+  $z_{\omega} \circ \alpha_{\omega}$ are cocone morphisms from
+  $FA_{\omega}$ into $Z$, hence by the universal property of
+  $FA_{\omega}$ they are equal.
+
+  The cocone on $Z$ is defined with morphisms
+  $\zeta \circ Fz_n : FA_n \to Z$. We have
+  $\zeta \circ Fz_n = \zeta \circ Fz_{n+1} \circ Fa_n$, as $z_n$
+  itself is a cocone on $(A,a)$. The fact that
+  $\zeta \circ F z_{\omega}$ follows directly from the computation
+  rules for $z_{\omega}$. Showing that $z_{n+1} \circ \alpha_n$ is a
+  cocone morphism also follows directly from the computation rules of
+  $z_{\omega}$ and $\alpha_{\omega}$.
+
+  Lastly, we have to check whether composing $z_{\omega}$ with the
+  inclusions from $X$ and $Y$ into $Z$ gives us back $f$ and $g$
+  respectively. We can show this by performing the following
+  computation:
+  \begin{align*}
+    z_{\omega} \circ \inln{\omega} &=& z_{\omega} \circ c_0 \circ \inln{0} \\
+    &=&z_0 \circ \inln{0} \\
+    &=&\langle f , g \rangle \circ \inl \\
+    &=&f
+  \end{align*}
+  Showing that $z_{\omega} \circ \inrn{\omega} = g$ can be done
+  analogously.
 \end{proof}
 
 \begin{proposition}
