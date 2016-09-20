@@ -666,6 +666,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
 \end{proof}
 
 \begin{proposition}
+  \label{f-alg-coproducts}
   The category $\algcat{F}$ has binary coproducts.
 \end{proposition}
 
@@ -890,7 +891,47 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
 \end{proposition}
 
 \begin{proof}
-  \todoi{TODO: proof}
+  Let $(X,\theta),(Y,\rho) : | \algcat{F} |$ with
+  $f, g : \theta \to \rho$ algebra morphisms. The coequaliser of $f$
+  and $g$ can be defined using a construction similar to that of
+  coproducts in \cref{f-alg-coproducts}. We again use the idea of
+  constructing a sequence of approximations to the coequaliser, using
+  pushouts to ensure that the inclusion maps are algebra morphisms. 
+
+  We define the objects $A_n$ inductively:
+  \begin{itemize}
+  \item $A_0 \ddefeq \coeqty{f}{g}$
+  \item $A_{n+1} \ddefeq \pushout{(F\beta_n \circ \langle F in_{f,g} \rangle)}{\langle in_{f,g} \circ \rho \rangle}$
+  \end{itemize}
+  \ie the following is a pushout diagram:
+  $$
+  \xymatrix{
+    \coeqty{Ff}{Fg}
+    \ar[rr]^{\langle in_{f,g} \circ \rho \rangle}
+    \ar[d]_{\langle F in_{f,g} \rangle}
+    &&\coeqty{f}{g}
+    \ar[dd]^{\beta_{n+1}}
+    \\
+    F (\coeqty{f}{g})
+    \ar[d]_{F\beta_n}
+    \\
+    FA_n 
+    \ar[rr]_{\alpha_n}
+    &&A_{n+1}
+  }
+  $$
+  where $in_{f,g} : Y \to \coeqty{f}{g}$ is the constructor of
+  $\coeqty{f}{g}$ and $\beta_0 \ddefeq \id_{\coeqty{f}{g}}$.
+
+  We can define the morphisms $a_n : A_n \to A_{n+1}$ in the same way
+  as before, using the universal property of pushouts. We can then
+  proceed to define an algebra
+  $\alpha_{\omega} : FA_{\omega} \to A_{\omega}$ on the colimit of
+  $(A,a)$. This algebra has an inclusion from $(Y,\rho)$, which
+  coequalises $f$ and $g$ and satisfies the universal property of
+  coequalisers in $\algcat{F}$. The details for these constructions
+  are all analogous to the proof of \cref{f-alg-coproducts}.
+  
 \end{proof}
 
 \begin{proposition}
