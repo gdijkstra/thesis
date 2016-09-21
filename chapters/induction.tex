@@ -249,6 +249,7 @@ equal. Giving the methods for this motive, \ie giving the algebra
 family, corresponds to forming the equaliser.
 
 \section{Limits in categories of algebras}
+\label{limits-in-categories-of-algebras}
 
 In this section we will show that the categories of algebras we are
 working with have products and equalisers, and hence satisfy the
@@ -774,7 +775,10 @@ x$. Rewriting the type of $m$ using this notation gives us:
 $$
 m : (x : FX) \times \Box_F\ P\ x \to P\ (\theta\ x)
 $$
-Intuitively the type $\Box_F\ P\ x$ is the induction hypothesis.
+Intuitively the type $\Box_F\ P\ x$ is the induction hypothesis. We
+can also read it as the modality ``all'': $\Box_F\ P\ x$ holds if $P$
+holds for all values of type $X$ ``contained'' in $x$.
+
 
 \subsection{General framework}
 

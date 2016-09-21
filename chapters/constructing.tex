@@ -1210,11 +1210,24 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
 
 In this chapter we have shown for some of the categories of algebras
 that they are finitely cocomplete. Our goal was to use these colimits
-to construct left adjoints. An alternative approach would be to use
-the adjoint functor theorem. We have already shown that the forgetful
-functors preserve certain limits, so we could extend this to them
-being continuous. We also would have to show that the sort categories
-are complete.
+to construct left adjoints. There are several different approaches to
+this problem.
 
-For monad algebras, there are several results on colimits of monad
-algebras \cite{Adamek1977i,Kelly1980,Barr1985}.
+The obvious choice would be to look at the Freyd's adjoint functor
+theorem. This theorem gives us a left adjoint for a functor, given
+that its domain is complete, that the functor is continuous and that
+the solution set condition is satisfied. In
+\cref{limits-in-categories-of-algebras}, we have (almost) shown that
+the categories we are working with are finitely complete and that the
+forgetful functors are continuous. Extending this to completeness
+means that we have to show that they have terminal objects and
+generalise binary products to arbitrary ones. More difficult would be
+to show that the solution set condition is satisfied.
+
+As for showing cocompleteness of categories of monad algebras, there
+are several treatments of colimits of monad algebras
+\cite{Linton1969,Barr1985}. The main result in \cite{Linton1969} is
+that, given that $\Cc$ is cocomplete, the category of monad algebras
+$\monalgcat{M}$ for a monad $M : \Func{\Cc}{\Cc}$ is cocomplete if and
+only if it has reflexive coequalisers. $\monalgcat{M}$ has reflexive
+coequalisers if $M$ preserves them.
