@@ -779,6 +779,29 @@ Intuitively the type $\Box_F\ P\ x$ is the induction hypothesis. We
 can also read it as the modality ``all'': $\Box_F\ P\ x$ holds if $P$
 holds for all values of type $X$ ``contained'' in $x$.
 
+Now that we know what the algebra families are, we can derive what the
+dependent algebra morphisms are as follows:
+
+let $(X,\theta) : | \algcat{F}$ with an algebra family
+$P : X \to \Set$,
+$m : (x : FX) \times \Box_F\ P\ x \to P\ (\theta\ x)$. Our goal is to
+find a type $\tau$ such that the following equivalence holds:
+$$
+(s : (x : X) \to P\ x) \times \tau = (f : \algcat{F}((X,\theta),(\Sigma X . P , \tilde{m}))) \times (\issection\ f)
+$$
+where $(\Sigma X . P , \tilde{m})$ is the total space of the family of
+algebras $(P,m)$, where $\tilde{m}$ is given as the composite:
+$$
+\xymatrix@!C{
+  F (\Sigma X . P)
+  \ar[r]^-{\phi}
+  &\Sigma (FX) . \Box_F\ P
+  \ar[r]^-{\langle \theta \circ \pi_0 , m \rangle}
+  &\Sigma X . P
+}
+$$
+
+
 
 \subsection{General framework}
 
