@@ -804,8 +804,8 @@ Intuitively the type $\Box_F\ P\ x$ is the induction hypothesis. We
 can also read it as the modality ``all'': $\Box_F\ P\ x$ holds if $P$
 holds for all values of type $X$ ``contained'' in $x$.
 
-Now that we know what the algebra families are, we can derive what the
-dependent algebra morphisms are as follows: let
+Now that we know what the algebra families are, we want to go on and
+derive the dependent algebra morphisms. Let
 $(X,\theta) : | \algcat{F}$ with an algebra family $P : X \to \Set$,
 $m : (x : FX) \times \Box_F\ P\ x \to P\ (\theta\ x)$. Our goal is to
 find a type $\tau$ such that the following equivalence holds:
@@ -823,6 +823,41 @@ $$
   &\Sigma X . P
 }
 $$
+where $\phi$ is the map given by the defining equivalence of $\Box_F$.
+
+As $\Box_F$ gives the functorial action of $F$ on \emph{families}, we
+need a similar functorial actions on dependent functions, namely
+$\bar{F} : ((x : X) \to P\ x) \to (x : FX) \to \Box_F\ P\
+x$. $\bar{F}$ has the defining property:
+$$
+\grph\ (\bar{F}\ s) = \phi \circ F (\grph\ s)
+$$
+where $\grph\ s = \lambda x . (x , s\ x)$.
+
+Using this, we can derive dependent morphisms for $\algcat{F}$ as
+follows:
+\begin{align*}
+  &&&(f : \algcat{F}((X,\theta),((x : X) \times P\ x , \tilde{m}))) \times (\issection_{\algcat{F}}\ (\pi_0, \refl)\ f) \\
+  &&=&\ \reasontext{definition of $\algcat{F}$ and $\issection_{\algcat{F}}$} \\
+  &&&(f : X \to (x : X) \times P\ x) \times (f \circ \theta = \tilde{m} \circ Ff) \times (\pi_0 \circ f = \id_X) \\
+  &&=&\ \reasontext{dependent morphism structure on $\Set$} \\
+  &&&(s : (x : X) \to P\ x) \times (s_0 : \grph\ s \circ \theta = \tilde{m} \circ F (\grph\ s)) \\
+  &&=&\ \reasontext{equality of pairs is pair of equalities} \\
+  &&&(s : (x : X) \to P\ x) \\
+  &&&\times (s_0 : \pi_0 \circ \grph\ s \circ \theta = \pi_0 \circ \tilde{m} \circ F (\grph\ s)) \\
+  &&&\times (s_1 : \pi_1 \circ \grph\ s \circ \theta = \pi_1 \circ \tilde{m} \circ F (\grph\ s)) \\
+  &&=&\ \reasontext{$\pi_0$ is an algebra morphism $\tilde{m} \to \theta$ and $\pi_0 \circ \grph\ s = \id_X$} \\
+  &&&(s : (x : X) \to P\ x) \times (s_0 : \theta = \theta) \times (s_1 : \pi_1 \circ \grph\ s \circ \theta = \pi_1 \circ \tilde{m} \circ F (\grph\ s))  \\
+  &&=&\ \reasontext{unfold definition $\tilde{m}$, $\theta = \theta$ is trivial by uniqueness of identity proofs} \\
+  &&&(s : (x : X) \to P\ x) \times (s_1 : \pi_1 \circ \grph\ s \circ \theta = \pi_1 \circ \langle \theta \circ \pi_0 , m \rangle \circ \phi \circ F (\grph\ s)) \\
+  &&=&\ \reasontext{computation rule of $\langle \theta \circ \pi_0 , m \rangle$, $\pi_1 \circ \grph\ s = s$, defining property of $\bar{F}$} \\
+  &&&(s : (x : X) \to P\ x) \times (s_1 : s \circ \theta = m \circ \grph (\bar{F}\ s))
+\end{align*}
+
+If we $\eta$-expand and $\beta$-reduce the definitions, we see that a
+dependent algebra morphism on an algebra family $(P,m)$ on an algebra
+$(X,\theta)$ consists of a dependent function $s : (x : X) \to P\ x$
+with computation rule $s\ (\theta\ x) = m\ x\ (\bar{F}\ s\ x)$.
 
 \subsection{General framework}
 \label{general-framework}
