@@ -732,10 +732,11 @@ conceptually simpler notion of initial algebra.
 
 If we unfold the section principle for our categories of algebras, we
 will not end up with a very natural induction principle. One of the
-key features of type theory is that we have special notation for
-families. If we want to define a predicate on a type $X$, the most 
-natural way to do it is usually to define a family $X \to \Set$, not
-to define another type $Y$ with a function $Y \to X$. 
+key features of type theory is that we have special machinery for
+dealing with type families/fibrations. If we want to define a
+predicate on a type $X$, the most natural way to do it is usually to
+define a family $X \to \Set$, not to define another type $Y$ with a
+function $Y \to X$.
 
 Since our categories of sorts and algebras are built out of types, we
 can try and derive a notion of families in these categories. In
@@ -749,7 +750,31 @@ its ``total space'' and its projection function. The inverse operation
 is the preimage family: $(Y,p)$ is mapped to
 $\lambda x . (y : Y) \times (p\ y = x)$. 
 
+Apart from having the machinery to deal with type families, we also
+have the machinery to deal with dependent functions, or equivalently,
+sections of fibrations. We have:
+$$
+(x : X) \to P\ x = (s : X \to (x : X) \times P\ x) \times (\pi_0 \circ s = \id_{X})
+$$
+where the map from left to right is the map that gives the ``graph''
+of the function: a dependent function $s$ is mapped to the
+non-dependent function $\lambda x . (x , s\ x)$. The map in the other
+direction is the second projection $\pi_1$, which is well-typed due to
+$s$ being a section.
+
+We will start out with using this observation to make precise the
+derivation of algebra families and dependent algebra morphisms in
+$\algcat{F}$ for an endofunctor $F : \Func{\Set}{\Set}$ in
+\cref{induction-for-f-algebras}. We will then give a general framework
+containing the ingredients for deriviations of the induction principle
+in \cref{general-framework}. Finally, in \cref{induction-for-qiids},
+we give some examples of induction principles of some quotient
+inductive-inductive definitions and then employ the general framework
+to derive the induction principle for arbitrary quotient
+inductive-inductive definitions in its full generality.
+
 \subsection{Induction for $F$-algebras}
+\label{induction-for-f-algebras}
 If we want to derive the notion of families of $F$-algebras for some
 endofunctor $F : \Func{\Set}{\Set}$, then we proceed as follows: let
 $(X,\theta) : | \algcat{F} |$, we want to solve the equivalence for
@@ -780,10 +805,8 @@ can also read it as the modality ``all'': $\Box_F\ P\ x$ holds if $P$
 holds for all values of type $X$ ``contained'' in $x$.
 
 Now that we know what the algebra families are, we can derive what the
-dependent algebra morphisms are as follows:
-
-let $(X,\theta) : | \algcat{F}$ with an algebra family
-$P : X \to \Set$,
+dependent algebra morphisms are as follows: let
+$(X,\theta) : | \algcat{F}$ with an algebra family $P : X \to \Set$,
 $m : (x : FX) \times \Box_F\ P\ x \to P\ (\theta\ x)$. Our goal is to
 find a type $\tau$ such that the following equivalence holds:
 $$
@@ -801,9 +824,8 @@ $$
 }
 $$
 
-
-
 \subsection{General framework}
+\label{general-framework}
 
 To derive notions of famlies and dependent morphism in the categories
 of algebras, we will introduce some notation, making precise what we
@@ -983,6 +1005,7 @@ $$
 The map $\phi$ we get from the equivalence given in \cref{box-thm}.
 
 \subsection{Induction for quotient inductive-inductive definitions}
+\label{induction-for-qiids}
 
 The family structure on $\Set$ is the usual one. We can derive
 definitions of the family structure on categories of algebras by
