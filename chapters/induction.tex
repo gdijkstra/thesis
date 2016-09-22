@@ -741,7 +741,7 @@ Since our categories of sorts and algebras are built out of types, we
 can try and derive a notion of families in these categories. In
 $\Set$, we have the equivalence, for any $X : \Set$:
 $$
-(X \to \Set) \simeq (Y : \Set) \times (p : Y \to X)
+(X \to \Set) = (Y : \Set) \times (p : Y \to X)
 $$
 where the function left to right is defined as
 $\lambda P . ((x : X) \times P\ x , \pi_0)$, \ie we map the family to
@@ -757,7 +757,7 @@ the type $\tau$:
 %
 \begin{align*}
 &\ \ \ \ \ \ (P : X \to \Set) \times (m : \tau) \\
-&\simeq ((Y,\rho) : | \algcat{F} |) \times ((p,p_0) : \algcat{F}((Y,\rho),(X,\theta)))  
+&= ((Y,\rho) : | \algcat{F} |) \times ((p,p_0) : \algcat{F}((Y,\rho),(X,\theta)))  
 \end{align*}
 %
 We set $Y$ to $(x : X) \times P\ x$ and $p$ to $\pi_0$. We then have
@@ -770,7 +770,7 @@ $$
 This can be simplified even further if we define the operation
 $\Box_F : (X \to \Set) \to FX \to \Set$, \ie the action of $F$ on type
 families, which has the defining equation
-$F ((x : X) \times P\ x) \simeq (x : FX) \times \Box_F\ P\
+$F ((x : X) \times P\ x) = (x : FX) \times \Box_F\ P\
 x$. Rewriting the type of $m$ using this notation gives us:
 $$
 m : (x : FX) \times \Box_F\ P\ x \to P\ (\theta\ x)
