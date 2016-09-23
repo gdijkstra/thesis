@@ -883,7 +883,7 @@ parts simplify.
   \item $\Fam_{\Cc} : | \Cc | \to \Type$
   \item $\total : (X : | \Cc |) \to \Fam_{\Cc}\ X \to | \Cc |$
   \item
-    $\proj : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \Cc(\total\ X\ P,
+    $\proj : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \Cc(\total\ P,
     X)$
   \item
     $\preimage : (X : | \Cc |)\ (Y : | \Cc |)\ (p : \Cc(Y,X)) \to
@@ -895,7 +895,7 @@ parts simplify.
 %
   \begin{itemize}
   \item for any family $P : \Fam_{\Cc}\ X$,
-  $$\preimage\ X\ (\total\ X\ P , \proj\ X\ P) = P$$
+  $$\preimage\ X\ (\total\ P , \proj\ P) = P$$
 \item for any object $Y : | \Cc |$ with $p : \Cc(Y,X)$,
   %
   \begin{align*}
@@ -983,9 +983,9 @@ $\Set$:
 %
   \begin{itemize}
   \item
-    $\grph : \DepHom\ X\ P \to \Sect\ X\ (\total\ X\ P,\proj\ X\ P)$
+    $\grph : \DepHom\ X\ P \to \Sect\ X\ (\total\ P,\proj\ P)$
   \item
-    $\snd : \Sect\ X\ (\total\ X\ P,\proj\ X\ P) \to \DepHom_{\Cc}\ X\
+    $\snd : \Sect\ X\ (\total\ P,\proj\ P) \to \DepHom_{\Cc}\ X\
     P$
   \end{itemize}
 %
@@ -994,7 +994,7 @@ $\Set$:
   \begin{itemize}
   \item for any $f : \DepHom_{\Cc}\ X\ P$,
   $$\snd\ X\ P\ s\ (\grph\ X\ P\ f) = f$$
-\item for any $s : \Sect\ X\ (\total\ X\ P, \proj\ X\ P)$,
+\item for any $s : \Sect\ X\ (\total\ P, \proj\ P)$,
   $$\grph\ X\ P\ (\snd\ X\ P\ s) = s$$
 \end{itemize}
 %
@@ -1308,24 +1308,80 @@ $$
 Suppose we have the following data describing a point constructor:
 %
 \begin{itemize}
-\item $\Ss : \sortsty$
-\item $s : \specty_{\Ss}$
-\item $S_i : \Cat$
-\item $p : \sortsin{S_i}{\Ss}$
+\item $\Ss : \sortsty$ with $s : \specty_{\Ss}$
+\item $S_i : \Cat$ with $p : \sortsin{S_i}{\Ss}$
 \item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \hat{U_s}$
 \end{itemize}
+
+Before we work out what algebra families are for point constructors,
+we will investigate what $\Box_F$ and $\Box_{\bar{U}_s}$ look
+like. Recall that we can split the functor $F : \Func{\Alg_s}{S_i}$
+into two operations, which are both functorial:
+\begin{itemize}
+\item $F^0 : | \Cc | \to |S_{i-1}|$, which we know to be equal to $\bar{U}^0_s$
+\item
+  $F^1 : (X : | \Cc |) \to (x : R_i (F^0 X)) \to F^1\ X\ x \to \Set$
+\end{itemize}
+
+The defining equation for $\Box_F\ P$ for $P : \Fam_{\Alg_s}$ is
+$$
+F (\total_{\Alg_s}\ P) = \total_{S_i}\ (\Box_F\ P)
+$$
+Knowing what the family structure on $S_i$ is, we know that
+$\Box_F\ P$ has the following type:
+$$
+\Box_F\ P : (V : \Fam_{S_{i-1}}\ F^0X) \times (W : (x : R_i (F^0 X)) \to \Box_{R_i}\ V\ x \to F^1\ X\ x \to \Set)
+$$
+Splitting this in its constituents will turn out to be useful, just as
+we have done with the functors itself. Let us call the first and
+second projections of this $\Box_{F^0}$ and $\Box_{F^1}$ respectively.
 
 Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
 specification, which is $s$ extended with the point constructor given by
 the data above. We want to derive the family structure on this
 category $\Alg_{s'}$:
-$$
-\hdots
-$$
-The family structure on $\Alg_{s'}$ is then:
-$$
-  \Fam_{\Alg_{s'}}\ (X , \theta) \ddefeq ? \\
-$$
+%
+\begin{align*}
+  &&&(Y : | \Alg_s |) \\
+  &&&\times (\rho : S_i(FY, \bar{U}_s Y)) \times (t_i \rho = \id_{t_i (\bar{U}_s X)}) \\
+  &&&\times (\Alg_{s'} ((Y,\rho),(X,\theta)) \\
+  &=&&\reasontext{unfold definition of $\Alg_{s'}$} \\
+  &&&(Y : | \Alg_s |) \times (\rho : S_i(FY, \bar{U}_s Y)) \times (t_i \rho = \id_{t_i (\bar{U}_s Y)}) \\
+  &&&\times (p : \Alg_s(Y,X)) \times (p_0 : \bar{U}_s p \circ \rho = \theta \circ F p) \\
+  &=&&\reasontext{combine $Y$ and $p$ using $\Fam$ structure on $\Alg_s$} \\
+  &&&(P : \Fam_{\Alg_s}\ X) \times (\rho : S_i(F(\total\ P), \bar{U}_s (\total\ P))) \times (t_i \rho = \id_{t_i (\bar{U}_s (\total\ P))}) \\
+  &&&\times (p_0 : \bar{U}_s(\proj\ P) \circ \rho = \theta \circ F (\proj\ P)) \\
+  &=&&\reasontext{unfold definition $S_i$ and expand $p_0$} \\
+  &&&(P : \Fam_{\Alg_s}\ X) \\
+  &&&\times (\rho : (x : R_i (\bar{U}^0_s (\total\ P))) \to F^1 (\total\ P)\ x \to \bar{U}^1_s (\total\ P)\ x) \\
+  &&&\times (p_0 : (x : R_i (\bar{U}^0_s (\total\ P)))\ (y : F^1 (\total\ P)\ x) \\
+  &&&\ \ \ \ \to \bar{U}^1_s (\proj\ P)\ x (\rho\ x\ y) = \theta\ (R_i\ (\bar{U}^0_s (\proj\ P) x)\ (F^1\ (\proj\ P)\ x\ y))) \\
+  &=&&\reasontext{rewriting using $\Box$ notation} \\
+  &&&(P : \Fam_{\Alg_s}\ X) \\
+  &&&\times (\rho : (x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+  &&&\ \ \ \ \to (z : \bar{U}^1_s\ X\ x) \times \Box_{\bar{U}^1_s}\ P\ (x,x')\ z) \\
+  &&&\times(p_0 : (x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+  &&&\ \ \ \ \to \pi_0\ (\rho\ (x,x')\ (y,y')) = \theta\ x\ y) \\
+  &=&&\reasontext{singleton contraction} \\
+  &&&(P : \Fam_{\Alg_s}\ X) \\
+  &&&\times (m : (x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+  &&&\ \ \ \ \to \Box_{\bar{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
+\end{align*}
+%
+What we get out as the definition of algebra families for point
+constructors looks a bit daunting at first glance. However, we can
+also see how it is a generalisation of the original situation in
+$\algcat{F}$ for endofunctors on $\Set$. The first part,
+$(x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\
+P\ x)$,
+gives us the induction hypotheses for all the sorts ``below'' the sort
+of the current constructors. The second part,
+$(y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y)$, gives us
+the induction hypothesis for the recursive arguments, which looks very
+similar to the $\algcat{F}$ case. Finally, the result type is
+$\Box_{\bar{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))$, which is the
+dialgebra counterpart of what we had before.
+
 The dependent morphism structure on $\Alg_{s'}$ is then:
 $$  
 \DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) \ddefeq ?
