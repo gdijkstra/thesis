@@ -27,6 +27,7 @@
 \usepackage{xifthen} % for data type decl hackery, detect empty parameters
 \usepackage{graphicx} % for \naturalto hackery
 \usepackage{tgpagella}
+\usepackage{dutchcal} % replace mathcal fonts to also support lowercase
 \usepackage{setspace}
 \onehalfspacing
 
@@ -258,6 +259,13 @@
 \newcommand{\Aa}{\mathcal{A}}
 \newcommand{\Cc}{\mathcal{C}}
 \newcommand{\Dd}{\mathcal{D}}
+
+\newcommand{\CAT}{\AgdaPrimitiveType{\mathcal{Cat}}}
+\newcommand{\SET}{\AgdaPrimitiveType{\mathcal{Set}}}
+\newcommand{\TYPE}{\AgdaPrimitiveType{\mathcal{Type}}}
+\newcommand{\FAM}{\AgdaFunction{\mathcal{Fam}}}
+\newcommand{\REL}{\AgdaFunction{\mathcal{Rel}}}
+
 \newcommand{\id}{\ident{id}}
 \newcommand{\algcat}[1]{#1\ident{-alg}}
 \newcommand{\dialgcat}[2]{(#1,#2)\ident{-dialg}}

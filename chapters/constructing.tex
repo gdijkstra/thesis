@@ -30,7 +30,7 @@ by induction on the length of the specification. We end up with a
 chain of adjunctions:
 $$
 \xymatrix{
-\Set \ar@/^/[r]^{L_0}
+\SET \ar@/^/[r]^{L_0}
 \ar@{}[r]|{\top} 
 &\Alg_0 \ar@/^/[l]^{U_0} \ar@/^/[r]^{L_1} 
 \ar@{}[r]|{\top} 
@@ -42,7 +42,7 @@ $$
 }
 $$
 Since left adjoints preserve colimits, in particular initial objects
-and $\Set$ has an initial object $\emptyty$,
+and $\SET$ has an initial object $\emptyty$,
 $(L_n \circ \hdots \circ L_0)\ \emptyty$ gives us the initial algebra
 in $\Alg_n$ we are after.
 
@@ -54,12 +54,12 @@ types to actually exist. We have seen in
 \cref{from-syntax-to-functors} that the recursive positions may only
 occur in \emph{positive positions} in order for the arguments to
 describe a covariant functor. This is not enough to guarantee the
-existence of an initial algebra. If we look at $\Set$ and consider the
-double powerset functor $P : \Func{\Set}{\Set}$:
+existence of an initial algebra. If we look at $\SET$ and consider the
+double powerset functor $P : \Func{\SET}{\SET}$:
 $$
 P\ X \ddefeq (X \to \boolty) \to \boolty
 $$
-This defines a covariant functor on $\Set$, yet $\algcat{P}$ does not
+This defines a covariant functor on $\SET$, yet $\algcat{P}$ does not
 have an initial algebra. By Lambek's lemma, having an initial algebra
 $(X,\theta) : | \algcat{P} |$ would imply that $\Iso{X}{P\ X}$. By
 Cantor's theorem, we know that there is no set $X$ which is isomorphic
@@ -73,12 +73,12 @@ way to describe them as the class of functors that contains all
 constant functor, closed under sums and products of strictly positive
 functors, exponentiation with a constant on the left of the arrow, and
 taking fixpoints \cite{Morris2007}. A more compact way to characterise
-strictly positive functors on $\Set$ in type theory is as
+strictly positive functors on $\SET$ in type theory is as
 \emph{containers}:
 %
 \begin{definition}
 \label{def-container}
-  A \emph{container} on $\Set$ consists of:
+  A \emph{container} on $\SET$ consists of:
   \begin{itemize}
   \item $S : \Set$, a type of \emph{shapes}
   \item $P : S \to \Set$, a family of \emph{position}, indexed by the shapes.
@@ -92,7 +92,7 @@ The corresponding functor is called the \emph{extension} of the container:
 %
 \begin{definition}
   Given a container $\cont{S}{P}$, its \emph{extension} is the functor
-  $\context{\cont{S}{P}} : \Func{\Set}{\Set}$ with its action on objects
+  $\context{\cont{S}{P}} : \Func{\SET}{\SET}$ with its action on objects
   defined as, for every $X : \Set$:
   $$
   \context{\cont{S}{P}}\ X \ddefeq (s : S) \times (P\ s \to X)
@@ -103,14 +103,14 @@ The corresponding functor is called the \emph{extension} of the container:
   $$
 \end{definition}
 
-\subsection{Containers for $\Set$-sorted definitions}
+\subsection{Containers for $\SET$-sorted definitions}
 To give the data for a quotient inductive-inductive definition, we
-often need more than just endofunctors on $\Set$. We are generally
+often need more than just endofunctors on $\SET$. We are generally
 working with functors $\Func{\Alg_s}{S_i}$ where $s : \specty$
 describes the previous constructors and $S_i$ is sort category
 describing the sort of the constructor we are defining. Containers
 have a generalisation to \emph{indexed containers} which describe
-functors between slice categories of $\Set$. This concept is again an
+functors between slice categories of $\SET$. This concept is again an
 instance of the more general notion of \emph{polynomial functor},
 which describes strictly positive functors between slices categories
 of a locally cartesian closed category. We cannot expect $\Alg_s$ to
@@ -139,7 +139,7 @@ The extension generalises straightforwardly:
 %
 \begin{definition}
   Given a container $\cont{S}{P}$ on a category $\Cc$, its extension
-  is the functor $\context{\cont{S}{P}} : \Func{\Cc}{\Set}$ with its
+  is the functor $\context{\cont{S}{P}} : \Func{\Cc}{\SET}$ with its
   action on objects defined as, for every $X : | \Cc |$:
   $$
   \context{\cont{S}{P}}\ X \ddefeq (s : S) \times \Cc(P\ s, X)
@@ -154,7 +154,7 @@ For ordinary containers, there exists a composition operation on
 them. For generalised containers, such an operation only makes sense
 if the extensions are composable. Even then, the usual construction is
 not always possible: suppose we have a $\Cc$-container $\cont{S}{P}$
-and a $\Set$-container $\cont{T}{Q}$, given an object $X : | \Cc |$, we can calculate:
+and a $\SET$-container $\cont{T}{Q}$, given an object $X : | \Cc |$, we can calculate:
 \begin{align*}
   \context{\cont{T}{Q}}\ (\context{\cont{S}{P}}\ X) &=& &(t : T) \times (Q\ t \to \context{\cont{S}{P}}\ X) \\
   &=& &(t : T) \times (Q\ t \to (s : S) \times \Cc(P\ s, X)) \\
@@ -169,7 +169,7 @@ $$
 In the ordinary container case, to derive the corresponding positions,
 one uses currying on the type of $b$. However, if
 $\context{\cont{S}{P}}$ happens to have a left adjoint
-$L : \Func{\Set}{\Cc}$, then the situation simplifies as follows:
+$L : \Func{\SET}{\Cc}$, then the situation simplifies as follows:
 \begin{align*}
   \context{\cont{T}{Q}}\ (\context{\cont{S}{P}}\ X) &=& &(t : T) \times (Q\ t \to \context{\cont{S}{P}}\ X) \\
   &=& &(t : T) \times (\Cc(L (Q\ t), X)) \\
@@ -199,42 +199,42 @@ for generalised containers:
 
 \subsection{Containers for arbitrarily sorted definitions}
 We have given a way to describe strictly positive functors and natural
-transformations needed to describe $\Set$-sorted quotient
+transformations needed to describe $\SET$-sorted quotient
 inductive-inductive definitions. However, the functors we work with
-are not generally functors into $\Set$, but may also be into any sort
+are not generally functors into $\SET$, but may also be into any sort
 category.
 
 In this section we will show how this can be done for the special case
-$\Fam$. Suppose we have a category $\Cc$, which we can think of as
-being a category of $\Fam$-sorted algebras. It is therefore equipped
-with a forgetful functor $U : \Func{\Cc}{\Fam}$. Describing the
-arguments of a $\Fam$-sorted constructor over $\Cc$ requires us to
-give a functor $F : \Func{\Cc}{\Fam}$ such that
-$t_1 \circ F = t_1 \circ U$, where $t_1 : \Func{\Fam}{\Set}$ is its
+$\FAM$. Suppose we have a category $\Cc$, which we can think of as
+being a category of $\FAM$-sorted algebras. It is therefore equipped
+with a forgetful functor $U : \Func{\Cc}{\FAM}$. Describing the
+arguments of a $\FAM$-sorted constructor over $\Cc$ requires us to
+give a functor $F : \Func{\Cc}{\FAM}$ such that
+$t_1 \circ F = t_1 \circ U$, where $t_1 : \Func{\FAM}{\SET}$ is its
 forgetful functor.
 
-Note that we have $\Fam = \Set^I$, therefore by the
+Note that we have $\FAM = \SET^I$, therefore by the
 cartesian-closedness of $\Cat$, we have
-$\Func{\Cc}{\Set^I} = \Func{\Cc \times I}{\Set}$. To give a functor
-$F : \Func{\Cc}{\Fam}$ is to give two functors
-$F^0, F^1 : \Func{\Cc}{\Set}$ along with a natural transformation
+$\Func{\Cc}{\SET^I} = \Func{\Cc \times I}{\SET}$. To give a functor
+$F : \Func{\Cc}{\FAM}$ is to give two functors
+$F^0, F^1 : \Func{\Cc}{\SET}$ along with a natural transformation
 $\alpha : \Nat{F^1}{F^0}$.
 
 Furthermore, we have the requirement that $F^0 = t_1 \circ U$. If we
-assume that we have an adjunction $L \dashv U : \Func{\Cc}{\Fam}$,
+assume that we have an adjunction $L \dashv U : \Func{\Cc}{\FAM}$,
 $t_1 \circ U$ will also have a left adjoint (as $t_1$ also has a left
 adjoint). If $t_1 \circ U$ has a left adjoint, it is a representible
 functor, which means it is also a container.
 
 \subsection{Generalising W-types}
 
-Let $\Cont_{\Set}$ be the type of containers on $\Set$. W-types give
-us a primitive $\wty : \Cont_{\Set} \to \Set$ along with a constructor
-$\wsup : (F : \Cont_{\Set}) \to \context{F}\ \wty_F \to \wty$. For
+Let $\Cont_{\SET}$ be the type of containers on $\SET$. W-types give
+us a primitive $\wty : \Cont_{\SET} \to \Set$ along with a constructor
+$\wsup : (F : \Cont_{\SET}) \to \context{F}\ \wty_F \to \wty$. For
 every container $F$, $(\wty_F,\wsup_F)$ satisfy the induction
 principle, \ie we have:
 $$
-\welim : (F : \Cont_{\Set}) \to (P : \Fam_{\algcat{F}}\ (\wty_F,\wsup_F)) \to \DepHom_{\algcat{F}}\ P
+\welim : (F : \Cont_{\SET}) \to (P : \Fam_{\algcat{F}}\ (\wty_F,\wsup_F)) \to \DepHom_{\algcat{F}}\ P
 $$
 Generalising this idea to quotient inductive-inductive definitions would be to have a primitive:
 $$
@@ -259,7 +259,7 @@ quotients.
 
 \subsection{Limitations of containers}
 
-While in the traditional setting, containers (on $\Set$) seem to be an
+While in the traditional setting, containers (on $\SET$) seem to be an
 adequate way to characterise strictly positive functors, it has its
 limitations. Let us consider the propositional truncation operation on
 $\Set$: $\proptrunc{\_} : \Set \to \Set$. Let $\cont{S}{P}$ be its
@@ -289,9 +289,9 @@ $(x\ y : \Bty) \to x = y$.
 If we have an inductive specification with no constructors, the
 category of algebras is the category of sorts. Constructing the
 initial object in these categories is similar to the construction in
-$\Fam$. We will construct the left adjoint to the forgetful functors
-of sort categories, similar to that of $\Fam$. The forgetful functor
-$\Func{\Fam}{\Set}$ has a left adjoint: the \emph{truth functor} that
+$\FAM$. We will construct the left adjoint to the forgetful functors
+of sort categories, similar to that of $\FAM$. The forgetful functor
+$\Func{\FAM}{\SET}$ has a left adjoint: the \emph{truth functor} that
 maps a set $X$ to the family $\lambda x . \unitty : X \to \Set$. This
 generalises to any functor in the abovementioned chain of sort
 categories: suppose we have a sort specification $\Ss : \sortsty$
@@ -328,7 +328,7 @@ Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
 \end{proof}
 
 \begin{proposition}
-  There exists an adjunction between $S_0$ and $\Set$
+  There exists an adjunction between $S_0$ and $\SET$
 \end{proposition}
 
 \begin{proof}
@@ -336,14 +336,14 @@ Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
   $A \to \Set$ for some $A : \Set$ and morphisms between
   $P, Q : A \to \Set$ being dependent functions
   $(x : A) \to P\ x \to Q\ x$. Usually $A = \unitty$, so we have a
-  trivial adjunction between $S_0$ and $\Set$. Whatever the choice of
+  trivial adjunction between $S_0$ and $\SET$. Whatever the choice of
   $A$ is, we can construct the following pair of adjoint functors
-  between $\Set$ and $S_0$:
+  between $\SET$ and $S_0$:
   \begin{align*}
-    &\Pi : \Func{S_0}{\Set} \\
+    &\Pi : \Func{S_0}{\SET} \\
     &\Pi\ P \ddefeq (x : A) \to P\ x \\
     \\
-    &K : \Func{\Set}{S_0} \\
+    &K : \Func{\SET}{S_0} \\
     &K\ X \ddefeq (\lambda x . X)
   \end{align*}
   We then have for any $X : \Set$ and $P : A \to \Set$ the following equality
@@ -358,7 +358,7 @@ Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
 We therefore get the following chain of adjunctions:
 $$
 \xymatrix{
-\Set \ar@/^/[r]^{K}
+\SET \ar@/^/[r]^{K}
 \ar@{}[r]|{\top} 
 &S_0 \ar@/^/[l]^{\Pi} \ar@/^/[r]^{u_1} 
 \ar@{}[r]|{\top} 
@@ -369,7 +369,7 @@ $$
 &S_n \ar@/^/[l]^{t_n}
 }
 $$
-Since $\Set$ has an initial object, we get the initial object of any
+Since $\SET$ has an initial object, we get the initial object of any
 sort category $S_i$ by following the chain of left adjoints.
 
 \section{Initial objects via sequential colimits}
@@ -520,12 +520,12 @@ inside type theory itself.
 
 The definition of sequential colimits is presented in such a way that
 we can straightforwardly formalise it in type theory. The same goes
-for Ad\'amek's theorem. We can also show internally that $\Set$ has
+for Ad\'amek's theorem. We can also show internally that $\SET$ has
 sequential colimits, if we have an internal version of coequalisers at
 hand.
 
 \begin{proposition}
-  We can construct sequential colimits in $\Set$ from the natural
+  We can construct sequential colimits in $\SET$ from the natural
   numbers and coequalisers.
 \end{proposition}
 
@@ -561,26 +561,26 @@ does not help us much as constructing coproducts in categories of
 algebras is rather involved, and already involves sequential colimits
 themselves.
 
-\subsection{Constructing $\Set$-sorted quotient inductive-inductive definitions}
+\subsection{Constructing $\SET$-sorted quotient inductive-inductive definitions}
 
-In this section we will look at the simplified setting of $\Set$-sorted quotient
+In this section we will look at the simplified setting of $\SET$-sorted quotient
 inductive-inductive definitions. Our ultimate goal is to show that for
-any $\Set$-sorted $s : \specty$, where all the functors preserve
+any $\SET$-sorted $s : \specty$, where all the functors preserve
 sequential colimits, we have a left adjoint to the forgetful functor
-$U : \Func{\Alg_s}{\Set}$. We can do this by induction on the
+$U : \Func{\Alg_s}{\SET}$. We can do this by induction on the
 specification $s$. To construct this left adjoint for a category
 $\Alg_s$ extended with a point or path constructor, we need to have
 sequential colimits, coequalisers and binary coproducts in $\Alg_s$.
 
-$\Set$ satisfies all these conditions, so the base case of the
+$\SET$ satisfies all these conditions, so the base case of the
 induction holds. In the next two sections we will to the inductive
 step for point and path constructors respectively.
 
 \subsubsection{Point constructors}
 
 If we have $\Alg_s$ with an adjunction
-$L \dashv U : \Func{\Alg_s}{\Set}$ and a functor
-$F : \Func{\Alg_s}{\Set}$, then the category of $(F,U)$-dialgebras is
+$L \dashv U : \Func{\Alg_s}{\SET}$ and a functor
+$F : \Func{\Alg_s}{\SET}$, then the category of $(F,U)$-dialgebras is
 equivalent to the category of $(L \circ F)$-algebras. As such, we can
 focus our attention on the properties of categories of algebras of
 endofunctors. Also note that since $L$ is a left adjoint, it preserves
@@ -948,10 +948,10 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
 
 \subsubsection{Path constructors}
 Suppose we have a category $\Cc : \Cat$ with an adjunction
-$L \dashv U : \Func{\Cc}{\Set}$. To describe a path constructor
+$L \dashv U : \Func{\Cc}{\SET}$. To describe a path constructor
 on $\Cc$, we need the following data:
 \begin{itemize}
-\item $F : \Func{\Cc}{\Set}$, describing the arguments of the constructor
+\item $F : \Func{\Cc}{\SET}$, describing the arguments of the constructor
 \item $\ell, r : \Nat{F}{U}$, giving the end points of the equations
 \end{itemize}
 
