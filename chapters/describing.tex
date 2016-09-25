@@ -702,16 +702,16 @@ membership relation as the following inductive type:
 Suppose we have a chain of sorts
 $S_0 \from S_1 \from \hdots \from S_n$ and a functor
 $U : \Func{\Cc}{S_n}$, then naturally we can extend this functor to
-$\hat{U_i} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by composing
+$\extendfunc{U_i} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by composing
 with the forgetful functors. We can implement this operation with sort
 membership, \ie for every specification $\Ss : \sortsty$ with a
 functor $U : \Func{\Cc}{\SortCat{\Ss}}$, we can define the function:
 $$
-\hat{U} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to \Func{\Cc}{S_i}
+\extendfunc{U} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to \Func{\Cc}{S_i}
 $$
 This function is defined by induction over the proof of
 $\sortsin{S_i}{\SortCat{\Ss}}$. We will usually just write
-$\hat{U} X$, leaving the membership proof implicit.
+$\extendfunc{U} X$, leaving the membership proof implicit.
 
 \subsection{Makkai's dependent sorts}
 
@@ -1108,7 +1108,7 @@ already constructed
 \begin{itemize}
 \item $\Alg_s : \Cat$,
 \item $U_s : \Alg_s \to \SortCat{\Ss}$ its forgetful functor, and
-\item the extension $\bar{U}_s : \Alg_s \to S_i$ of $U_s$, which we
+\item the extension $\extendfunc{U}_s : \Alg_s \to S_i$ of $U_s$, which we
   get from $\sortsin{S_i}{\Ss}$.
 \end{itemize}
 %
@@ -1125,7 +1125,7 @@ $(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)$. The functor $U_s$
 gives us back all underlying carriers, \ie
 $U_s(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m) = (X_0, \hdots,
 X_n)$
-and the functor $\bar{U}_s$ further projects down to the $i$ first
+and the functor $\extendfunc{U}_s$ further projects down to the $i$ first
 carriers $X_0, \hdots, X_i$, with
 $(X_0, \hdots, X_{i-1}) : | S_{i-1} |$ and
 \[
@@ -1141,14 +1141,14 @@ where
 $$
 F^1 : ((X_0,\hdots,X_n,\theta_0,\hdots,\theta_m) : | \Alg_s |) \to R_i (X_0, \hdots, X_{i-1}) \to \Set
 $$
-Note that the functor $\bar{U}_s$ can be decomposed into two parts: we
-have $\bar{U}^0 : \Alg_s \to S_{i-1}$ and
-$\bar{U}_1 : (X : \Alg_s) \to R_i\ (\bar{U}^0\ X) \to \Set$.
-$\bar{U}^0$ can also be written as $t_i \circ \bar{U}_s$, where
+Note that the functor $\extendfunc{U}_s$ can be decomposed into two parts: we
+have $\extendfunc{U}^0 : \Alg_s \to S_{i-1}$ and
+$\extendfunc{U}_1 : (X : \Alg_s) \to R_i\ (\extendfunc{U}^0\ X) \to \Set$.
+$\extendfunc{U}^0$ can also be written as $t_i \circ \extendfunc{U}_s$, where
 $t_i : S_i \to S_{i-1}$ is the forgetful functor of $S_i$. In order
 for the point constructor specified by $F^1$ to be well-defined, \ie
 to make sense of its computation rule, we need
-$F X \ddefeq (\bar{U}^0\ X, F^1\ X)$ to be a functor
+$F X \ddefeq (\extendfunc{U}^0\ X, F^1\ X)$ to be a functor
 $\Func{\Alg_s}{S_i}$.  This leads us to the definition of a point
 constructor specification:
 
@@ -1158,13 +1158,13 @@ constructor specification:
   $F : \Func{\Alg_s}{S_i}$ such that the following commutes:
   $$
   \xymatrix{
-    \Alg_s \ar[r]^{F} \ar[d]_{\bar{U}_s} &S_i \ar[d]^{t_i} \\
+    \Alg_s \ar[r]^{F} \ar[d]_{\extendfunc{U}_s} &S_i \ar[d]^{t_i} \\
     S_i \ar[r]^{t_i} &S_{i-1}
   }
   $$
   In other words, we have
   $$
-  \Constr_0\ s\ S_i\ p \ddefeq (F : \Func{\Alg_s}{S_i}) \times (p : t_i \circ F = t_i \circ \bar{U}_s) \enspace .
+  \Constr_0\ s\ S_i\ p \ddefeq (F : \Func{\Alg_s}{S_i}) \times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \enspace .
   $$
 \end{definition} 
 
@@ -1175,25 +1175,25 @@ We now explain how to construct the category $\Alg_{s'}$ of algebras
 for a an specification with an additional point constructor. Suppose
 the specification $s'$ has been obtained as the extension of a
 specification $s$ by a point constructor given by a functor
-$F : \Alg_s \to S_i$, which decomposes as $F = (\bar{U}^0, F^1)$. The
+$F : \Alg_s \to S_i$, which decomposes as $F = (\extendfunc{U}^0, F^1)$. The
 previous characterisation of a point constructor algebra structure on
 an object $X : | \Alg_s |$ can be summarised as having a dependent
 function of morphisms
 \[
-\theta : (x : R_i (\bar{U}^0\ X)) \to F^1\ X\ x \to \bar{U}_1\ X\ x
+\theta : (x : R_i (\extendfunc{U}^0\ X)) \to F^1\ X\ x \to \extendfunc{U}_1\ X\ x
 \]
 A morphism $(X,\theta) \to (Y,\rho)$ consists of a morphism
 $f : \Alg_s(X,Y)$ along with a ``computation rule'':
 \begin{multline*}
-f_0 : (x : R_i \ (\bar{U}^0\ X))\ (y : F^1\ X\ x) \to \\ 
-\bar{U}_1\ f\ x\ (\theta\ x\ y) = \rho\ (R_i(\bar{U}^0\ f\ x)\ (F^1\ f\ x\ y)
+f_0 : (x : R_i \ (\extendfunc{U}^0\ X))\ (y : F^1\ X\ x) \to \\ 
+\extendfunc{U}_1\ f\ x\ (\theta\ x\ y) = \rho\ (R_i(\extendfunc{U}^0\ f\ x)\ (F^1\ f\ x\ y)
 \end{multline*}
 This category of algebras look similar to
-$\dialgcat{F}{\bar{U}_s}$. However, as we have seen previously, the
+$\dialgcat{F}{\extendfunc{U}_s}$. However, as we have seen previously, the
 category of dialgebras contains too much: morphisms there also come
 with a superfluous endomorphism in $S_{i-1}$. We want this morphism to
 be an identity morphism, which we can achieve by taking an
-equaliser. The category $\dialgcat{F}{\bar{U}_s}$ comes with two
+equaliser. The category $\dialgcat{F}{\extendfunc{U}_s}$ comes with two
 forgetful functors: $V$ that gives us the carrier of the algebra and
 $V^I$ that gives us algebra structure on the carrier, which is a
 morphism in $S_i$ or equivalently, an object in the arrow category
@@ -1202,11 +1202,11 @@ $S_i^I$. The definition of the new category of algebras is as follows:
 \begin{definition}[Category of algebras for a point constructor]
   Let $s' : \specty$ be the specification $s$ extended with a
   point constructor of sort $S_i$ given by a functor $F : \Alg_s \to S_i$
-  satisfying $t_i \circ F = t_i \circ \bar{U}_s$. The category of
+  satisfying $t_i \circ F = t_i \circ \extendfunc{U}_s$. The category of
   algebras $\Alg_{s'}$ is as the following equaliser in $\Cat$:
   \[
   \xymatrix{
-    \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\bar{U}_s} \ar[r]^-{V} \ar[d]^-{V^I} &\Alg_s \ar[r]^-{\bar{U}_s} &S_i \ar[r]^{t_i} &S_{i-1} \ar[d]^-{\id} \\
+    \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\extendfunc{U}_s} \ar[r]^-{V} \ar[d]^-{V^I} &\Alg_s \ar[r]^-{\extendfunc{U}_s} &S_i \ar[r]^{t_i} &S_{i-1} \ar[d]^-{\id} \\
     &S_i^I \ar[rrr]^{t_i^I} && &S_{i-1}^I }
   \]
   where $e$ is the projection map of the equaliser, $t_i^I$ is the
@@ -1217,7 +1217,7 @@ $S_i^I$. The definition of the new category of algebras is as follows:
   The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite:
   \[
     \xymatrix{
-      \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\bar{U}_s} \ar[r]^-{V} &\Alg_s \ar[r]^-{U_s} &\SortCat{\Ss}
+      \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\extendfunc{U}_s} \ar[r]^-{V} &\Alg_s \ar[r]^-{U_s} &\SortCat{\Ss}
     }
   \]
 \end{definition}
@@ -1300,14 +1300,14 @@ form:
 \end{align*}
 where
 \begin{itemize}
-\item $F^1 : (X : | \Alg_s |) \to R_i (\bar{U}^0 X) \to \Set$, such
-  that $F X \ddefeq (\bar{U}^0 X, F^1 X)$ is a functor $\Alg_s \to S_i$, and
+\item $F^1 : (X : | \Alg_s |) \to R_i (\extendfunc{U}^0 X) \to \Set$, such
+  that $F X \ddefeq (\extendfunc{U}^0 X, F^1 X)$ is a functor $\Alg_s \to S_i$, and
 \item
-  $\ell^1, r^1 : (X : | \Cc |) (x : R_i (\bar{U}^0\ X)) (y : F^1\ X\ x)
-  \to \bar{U}_1\ X\ x$
-  such that $\ell_X \ddefeq (\id_{\bar{U}^0 X}, \ell^1)$ and
-  $r_X \ddefeq (\id_{\bar{U}^0 X}, r^1)$ are natural transformations
-  $\Nat{F}{\bar{U}_s}$.
+  $\ell^1, r^1 : (X : | \Cc |) (x : R_i (\extendfunc{U}^0\ X)) (y : F^1\ X\ x)
+  \to \extendfunc{U}_1\ X\ x$
+  such that $\ell_X \ddefeq (\id_{\extendfunc{U}^0 X}, \ell^1)$ and
+  $r_X \ddefeq (\id_{\extendfunc{U}^0 X}, r^1)$ are natural transformations
+  $\Nat{F}{\extendfunc{U}_s}$.
 \end{itemize}
 Algebra morphisms $(X,\theta) \to (Y,\rho)$ are simply morphisms
 $X \to Y$ in $\Alg_s$. As we are working with sets, we do not need
@@ -1320,13 +1320,13 @@ path constructor specification:
 \begin{definition}[Data for a path constructor]
   Given a specification $s : \specty$, a path constructor of sort
   $\sortsin{S_i}{\Ss}$ is specified by a functor $F : \Alg_s \to S_i$
-  satisfying $t_i \circ F = t_i \circ \bar{U}_s$ and two natural
-  transformations $\ell, r : F \to \bar{U}_s$ satisfying
-  $t_i\ \ell = t_i\ r = \id_{t_i \circ \bar{U}_s}$, \ie:
+  satisfying $t_i \circ F = t_i \circ \extendfunc{U}_s$ and two natural
+  transformations $\ell, r : F \to \extendfunc{U}_s$ satisfying
+  $t_i\ \ell = t_i\ r = \id_{t_i \circ \extendfunc{U}_s}$, \ie:
 \begin{align*}
-  \Constr_1\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \bar{U}_s) \\ 
-  \times (\ell : F \to \bar{U}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \bar{U}_s}) \\ 
-  \times (r : F \to \bar{U}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \bar{U}_s}) \enspace .
+  \Constr_1\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \\ 
+  \times (\ell : F \to \extendfunc{U}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \extendfunc{U}_s}) \\ 
+  \times (r : F \to \extendfunc{U}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \extendfunc{U}_s}) \enspace .
 \end{align*}
 \end{definition}
 
@@ -1336,12 +1336,12 @@ transformations must leave the sorts below $S_i$ untouched.
 
 Note that by function extensionality, the type of $\theta$ is
 equivalent to $\ell^1_X = r^1_X$. Since
-$t_i\ (l\ X) = t_i\ (r\ X) = \id_{t_i \circ \bar{U}}$ the equality
+$t_i\ (l\ X) = t_i\ (r\ X) = \id_{t_i \circ \extendfunc{U}}$ the equality
 $\ell_1\ X = r_1\ X$ of dependent functions in $\SET$ is equivalent to
 the equality $l\ X = r\ X $ of morphisms in $S_i$. We also observe
-that a natural transformation $\alpha : F \to \bar{U}$ gives rise to a
+that a natural transformation $\alpha : F \to \extendfunc{U}$ gives rise to a
 functor $\hat{\alpha} : \Alg_s \to S_i^I$, mapping $X : | \Alg_s |$ to
-$\alpha_X : S_i(F\ X,\bar{U}\ X)$. Functoriality of this functor comes
+$\alpha_X : S_i(F\ X,\extendfunc{U}\ X)$. Functoriality of this functor comes
 from the naturality of $\alpha$. This leads us to the definition of
 the category of algebras for a path constructor:
 
@@ -1349,13 +1349,13 @@ the category of algebras for a path constructor:
   Let $s' : \specty$ be the specification
   $s$ extended with a path constructor of sort
   $S_i$ given by a functor $F : \Alg_s \to S_i$ satisfying $t_i \circ
-  F = t_i \circ \bar{U}_s$ and natural transformations $l, r : F \to
-  \bar{U}_s$ satisfying $t_i\ l = t_i\ r = \id_{t_i \circ
-    \bar{U}_s}$. The category of algebras
+  F = t_i \circ \extendfunc{U}_s$ and natural transformations $l, r : F \to
+  \extendfunc{U}_s$ satisfying $t_i\ l = t_i\ r = \id_{t_i \circ
+    \extendfunc{U}_s}$. The category of algebras
   $\Alg_{s'}$ is defined as the following equaliser in $\Cat$:
   \[
   \xymatrix{
-    \Alg_{s'} \ar[r]^{e} &\Alg_s \ar@<-.5ex>[r]_-{\hat{r}} \ar@<.5ex>[r]^-{\hat{l}} &S_i^I
+    \Alg_{s'} \ar[r]^{e} &\Alg_s \ar@<-.5ex>[r]_-{\hat{r}} \ar@<.5ex>[r]^-{\hat{\ell}} &S_i^I
   }
   \]
   where $e$ is the projection map of the equaliser.
