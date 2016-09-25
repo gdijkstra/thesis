@@ -278,7 +278,7 @@ sorts. We will show that this category has the required limits:
 
   In the induction step case, we have $\SortCat{\Ss} = S_i$ for a
   category $S_i$ which is built out of the previous category of sorts
-  $S_{i-1} : \Cat$ with $R_i : S_{i-1} \to \Set$. By the induction
+  $S_{i-1} : \Cat$ with $R_i : \Func{S_{i-1}}{\SET}$. By the induction
   hypothesis $S_{i-1}$ has products and equalisers. We can then define
   products in $S_{i}$ as follows: suppose $(X,P), (Y,Q) : | S_{i} |$,
   \ie $X, Y : | S_{i-1} |$ and $P : R_i X \to \Set$,
@@ -293,7 +293,7 @@ sorts. We will show that this category has the required limits:
   \]
   This definition satisfies the universal property of products, which
   can be shown by appealing to the universal properties of products in
-  $S_{i-1}$ and $\Set$: let $(Z,T) : | S_{i} |$, then we have:
+  $S_{i-1}$ and $\SET$: let $(Z,T) : | S_{i} |$, then we have:
   % 
   \begin{align*}
     &&&S_i((Z,T),(X \times Y, P \times Q)) \\
@@ -303,7 +303,7 @@ sorts. We will show that this category has the required limits:
     &=& &\reasontext{universal property of $X \times Y$ in $S_{i-1}$ and functoriality of $R_i$} \\
     &&& (f_0 : S_{i-1}(Z,X)) \times (f_1 : S_{i-1}(Z,Y)) \\
     &&& \times (g : (x : R_iZ) \to T\ x \to P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)) \\
-    &=& &\reasontext{universal property of $P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)$ in $\Set$} \\
+    &=& &\reasontext{universal property of $P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)$ in $\SET$} \\
     &&& (f_0 : S_{i-1}(Z,X)) \times (f_1 : S_{i-1}(Z,Y)) \\
     &&& \times (g_0 : (x : R_iZ) \to T\ x \to P\ (R_i\ f\ x)) \\
     &&& \times (g_1 : (x : R_iZ) \to T\ x \to Q\ (R_i\ g\ x)) \\
@@ -364,7 +364,7 @@ following proposition:
   Showing that $(f,f') \circ (e,e') = (g,g') \circ (e,e')$ is then
   straightforward. The universal property can be shown similarly to
   that of the product: we have to appeal to the universal properties
-  of equalisers in $S_{i-1}$ and $\Set$.
+  of equalisers in $S_{i-1}$ and $\SET$.
 \end{proof}
 
 \begin{remark}
@@ -740,7 +740,7 @@ function $Y \to X$.
 
 Since our categories of sorts and algebras are built out of types, we
 can try and derive a notion of families in these categories. In
-$\Set$, we have the equivalence, for any $X : \Set$:
+$\SET$, we have the equivalence, for any $X : \Set$:
 $$
 (X \to \Set) = (Y : \Set) \times (p : Y \to X)
 $$
@@ -764,7 +764,7 @@ $s$ being a section.
 
 We will start out with using this observation to make precise the
 derivation of algebra families and dependent algebra morphisms in
-$\algcat{F}$ for an endofunctor $F : \Func{\Set}{\Set}$ in
+$\algcat{F}$ for an endofunctor $F : \Func{\SET}{\SET}$ in
 \cref{induction-for-f-algebras}. We will then give a general framework
 containing the ingredients for derivations of the induction principle
 in \cref{general-framework}. Finally, in \cref{induction-for-qiids},
@@ -776,7 +776,7 @@ inductive-inductive definitions in its full generality.
 \subsection{Induction for $F$-algebras}
 \label{induction-for-f-algebras}
 If we want to derive the notion of families of $F$-algebras for some
-endofunctor $F : \Func{\Set}{\Set}$, then we proceed as follows: let
+endofunctor $F : \Func{\SET}{\SET}$, then we proceed as follows: let
 $(X,\theta) : | \algcat{F} |$, we want to solve the equivalence for
 the type $\tau$:
 %
@@ -840,7 +840,7 @@ follows:
   &&&(f : \algcat{F}((X,\theta),((x : X) \times P\ x , \tilde{m}))) \times (\issection_{\algcat{F}}\ (\pi_0, \refl)\ f) \\
   &&=&\ \reasontext{definition of $\algcat{F}$ and $\issection_{\algcat{F}}$} \\
   &&&(f : X \to (x : X) \times P\ x) \times (f \circ \theta = \tilde{m} \circ Ff) \times (\pi_0 \circ f = \id_X) \\
-  &&=&\ \reasontext{dependent morphism structure on $\Set$} \\
+  &&=&\ \reasontext{dependent morphism structure on $\SET$} \\
   &&&(s : (x : X) \to P\ x) \times (s_0 : \grph\ s \circ \theta = \tilde{m} \circ F (\grph\ s)) \\
   &&=&\ \reasontext{equality of pairs is pair of equalities} \\
   &&&(s : (x : X) \to P\ x) \\
@@ -871,8 +871,8 @@ that category. This definition on its own is not very useful: we can
 always trivially satisfy the definition by letting the type of
 families exactly be the type of morphisms into an object. However, our
 categories are not completely arbitrary: they are always in some way
-built out of objects and morphisms in $\Set$. We can therefore use the
-notion of families in $\Set$ for those parts and see how the remaining
+built out of objects and morphisms in $\SET$. We can therefore use the
+notion of families in $\SET$ for those parts and see how the remaining
 parts simplify.
 
 \begin{definition}[Family structure on a category]
@@ -945,15 +945,15 @@ functor $F : \Func{\Cc}{\Dd}$.
 \end{proof}
 
 \begin{corollary}
-  Applying \cref{box-thm} to endofunctors on $\Set$, we get, given
-  $F : \Func{\Set}{\Set}$, $X : \Set$, $P : X \to \Set$:
+  Applying \cref{box-thm} to endofunctors on $\SET$, we get, given
+  $F : \Func{\SET}{\SET}$, $X : \Set$, $P : X \to \Set$:
   $$
   F ((x : X) \times P x) = (x : FX) \times \Box_F\ P\ x
   $$
 \end{corollary}
 
 Having defined families, we can then go on to generalise the notion of
-dependent functions. In $\Set$, given a family $P : X \to \Set$, a
+dependent functions. In $\SET$, given a family $P : X \to \Set$, a
 dependent function $(x : X) \to P\ x$ corresponds to a function
 $s : X \to (x : X) \times P\ x$ along with
 $s_0 : \pi_0 \circ s = \id_X$. The function from left to right sends a
@@ -972,7 +972,7 @@ make it typecheck.
 
 A dependent morphism structure on a category with a family structure
 is something that allows us to perform the same construction as in
-$\Set$:
+$\SET$:
 
 \begin{definition}[Dependent morphism structure]
   To generalise dependent morphisms to a category $\Cc$, we need a
@@ -1011,7 +1011,7 @@ morphisms. Given a functor $F : \Func{\Cc}{\Dd}$, we can define:
 $$
 \bar{F} : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \DepHom_{\Cc}\ X\ P \to \DepHom_{\Cc}\ FX\ (\Box_F\ X\ P)
 $$
-If $F$ happens to be an endofunctor on $\Set$, this simplifies to:
+If $F$ happens to be an endofunctor on $\SET$, this simplifies to:
 $$
 \bar{F} : (X : \Set) (P : X \to \Set) \to ((x : X) \to P\ x) \to (x : F X) \to \Box_F\ X\ P\ x
 $$
@@ -1042,10 +1042,10 @@ The map $\phi$ we get from the equivalence given in \cref{box-thm}.
 \subsection{Induction for quotient inductive-inductive definitions}
 \label{induction-for-qiids}
 
-The family structure on $\Set$ is the usual one. We can derive
+The family structure on $\SET$ is the usual one. We can derive
 definitions of the family structure on categories of algebras by
-induction. Since they are defined ``on top of'' $\Set$, we can use the
-specification and the family structure on $\Set$ to derive appropriate
+induction. Since they are defined ``on top of'' $\SET$, we can use the
+specification and the family structure on $\SET$ to derive appropriate
 definitions. We will start out by considering the induction principles
 for the contexts and types example and the interval type.
 
@@ -1134,7 +1134,7 @@ constructors:
   \constr{\intseg}{\intzero = \intone}
 \end{align*}
 
-Since it is just a $\Set$-sorted inductive definition, a motive for
+Since it is just a $\SET$-sorted inductive definition, a motive for
 induction on $\intty$ is a family $P : \intty \to \Set$. The methods
 are:
 \begin{align*}
@@ -1159,35 +1159,35 @@ Since we are working with sets, we do not need to add a computation
 rule for the path constructor $\intseg$, as that would introduce a
 path between equalities, \ie it would not introduce anything new.
 
-\subsubsection{Family and dependent morphism structure on $\Fam$}
+\subsubsection{Family and dependent morphism structure on $\FAM$}
 
 Before we move on to sort categories and categories of algebras, let
 us first consider the families and dependent morphisms in the category
-$\Fam$. Recall that $\Fam$ is the sort category for the
+$\FAM$. Recall that $\FAM$ is the sort category for the
 inductive-inductive type $(\ttconty,\tttyty)$ of contexts and types in
 a context. We will use the intuition of the induction principle of
 that inductive-inductive definition to make sense of what is going on
 here.
 
-Our first goal is to derive a family $\Fam_{\Fam} : | \Fam | \to \Set$
-that satisfies, for any $X : | \Fam |$:
+Our first goal is to derive a family $\Fam_{\FAM} : | \FAM | \to \Set$
+that satisfies, for any $X : | \FAM |$:
 $$
-\Fam_{\Fam} = (Y : | \Fam |) \times \Fam(Y,X)
+\Fam_{\FAM} = (Y : | \FAM |) \times \FAM(Y,X)
 $$
 We derive the definition by taking the right hand side of the above
 equation and performing the following equational reasoning:
 \begin{align*}
-  &&&(Y : | \Fam |) \times \Fam(Y,X) \\
-  &=& &\reasontext{definition of objects and morphisms in $\Fam$} \\
+  &&&(Y : | \FAM |) \times \FAM(Y,X) \\
+  &=& &\reasontext{definition of objects and morphisms in $\FAM$} \\
   &&&(Y : \Set) \times (Q : Y \to \Set) \times (p : Y \to X) \\
   &&&\times (q : (y : Y) \to Q\ y \to P\ (p\ y)) \\
-  &=& &\reasontext{combining $Y$ and $P$ using the family structure on $\Set$} \\
+  &=& &\reasontext{combining $Y$ and $P$ using the family structure on $\SET$} \\
   &&&(V : X \to \Set) \times (Q : (x : X) \times V\ x \to \Set) \\
   &&&\times (q : (y : (x : X) \times V\ x) \to Q\ y \to P\ (\pi_1\ y)) \\
   &=& &\reasontext{currying} \\
   &&&(V : X \to \Set) \times (Q : (x : X) \to V\ x \to \Set) \\
   &&&\times (q : (x : X) \to (y : V\ x) \to Q\ x\ y \to P\ x) \\
-  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\Set$} \\
+  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\SET$} \\
   &&&(V : X \to \Set) \times (W : (x : X) \to V\ x \to P\ x \to \Set)
 \end{align*}
 What we ended up with does match with what a motive for $(\ttconty,\tttyty)$
@@ -1203,13 +1203,13 @@ doing induction on $\Gamma$, we also have a $P\ \Gamma$ in there.
 We then give the following definitions:
 %
 \begin{align*}
-  \Fam_{\Fam}\ (X , P) &\ddefeq (V : X \to \Set) \times (W : (x : X) \to P\ x \to V\ x \to \Set) \\
-  \total_{\Fam}\ (X , P)\ (V , W) &\ddefeq ((x : X) \times V\ x , (\lambda (x , z) . (y : P\ x) \times W\ x\ y\ z)) \\
-  \proj_{\Fam}\ (X, P)\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) \to z) \\
-  \preimage_{\Fam}\ (X, P)\ ((C,D),(p, q)) &\ddefeq (\lambda a . (c : C) \times p\ c = a , \lambda  x y (z, z') . (w : D\ z) \times (\pathover{P}{z'}{q\ z\ w}{y}))
+  \Fam_{\FAM}\ (X , P) &\ddefeq (V : X \to \Set) \times (W : (x : X) \to P\ x \to V\ x \to \Set) \\
+  \total_{\FAM}\ (X , P)\ (V , W) &\ddefeq ((x : X) \times V\ x , (\lambda (x , z) . (y : P\ x) \times W\ x\ y\ z)) \\
+  \proj_{\FAM}\ (X, P)\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) \to z) \\
+  \preimage_{\FAM}\ (X, P)\ ((C,D),(p, q)) &\ddefeq (\lambda a . (c : C) \times p\ c = a , \lambda  x y (z, z') . (w : D\ z) \times (\pathover{P}{z'}{q\ z\ w}{y}))
 \end{align*}
 %
-Now we have a family structure on $\Fam$, we need to define what
+Now we have a family structure on $\FAM$, we need to define what
 dependent morphisms of these families are. Returning to the
 $(\ttconty,\tttyty)$ example, given a motive $P : \ttconty \to \Set$,
 $Q : (\Gamma : \ttconty) \to P\ \ttconty \to \tttyty\ \Gamma \to \Set$
@@ -1227,27 +1227,27 @@ $\tttyty$.
 
 We can derive this formulation by the following equational reasoning:
 \begin{align*}
-  &&&(s : \Fam_{\Fam}((X,P),(\total_{\Fam}\ (X , P)\ (V, W)))) \times (s_0 : \proj_{\Fam}\ (X, P)\ (V, W) \circ_{\Fam} s = \id_{\Fam}\ (X,P)) \\
-  &=&& \reasontext{definition of morphisms in $\Fam$, equality of pairs is pair of equalities} \\
+  &&&(s : \Fam_{\FAM}((X,P),(\total_{\FAM}\ (X , P)\ (V, W)))) \times (s_0 : \proj_{\FAM}\ (X, P)\ (V, W) \circ_{\FAM} s = \id_{\FAM}\ (X,P)) \\
+  &=&& \reasontext{definition of morphisms in $\FAM$, equality of pairs is pair of equalities} \\
   &&&(s : X \to (x : X) \times V\ x) \\
   &&&\times (t : (x : X) \to P\ x \to (y : P (\pi_0\ (s\ x))) \times (W\ (\pi_0\ (s\ x))\ y\ (\pi_1\ (s\ x)))) \\
-  &&&\times (s_0 : \pi_0 \circ s = \id_{\Set}\ X) \times (t_0 : \lambda x z . \pi_0\ (t\ x\ z) = \lambda x z . z) \\
-  &=&& \reasontext{combining $s$ and $s_0$ using the dependent morphism structure on $\Set$} \\
+  &&&\times (s_0 : \pi_0 \circ s = \id_{\SET}\ X) \times (t_0 : \lambda x z . \pi_0\ (t\ x\ z) = \lambda x z . z) \\
+  &=&& \reasontext{combining $s$ and $s_0$ using the dependent morphism structure on $\SET$} \\
   &&&(s : (x : X) \to V\ x) \times (t : (x : X) \to P\ x \to (y : P\ x) \times W\ x\ y\ (s\ x)) \\
   &&&\times (t_0 : \lambda x z . \pi_0\ (t\ x\ z) = \lambda x z . z) \\
-  &=&& \reasontext{combining $t$ and $t_0$ using the dependent morphism structure on $\Set$} \\
+  &=&& \reasontext{combining $t$ and $t_0$ using the dependent morphism structure on $\SET$} \\
   &&&(s : (x : X) \to V\ x) \times (t : (x : X)\ (y : P x) \to W\ x\ y\ (s\ x))
 \end{align*}
 
-The dependent morphism structure on $\Fam$ is then:
+The dependent morphism structure on $\FAM$ is then:
 $$
-\DepHom_{\Fam}\ (X , P)\ (V , W) \ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x))
+\DepHom_{\FAM}\ (X , P)\ (V , W) \ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x))
 $$
 %
 % \begin{align*}
-%   \DepHom_{\Fam}\ (X , P)\ (V , W) &\ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x)) \\
-%   \grph_{\Fam}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ((\lambda x . (x , f\ x) , \lambda x\ y . y , (g\ x\ y)) , \refl) \\
-%   \snd_{\Fam}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
+%   \DepHom_{\FAM}\ (X , P)\ (V , W) &\ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x)) \\
+%   \grph_{\FAM}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ((\lambda x . (x , f\ x) , \lambda x\ y . y , (g\ x\ y)) , \refl) \\
+%   \snd_{\FAM}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
 % \end{align*}
 %
 \subsubsection{Sort categories}
@@ -1259,7 +1259,7 @@ other definitions are equally trivial.
 
 In the induction step case, we get a family structure on $S_{i-1}$ and
 have to provide one on the category $S_i$ which is built out of
-$S_{i-1}$ with the functor $R_i : \Func{S_{i-1}}{\Set}$. Our goal is
+$S_{i-1}$ with the functor $R_i : \Func{S_{i-1}}{\SET}$. Our goal is
 to find, given $X : | S_{i-1} |$ and $P : R_i X \to \Set$, a set
 $\Fam_{S_i} (X, P)$ such that:
 $$
@@ -1277,7 +1277,7 @@ side of the equation above:
   &=& &\reasontext{rewrite $R_i (\total_{S_{i-1}}\ X\ V)$ with $\Box_{R_i}$} \\
   &&&(V : \Fam_{S_{i-1}}\ X) \times (Q : (x : R_i X) \times \Box_{R_i}\ X\ V\ x \to \Set) \\
   &&&\times (q : (x : R_i X) \times (y : \Box_{R_i}\ X\ V\ x) \to Q\ (x , y) \to P\ x)) \\
-  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\Set$} \\
+  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\SET$} \\
   &&&(V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \to \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
 \end{align*}
 
@@ -1298,7 +1298,7 @@ $\phi : (x : R_i X) \times \Box_{R_i}\ X\ V x \to R_i\
 is the isomorphism we get from the definition of $\Box$.
 
 The dependent morphism structure on $S_i$ can be derived in a similar
-way that of $\DepHom_{\Fam}$, arriving at:
+way that of $\DepHom_{\FAM}$, arriving at:
 $$
   \DepHom_{S_i}\ (X , P)\ (V , W) \ddefeq (f : \DepHom_{S_{i-1}}\ X\ V) \times (g : (x : R_i\ X)\ (y : P\ x) \to W\ (x , \bar{R}_i\ f\ x)\ y)\\
 $$
@@ -1371,7 +1371,7 @@ category $\Alg_{s'}$:
 What we get out as the definition of algebra families for point
 constructors looks a bit daunting at first glance. However, we can
 also see how it is a generalisation of the original situation in
-$\algcat{F}$ for endofunctors on $\Set$. The first part,
+$\algcat{F}$ for endofunctors on $\SET$. The first part,
 $(x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\
 P\ x)$,
 gives us the induction hypotheses for all the sorts ``below'' the sort
