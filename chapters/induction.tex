@@ -430,8 +430,8 @@ Note that $S_i \neq \unitty$.
   \xymatrix{ 
     F(X \times Y) \ar[r]^{\phi_F}
     &FX \times FY \ar[r]^{\theta \times \rho} 
-    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi_U^{-1}} 
-    &\bar{U}(X \times Y) 
+    &\extendfunc{U}X \times \extendfunc{U}Y \ar[r]^{\phi_U^{-1}} 
+    &\extendfunc{U}(X \times Y) 
   }
   $$
   where $\phi_F \ddefeq \langle F \pi_0 , F \pi_1 \rangle$.
@@ -467,8 +467,8 @@ Note that $S_i \neq \unitty$.
   \xymatrix{
     F(X \times Y) \ar[r]^{\phi_F} \ar[d]_{F \pi_0}
     &FX \times FY \ar[r]^{\theta \times \rho} \ar[dl]_{\pi_0}
-    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi_U^{-1}} \ar[dr]_{\pi_0}
-    &\bar{U}(X \times Y) \ar[d]_{U \pi_0}
+    &\extendfunc{U}X \times \extendfunc{U}Y \ar[r]^{\phi_U^{-1}} \ar[dr]_{\pi_0}
+    &\extendfunc{U}(X \times Y) \ar[d]_{U \pi_0}
     \\
     FX \ar[rrr]_{\theta} &&&UX
   }
@@ -503,8 +503,8 @@ Note that $S_i \neq \unitty$.
     \\
     F(X \times Y) \ar[r]^{\phi_F} 
     &FX \times FY \ar[r]^{\theta \times \rho}
-    &\bar{U}X \times \bar{U}Y \ar[r]^{\phi_U^{-1}}
-    &\bar{U}(X \times Y) 
+    &\extendfunc{U}X \times \extendfunc{U}Y \ar[r]^{\phi_U^{-1}}
+    &\extendfunc{U}(X \times Y) 
   }
   $$
   The left triangle holds by definition. The middle trapezoid holds as
@@ -520,7 +520,7 @@ Note that $S_i \neq \unitty$.
   $U \langle f , g \rangle = \phi_U^{-1} \circ \langle U f , U g
   \rangle$.
 
-  Note that by construction, $\bar{U}_{s'}$ preserves products
+  Note that by construction, $\extendfunc{U}_{s'}$ preserves products
   definitionally.
 \end{proof}
 
@@ -529,8 +529,8 @@ Note that $S_i \neq \unitty$.
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
-  \item $l, r : \Nat{F}{\bar{U}_s}$ satisfying
-    $t_i\ l = t_i\ r = \id_{t_i \circ \bar{U}_s}$.
+  \item $l, r : \Nat{F}{\extendfunc{U}_s}$ satisfying
+    $t_i\ l = t_i\ r = \id_{t_i \circ \extendfunc{U}_s}$.
   \end{itemize}
 
   If $\Alg_s$ has products and $U_s$ preserves them, then the category
@@ -562,7 +562,7 @@ Note that $S_i \neq \unitty$.
   algebra morphisms and that the universal property is satisfied.
 
   By construction of the products, the forgetful functor
-  $\bar{U}_{s'}$ preserves products definitionally.
+  $\extendfunc{U}_{s'}$ preserves products definitionally.
 \end{proof}
 
 \subsubsection{Equalisers}
@@ -621,7 +621,7 @@ path constructor algebra morphisms.
   $$
   Since $U$ preserves equalisers, $UE$ is an equaliser, hence we get a
   unique arrow $\epsilon : S_i(FE,UE)$. We need to check that we have
-  $t_i \epsilon = \id_{t_i (\bar{U}_s E)}$. We know that the following
+  $t_i \epsilon = \id_{t_i (\extendfunc{U}_s E)}$. We know that the following
   commutes:
   $$
   \xymatrix{
@@ -629,9 +629,9 @@ path constructor algebra morphisms.
     t_i (UE) \ar[r]^{t_i (Ue)} &t_i (UX) \ar@<-.5ex>[r]_-{t_i Uf} \ar@<.5ex>[r]^-{t_i Ug} &t_i (UY)
   }
   $$
-  Furthermore, $t_i \theta = \id_{t_i (\bar{U}_s X)}$ and
+  Furthermore, $t_i \theta = \id_{t_i (\extendfunc{U}_s X)}$ and
   $t_i (Fe) = t_i (Ue)$, and since $t_i$ preserves equalisers, we
-  necessarily have that $t_i \epsilon = \id_{t_i (\bar{U}_s E)}$.
+  necessarily have that $t_i \epsilon = \id_{t_i (\extendfunc{U}_s E)}$.
 
   We still have to establish that the universal property is
   satisfied. Suppose we have $(A, \alpha) : | \Alg_{s'} |$ along with
@@ -678,8 +678,8 @@ path constructor algebra morphisms.
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
-  \item $l, r : \Nat{F}{\bar{U}_s}$ satisfying
-    $t_i\ l = t_i\ r = \id_{t_i \circ \bar{U}_s}$.
+  \item $l, r : \Nat{F}{\extendfunc{U}_s}$ satisfying
+    $t_i\ l = t_i\ r = \id_{t_i \circ \extendfunc{U}_s}$.
   \end{itemize}
 
   If $\Alg_s$ has equalisers and $U_s$ preserves them, then the category
@@ -827,10 +827,10 @@ where $\phi$ is the map given by the defining equivalence of $\Box_F$.
 
 As $\Box_F$ gives the functorial action of $F$ on \emph{families}, we
 need a similar functorial actions on dependent functions, namely
-$\bar{F} : ((x : X) \to P\ x) \to (x : FX) \to \Box_F\ P\
-x$. $\bar{F}$ has the defining property:
+$\liftdephom{F} : ((x : X) \to P\ x) \to (x : FX) \to \Box_F\ P\
+x$. $\liftdephom{F}$ has the defining property:
 $$
-\grph\ (\bar{F}\ s) = \phi \circ F (\grph\ s)
+\grph\ (\liftdephom{F}\ s) = \phi \circ F (\grph\ s)
 $$
 where $\grph\ s = \lambda x . (x , s\ x)$.
 
@@ -850,14 +850,14 @@ follows:
   &&&(s : (x : X) \to P\ x) \times (s_0 : \theta = \theta) \times (s_1 : \pi_1 \circ \grph\ s \circ \theta = \pi_1 \circ \tilde{m} \circ F (\grph\ s))  \\
   &&=&\ \reasontext{unfold definition $\tilde{m}$, $\theta = \theta$ is trivial by uniqueness of identity proofs} \\
   &&&(s : (x : X) \to P\ x) \times (s_1 : \pi_1 \circ \grph\ s \circ \theta = \pi_1 \circ \langle \theta \circ \pi_0 , m \rangle \circ \phi \circ F (\grph\ s)) \\
-  &&=&\ \reasontext{computation rule of $\langle \theta \circ \pi_0 , m \rangle$, $\pi_1 \circ \grph\ s = s$, defining property of $\bar{F}$} \\
-  &&&(s : (x : X) \to P\ x) \times (s_1 : s \circ \theta = m \circ \grph (\bar{F}\ s))
+  &&=&\ \reasontext{computation rule of $\langle \theta \circ \pi_0 , m \rangle$, $\pi_1 \circ \grph\ s = s$, defining property of $\liftdephom{F}$} \\
+  &&&(s : (x : X) \to P\ x) \times (s_1 : s \circ \theta = m \circ \grph (\liftdephom{F}\ s))
 \end{align*}
 
 If we $\eta$-expand and $\beta$-reduce the definitions, we see that a
 dependent algebra morphism on an algebra family $(P,m)$ on an algebra
 $(X,\theta)$ consists of a dependent function $s : (x : X) \to P\ x$
-with computation rule $s\ (\theta\ x) = m\ x\ (\bar{F}\ s\ x)$.
+with computation rule $s\ (\theta\ x) = m\ x\ (\liftdephom{F}\ s\ x)$.
 
 \subsection{General framework}
 \label{general-framework}
@@ -1009,17 +1009,17 @@ Similar to the action of a functor $F$ on families, we can use this
 structure to define the action of functors on dependent
 morphisms. Given a functor $F : \Func{\Cc}{\Dd}$, we can define:
 $$
-\bar{F} : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \DepHom_{\Cc}\ X\ P \to \DepHom_{\Cc}\ FX\ (\Box_F\ X\ P)
+\liftdephom{F} : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \DepHom_{\Cc}\ X\ P \to \DepHom_{\Cc}\ FX\ (\Box_F\ X\ P)
 $$
 If $F$ happens to be an endofunctor on $\SET$, this simplifies to:
 $$
-\bar{F} : (X : \Set) (P : X \to \Set) \to ((x : X) \to P\ x) \to (x : F X) \to \Box_F\ X\ P\ x
+\liftdephom{F} : (X : \Set) (P : X \to \Set) \to ((x : X) \to P\ x) \to (x : F X) \to \Box_F\ X\ P\ x
 $$
-Before we define $\bar{F}$, observe that we can easily define a function:
+Before we define $\liftdephom{F}$, observe that we can easily define a function:
 $$
 \Sect_{\Cc}\ X\ (s , p) \to \Sect_{\Dd}\ FX\ (F s , F p)
 $$
-$\bar{F}$ can then be defined as the composite:
+$\liftdephom{F}$ can then be defined as the composite:
 $$
 \xymatrix{
 \DepHom_{\Cc}\ X\ P
@@ -1278,12 +1278,12 @@ side of the equation above:
   &&&(V : \Fam_{S_{i-1}}\ X) \times (Q : (x : R_i X) \times \Box_{R_i}\ X\ V\ x \to \Set) \\
   &&&\times (q : (x : R_i X) \times (y : \Box_{R_i}\ X\ V\ x) \to Q\ (x , y) \to P\ x)) \\
   &=& &\reasontext{combining $Q$ and $q$ using family structure on $\SET$} \\
-  &&&(V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \to \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
+  &&&(V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \times \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
 \end{align*}
 
 The family structure on $S_i$ is then:
 $$
-  \Fam_{S_i}\ (X , P) \ddefeq (V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \to \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
+  \Fam_{S_i}\ (X , P) \ddefeq (V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \times \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
 $$
 with
 %
@@ -1305,83 +1305,130 @@ $$
 
 \subsubsection{Point constructors}
 
-Suppose we have the following data describing a point constructor:
+Just as the sort and algebra categories are defined inductively as
+having objects from the previous sort/algebra categories along with
+some extra structures, the family structures on these categories
+reflect this pattern. We have seen this happen in the previous section
+when describing the family structure on sort categories.
+
+Before we move on to the full generality of point constructors of
+arbitrary sort, we will consider $\SET$-sorted point constructors. Let
+$\Alg_s$ be a category of algebras of some specification
+$s : \specty$. A $\SET$-sorted constructor on $\Alg_s$ is given by a
+functor $F : \Func{\Alg_s}{\SET}$ and the new category of algebras is
+$\dialgcat{F}{U}$ with $U : \Func{\Alg_s}{\SET}$ the forgetful
+functor. Following a similar derivation to that of the family
+structure on $\algcat{F}$ for endofunctors $F$ on $\SET$, we arrive
+at:
+$$
+\Fam_{\dialgcat{F}{U}}\ (X,\theta) \ddefeq (P : \Fam_{\Alg_s}\ X)
+\times (m : (x : FX) \times \Box_F\ P\ x \to \Box_U\ P\ (\theta\ x))
+$$
+We can recover $\Fam_{\algcat{F}}$ from this if $\Alg_s = \SET$ and
+$U$ is the identity functor, as $\Box_{\id_{\SET}}\ P = P$.
+
+Moving on to the fully general point constructor case, we have the
+following data:
 %
 \begin{itemize}
 \item $\Ss : \sortsty$ with $s : \specty_{\Ss}$
 \item $S_i : \Cat$ with $p : \sortsin{S_i}{\Ss}$
-\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \hat{U_s}$
+\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \extendfunc{U}_s$
 \end{itemize}
 
-Before we work out what algebra families are for point constructors,
-we will investigate what $\Box_F$ and $\Box_{\bar{U}_s}$ look
+We start out by investigating what $\Box_F$ and $\Box_{\extendfunc{U}_s}$ look
 like. Recall that we can split the functor $F : \Func{\Alg_s}{S_i}$
 into two operations, which are both functorial:
 \begin{itemize}
-\item $F^0 : | \Cc | \to |S_{i-1}|$, which we know to be equal to $\bar{U}^0_s$
+\item $F^0 : | \Cc | \to |S_{i-1}|$, which we know to be equal to $\extendfunc{U}^0_s$
 \item
   $F^1 : (X : | \Cc |) \to (x : R_i (F^0 X)) \to F^1\ X\ x \to \Set$
 \end{itemize}
 
-The defining equation for $\Box_F\ P$ for $P : \Fam_{\Alg_s}$ is
-$$
-F (\total_{\Alg_s}\ P) = \total_{S_i}\ (\Box_F\ P)
-$$
-Knowing what the family structure on $S_i$ is, we know that
-$\Box_F\ P$ has the following type:
+Knowing what the family structure on $S_i$ is, we know that for
+$P : \Fam_{\Alg_s}\ X$ $\Box_F\ P$ has the following type:
 $$
 \Box_F\ P : (V : \Fam_{S_{i-1}}\ F^0X) \times (W : (x : R_i (F^0 X)) \to \Box_{R_i}\ V\ x \to F^1\ X\ x \to \Set)
 $$
 Splitting this in its constituents will turn out to be useful, just as
 we have done with the functors itself. Let us call the first and
-second projections of this $\Box_{F^0}$ and $\Box_{F^1}$ respectively.
-
-Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
-specification, which is $s$ extended with the point constructor given by
-the data above. We want to derive the family structure on this
-category $\Alg_{s'}$:
+second projections of this $\Box_{F^0}$ and $\Box_{F^1}$ respectively:
 %
 \begin{align*}
-  &&&(Y : | \Alg_s |) \\
-  &&&\times (\rho : S_i(FY, \bar{U}_s Y)) \times (t_i \rho = \id_{t_i (\bar{U}_s X)}) \\
-  &&&\times (\Alg_{s'} ((Y,\rho),(X,\theta)) \\
-  &=&&\reasontext{unfold definition of $\Alg_{s'}$} \\
-  &&&(Y : | \Alg_s |) \times (\rho : S_i(FY, \bar{U}_s Y)) \times (t_i \rho = \id_{t_i (\bar{U}_s Y)}) \\
-  &&&\times (p : \Alg_s(Y,X)) \times (p_0 : \bar{U}_s p \circ \rho = \theta \circ F p) \\
-  &=&&\reasontext{combine $Y$ and $p$ using $\Fam$ structure on $\Alg_s$} \\
-  &&&(P : \Fam_{\Alg_s}\ X) \times (\rho : S_i(F(\total\ P), \bar{U}_s (\total\ P))) \times (t_i \rho = \id_{t_i (\bar{U}_s (\total\ P))}) \\
-  &&&\times (p_0 : \bar{U}_s(\proj\ P) \circ \rho = \theta \circ F (\proj\ P)) \\
-  &=&&\reasontext{unfold definition $S_i$ and expand $p_0$} \\
-  &&&(P : \Fam_{\Alg_s}\ X) \\
-  &&&\times (\rho : (x : R_i (\bar{U}^0_s (\total\ P))) \to F^1 (\total\ P)\ x \to \bar{U}^1_s (\total\ P)\ x) \\
-  &&&\times (p_0 : (x : R_i (\bar{U}^0_s (\total\ P)))\ (y : F^1 (\total\ P)\ x) \\
-  &&&\ \ \ \ \to \bar{U}^1_s (\proj\ P)\ x (\rho\ x\ y) = \theta\ (R_i\ (\bar{U}^0_s (\proj\ P) x)\ (F^1\ (\proj\ P)\ x\ y))) \\
-  &=&&\reasontext{rewriting using $\Box$ notation} \\
-  &&&(P : \Fam_{\Alg_s}\ X) \\
-  &&&\times (\rho : (x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
-  &&&\ \ \ \ \to (z : \bar{U}^1_s\ X\ x) \times \Box_{\bar{U}^1_s}\ P\ (x,x')\ z) \\
-  &&&\times(p_0 : (x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
-  &&&\ \ \ \ \to \pi_0\ (\rho\ (x,x')\ (y,y')) = \theta\ x\ y) \\
-  &=&&\reasontext{singleton contraction} \\
-  &&&(P : \Fam_{\Alg_s}\ X) \\
-  &&&\times (m : (x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
-  &&&\ \ \ \ \to \Box_{\bar{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
+  &\Box_{F^0}\ P : \Fam_{S_{i-1}}\ (F^0\ X) \\
+  &\Box_{F^1}\ P : (x : R_i (F^0 X)) \times \Box_{R_i}\ (\Box_{F^0}\ P)\ x \to F^1\ X\ x \to \Set
 \end{align*}
 %
+Since the $\Box$ operation is functorial, we will use
+$\Box_{R_i \circ F^0}$ instead of the nested variant. Also since
+$F^0 = \extendfunc{U}^0_s$, we will use $\Box_{R_i \circ \extendfunc{U}^0_s}$.
+
+Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
+specification, which is $s$ extended with the point constructor given
+by the data above. We can now derive the family structure on this
+category $\Alg_{s'}$ (see \cref{point-constr-fam-deriv}) and arrive at
+the following:
+%
+\begin{align*}
+\Fam_{\Alg_{s'}}\ (X, \theta) \ddefeq &(m : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \\
+& \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+& \to \Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
+\end{align*}
+%
+\begin{figure}\centering
+  \begin{align*}
+    &&&(Y : | \Alg_s |) \\
+    &&&\times (\rho : S_i(FY, \extendfunc{U}_s Y)) \times (t_i \rho = \id_{t_i (\extendfunc{U}_s X)}) \\
+    &&&\times (\Alg_{s'} ((Y,\rho),(X,\theta)) \\
+    &=&&\reasontext{unfold definition of $\Alg_{s'}$} \\
+    &&&(Y : | \Alg_s |) \times (\rho : S_i(FY, \extendfunc{U}_s Y)) \times (t_i \rho = \id_{t_i (\extendfunc{U}_s Y)}) \\
+    &&&\times (p : \Alg_s(Y,X)) \times (p_0 : \extendfunc{U}_s p \circ \rho = \theta \circ F p) \\
+    &=&&\reasontext{combine $Y$ and $p$ using $\Fam$ structure on $\Alg_s$} \\
+    &&&(P : \Fam_{\Alg_s}\ X) \times (\rho : S_i(F(\total\ P), \extendfunc{U}_s (\total\ P))) \times (t_i \rho = \id_{t_i (\extendfunc{U}_s (\total\ P))}) \\
+    &&&\times (p_0 : \extendfunc{U}_s(\proj\ P) \circ \rho = \theta \circ F (\proj\ P)) \\
+    &=&&\reasontext{unfold definition $S_i$ and expand $p_0$} \\
+    &&&(P : \Fam_{\Alg_s}\ X) \\
+    &&&\times (\rho : (x : R_i (\extendfunc{U}^0_s (\total\ P))) \to F^1 (\total\ P)\ x \to \extendfunc{U}^1_s (\total\ P)\ x) \\
+    &&&\times (p_0 : (x : R_i (\extendfunc{U}^0_s (\total\ P)))\ (y : F^1 (\total\ P)\ x) \\
+    &&&\ \ \ \ \to \extendfunc{U}^1_s (\proj\ P)\ x (\rho\ x\ y) = \theta\ (R_i\ (\extendfunc{U}^0_s (\proj\ P) x)\ (F^1\ (\proj\ P)\ x\ y))) \\
+    &=&&\reasontext{rewriting using $\Box$ notation} \\
+    &&&(P : \Fam_{\Alg_s}\ X) \\
+    &&&\times (\rho : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+    &&&\ \ \ \ \to (z : \extendfunc{U}^1_s\ X\ x) \times \Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ z) \\
+    &&&\times(p_0 : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+    &&&\ \ \ \ \to \pi_0\ (\rho\ (x,x')\ (y,y')) = \theta\ x\ y) \\
+    &=&&\reasontext{singleton contraction} \\
+    &&&(P : \Fam_{\Alg_s}\ X) \\
+    &&&\times (m : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+    &&&\ \ \ \ \to \Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
+  \end{align*}
+  
+  \caption{Derivation of the family structure for point constructors}
+  \label{point-constr-fam-deriv}
+\end{figure}
+
 What we get out as the definition of algebra families for point
 constructors looks a bit daunting at first glance. However, we can
 also see how it is a generalisation of the original situation in
 $\algcat{F}$ for endofunctors on $\SET$. The first part,
-$(x : R_i (\bar{U}^0_s X)) \times (x' : \Box_{R_i \circ \bar{U}^0_s}\
+$(x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\
 P\ x)$,
 gives us the induction hypotheses for all the sorts ``below'' the sort
 of the current constructors. The second part,
 $(y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y)$, gives us
 the induction hypothesis for the recursive arguments, which looks very
 similar to the $\algcat{F}$ case. Finally, the result type is
-$\Box_{\bar{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))$, which is the
+$\Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y)$, which is the
 dialgebra counterpart of what we had before.
 
+For dependent morphisms, the $\SET$-sorted case again follows the
+$\algcat{F}$ for endofunctors $F$ on $\SET$ in a straightforward
+way. Suppose we have $F : \Func{\Alg_s}{\SET}$, along with
+$(X,\theta) : | \dialgcat{F}{U} |$ and
+$(P,m) : \Fam_{\dialgcat{F}{U}}\ (X,\theta)$, we have:
+$$
+\DepHom_{\dialgcat{F}{U}}\ (P, m) \ddefeq (s : \DepHom_{\Alg_s}\ P) \times (s_0 : (x : FX) \to \liftdephom{U}\ s\ (\theta\ x) = m\ x\ (\liftdephom{F}\ s\ x))
+$$
 The dependent morphism structure on $\Alg_{s'}$ is then:
 $$  
 \DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) \ddefeq ?
@@ -1389,27 +1436,74 @@ $$
 
 \subsubsection{Path constructors}
 
-Suppose we have the following data describing a path constructor:
+Let us first consider $\SET$-sorted path constructors. Suppose we have
+$\Alg_s$ for some specification $s : \specty$ and
+$F : \Func{\Alg_s}{\SET}$ describing the arguments and
+$\ell, r : \Nat{F}{U}$ the end points of the path constructor. Let
+$s' : \specty$ be $s$ extend with the path constructor described by
+these data. Since $\Alg_{s'}$ is a full subcategory of $\Alg_{s}$, we
+have that $\Fam_{\Alg_{s'}}\ (X, \theta)$ for $X : \Alg_s$ and
+$\theta : \ell_X = r_X$ is simply:
+$$
+(P : \Fam_{\Alg_s}) \times (\rho : \ell_{\total\ P} = r_{\total\ P})
+$$
+We can simplify this a bit further. We can define
+$\ell_P : (x : FX) \times \Box_F\ P\ x \to (y : UX) \times \Box_U\ P\ y$
+as $\ell_{\total\ P}$ with the defining equivalences of $\Box_F$ and
+$\Box_u$ plugged in at the right places. We furthermore will use the
+notation $\ell_P^0$ and $\ell_P^1$ to indicate first and second projections
+of these functions respectively. Note that by naturality $\ell_P^0 = \ell_X$
+and $r_P^0 = r_X$. An equality $\ell_P = r_P$ is then an equality of
+functions mapping into a $\Sigma$-type, we can then perform the
+following equational reasoning to simplify the expression:
+%
+\begin{align*}
+  &&&(\ell_{\total\ P} = r_{\total\ P})  \\
+  &=&&\reasontext{definition of $\ell_P$ and $r_P$} \\
+  &&&(\ell_P = r_P) \\
+  &=&&\reasontext{equality of pairs is a pair of equalities} \\
+  &&&(\rho_0 : \pi_0 \circ \ell_P = r_P) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &=&&\reasontext{by definition and naturality of $\ell_P$ and $r_P$} \\
+  &&&(\rho_0 : \ell_X = r_X) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &=&&\reasontext{by uniqueness of identity proofs, we can multiply by $(\rho_0 = \theta)$} \\
+  &&&(\rho_0 : \ell_X = r_X) \times (\rho_0 = \theta) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &=&&\reasontext{singleton contraction} \\
+  &&&(\pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &=&&\reasontext{function extensionality} \\
+  &&&(x : FX) \times (y : \Box_F\ P\ x) \to \pathover{\Box_U P}{\theta x}{l^1_P\ (x , y)}{r^1_P\ (x , y)}
+\end{align*}
+%
+
+In the general case, we have the following data describing a path
+constructor:
 %
 \begin{itemize}
-\item $\Ss : \sortsty$
-\item $s : \specty_{\Ss}$
-\item $S_i : \Cat$
-\item $p : \sortsin{S_i}{\Ss}$
-\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \hat{U_s}$
-\item $l , r : \Nat{F}{\hat{U_s}}$ such that $t_i l = t_i r = \id$
+\item $\Ss : \sortsty$ with $s : \specty_{\Ss}$
+\item $S_i : \Cat$ with $p : \sortsin{S_i}{\Ss}$
+\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \extendfunc{U}_s$
+\item $l , r : \Nat{F}{\extendfunc{U}_s}$ such that $t_i l = t_i r = \id$
 \end{itemize}
 
 Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
-specification, which is $s$ extended with the path constructor given by
-the data above. We want to derive the family structure on this
-category $\Alg_{s'}$:
+specification, which is $s$ extended with the path constructor given
+by the data above. Let $(X,\theta) : | \Alg_{s'}|$, \ie:
 $$
-\hdots
+\theta :  (x : R_i (\extendfunc{U}^0_s X)) \to (y : F^1\ X\ x) \to \ell^1_X\ x\ y = r^1_X\ x\ y
 $$
-The family structure on $\Alg_{s'}$ is then:
-$$
-  \Fam_{\Alg_{s'}}\ (X , \theta) \ddefeq ? \\
-$$
+Deriving the family structure $\Alg_{s'}$ follows both our
+$\SET$-sorted situation described above as well as the derivation for
+arbitrarily sorted point constructors. The family structure on
+$\Alg_{s'}$ is then:
+%
+\begin{align*}
+\Fam_{\Alg_{s'}}\ (X, \theta) \ddefeq & (P : \Fam_{\Alg_s}\ X)\\
+&(m : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \\
+& \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+& \to \pathover{\Box_{\extendfunc{U}_s^1 P (x,x')}}{\theta\ x\ y}{\ell^1_P\ (x,x')\ (y,y')}{r^1_P\ (x,x')\ (y,y')})
+\end{align*}
+%
 Since $\Alg_{s'}$ is a full subcategory of $\Alg_s$, the dependent
-morphisms are simply inherited from $\Alg_s$.
+morphisms are simply inherited from $\Alg_s$:
+$$
+\DepHom_{\Alg_{s'}}\ (P,m) \ddefeq \DepHom_{\Alg_s}\ P
+$$
