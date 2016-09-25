@@ -1427,12 +1427,32 @@ way. Suppose we have $F : \Func{\Alg_s}{\SET}$, along with
 $(X,\theta) : | \dialgcat{F}{U} |$ and
 $(P,m) : \Fam_{\dialgcat{F}{U}}\ (X,\theta)$, we have:
 $$
-\DepHom_{\dialgcat{F}{U}}\ (P, m) \ddefeq (s : \DepHom_{\Alg_s}\ P) \times (s_0 : (x : FX) \to \liftdephom{U}\ s\ (\theta\ x) = m\ x\ (\liftdephom{F}\ s\ x))
+\DepHom_{\dialgcat{F}{U}}\ (P, m) \ddefeq (\sss : \DepHom_{\Alg_s}\ P) \times (\sss_0 : (x : FX) \to \liftdephom{U}\ \sss\ (\theta\ x) = m\ x\ (\liftdephom{F}\ \sss\ x))
 $$
-The dependent morphism structure on $\Alg_{s'}$ is then:
-$$  
-\DepHom_{\Alg_{s'}}\ (X , \theta)\ (P , m) \ddefeq ?
-$$
+Generalising to the arbitrarily sorted point constructors follows the
+same steps as we took to derive the notion of algebra family for point
+constructors. We have to find out, given $P : \Fam_{\Alg_s}\ X$ and
+$X : | \Alg_s |$, what
+$\liftdephom{F} : \DepHom_{\Alg_s}\ P \to \DepHom_{S_i}\ (\Box_F\ P)$
+gives us for a functor $F : \Func{\Alg_s}{S_i}$. We can split
+$\liftdephom{F}$ into two parts:
+%
+\begin{align*}
+  &\liftdephom{F}^0 : \DepHom_{S_{i-1}}\ (\Box_{F^0}\ P) \\
+  &\liftdephom{F}^1 : (\sss : \DepHom_{\Alg_s}\ P) \to (x : R_i (F^0 X)) (y : F^1\ X\ x) \to \Box_{F^1}\ (x, \liftdephom{R_i}\ \sss\ x)\ y
+\end{align*}
+%
+The dependent morphism structure on $\Alg_{s'}$ is then, given
+$(X,\theta) : | \Alg_{s'} |$ and
+$(P,m) : \Fam_{\Alg_{s'}}\ (X,\theta)$:
+%
+\begin{align*}
+  &\DepHom_{\Alg_{s'}}\ (P, m) \ddefeq \\
+  &\ \ (\sss : \DepHom_{\Alg_s}\ P) \\
+  &\ \ \times (\sss_0 : (x : R_i (\extendfunc{U}^0_s X)) (y : F^1\ X\ x)\\
+  &\ \ \ \ \ \ \to \liftdephom{U}^1_s\ \sss\ x\ (\theta\ x\ y) = m\ (x , \liftdephom{R_i \circ \extendfunc{U}^0_s}\ \sss\ x)\ (y , \liftdephom{F}^1\ \sss\ x\ y))
+\end{align*}
+%
 
 \subsubsection{Path constructors}
 
