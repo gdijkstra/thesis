@@ -377,7 +377,7 @@ following constructors:
 \begin{datatype}{\realty}{}
   \constr{\realrat}{\ratty \to \realty} \\
   \constr{\reallim}{(f : \ratty^+ \to \realty) \to ((\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{x\ \delta}{x\ \epsilon}) \to \realty} \\
-  \constr{\realeq}{(u\ v : \realty) \to ((\epsilon : \ratty^+) \to \realrel{\epsilon}{u}{v} \to u = v} \\
+  \constr{\realeq}{(u\ v : \realty) \to ((\epsilon : \ratty^+) \to \realrel{\epsilon}{u}{v}) \to u = v}
 \end{datatype}
 
 The first constructor $\realrat$ is the inclusion of the rationals
@@ -388,7 +388,18 @@ arbitrarily close to eachother via the relation we inductively define
 simultaneously.
 %
 \begin{datatype}{\realrel{\epsilon}{\_}{\_}}{}
-  \constrdots
+  \constr{\realratrateq}{(q\ r : \ratty)\ (\epsilon : \ratty^+) \to -\epsilon < q - r < \epsilon \to \realrel{\epsilon}{\realrat\ q}{\realrat\ r}} \\
+  \constr{\realratlimeq}{(q : \ratty)\ (y : \ratty^+ \to \realty)\ (\epsilon\ \delta : \ratty^+)\ (t : (\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{y\ \delta}{y\ \epsilon}) \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon - \delta}{\realrat\ q}{y\ \delta} \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon}{\realrat\ q}{\reallim\ y\ t}} \\
+  \constr{\reallimrateq}{(x : \ratty^+ \to \realty)\ (r : \ratty)\ (\epsilon\ \delta : \ratty^+) (s : (\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{x\ \delta}{x\ \epsilon}) \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon - \delta}{x\ \delta}{\realrat\ r} \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon}{\reallim\ x\ s}{\realrat\ r}} \\
+  \constr{\reallimlimeq}{(x\ y : \ratty^+ \to \realty)\ (\epsilon\ \delta\ \eta : \ratty^+) \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ (s : (\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{x\ \delta}{x\ \epsilon}) \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ (t : (\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{y\ \delta}{y\ \epsilon}) \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon - \delta - \eta}{x\ \delta}{y\ \eta} \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon}{\reallim\ x\ s}{\reallim\ y\ t}}
 \end{datatype}
 %
 The constructors of the relation tell us when rational points are

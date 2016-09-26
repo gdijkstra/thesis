@@ -359,10 +359,16 @@
 % Rational and real numbers
 \newcommand{\ratty}{\AgdaDatatype{\mathbb{Q}}}
 \newcommand{\realty}{\AgdaDatatype{\mathbb{R}}}
-\newcommand{\realrel}[3]{#2 \AgdaDatatype{\sim}_{#1} #3}
+\newcommand{\realrel}[3]{#2\ \AgdaDatatype{\sim}_{#1}\ #3}
 \newcommand{\realrat}{\AgdaInductiveConstructor{\ident{rat}}}
 \newcommand{\reallim}{\AgdaInductiveConstructor{\ident{lim}}}
 \newcommand{\realeq}{\AgdaInductiveConstructor{\ident{eq}}}
+
+\newcommand{\realratrateq}{\AgdaInductiveConstructor{\ident{rat-rat-eq}}}
+\newcommand{\realratlimeq}{\AgdaInductiveConstructor{\ident{rat-lim-eq}}}
+\newcommand{\reallimrateq}{\AgdaInductiveConstructor{\ident{lim-rat-eq}}}
+\newcommand{\reallimlimeq}{\AgdaInductiveConstructor{\ident{lim-lim-eq}}}
+\newcommand{\realproptrunc}{\AgdaInductiveConstructor{\ident{prop-trunc}}}
 
 % Field
 \newcommand{\fieldty}{\AgdaDatatype{\ident{Field}}}
