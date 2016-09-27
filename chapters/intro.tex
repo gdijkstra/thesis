@@ -121,7 +121,8 @@ other uses.
 
 Inductive families are especially powerful in a dependently typed
 setting in conjunction with \emph{dependent pattern matching}
-\cite{Coquand1992}, such as it is implemented in Agda
+\cite{Coquand1992}, such as it is implemented in
+Agda\footnote{\url{http://wiki.portal.chalmers.se/agda/pmwiki.php}}
 \cite{Norell2007}. The information encoded in the indices may tell us
 that certain cases are impossible and need not be treated, or they may
 tell us that certain variables in the patterns are equal. We can
@@ -313,13 +314,17 @@ its identity types as the paths in said type.
 One important axiom that is considered in homotopy type theory, is the
 univalence axiom, which roughly tells us that isomorphic types are
 also propositionally equal. This axiom is inspired by and holds in the
-simplicial sets model of type theory \cite{Kapulkin2012}. A univalent
+simplicial set model of type theory \cite{Kapulkin2012}. A univalent
 universe is then one example of a type that does not satisfy
 uniqueness of identity proofs: we may have different isomorphisms,
 giving rise to different propositional equalities between types. An
 example of this are the identity map and the negation map on the
 booleans: these are two distinct isomorphisms, yielding by univalence
-two distinct propositional equalities $\boolty = \boolty$.
+two distinct propositional equalities $\boolty = \boolty$. In fact, if
+we have a hierarchy of univalent universes
+$\Type_0 : \Type_1 : \Type_2 : \hdots$, then $\Type_{n+1}$ has a
+strictly more complicated higher equality structure
+\cite{Kraus2015ii}.
 
 Apart from univalent universes of types invalidating uniqueness of
 identity proofs, there are also plenty of geometric examples to take

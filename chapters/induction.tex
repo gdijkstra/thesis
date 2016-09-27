@@ -54,8 +54,8 @@ of algebras defined over the algebra $(\natty, \natzero, \natsucc)$:
   algebras as:
 %
   \begin{alignat*}{2}
-    &\Fam_{\Alg_{\lambda X . 1 + X}} : | \Alg_{\lambda X . 1 + X} | \to \Type \\
-    &\Fam_{\Alg_{\lambda X . 1 + X}} (X , \theta_0, \theta_1) &\ddefeq& (P : X \to \Type) \\
+    &\Fam_{\Alg_{\lambda X . 1 + X}} : | \Alg_{\lambda X . 1 + X} | \to \Set \\
+    &\Fam_{\Alg_{\lambda X . 1 + X}} (X , \theta_0, \theta_1) &\ddefeq& (P : X \to \Set) \\
     &&\times& (m_0 : P\ \theta_0) \\
     &&\times& (m_1 : (x : X) \to P\ x \to P\ (\theta_1\ x))
   \end{alignat*}
@@ -64,17 +64,17 @@ of algebras defined over the algebra $(\natty, \natzero, \natsucc)$:
 
 In order to see that this type does correspond to a notion of family,
 recall that families on a type can also be represented as functions
-into said type:
+into said type, \ie as a \emph{fibration}:
 
 \begin{proposition}
-Given $X : \Type$, there is an equivalence:
+Given $X : \Set$, there is an equivalence:
 $$
-(X \to \Type) = (Y : \Type) \times (p : Y \to X)
+(X \to \Set) = (Y : \Set) \times (p : Y \to X)
 $$
 \end{proposition}
 
 \begin{proof}
-  Let $P : X \to \Type$ be a family on $X$, we can map this to the
+  Let $P : X \to \Set$ be a family on $X$, we can map this to the
   pair $((x : X) \times P\ x, \pi_0)$, \ie the family's total space
   along with its projection map into its base space. In the other
   direction we map $(Y,p)$ to the preimage family
@@ -95,7 +95,7 @@ $$
 \end{proposition}
 
 \begin{proof}
-  The proof follows the same structure as the $\Type$ case. Given an
+  The proof follows the same structure as the $\Set$ case. Given an
   algebra family $(P,m_0,m_1)$, we can define its ``total algebra'' as
   follows:
   $$
@@ -116,7 +116,7 @@ $$
   we define the following family:
   %
   \begin{align*}
-  &(\ \lambda x . (y : Y) \times p\ y = x &&: X \to \Type \\
+  &(\ \lambda x . (y : Y) \times p\ y = x &&: X \to \Set \\
   &,\ (\rho_0 , p_0) &&: (y : Y) \times p\ y = \theta_0 \\
   &,\ \lambda x (y,z) . (\rho_1\ y , w) &&: (x : X) \to (y : Y) \times (p\ y = x) \to (y' : Y) \times (p\ y' = \theta_1\ x)\\
   &)
@@ -130,7 +130,7 @@ $$
   $$
 \end{proof}
 
-Given a family $P : X \to \Type$, a dependent function
+Given a family $P : X \to \Set$, a dependent function
 $(x : X) \to P\ x$ corresponds to a \emph{section} of the projection
 function $\pi_0 : (x : X) \times P\ x \to X$. As it turns out, the
 corresponding notion of dependent function for an algebra family is a
@@ -163,7 +163,7 @@ therefore be phrased abstractly as follows:
   \]
 \end{definition}
 
-\section{Section principle is logically equivalent to initiality}
+\section{The section principle is logically equivalent to initiality}
 
 Now we have a category theoretic characterisation of the induction
 principle, we have to show that it is logically equivalent to
@@ -880,7 +880,7 @@ parts simplify.
   are as follows:
 %
   \begin{itemize}
-  \item $\Fam_{\Cc} : | \Cc | \to \Type$
+  \item $\Fam_{\Cc} : | \Cc | \to \Set$
   \item $\total : (X : | \Cc |) \to \Fam_{\Cc}\ X \to | \Cc |$
   \item
     $\proj : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \Cc(\total\ P,
@@ -977,7 +977,7 @@ $\SET$:
 \begin{definition}[Dependent morphism structure]
   To generalise dependent morphisms to a category $\Cc$, we need a
   family
-  $\DepHom_{\Cc} : (X : | \Cc |)\ (P : \Fam_{\Cc}\ X) \to \Type$ along
+  $\DepHom_{\Cc} : (X : | \Cc |)\ (P : \Fam_{\Cc}\ X) \to \Set$ along
   with the following operations, given an object $X : | \Cc |$ and a
   family $P : \Fam_{\Cc}\ X$:
 %

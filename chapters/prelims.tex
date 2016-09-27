@@ -60,13 +60,13 @@ notation for $\Pi$-types.
 The type $(x : A) \times B\ x$ comes with two projection functions:
 \begin{itemize}
 \item $\pi_0 : (x : A) \times B\ x \to A$
-\item $\pi_1 : (x : A) \times B\ x \to B\ x$
+\item $\pi_1 : (a : (x : A) \times B\ x) \to B\ (\pi_1\ a)$
 \end{itemize}
 Since we are explicitly giving a name to the first element of the
-pair, we do not explicitly use the first projection in the type of the
-second projection. Using the ``anonymous'' notation we would instead have:
+pair, we can also use the following notation, where we let the scope
+of $x$ range over the whole expression after its introduction:
 $$
-\pi_1 : (z : \Sigma A B) \to B\ (\pi_0\ z)
+\pi_1 : (x : A) \times B\ x \to B\ x
 $$
 The $\eta$-law for $\Sigma$-types gives us the following definitional
 equality for every pair $z : \Sigma A B$:
@@ -203,14 +203,15 @@ equality is a metatheoretic notion, it is external to the type theory,
 equality between terms in the type theory itself, referred to as
 \emph{propositional equality}:
 
-\begin{definition}
+\begin{definition}[Identity types]
   Given a type $A : \Type$ and $x, y : A$, we define the type
   $x = y : \Type$, inductively with constructor:
   $$
   \refl : (x : A) \to x = x
   $$
-
-  The elimination principle for the identity type is:
+  A type $x = y$ is called an \emph{identity type}.
+  
+  The elimination principle for identity types is:
   \begin{align*}
   \J : &\ (A : \Type)\ (P : (x\ y : A) \to x = y \to \Type)\ \\
   &\ (m : (x : A) \to P\ x\ x\ (\refl\ x)) \\
@@ -312,55 +313,6 @@ Using $\transport$ we can define the notion of \emph{dependent path}:
   \end{align*}
 \end{definition}
 
-Although we can define things such as composition for dependent
-equalities and prove some of the same properties that ordinary
-equality has, dependent equalities are not always convenient to work
-with. Sometimes we can rewrite them to ordinary equalities. One
-example of this are dependent equalities over a family of equalities,
-\ie a family $\lambda x . f\ x = g\ x$, for some functions
-$f, g : X \to Y$.
-
-\begin{proposition}
-  Let $f, g : X \to Y$ be two functions, $x, y : X$ and suppose we
-  have the following data:
-  \begin{itemize}
-  \item $p : f\ x = g\ x$
-  \item $q : f\ y = g\ y$
-  \item $r : x = y$
-  \end{itemize}
-  then a dependent equality:
-  $$
-  \pathover{\lambda x . f\ x = g\ x}{r}{p}{q}
-  $$
-  is equivalent to:
-  $$
-  p \ct \ap\ g\ r = \ap\ f\ r \ct q
-  $$
-\end{proposition}
-
-\begin{remark}
-  When we are dealing with equalities between compositions of paths
-  such as in the above proposition, then it makes sense to denote this
-  as a commutative diagram. The above example translates to the
-  following diagram:
-  $$
-  \xymatrix{
-    f\ x 
-    \ar@{-}[r]^{p}
-    \ar@{-}[d]_{\ap f r}
-    &g\ x
-    \ar@{-}[d]^{\ap g r}
-    \\
-    f\ y
-    \ar@{-}[r]_{q}
-    &g\ y
-  }
-  $$
-  Paths are denoted with lines with no arrow heads, as they are
-  invertible. Since direction is not always relevant, we usually
-  denote $\sym{p}$ as $p$ in such a diagram.
-\end{remark}
-
 \subsection{Functoriality of functions}
 
 The equality relation is a congruence: it is preserved by any function.
@@ -421,6 +373,53 @@ similar operation for dependent functions:
   \end{align*}
   is defined by path induction similar to $\ap$.
 \end{definition}
+
+A useful property of dependent paths over families of which the fibres
+are equalities is the following:
+
+\begin{proposition}
+  Let $f, g : X \to Y$ be two functions, $x, y : X$ and suppose we
+  have the following data:
+  \begin{itemize}
+  \item $p : f\ x = g\ x$
+  \item $q : f\ y = g\ y$
+  \item $r : x = y$
+  \end{itemize}
+  then a dependent equality:
+  $$
+  \pathover{\lambda x . f\ x = g\ x}{r}{p}{q}
+  $$
+  is equivalent to:
+  $$
+  p \ct \ap\ g\ r = \ap\ f\ r \ct q
+  $$
+\end{proposition}
+
+This proposition allows us to rewrite dependent equalities to
+non-dependent ones, which are easier to manipulate and reason about.
+
+\begin{remark}
+  When we are dealing with equalities between compositions of paths
+  such as in the above proposition, then it makes sense to denote this
+  as a commutative diagram. The above example translates to the
+  following diagram:
+  $$
+  \xymatrix{
+    f\ x 
+    \ar@{-}[r]^{p}
+    \ar@{-}[d]_{\ap f r}
+    &g\ x
+    \ar@{-}[d]^{\ap g r}
+    \\
+    f\ y
+    \ar@{-}[r]_{q}
+    &g\ y
+  }
+  $$
+  Paths are denoted with lines with no arrow heads, as they are
+  invertible. Since direction is not always relevant, we usually
+  denote $\sym{p}$ as $p$ in such a diagram.
+\end{remark}
 
 \subsection{Truncation levels}
 
@@ -575,12 +574,13 @@ on the universe of types: equivalence and identity types. All the
 things we prove about identity types, have to proven again for
 equivalences. 
 
-Perhaps more importantly, is that we do not have an induction
-principle for equivalences. While we can show that equivalences form
-an equivalence relation and also satisfy the groupoid laws, we cannot
-show that it is a congruence. In other words: we do not have a prove
-of the statement that every construction in type theory is invariant
-under equivalence.
+While identity types come with the path induction principle,
+equivalences do not enjoy such an induction principle. Even though we
+lack such a principle, we still can show that equivalences form an
+equivalence relation and also satisfy the groupoid laws. Once we try
+to show that equivalence gives us a congruence relation, we get
+stuck. In other words: we do not have a prove of the statement that
+every construction in type theory is invariant under equivalence.
 
 \begin{definition}
   Every equality between types gives rise to an isomorphism:
@@ -597,7 +597,7 @@ under equivalence.
   is an equivalence.
 \end{definition}
 
-In other words: univalence gives us an equivalence:
+Hence univalence gives us an equivalence:
 $$
 (\Equiv{A}{B}) = (A = B)
 $$
@@ -648,7 +648,7 @@ definitionally):
 \begin{itemize}
 \item $A \times \unitty = \unitty \times A = A$
 \item $A \times (B \times C) = (A \times B) \times C$
-\item $A \times B$
+\item $A \times B = B \times A$
 \end{itemize}
 We have similar properties for $\Sigma$-types:
 \begin{itemize}
@@ -764,6 +764,9 @@ original identity types onto composition of the alternative version
 and vice versa. The alternative identity types also satisfy the path
 induction principle.
 
+The above equivalence is also a direct consequence of the type
+theoretic Yoneda lemma \cite{Rijke2012}.
+
 \section{Category theory in type theory}
 
 When defining the concept of category in type theory, we have to make
@@ -835,11 +838,6 @@ leave the rest implicit.
   The \emph{empty category} $\initcat$ is defined as the category with
   no objects. The \emph{unit category} $\termcat$ is defined as the
   category with one object and no non-trivial automorphisms.
-\end{definition}
-
-\begin{definition}
-  The category of categories $\Cat$ is defined as a category with as
-  objects categories and morphisms functors.
 \end{definition}
 
 The categories $\initcat$ and $\termcat$ are respectively initial and

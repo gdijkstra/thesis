@@ -453,7 +453,7 @@ simultaneously:
   %
   \begin{datatype}{\specty}{}
     \constr{\specnil}{\specty} \\
-    \constr{\specsnoc}{(s : \specty) \to \Func{\Alg_s}{\SET} \to \specty}
+    \constr{\specsnoc}{(s : \specty) \to (F : \Func{\Alg_s}{\SET}) \to \specty}
   \end{datatype}
   %
   and $\Alg$ and $\Und$ are defined by
@@ -740,7 +740,7 @@ is the arrow category $\cdot \to \cdot$.
   \begin{itemize}
   \item $O : \Set$
   \item $A : O \to O \to \Set$ (a family of arrows)
-  \item $T : (x y z : O) \to A\ x\ y \to A\ y\ z \to A\ x\ z \to \Set$
+  \item $T : (x\ y\ z : O) \to A\ x\ y \to A\ y\ z \to A\ x\ z \to \Set$
     (a family of triangles)
   \end{itemize}
 %
@@ -1072,10 +1072,10 @@ with
 %
 where $\Constr\ s\ \Aa\ p$ is defined as:
 $$
-\Constr\ s\ \Aa\ p \ddefeq \Constr_0\ s\ \Aa\ p + \Constr_1\ s\ \Aa\ p
+\Constr\ s\ \Aa\ p \ddefeq \Constr_{\ident{point}}\ s\ \Aa\ p + \Constr_{\ident{path}}\ s\ \Aa\ p
 $$
 %
-The functions $\Constr_0$, $\Constr_1$, $\Alg$ and $\Und$ will be
+The functions $\Constr_{\ident{point}}$, $\Constr_{\ident{path}}$, $\Alg$ and $\Und$ will be
 defined in the remainder of this section, treating point constructors
 in \cref{point-constructors} and path constructors in \cref{path-constructors}.
 
@@ -1086,8 +1086,8 @@ which is meant to describe the data needed to specify a constructor of
 sort $\Aa$. There should not be any constructors of the trivial sort
 $\Aa = \termcat$, and if $\Aa$ is a non-trivial sort, then a
 constructor can either be a point constructor specified by
-$\Constr_0\ s\ \Aa\ p$, or a path constructor specified by
-$\Constr_1\ s\ \Aa\ p$. The next two subsections will describe the
+$\Constr_{\ident{point}}\ s\ \Aa\ p$, or a path constructor specified by
+$\Constr_{\ident{path}}\ s\ \Aa\ p$. The next two subsections will describe the
 data needed for point and path constructors respectively.
 
 \subsection{Point constructors}
@@ -1096,7 +1096,7 @@ data needed for point and path constructors respectively.
 In this section we will define three things:
 %
 \begin{itemize}
-\item what the data for a point constructor is, \ie we will define $\Constr_0$,
+\item what the data for a point constructor is, \ie we will define $\Constr_{\ident{point}}$,
 \item how given these data, what the category of algebras is,
 \item what the forgetful functor from this new category of algebras
   into the category of sorts is.
@@ -1164,7 +1164,7 @@ constructor specification:
   $$
   In other words, we have
   $$
-  \Constr_0\ s\ S_i\ p \ddefeq (F : \Func{\Alg_s}{S_i}) \times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \enspace .
+  \Constr_{\ident{point}}\ s\ S_i\ p \ddefeq (F : \Func{\Alg_s}{S_i}) \times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \enspace .
   $$
 \end{definition} 
 
@@ -1172,7 +1172,7 @@ The fact that $F$ must satisfy the commutativity condition intuitively
 means that $F$ leaves the sorts $(X_0, \hdots, X_{i-1})$ ``untouched''.
 
 We now explain how to construct the category $\Alg_{s'}$ of algebras
-for a an specification with an additional point constructor. Suppose
+for a specification with an additional point constructor. Suppose
 the specification $s'$ has been obtained as the extension of a
 specification $s$ by a point constructor given by a functor
 $F : \Alg_s \to S_i$, which decomposes as $F = (\extendfunc{U}^0, F^1)$. The
@@ -1242,7 +1242,7 @@ isomorphism of objects, hence this is not an issue in our setting.
   \end{datatype}
   %
   \begin{datatype}{\Bty}{}
-    \constr{\Bci}{(x : X) \to \emptyty \to \Bty\ x}
+    \constr{\Bci}{(x : \Aty) \to \emptyty \to \Bty\ x}
   \end{datatype}
   %
   We can see that $\Aty$ is equivalent to $\unitty$. The second
@@ -1324,7 +1324,7 @@ path constructor specification:
   transformations $\ell, r : F \to \extendfunc{U}_s$ satisfying
   $t_i\ \ell = t_i\ r = \id_{t_i \circ \extendfunc{U}_s}$, \ie:
 \begin{align*}
-  \Constr_1\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \\ 
+  \Constr_{\ident{path}}\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \\ 
   \times (\ell : F \to \extendfunc{U}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \extendfunc{U}_s}) \\ 
   \times (r : F \to \extendfunc{U}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \extendfunc{U}_s}) \enspace .
 \end{align*}
