@@ -1,11 +1,12 @@
-\chapter{Quotient inductive types}
+\chapter{Quotient inductive-inductive definitions}
 \label{qits}
 
-In this chapter we will give several examples of quotient inductive
-types, motivating their usefulness, before we set out giving a precise
-definition. We will also compare it to other notions such as quotient
-types. We will discuss the status of current (partial) implementations
-of quotient and higher inductive types in various proof assistants.
+In this chapter we will give several examples of quotient
+inductive-inductive definitions, motivating their usefulness, before
+we set out giving a precise definition. We will also compare it to
+other notions such as higher inductive types and quotient types. We
+will discuss the status of current (partial) implementations of
+quotient and higher inductive types in various proof assistants.
 
 \section{Examples}
 \label{examples}
@@ -47,6 +48,15 @@ which comes with the computation rules:
   \intrecbetazero : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero = a_{\intzero} \\
   \intrecbetaone : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone = a_{\intone}
 \end{align*}
+
+\subsubsection{Definitional versus propositional computation rules}
+
+For ordinary inductive types, the computation rules customarily hold
+definitionally, as they are called \emph{computation} rules after
+all. However, if we want to formalise the theory of inductive
+definitions in type theory, we only have propositional equality at our
+disposal. As such, in this thesis will only talk about computation
+rules holding propositionally.
 
 \subsubsection{Path computation rules}
 \label{int:pathcomp}
@@ -92,16 +102,21 @@ is not a simple path as it was with the recursion principle:
 $m_{\intzero}$ and $m_{\intone}$ may have different types. We do know
 that they can be related by transporting along $\intseg$, so we end up
 having to give a dependent path as the method for $\intseg$:
-
-$$
-\intind : (P : \intty \to \Type) (m_{\intzero} : P\ \intzero) (m_{\intone} : P\ \intone) (m_{\intseg} : \pathover{P}{\intseg}{\intzero}{\intone}) \to (x : \intty) \to P\ x
-$$
+%
+\begin{align*}
+&\intind : \\
+&\ \ \ \ \ \ \ (P : \intty \to \Type) \\
+&\ \ \ \ \ \ \ (m_{\intzero} : P\ \intzero) \\
+&\ \ \ \ \ \ \ (m_{\intone} : P\ \intone) \\
+&\ \ \ \ \ \ \ (m_{\intseg} : \pathover{P}{\intseg}{\intzero}{\intone}) \\
+&\ \ \ \ \ \ \ \ \ \to (x : \intty) \to P\ x
+\end{align*}
 
 As with the recursion principle, we of course have computation rules:
+%
 \begin{align*}
   \intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intzero = m_{\intzero} \\
-  \intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intone = m_{\intone} \\
-  \apd\ (\intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg})\ \intseg = m_{\intseg}
+  \intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intone = m_{\intone}
 \end{align*}
 
 \subsubsection{Function extensionality}
@@ -119,7 +134,7 @@ $$
 This is like the universal property for the interval with equivalence
 weakened to logical equivalence.
 
-\begin{proposition}
+\begin{proposition}[\cite{Hofmann1995,Shulman2011ii}]
   The interval type implies function extensionality.
 \end{proposition}
 
@@ -136,7 +151,9 @@ weakened to logical equivalence.
   $$
   This assumes that the computation rules of $\intrec$ hold
   definitionally and that the type theory satisfies the $\eta$-law for
-  functions definitionally.
+  functions definitionally. However, the proof can be easily modified
+  to also work when these equations hold only up to propositional
+  equality.
 \end{proof}
 
 \subsection{Quotients and colimits}
@@ -189,7 +206,7 @@ $$
 R\ x\ y \ddefeq (z : A) \times (x = f\ z) \times (y = g\ z)
 $$
 
-\begin{proposition}
+\begin{proposition}[\cite{Altenkirch2011ii}]
   The quotient $\quotty{B}{R}$ is the coequaliser of $f$ and $g$, \ie
   $\quotproj{\_} : B \to \quotty{B}{R}$ satisfies
   $\quotproj{\_} \circ f = \quotproj{\_} \circ g$ and $\quotty{B}{R}$
@@ -233,28 +250,19 @@ which comes with the following elimination principle:
 \end{align*}
 %
 Given a type $A : \Type$ and a relation $R : A \to A \to \Type$, we
-can define a type $\tilde{R} \ddefeq (x\ y : A) \times R\ x \ y$ which
-has two projections $\pi_0, \pi_1 : \tilde{R} \to A$. We can then take
+can define a type $\widetilde{R} \ddefeq (x\ y : A) \times R\ x \ y$ which
+has two projections $\pi_0, \pi_1 : \widetilde{R} \to A$. We can then take
 the coequaliser of these two functions:
 $$
 \xymatrix{
-\tilde{R} \ar@<-.5ex>[r]_{\pi_0} \ar@<.5ex>[r]^{\pi_1} &A \ar[r]^{\coeqproj} &\coeqty{\pi_0}{\pi_1}
+\widetilde{R} \ar@<-.5ex>[r]_{\pi_0} \ar@<.5ex>[r]^{\pi_1} &A \ar[r]^-{\coeqproj} &\coeqty{\pi_0}{\pi_1}
 }
 $$
 
-\begin{proposition}
+\begin{proposition}[\cite{Altenkirch2011ii}]
   The coequaliser $\coeqty{\pi_0}{\pi_1}$ is the quotient of $A$ by
   $R$.
 \end{proposition}
-
-\begin{proof}
-  We have to show that $\coeqty{\pi_0}{\pi_1}$ satisfies the
-  elimination principle of the quotient $\quotty{A}{R}$.
-\end{proof}
-
-We have shown that coequalisers and quotient types can be phrased in
-terms of each other. We can go a bit further and state that they are
-equivalent when seen as families.
 
 \subsection{Infinitely branching trees}
 
@@ -267,7 +275,7 @@ following inductive type:
 \begin{datatype}{\treety}{\Set}
   \constr{\treeleaf}{\treety} \\
   \constr{\treenode}{(\natty \to \treety) \to \treety} \\
-  \constr{\treeperm}{(f : \natty \to \treety) (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treenode\ f = \treenode\ (f \circ \phi)}
+  \constr{\treeperm}{(f : \natty \to \treety)\ (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treenode\ f = \treenode\ (f \circ \phi)}
 \end{datatype}
 
 The $\treeperm$ constructor tells that two nodes
@@ -288,6 +296,13 @@ with the relation defined inductively as:
   \constr{\treerelnode}{(f : \natty \to \pretreety) (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treerelty{\pretreenode\ f}{\pretreenode\ (f \circ \phi)}}  
 \end{datatype}
 %
+Note that the relation as defined here is not an equivalence
+relation. It fails to be reflexive as we do not have a proof of
+$\treerelty{\pretreeleaf}{\pretreeleaf}$. However, taking the quotient
+by a relation means that we quotient by the
+reflexive-transitive-symmetric closure of that relation. As such the
+relation as defined above is sufficient for our purposes.
+
 If we then look at the ``constructors'' of the quotient $\quotty{\pretreety}{\treerel}$, we have the following:
 %
 \begin{align*}
@@ -345,9 +360,11 @@ axiom of choice in type theory is a constructive taboo in and of
 itself, it also has the law of excluded middle as a consequence
 \cite{Diaconescu1975}. Going in the other direction, having an inverse
 to the quotient projection function in general implies the axiom of
-choice \cite{Hofmann1995}. Having quotient inductive types available
-allows us to work with definitions such as $\treety$, avoiding the
-need for choice principles to use them.
+choice \cite{Hofmann1995}. However, it is still an open problem
+whether $\widetilde{\pretreenode}$ is definable without using the
+axiom of choice. Having quotient inductive types available allows us
+to work with definitions such as $\treety$, avoiding the need for
+choice principles to use them.
 
 \subsection{Cauchy reals}
 \label{cauchy-reals}
