@@ -95,6 +95,7 @@
 
 \newcommand{\Level}{\AgdaPrimitiveType{\ident{Level}}}
 
+\newcommand{\uip}{\AgdaFunction{\ident{uip}}}
 \newcommand{\isset}{\AgdaFunction{\ident{is-set}}}
 \newcommand{\isprop}{\AgdaFunction{\ident{is-prop}}}
 \newcommand{\iscontr}{\AgdaFunction{\ident{is-contr}}}
@@ -129,6 +130,7 @@
 
 % Equality and its operations
 \newcommand{\pathover}[4]{#3 =^{#1}_{#2} #4}
+\newcommand{\happly}{\AgdaFunction{\ident{happly}}}
 \newcommand{\ap}{\AgdaFunction{\ident{ap}}}
 \newcommand{\apd}{\AgdaFunction{\ident{apd}}}
 \newcommand{\transport}{\AgdaFunction{\ident{transport}}}
@@ -149,6 +151,7 @@
 
 % is-prop, is-equiv, etc.
 \newcommand{\isequiv}{\AgdaFunction{\ident{is-equiv}}}
+\newcommand{\isiso}{\AgdaFunction{\ident{is-iso}}}
 
 % Naturals
 \newcommand{\natty}{\AgdaDatatype{\mathbb{N}}}
@@ -432,5 +435,7 @@
 \newcommand{\pushoutcorner}[1][ul]{\save*!/#1-1.2pc/#1:(-2,2)@^{|-}\restore} 
 
 % Equiv stuff
-\newcommand{\idtoequiv}{\AgdaFunction{\ident{idtoequiv}}}
+\newcommand{\idtoequiv}{\AgdaFunction{\ident{id-to-equiv}}}
+\newcommand{\idtoiso}{\AgdaFunction{\ident{id-to-iso}}}
 \newcommand{\idequiv}{\AgdaFunction{\ident{id-equiv}}}
+

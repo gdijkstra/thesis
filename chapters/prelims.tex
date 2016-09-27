@@ -541,21 +541,31 @@ A more well-behaved notion is the notion of equivalence:
 \begin{definition}[Equivalence]
   A function $f : A \to B$ is an \emph{equivalence} if the following
   type is inhabited:
-  $$
-  (g : B \to A) \times f \circ g = \id_B \times (h : B \to A) \times h \circ f = \id_A
-  $$
-  
+  %
+  \begin{align*}
+    &\isequiv\ f : \Type \\
+    &\isequiv\ f \ddefeq (g : B \to A) \times f \circ g = \id_B \times (h : B \to A) \times h \circ f = \id_A
+  \end{align*}
+  %
   If there exists an equivalence between types $A$ and $B$, we denote
-  this as $\Equiv{A}{B}$.
+  this as $\Equiv{A}{B}$:
+  %
+  \begin{align*}
+    &\Equiv{A}{B} : \Type \\
+    &\Equiv{A}{B} \ddefeq (f : A \to B) \times \isequiv\ f
+  \end{align*}
+  % 
 \end{definition}
+
+Equivalences satisfy the following useful properties (for proofs we
+refer the reader to \cite{UFP2013}):
 
 \begin{proposition}
   Every isomorphism gives rise to an equivalence.
 \end{proposition}
 
 \begin{proposition}
-  Given a function $f : A \to B$, the property of $f$ being an
-  equivalence is a proposition.
+  Given a function $f : A \to B$, $\isequiv\ f$ is a proposition.
 \end{proposition}
 
 For a function to be an equivalence is a proposition, but for two
@@ -614,9 +624,10 @@ otherwise indicated.
 
 \subsection{Function extensionality}
 
-In ordinary mathematics, one usually proves that two functions are
-equal by showing that they are pointwise equal: we appeal to function
+In mathematics, one usually proves that two functions are equal by
+showing that they are pointwise equal: we appeal to function
 extensionality. In type theory this can be formulated as follows:
+%
 \begin{definition}[Function extensionality]
   Suppose we have functions $f, g : (x : X) \to P\ x$, function
   extensionality gives us a term of type:
@@ -624,17 +635,30 @@ extensionality. In type theory this can be formulated as follows:
   ((x : X) \to f\ x = g\ x) \to f = g
   $$
 \end{definition}
-
+%
+In type theory we can define a function that goes in the other
+direction. We have shown that the identity types form a congruence
+relation. In particular, we can define the following function, given
+two dependent functions $f, g : (x : X) \to P\ x$:
+%
+\begin{align*}
+  &\happly\ f\ g : f = g \to ((x : X) \to f\ x = g\ x) \\
+  &\happly\ f\ g\ p = \lambda x . \ap\ (\lambda h . h\ x)\ p
+\end{align*}
+%
 Function extensionality is not something that is provable in ordinary
 \mltt. However, it does follow from univalence and as we will see, it
-also follows from having quotients. In fact, these imply we have \emph{strong function extensionality}:
+also follows from having quotients. In fact, these imply we have
+\emph{strong function extensionality}:
 
 \begin{proposition}[Strong function extensionality]
-  For any two functions $f, g : (x : X) \to P\ x$, we have the following equivalence:
+  For any two functions $f, g : (x : X) \to P\ x$, we have a witness of:
   $$
-  ((x : X) \to f\ x = g\ x) = (f = g)
+  \isequiv\ (\happly\ f\ g)
   $$
 \end{proposition}
+%
+A proof of this statement can be found in \cite{UFP2013}.
 
 \subsection{Equivalences of $\Sigma$-types}
 
@@ -687,6 +711,18 @@ each other out, are a useful techniques.
   $$
 \end{proposition}
 
+\begin{proof}
+  Using univalence, it is enough to show that there exists an
+  equivalence between the two types. The function
+  $((x , z) = (y , w)) \to (p : x = y) \times (q :
+  \pathover{B}{p}{z}{w})$
+  can be given by path induction on the argument. Similarly for the
+  function in the other direction, we can define this by applying path
+  induction to both elements of the pair. Showing that these two
+  functions are each other's inverses is again a simple case of path
+  induction.
+\end{proof}
+
 \subsection{Alternative formulation of identity types}
 \label{alt-identity-type}
 We have seen that the identity types form a groupoid on its underlying
@@ -698,21 +734,21 @@ $a \ct p \ct (\sym{p} \ct b) = a \ct b$, for some expressions $a$ and
 $b$. The easiest way to prove this is by applying path induction to
 $p$, which will reduce the goal to $a \ct b = a \ct b$. However,
 sometimes we are in comparable situations where we cannot perform path
-induction on all of the paths involved.
+induction on all of the paths involved. In such a situation, we have
+to take a lot of intermediate steps invoking associativity and the
+unit laws explicitly, \eg:
+%
 \begin{align*}
-  &a \ct p \ct (\sym{p} \ct b) \\
-  &= \\
-  &a \ct ((p \ct \sym{p}) \ct b) \\
-  &= \\
-  &a \ct (\refl \ct b) \\
-  &= \\
-  &a \ct b
+  a \ct p \ct (\sym{p} \ct b) &= a \ct ((p \ct \sym{p}) \ct b) \\
+                              &= a \ct (\refl \ct b) \\
+                              &= a \ct b
 \end{align*}
 
 Because associativity does not hold definitionally, we cannot give as
-proof term:
+proof term ($\ident{sym-inv}$ is the witness of
+$\trans{p}{\sym{p}} = \refl$):
 $$
-\ap\ (\lambda h . a \ct h \ct b) (sym-inv\ p) : a \ct (p \ct \sym{p}) \ct b = a \ct b
+\ap\ (\lambda h . a \ct h \ct b)\ (\ident{sym-inv}\ p) : a \ct (p \ct \sym{p}) \ct b = a \ct b
 $$
 as it has the wrong type, hence we are stuck with filling in
 associativity and unit laws here and there. This is particularly
@@ -726,15 +762,27 @@ unit laws definitionally with respect to function composition. We define:
 $$
 x \alteq_{A} y \ddefeq (z : A) \to z = x \to z = y
 $$
-Reflexivity is then redefined as the identity function and
-transitivity is given by function composition. There are functions to
-and fro between the two formulations:
+Reflexivity and transitivity are then defined as follows
+%
 \begin{align*}
-  &to : x = y \to x \alteq y \\
-  &to\ p = \lambda z\ q . \trans{q}{p} \\
+&\ident{refl}' : x \alteq_{A} x \\
+&\ident{refl}' \ddefeq \lambda w\ p\ .\ p \\
+\\
+&\ident{trans}' : x \alteq_{A} y \to y \alteq_{A} z \to x \alteq_{A} z \\
+&\ident{trans}'\ p\ q \ddefeq \lambda w\ r\ .\ q\ w\ (p\ w\ r)
+\end{align*}
+%
+Since reflexivity and transitivity are essentially given by the
+identity function and function composition respectively, the unit laws
+and associativity are now satisfied definitionally.
+
+There are functions to and fro between the two formulations:
+\begin{align*}
+  &\ident{to} : x = y \to x \alteq y \\
+  &\ident{to}\ p = \lambda z\ q . \trans{q}{p} \\
   \\
-  &from : x \alteq y \to x = y \\
-  &from\ p = p\ x\ \refl_{x}
+  &\ident{from} : x \alteq y \to x = y \\
+  &\ident{from}\ p = p\ x\ \refl_{x}
 \end{align*}
 
 \begin{proposition}
@@ -745,13 +793,13 @@ and fro between the two formulations:
 \end{proposition}
 
 \begin{proof}
-  The functions $to$ and $from$ give us an isomorphism. Let $p : x = y$, then we have that:
+  The functions $\ident{to}$ and $\ident{from}$ give us an isomorphism. Let $p : x = y$, then we have that:
   $$
-  from\ (to\ p) = from\ (\lambda z\ q . \trans{q}{p}) = \trans{\refl}{p} = p
+  \ident{from}\ (\ident{to}\ p) = \ident{from}\ (\lambda z\ q . \trans{q}{p}) = \trans{\refl}{p} = p
   $$
   In the other direction we get for $p : x \alteq y$:
   $$
-  to\ (from\ p) = to\ (p\ x\ \refl) = \lambda z\ q . \trans{q}{p\ x\ \refl}
+  \ident{to}\ (\ident{from}\ p) = \ident{to}\ (p\ x\ \refl) = \lambda z\ q . \trans{q}{p\ x\ \refl}
   $$
   Showing that this is equal to $p$ can be done by employing function
   extensionality and applying path induction on the second
@@ -764,8 +812,9 @@ original identity types onto composition of the alternative version
 and vice versa. The alternative identity types also satisfy the path
 induction principle.
 
-The above equivalence is also a direct consequence of the type
-theoretic Yoneda lemma \cite{Rijke2012}.
+The equivalence of $x = y$ and $x \alteq y$ is can also be seen as a
+direct consequence of the type theoretic Yoneda lemma
+\cite{Rijke2012}.
 
 \section{Category theory in type theory}
 
@@ -805,8 +854,8 @@ type of morphisms given objects $X, Y : | \Cc |$ is denoted as
 $\Cc(X,Y)$.
 
 \begin{example}
-  The universe $\Set$ of types that are sets forms a category with its
-  morphisms defined as functions between sets.
+  The universe $\Set$ of types that are sets forms a category, denoted
+  $\SET$, with its morphisms defined as functions between sets.
 \end{example}
 
 \begin{remark}
@@ -843,32 +892,59 @@ leave the rest implicit.
 The categories $\initcat$ and $\termcat$ are respectively initial and
 terminal in the category of categories.
 
+\begin{definition}[Natural transformation]
+  Given two functors $F, G : \Func{\Cc}{\Dd}$, we can define the type
+  of \emph{natural transformations} between them as follows:
+  %
+  \begin{align*}
+    \Nat{F}{G} &\ddefeq &&(\alpha : (X : | \Cc |) \to \Dd(FX,GX)) \\
+    &\times &&(\{\ X\ Y : | \Cc |\ \}\ (f : \Cc(X,Y))\ \to Gf \circ_{\Dd} \alpha_X = \alpha_Y \circ_{\Dd} Ff)
+  \end{align*}
+\end{definition}
+
 As the objects are given by a type, propositional equality gives us a
 way to talk about equality between objects. When doing category
 theory, we should always work with isomorphism if we want to talk
 about objects being equal:
 
 \begin{definition}[Isomorphism]
-  Let $X, Y : | \Cc |$ for some $\Cc : \Cat$, then the type of
-  isomorphisms between $X$ and $Y$ is defined as:
+  Let $X, Y : | \Cc |$ for some $\Cc : \Cat$, a morphism
+  $f : \Cc(X,Y)$ is an \emph{isomorphism} if the following is
+  inhabited:
+  %
   \begin{align*}
-    \Iso{X}{Y} &\ddefeq &&(to : X \to Y) \\
-               &\times &&(from : Y \to X) \\
-               &\times &&(\identalt{from-to} : from \circ to = \id_{\Cc}\ X) \\
-               &\times &&(\identalt{to-from} : to \circ to = \id_{\Cc}\ Y)
+    &\isiso\ f : \Type \\
+    &\isiso\ f \ddefeq (g : \Cc(Y,X)) \times (g \circ f = \id_{\Cc}\ X) \times (f \circ g = \id_{\Cc}\ Y)
   \end{align*}
 \end{definition}
 
+Note that since we are working with hom-sets, the property of a
+morphism being an isomorphism is propositional, unlike for
+isomorphisms on $\Type$.
+
+\begin{definition}
+  The type of isomorphisms between $X$ and $Y$ is defined as:
+  %
+  \begin{align*}
+  &\Iso{X}{Y} : \Type \\
+  &\Iso{X}{Y} \ddefeq (f : \Cc(X,Y)) \times \isiso\ f
+  \end{align*}
+\end{definition}
+
+For any object $X : | \Cc |$, the identity morphism $\id_{\Cc}\ X$ is
+an isomorphism, denoted as $\idequiv_{\Cc}\ X$.
+
 The univalence axiom gives us that for sets the notions of isomorphism
-and propositional equality coincide. We can state this property for
-any category:
+and propositional equality coincide. We can state a similar axiom for
+categories. Just as we have the function $\idtoequiv$ that lifts any
+propositional equality on types to an equivalence, we have a function,
+for any two objects $X, Y$, $\idtoiso_{\Cc}\ X\ Y : X = Y \to \Iso{X}{Y}$,
+defined by path induction.
 
 \begin{definition}[Univalent category]
   A category $\Cc$ is called \emph{univalent} if for any two objects
-  $X, Y : | \Cc |$ we have the following equivalence:
-  $$
-  \Iso{X}{Y} = (X = Y)
-  $$  
+  $X, Y : | \Cc |$ the function $\idtoiso_{\Cc}\ X\ Y$ is an
+  equivalence.
 \end{definition}
 
 \begin{proposition}
@@ -881,19 +957,23 @@ any category:
 
 \subsection{Families}
 
-We can define a type of families:
+Type families form a category, denoted $\FAM$. Just as with $\SET$ we
+restricted ourselves to those types that satisfy uniqueness of
+identity proofs, we will only consider those families $X : \Type$,
+$P : X \to \Type$ of which the carrier $X$ is a set and its fibres
+$P\ x$ are sets, for any $x : X$. We can define a type of families:
+%
 \begin{align*}
-  &\Fam : \Type \\
-  &\Fam \ddefeq (X : \Type) \times (P : X \to \Type)
+  &\Fam : \Set \\
+  &\Fam \ddefeq (X : \Set) \times (P : X \to \Set)
 \end{align*}
-The first projection of $\Fam$ is referred to as the \emph{carrier} or
-\emph{underlying type} of the family.
+%
 
 A morphism between two families is a function between the underlying
 types and a witness of the fact that this function ``preserves the
 predicate'':
 \begin{align*}
-  &\Fam((X,P),(Y,Q)) \ddefeq (f : X \to Y) \times (g : (x : X) \to P\ x \to Q\ (f\ x))
+  &\FAM((X,P),(Y,Q)) \ddefeq (f : X \to Y) \times (g : (x : X) \to P\ x \to Q\ (f\ x))
 \end{align*}
 
 \subsection{Higher categories}
