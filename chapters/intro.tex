@@ -284,8 +284,8 @@ $p = q$, \ie we have \emph{uniqueness of identity proofs}. Using
 dependent pattern matching this is easy to prove:
 %
 \begin{align*}
-  &uip : (A : \Type)\ (x\ y : A)\ (p\ q : x = y) \to p = q \\
-  &uip\ A\ x\ .x\ (\refl\ x)\ (\refl\ x) \ddefeq \refl\ (\refl\ x)
+  &\uip : (A : \Type)\ (x\ y : A)\ (p\ q : x = y) \to p = q \\
+  &\uip\ A\ x\ .x\ (\refl\ x)\ (\refl\ x) \ddefeq \refl\ (\refl\ x)
 \end{align*}
 %
 However, if we consider the induction principle for this type, called
@@ -452,11 +452,13 @@ extending type theory with a strict equality
 deal with the coherences by simply working with the truncated types:
 we work with sets instead.
 
+\section{Related work}
+
+\todoi{Fix!}
+
 \section{Overview of the thesis and contributions}
 
-The main contribution of this thesis is a formal specification of
-quotient inductive-inductive definitions, given in type theory. The
-thesis is organised as follows:
+The thesis is organised as follows:
 
 \begin{itemize}
 \item In \cref{prelims}, we give the basic concepts and notation we
@@ -487,6 +489,23 @@ thesis is organised as follows:
 \item The last chapter, \cref{conclusion}, presents the conclusions of
   the thesis along with a discussion of the presented results. We also
   point out several avenues for future work.
+\end{itemize}
+
+\subsection{List of main contributions}
+
+\todoi{Fix!}
+
+The main contributions of this thesis are:
+
+\begin{itemize}
+\item a formal specification of quotient inductive-inductive
+  definitions, alongside with their categorical interpretation, given
+  in type theory: def. blablba
+\item a proof of the logical equivalence of initiality and the
+  category theoretic induction principle: thm blabla
+\item a derivation of the type theoretic induction principle from the
+  category theoretic one
+\item construction of initial algebras for a class of quotient inductive types
 \end{itemize}
 
 \section{Declaration of authorship}
