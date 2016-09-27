@@ -948,33 +948,32 @@ defined by path induction.
 \end{definition}
 
 \begin{proposition}
-  The category $\Set$ is univalent.
+  The category $\SET$ is univalent.
 \end{proposition}
 
 \begin{proof}
   This follows directly from univalence for the universe $\Type$.
 \end{proof}
 
-\subsection{Families}
-
-Type families form a category, denoted $\FAM$. Just as with $\SET$ we
-restricted ourselves to those types that satisfy uniqueness of
-identity proofs, we will only consider those families $X : \Type$,
-$P : X \to \Type$ of which the carrier $X$ is a set and its fibres
-$P\ x$ are sets, for any $x : X$. We can define a type of families:
-%
-\begin{align*}
-  &\Fam : \Set \\
-  &\Fam \ddefeq (X : \Set) \times (P : X \to \Set)
-\end{align*}
-%
-
-A morphism between two families is a function between the underlying
-types and a witness of the fact that this function ``preserves the
-predicate'':
-\begin{align*}
-  &\FAM((X,P),(Y,Q)) \ddefeq (f : X \to Y) \times (g : (x : X) \to P\ x \to Q\ (f\ x))
-\end{align*}
+\begin{example}[Category of type families]
+  Type families form a category, denoted $\FAM$. Just as with $\SET$
+  we restricted ourselves to those types that satisfy uniqueness of
+  identity proofs, we will only consider those families $X : \Type$,
+  $P : X \to \Type$ of which the carrier $X$ is a set and its fibres
+  $P\ x$ are sets, for any $x : X$. We can define a type of families:
+  % 
+  \begin{align*}
+    &\Fam : \Set \\
+    &\Fam \ddefeq (X : \Set) \times (P : X \to \Set)
+  \end{align*}
+  % 
+  A morphism between two families is a function between the underlying
+  types and a witness of the fact that this function ``preserves the
+  predicate'':
+  \begin{align*}
+    &\FAM((X,P),(Y,Q)) \ddefeq (f : X \to Y) \times (g : (x : X) \to P\ x \to Q\ (f\ x))
+  \end{align*}
+\end{example}
 
 \subsection{Higher categories}
 \label{higher-cats}
