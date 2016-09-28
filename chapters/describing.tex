@@ -96,13 +96,11 @@ quotient inductive-inductive definitions. In
 declarations of quotient inductive-inductive definitions is given as a
 form of iterated dialgebras with equations. In this formal definition,
 we only consider certain functors for the result type of the
-functors. In \cref{other-forms-of-constructors} we discuss whether we
-can generalise this to a larger class of functors. In
-\cref{from-syntax-to-functors} how the formal inductive definitions
-differ from what one would like to write down in type theory
-itself. In \cref{application-to-equational-theories} we see how the
-formalisation of quotient inductive-inductive definitions can also be
-used to talk about equational theories.
+functors. In \cref{other-forms-of-constructors} and \cref{positivity}
+we discuss the consequences of working with dialgebras, both the
+limitations as well as the opportunities for generalising the current
+definitions. Finally in \cref{describing-related-work} we discuss
+related work.
 
 \section{Algebraic semantics}
 \label{algebraic-semantics}
@@ -1401,7 +1399,8 @@ $$
 \Ac : S_i(F X , U X)
 $$
 where $s : \specty$ and $F, U : \Func{\Alg_s}{S_i}$ for some sort
-category $S_i$. This begs the question if we generalise this to a
+category $S_i$. We have only considered the case where $U$ is a
+forgetful functor. This begs the question if we generalise this to a
 larger class of dialgebras. For example, can we have constructors such
 as:
 $$
@@ -1459,7 +1458,30 @@ $$
 $$
 as this is equivalent to $B \to \natty \to \Aty$.
 
-\section{Dependent dialgebras}
+\subsection{Currying}
+
+When a constructor has multiple arguments, we often write things down
+in its curried form, \eg suppose we have $K, L : \Set$ and define the
+following constructor for type $\Aty$:
+$$
+\Ac : K \to (L \to \Aty)
+$$
+In our presentation, we consider dialgebras where the functor
+describing the target of the constructor is usually a forgetful
+functor. As such, we are forced to have all our constructors in
+curried form, \eg the above case would be $K \times L \to \Aty$. To
+describe the curried constructor $\Ac$, we can see it as a
+$(F,G)$-dialgebra with $F X \ddefeq K$ and $G X \ddefeq (L \to X)$.
+This approach does not always work, if we were to consider instead the
+constructor:
+$$
+\Ac : K \to (\Aty \to \Aty)
+$$
+We cannot define $G X \ddefeq (X \to X)$ as it is not functorial. So
+it seems that at this level of syntax, dialgebras are not the
+appropriate concept to describe what is going on.
+
+\subsection{Dependent dialgebras}
 
 As an earlier attempt to unifying the treatment of point and path
 constructors, we have considered \emph{dependent dialgebras}
@@ -1487,70 +1509,8 @@ have $\widehat{g \circ f}_x = \hat{g}_{F f x} \circ \hat{f}_x$. This
 makes the approach unattractive if we want to generalise to higher
 inductive types.
 
-\section{From syntax to functors and natural transformations}
-\label{from-syntax-to-functors}
-
-We have presented a way to specify an inductive definition by giving a
-list of functors and natural transformations that satisfy certain
-properties, whilst at the same time defining the categories of
-algebras that correspond these definitions. In a proof assistant, we
-expect to specify an inductive definition by giving a list of
-constructors, \ie a list of types that adhere to certain rules. Our
-approach is somewhat similar to this: we essentially have to give a
-functor for each constructor specifying the arguments and give natural
-transformations to indicate the end points if it happens to be a path
-constructor we are describing. To give these data, we may need to
-massage our types before we can describe them as functors and natural
-transformations.
-
-\subsection{Currying}
-
-When a constructor has multiple arguments, we often write things down
-in its curried form, \eg suppose we have $K, L : \Set$ and define the
-following constructor for type $\Aty$:
-$$
-\Ac : K \to (L \to \Aty)
-$$
-In our presentation, we consider dialgebras where the functor
-describing the target of the constructor is usually a forgetful
-functor. As such, we are forced to have all our constructors in
-curried form, \eg the above case would be $K \times L \to \Aty$. To
-describe the curried constructor $\Ac$, we can see it as a
-$(F,G)$-dialgebra with $F X \ddefeq K$ and $G X \ddefeq (L \to X)$.
-This approach does not always work, if we were to consider instead the
-constructor:
-$$
-\Ac : K \to (\Aty \to \Aty)
-$$
-We cannot define $G X \ddefeq (X \to X)$ as it is not functorial. So
-it seems that at this level of syntax, dialgebras are not the
-appropriate concept to describe what is going on.
-
-\subsection{``Henry Ford'' translation}
-
-To deal with constructors that are not just functions but dependent
-functions, we rewrite them according to the ``Henry Ford''
-translation. Suppose we are defining a constructor, whose sort is
-$P : A \to \Set$, given some $A : \Set$, that looks as follows:
-$$
-\Pc : (\gamma : \Gamma) \to \Pty\ (f\ \gamma)
-$$
-where $\Gamma : \Set$ and $f : \Gamma \to A$. The translation of this
-is:
-$$
-\Pc : (x : A) \times (\gamma : \Gamma) \times (x = f\ \gamma) \to P\ x
-$$
-Such a translation allows us to describe such constructors as a
-subcategory of dialgebras and saves us from having to deal with
-dependent functions in a more direct way. 
-
-Usually such a translation affects the computational behaviour of the
-recursion principle, since we in essence replace definitional
-equalities with propositional ones. However, as we only talk about
-computational behaviour up to propositional equality, this does not
-make a difference in our setting.
-
-\subsection{Positivity}
+\section{Positivity}
+\label{positivity}
 
 Not all expressions of the type $\Set \to \Set$ are functorial: the
 arguments may only be in positive positions in the result. As we have
@@ -1592,32 +1552,8 @@ the datatype is that the constructor $\fieldinv$ has a recursive
 occurrence in a negative position: the constructor $\fieldzero$ occurs
 in a negative position.
 
-\subsection{Comparison to Agda's inductive definitions}
-\section{Application to equational theories}
-\label{application-to-equational-theories}
-
-Now that we have a mechanism that gives us the category of algebras
-given a list of constructors, we can also use this to create the
-category of models for an equational theory. For example, if we take
-the axioms of setoids as constructors, the corresponding category of
-algebras is equivalent to the category of setoids. A setoid consists
-of the following data:
-\begin{itemize}
-\item $X : \Set$
-\item $R : X \to X \to \Set$
-\item $\ident{refl} : (x : X) \to R\ x\ x$
-\item $\ident{sym} : (x\ y : X) \to R\ x\ y \to R\ y\ x$
-\item $\ident{trans} : (x\ y\ z : R) \to R\ x\ y \to R\ y\ z \to R\ x\ z$
-\item $\ident{is-prop} : (x\ y : R) \to (p\ q : R\ x\ y) \to p = q$
-\end{itemize}
-We can read this as an inductive definition with its category of sorts
-being $\REL$ and $\ident{refl}$, $\ident{sym}$, $\ident{trans}$ and
-$\ident{is-prop}$ as its constructors. As an inductive definition,
-this is not terribly interesting as the initial algebra for this would
-consist of the empty type with an equivalence relation. The category
-of algebras is the category of setoids.
-
 \section{Related work}
+\label{describing-related-work}
 
 \subsection{Inductive-inductive definitions}
 
