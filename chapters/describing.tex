@@ -459,11 +459,11 @@ simultaneously:
   and $\Alg$ and $\Und$ are defined by
   %
   \begin{align*}
-    \Alg_{\specnil} &\ddefeq \SET \\
-    \Alg_{(\specsnoc\ s\ F)} &\ddefeq \dialgcat{F}{U_s} \\
+    &\Alg_{\specnil} \ddefeq \SET \\
+    &\Alg_{(\specsnoc\ s\ F)} \ddefeq \dialgcat{F}{\Und_s} \\
     \\
-    \Und_{\specnil} &\ddefeq\ \id \\
-    \Und_{(\specsnoc\ s\ F)} &\ddefeq U_s \circ V
+    &\Und_{\specnil} \ddefeq\ \id \\
+    &\Und_{(\specsnoc\ s\ F)} \ddefeq U_s \circ V
   \end{align*}
   %
   where $V$ is the forgetful functor that gives the underlying object of
@@ -479,20 +479,27 @@ as $[F_0,F_1]$.
   specification $[F_0, F_1]$ where $F_0$ and $F_1$ are the same
   functors as before, as we have that $\SET \defeq \Alg_{[]}$,
   $\algcat{F_0} \defeq \Alg_{[F_0]}$ and
-  $\dialgcat{F_1}{U_0} \defeq \Alg_{[F_0,F_1]}$.
+  $\dialgcat{F_1}{\Und_{[F_0]}} \defeq \Alg_{[F_0,F_1]}$.
 \end{example}
 
 \subsection{Avoiding induction-recursion}
 \label{avoiding-induction-recursion}
 
 The type of specifications in \cref{type-sorted-spec} is given
-inductive-recursively. In this section we will show that the use of
-induction-recursion is not essential to the definition. Intuitively
-the type is just a snoc-list of functors. The induction-recursion
-allows us to succinctly make sure that the domain of the functors is
-always a category of algebras. We can avoid induction-recursion by
-separately defining the snoc-list of functors and a predicate on that
-list that ensures the domain of the functors is correct:
+inductive-recursively. However, we want our framework to be
+implementable in a small core type theory, where one would not expect
+to have induction-recursion available. A class of inductive-recursive
+definitions can be translated into definitions making use of indexed
+inductive definitions instead \cite{Malatesta2012}. In this section we
+will use a different translation, which does not need indexed
+inductive definitions.
+
+Intuitively the type is just a snoc-list of functors. The
+induction-recursion allows us to succinctly make sure that the domain
+of the functors is always a category of algebras. We can avoid
+induction-recursion by separately defining the snoc-list of functors
+and a predicate on that list that ensures the domain of the functors
+is correct:
 
 \begin{definition}
   % 
@@ -513,8 +520,8 @@ list that ensures the domain of the functors is correct:
   where
   %
   \begin{align*}
-    \specaltiscorrect\ \specaltnil &\ddefeq \unitty \\
-    \specaltiscorrect\ (\specaltsnoc\ s\ \Cc\ F) &\ddefeq (p : \specaltiscorrect) \times (\Cc = \Algalt_{(s,p)})
+    &\specaltiscorrect\ \specaltnil \ddefeq \unitty \\
+    &\specaltiscorrect\ (\specaltsnoc\ s\ \Cc\ F) \ddefeq (p : \specaltiscorrect) \times (\Cc = \Algalt_{(s,p)})
   \end{align*}
   %
   The definitions of $\Alg'$ and $\Und'$ are similar to the previous
@@ -701,17 +708,17 @@ membership relation as the following inductive type:
 
 Suppose we have a chain of sorts
 $S_0 \from S_1 \from \hdots \from S_n$ and a functor
-$U : \Func{\Cc}{S_n}$, then naturally we can extend this functor to
-$\extendfunc{U_i} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by composing
+$\Und : \Func{\Cc}{S_n}$, then naturally we can extend this functor to
+$\extendfunc{\Und} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by composing
 with the forgetful functors. We can implement this operation with sort
 membership, \ie for every specification $\Ss : \sortsty$ with a
-functor $U : \Func{\Cc}{\SortCat{\Ss}}$, we can define the function:
+functor $\Und : \Func{\Cc}{\SortCat{\Ss}}$, we can define the function:
 $$
-\extendfunc{U} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to \Func{\Cc}{S_i}
+\extendfunc{\Und} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to \Func{\Cc}{S_i}
 $$
 This function is defined by induction over the proof of
 $\sortsin{S_i}{\SortCat{\Ss}}$. We will usually just write
-$\extendfunc{U} X$, leaving the membership proof implicit.
+$\extendfunc{\Und} X$, leaving the membership proof implicit.
 
 \subsection{Makkai's dependent sorts}
 
@@ -725,7 +732,7 @@ that our type formation rules do not just give us a collection of
 types, but also type \emph{families}: we do have \emph{dependent
   sorts}.
 
-In Makkai's FOLDS (first-order logic with dependent sorts), these
+In Makkai's FOLDS (first-order logic with dependent sorts) \cite{Makkai1995}, these
 dependent sorts are represented as presheaves over certain
 categories. Observe that the category of families $\FAM$ can either be
 defined as having objects $(X : \Set) \times (P : X \to \Set)$ or as
@@ -1081,14 +1088,27 @@ in \cref{point-constructors} and path constructors in \cref{path-constructors}.
 
 \end{definition}
 
-Let us briefly discuss the defining clauses for $\Constr\ s\ \Aa\ p$,
-which is meant to describe the data needed to specify a constructor of
-sort $\Aa$. There should not be any constructors of the trivial sort
-$\Aa = \termcat$, and if $\Aa$ is a non-trivial sort, then a
-constructor can either be a point constructor specified by
-$\Constr_{\ident{point}}\ s\ \Aa\ p$, or a path constructor specified by
-$\Constr_{\ident{path}}\ s\ \Aa\ p$. The next two subsections will describe the
-data needed for point and path constructors respectively.
+Let us compare this definition to the previous descriptions of
+$\SET$-sorted definitions (\cref{type-sorted-spec}). It looks largely
+similar in that we mutually define the type of specifications with the
+definition of its categories of algebras and forgetful functors. There
+is the addition of the function $\Constr$, $\specsnoc$ constructor has
+a different type, as does the forgetful functor $\Und$.
+
+In the constructor $\specsnoc$, instead of having as argument a
+functor from a category of algebras into $\SET$, we have:
+$$
+\specsnoc : (s : \specty) (\Aa: \Cat) (p : \sortsin{\Aa}{\Ss}) \to \Constr\ s\ \Aa\ p \to \specty
+$$
+The arguments $\Aa : \Cat$, $p : \sortsin{\Aa}{\Ss}$ define the sort
+of this particular constructor, where the type $\Constr\ s\ \Aa\ p$
+contains the further data needed to specify the constructor. What this
+data is, \ie the definition of $\Constr_{\ident{point}}$ and
+$\Constr_{\ident{path}}$ will be given in \cref{point-constructors}
+and \cref{path-constructors}.
+
+The forgetful functors $\Und$ now do not map into $\SET$, but into the
+category of sorts $\SortCat{\Ss}$.
 
 \subsection{Point constructors}
 \label{point-constructors}
@@ -1097,7 +1117,7 @@ In this section we will define three things:
 %
 \begin{itemize}
 \item what the data for a point constructor is, \ie we will define $\Constr_{\ident{point}}$,
-\item how given these data, what the category of algebras is,
+\item what, given these data, the category of algebras is,
 \item what the forgetful functor from this new category of algebras
   into the category of sorts is.
 \end{itemize}
@@ -1107,8 +1127,8 @@ already constructed
 %
 \begin{itemize}
 \item $\Alg_s : \Cat$,
-\item $U_s : \Alg_s \to \SortCat{\Ss}$ its forgetful functor, and
-\item the extension $\extendfunc{U}_s : \Alg_s \to S_i$ of $U_s$, which we
+\item $\Und_s : \Func{\Alg_s}{\SortCat{\Ss}}$ its forgetful functor, and
+\item the extension $\extendfunc{\Und}_s : \Func{\Alg_s}{S_i}$ of $\Und_s$, which we
   get from $\sortsin{S_i}{\Ss}$.
 \end{itemize}
 %
@@ -1121,11 +1141,11 @@ $R_i : \Func{S_{i-1}}{\SET}$.
 
 To make this more concrete: suppose $\Ss$ contains $n$ sorts and $s$
 describes $m$ constructors, then an object in $X : \Alg_s$ is a tuple
-$(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)$. The functor $U_s$
+$(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m)$. The functor $\Und_s$
 gives us back all underlying carriers, \ie
-$U_s(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m) = (X_0, \hdots,
+$\Und_s(X_0, \hdots, X_n, \theta_0, \hdots, \theta_m) = (X_0, \hdots,
 X_n)$
-and the functor $\extendfunc{U}_s$ further projects down to the $i$ first
+and the functor $\extendfunc{\Und}_s$ further projects down to the $i$ first
 carriers $X_0, \hdots, X_i$, with
 $(X_0, \hdots, X_{i-1}) : | S_{i-1} |$ and
 \[
@@ -1141,14 +1161,14 @@ where
 $$
 F^1 : ((X_0,\hdots,X_n,\theta_0,\hdots,\theta_m) : | \Alg_s |) \to R_i (X_0, \hdots, X_{i-1}) \to \Set
 $$
-Note that the functor $\extendfunc{U}_s$ can be decomposed into two parts: we
-have $\extendfunc{U}^0 : \Alg_s \to S_{i-1}$ and
-$\extendfunc{U}_1 : (X : \Alg_s) \to R_i\ (\extendfunc{U}^0\ X) \to \Set$.
-$\extendfunc{U}^0$ can also be written as $t_i \circ \extendfunc{U}_s$, where
+Note that the functor $\extendfunc{\Und}_s$ can be decomposed into two parts: we
+have $\extendfunc{\Und}^0 : \Alg_s \to S_{i-1}$ and
+$\extendfunc{\Und}^1 : (X : \Alg_s) \to R_i\ (\extendfunc{\Und}^0\ X) \to \Set$.
+$\extendfunc{\Und}^0$ can also be written as $t_i \circ \extendfunc{\Und}_s$, where
 $t_i : S_i \to S_{i-1}$ is the forgetful functor of $S_i$. In order
 for the point constructor specified by $F^1$ to be well-defined, \ie
 to make sense of its computation rule, we need
-$F X \ddefeq (\extendfunc{U}^0\ X, F^1\ X)$ to be a functor
+$F X \ddefeq (\extendfunc{\Und}^0\ X, F^1\ X)$ to be a functor
 $\Func{\Alg_s}{S_i}$.  This leads us to the definition of a point
 constructor specification:
 
@@ -1158,13 +1178,13 @@ constructor specification:
   $F : \Func{\Alg_s}{S_i}$ such that the following commutes:
   $$
   \xymatrix{
-    \Alg_s \ar[r]^{F} \ar[d]_{\extendfunc{U}_s} &S_i \ar[d]^{t_i} \\
+    \Alg_s \ar[r]^{F} \ar[d]_{\extendfunc{\Und}_s} &S_i \ar[d]^{t_i} \\
     S_i \ar[r]^{t_i} &S_{i-1}
   }
   $$
   In other words, we have
   $$
-  \Constr_{\ident{point}}\ s\ S_i\ p \ddefeq (F : \Func{\Alg_s}{S_i}) \times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \enspace .
+  \Constr_{\ident{point}}\ s\ S_i\ p \ddefeq (F : \Func{\Alg_s}{S_i}) \times (p : t_i \circ F = t_i \circ \extendfunc{\Und}_s) \enspace .
   $$
 \end{definition} 
 
@@ -1175,25 +1195,25 @@ We now explain how to construct the category $\Alg_{s'}$ of algebras
 for a specification with an additional point constructor. Suppose
 the specification $s'$ has been obtained as the extension of a
 specification $s$ by a point constructor given by a functor
-$F : \Alg_s \to S_i$, which decomposes as $F = (\extendfunc{U}^0, F^1)$. The
+$F : \Alg_s \to S_i$, which decomposes as $F = (\extendfunc{\Und}^0, F^1)$. The
 previous characterisation of a point constructor algebra structure on
 an object $X : | \Alg_s |$ can be summarised as having a dependent
 function of morphisms
 \[
-\theta : (x : R_i (\extendfunc{U}^0\ X)) \to F^1\ X\ x \to \extendfunc{U}_1\ X\ x
+\theta : (x : R_i (\extendfunc{\Und}^0\ X)) \to F^1\ X\ x \to \extendfunc{\Und}^1\ X\ x
 \]
 A morphism $(X,\theta) \to (Y,\rho)$ consists of a morphism
 $f : \Alg_s(X,Y)$ along with a ``computation rule'':
 \begin{multline*}
-f_0 : (x : R_i \ (\extendfunc{U}^0\ X))\ (y : F^1\ X\ x) \to \\ 
-\extendfunc{U}_1\ f\ x\ (\theta\ x\ y) = \rho\ (R_i(\extendfunc{U}^0\ f\ x)\ (F^1\ f\ x\ y)
+f_0 : (x : R_i \ (\extendfunc{\Und}^0\ X))\ (y : F^1\ X\ x) \to \\ 
+\extendfunc{\Und}^1\ f\ x\ (\theta\ x\ y) = \rho\ (R_i(\extendfunc{\Und}^0\ f\ x)\ (F^1\ f\ x\ y)
 \end{multline*}
 This category of algebras look similar to
-$\dialgcat{F}{\extendfunc{U}_s}$. However, as we have seen previously, the
+$\dialgcat{F}{\extendfunc{\Und}_s}$. However, as we have seen previously, the
 category of dialgebras contains too much: morphisms there also come
 with a superfluous endomorphism in $S_{i-1}$. We want this morphism to
 be an identity morphism, which we can achieve by taking an
-equaliser. The category $\dialgcat{F}{\extendfunc{U}_s}$ comes with two
+equaliser. The category $\dialgcat{F}{\extendfunc{\Und}_s}$ comes with two
 forgetful functors: $V$ that gives us the carrier of the algebra and
 $V^I$ that gives us algebra structure on the carrier, which is a
 morphism in $S_i$ or equivalently, an object in the arrow category
@@ -1202,11 +1222,11 @@ $S_i^I$. The definition of the new category of algebras is as follows:
 \begin{definition}[Category of algebras for a point constructor]
   Let $s' : \specty$ be the specification $s$ extended with a
   point constructor of sort $S_i$ given by a functor $F : \Alg_s \to S_i$
-  satisfying $t_i \circ F = t_i \circ \extendfunc{U}_s$. The category of
+  satisfying $t_i \circ F = t_i \circ \extendfunc{\Und}_s$. The category of
   algebras $\Alg_{s'}$ is as the following equaliser in $\Cat$:
   \[
   \xymatrix{
-    \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\extendfunc{U}_s} \ar[r]^-{V} \ar[d]^-{V^I} &\Alg_s \ar[r]^-{\extendfunc{U}_s} &S_i \ar[r]^{t_i} &S_{i-1} \ar[d]^-{\id} \\
+    \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\extendfunc{\Und}_s} \ar[r]^-{V} \ar[d]^-{V^I} &\Alg_s \ar[r]^-{\extendfunc{\Und}_s} &S_i \ar[r]^{t_i} &S_{i-1} \ar[d]^-{\id} \\
     &S_i^I \ar[rrr]^{t_i^I} && &S_{i-1}^I }
   \]
   where $e$ is the projection map of the equaliser, $t_i^I$ is the
@@ -1214,10 +1234,10 @@ $S_i^I$. The definition of the new category of algebras is as follows:
   categories and $\id$ is the functor that assigns to each object the
   identity morphism of that object.
 
-  The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite:
+  The forgetful functor $\Und_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite:
   \[
     \xymatrix{
-      \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\extendfunc{U}_s} \ar[r]^-{V} &\Alg_s \ar[r]^-{U_s} &\SortCat{\Ss}
+      \Alg_{s'} \ar[r]^-{e} &\dialgcat{F}{\extendfunc{\Und}_s} \ar[r]^-{V} &\Alg_s \ar[r]^-{\Und_s} &\SortCat{\Ss}
     }
   \]
 \end{definition}
@@ -1270,7 +1290,7 @@ isomorphism of objects, hence this is not an issue in our setting.
   If we then unfold the definition of $\dialgcat{F_1}{U_0}$, we see
   that it has objects:
   \begin{align*}
-    | \dialgcat{F_1}{U_0} | &= &(X : \Set) \times (P : X \to \Set) \\
+    | \dialgcat{F_1}{U_0} | &=& (X : \Set) \times (P : X \to \Set) \\
     &\times &(\theta_0 : \unitty \to X) \times (\theta_1 : X \to X) \times (\theta_2 :  (x : X) \to \emptyty \to P\ (\theta_1\ x) \\
     &= &(X : \Set) \times (P : X \to \Set) \times (\theta_0 : X) \times (\theta_1 : X \to X)
   \end{align*}
@@ -1300,14 +1320,14 @@ form:
 \end{align*}
 where
 \begin{itemize}
-\item $F^1 : (X : | \Alg_s |) \to R_i (\extendfunc{U}^0 X) \to \Set$, such
-  that $F X \ddefeq (\extendfunc{U}^0 X, F^1 X)$ is a functor $\Alg_s \to S_i$, and
+\item $F^1 : (X : | \Alg_s |) \to R_i (\extendfunc{\Und}^0 X) \to \Set$, such
+  that $F X \ddefeq (\extendfunc{\Und}^0 X, F^1 X)$ is a functor $\Alg_s \to S_i$, and
 \item
-  $\ell^1, r^1 : (X : | \Cc |) (x : R_i (\extendfunc{U}^0\ X)) (y : F^1\ X\ x)
-  \to \extendfunc{U}_1\ X\ x$
-  such that $\ell_X \ddefeq (\id_{\extendfunc{U}^0 X}, \ell^1)$ and
-  $r_X \ddefeq (\id_{\extendfunc{U}^0 X}, r^1)$ are natural transformations
-  $\Nat{F}{\extendfunc{U}_s}$.
+  $\ell^1, r^1 : (X : | \Cc |) (x : R_i (\extendfunc{\Und}^0\ X)) (y : F^1\ X\ x)
+  \to \extendfunc{\Und}^1\ X\ x$
+  such that $\ell_X \ddefeq (\id_{\extendfunc{\Und}^0 X}, \ell^1)$ and
+  $r_X \ddefeq (\id_{\extendfunc{\Und}^0 X}, r^1)$ are natural transformations
+  $\Nat{F}{\extendfunc{\Und}_s}$.
 \end{itemize}
 Algebra morphisms $(X,\theta) \to (Y,\rho)$ are simply morphisms
 $X \to Y$ in $\Alg_s$. As we are working with sets, we do not need
@@ -1320,13 +1340,13 @@ path constructor specification:
 \begin{definition}[Data for a path constructor]
   Given a specification $s : \specty$, a path constructor of sort
   $\sortsin{S_i}{\Ss}$ is specified by a functor $F : \Alg_s \to S_i$
-  satisfying $t_i \circ F = t_i \circ \extendfunc{U}_s$ and two natural
-  transformations $\ell, r : F \to \extendfunc{U}_s$ satisfying
-  $t_i\ \ell = t_i\ r = \id_{t_i \circ \extendfunc{U}_s}$, \ie:
+  satisfying $t_i \circ F = t_i \circ \extendfunc{\Und}_s$ and two natural
+  transformations $\ell, r : F \to \extendfunc{\Und}_s$ satisfying
+  $t_i\ \ell = t_i\ r = \id_{t_i \circ \extendfunc{\Und}_s}$, \ie:
 \begin{align*}
-  \Constr_{\ident{path}}\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \extendfunc{U}_s) \\ 
-  \times (\ell : F \to \extendfunc{U}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \extendfunc{U}_s}) \\ 
-  \times (r : F \to \extendfunc{U}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \extendfunc{U}_s}) \enspace .
+  \Constr_{\ident{path}}\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \extendfunc{\Und}_s) \\ 
+  \times (\ell : F \to \extendfunc{\Und}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \extendfunc{\Und}_s}) \\ 
+  \times (r : F \to \extendfunc{\Und}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \extendfunc{\Und}_s}) \enspace .
 \end{align*}
 \end{definition}
 
@@ -1336,22 +1356,23 @@ transformations must leave the sorts below $S_i$ untouched.
 
 Note that by function extensionality, the type of $\theta$ is
 equivalent to $\ell^1_X = r^1_X$. Since
-$t_i\ (l\ X) = t_i\ (r\ X) = \id_{t_i \circ \extendfunc{U}}$ the equality
-$\ell_1\ X = r_1\ X$ of dependent functions in $\SET$ is equivalent to
-the equality $l\ X = r\ X $ of morphisms in $S_i$. We also observe
-that a natural transformation $\alpha : F \to \extendfunc{U}$ gives rise to a
-functor $\hat{\alpha} : \Alg_s \to S_i^I$, mapping $X : | \Alg_s |$ to
-$\alpha_X : S_i(F\ X,\extendfunc{U}\ X)$. Functoriality of this functor comes
-from the naturality of $\alpha$. This leads us to the definition of
-the category of algebras for a path constructor:
+$t_i\ \ell_X = t_i\ r_X = \id_{t_i \circ \extendfunc{\Und}_s}$ the
+equality $\ell^1_X = r^1_X$ of dependent functions in $\SET$ is
+equivalent to the equality $\ell_X = r_X$ of morphisms in $S_i$. We
+also observe that a natural transformation
+$\alpha : \Nat{F}{\extendfunc{\Und}_s}$ gives rise to a functor
+$\hat{\alpha} : \Func{\Alg_s}{S_i^I}$, mapping $X : | \Alg_s |$ to
+$\alpha_X : S_i(F\ X,\extendfunc{\Und}_s\ X)$. Functoriality of this
+functor comes from the naturality of $\alpha$. This leads us to the
+definition of the category of algebras for a path constructor:
 
 \begin{definition}[Category of algebras for a path constructor]
   Let $s' : \specty$ be the specification
   $s$ extended with a path constructor of sort
   $S_i$ given by a functor $F : \Alg_s \to S_i$ satisfying $t_i \circ
-  F = t_i \circ \extendfunc{U}_s$ and natural transformations $l, r : F \to
-  \extendfunc{U}_s$ satisfying $t_i\ l = t_i\ r = \id_{t_i \circ
-    \extendfunc{U}_s}$. The category of algebras
+  F = t_i \circ \extendfunc{\Und}_s$ and natural transformations $l, r : F \to
+  \extendfunc{\Und}_s$ satisfying $t_i\ l = t_i\ r = \id_{t_i \circ
+    \extendfunc{\Und}_s}$. The category of algebras
   $\Alg_{s'}$ is defined as the following equaliser in $\Cat$:
   \[
   \xymatrix{
@@ -1360,10 +1381,10 @@ the category of algebras for a path constructor:
   \]
   where $e$ is the projection map of the equaliser.
 
-The forgetful functor $U_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite
+The forgetful functor $\Und_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the composite
 \[
 \xymatrix{
-    \Alg_{s'} \ar[r]^{e} &\Alg_s \ar[r]^{U_s} &\SortCat{\Ss}
+    \Alg_{s'} \ar[r]^{e} &\Alg_s \ar[r]^{\Und_s} &\SortCat{\Ss}
 }
 \]
 \end{definition}
@@ -1377,7 +1398,7 @@ looked at, we only had the freedom to choose the left functor, \ie if
 we look at the point constructors we have seen so far, they all are of
 the shape:
 $$
-\Ac : \Alg_s(F X , U X)
+\Ac : S_i(F X , U X)
 $$
 where $s : \specty$ and $F, U : \Func{\Alg_s}{S_i}$ for some sort
 category $S_i$. This begs the question if we generalise this to a
@@ -1427,6 +1448,17 @@ $$
 This works out in this case, as $\isprop\ \Aty$ is equivalent to
 $(x\ y : \Aty) \to x = y$. 
 
+Other examples that are allowed, are constructors of the form
+$B \to \Aty \times \Aty$, as this is equivalent to have two
+constructors with type $B \to \Aty$. Generalising this, the result type
+may be given by any representable functor. One notable example of such
+a representable functor is the stream functor, \eg we can have a
+constructor, with $B : \Set$:
+$$
+\Ac : B \to \Stream\ \Aty
+$$
+as this is equivalent to $B \to \natty \to \Aty$.
+
 \section{Dependent dialgebras}
 
 As an earlier attempt to unifying the treatment of point and path
@@ -1447,7 +1479,7 @@ we define:
 %
 \begin{align*}
   &\hat{f}_x : \int_{\Cc} F ((X,x),(Y,F\ f\ x)) \\
-  &\hat{f}_x \ddefeq (Ff , \refl)
+  &\hat{f}_x \ddefeq (f , \refl)
 \end{align*}
 %
 This operation is not functorial in the untruncated setting: we do not
@@ -1561,28 +1593,6 @@ occurrence in a negative position: the constructor $\fieldzero$ occurs
 in a negative position.
 
 \subsection{Comparison to Agda's inductive definitions}
-Our framework allows us to specify most of the inductive definitions
-we can write down in Agda. The notable exception is that we do not
-support induction-recursion. However, some forms of
-induction-recursion can be simulated, using the methods described in
-\cite{Hancock2013}.
-
-Apart from the absence of induction-recursion, there is another
-fundamental difference between our framework and that of Agda. In Agda
-we have to group all the constructors per sort, \ie we cannot write
-down a definition with sorts $\Aty : \Set$, $\Bty : \Aty \to \Set$ and
-constructors:
-%
-\begin{itemize}
-\item $\Aco : \Aty$
-\item $\Bci : \Bty\ \Aco$
-\item $\Acii : \Bci = \Bci \to \Aty$
-\end{itemize}
-%
-We cannot alternate between the sorts in Agda, which prevents us from
-defining types as the one given above. Our framework has no such
-restriction.
-
 \section{Application to equational theories}
 \label{application-to-equational-theories}
 
@@ -1606,3 +1616,36 @@ $\ident{is-prop}$ as its constructors. As an inductive definition,
 this is not terribly interesting as the initial algebra for this would
 consist of the empty type with an equivalence relation. The category
 of algebras is the category of setoids.
+
+\section{Related work}
+
+\subsection{Inductive-inductive definitions}
+
+\todoi{write this}
+
+\subsection{Inductive definitions in Agda}
+Our framework allows us to specify most of the inductive definitions
+we can write down in Agda. The notable exception is that we do not
+support induction-recursion. However, some forms of
+induction-recursion can be simulated, using the methods described in
+\cite{Hancock2013}.
+
+Apart from the absence of induction-recursion, there is another
+fundamental difference between our framework and that of Agda. In Agda
+we have to group all the constructors per sort, \ie we cannot write
+down a definition with sorts $\Aty : \Set$, $\Bty : \Aty \to \Set$ and
+constructors:
+%
+\begin{itemize}
+\item $\Aco : \Aty$
+\item $\Bci : \Bty\ \Aco$
+\item $\Acii : \Bci = \Bci \to \Aty$
+\end{itemize}
+%
+We cannot alternate between the sorts in Agda, which prevents us from
+defining types as the one given above. Our framework has no such
+restriction.
+
+\subsection{Higher inductive types}
+
+\todoi{write this}
