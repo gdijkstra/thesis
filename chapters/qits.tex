@@ -37,7 +37,7 @@ To define a function out of an inductive type, we need to say what
 each constructor is mapped to. For the interval type, we first of all
 need to give two points. Since every function in type theory is a
 congruence, \ie we have $\ap$, these two points need to be equal to
-eachother. The recursion principle is therefore as follows:
+each other. The recursion principle is therefore as follows:
 $$
 \intrec : (A : \Type)\ (a_{\intzero} : A)\ (a_{\intone} : A)\ (a_{\intseg} : a_{\intzero} = a_{\intone})
 \to \intty \to A
@@ -398,7 +398,7 @@ The first constructor $\realrat$ is the inclusion of the rationals
 into the reals. The second constructor ``adds'' all the \emph{limit
   points} for Cauchy approximations and the third (path) constructor
 $\realeq$ tells us that any two real numbers are equal if they are
-arbitrarily close to eachother via the relation we inductively define
+arbitrarily close to each other via the relation we inductively define
 simultaneously.
 %
 \begin{datatype}{\realrel{\epsilon}{\_}{\_}}{}

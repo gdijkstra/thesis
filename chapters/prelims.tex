@@ -259,7 +259,7 @@ equality between terms in the type theory itself, referred to as
   composition, its inverses given by symmetry and the unit being
   reflexivity. These operations need to adhere to the following laws:
   \begin{itemize}
-  \item associativity: $(p : x = y) (q : y = z) (r : z = w) \to \trans{(\trans{p}{q})}{r} = \trans{p}{(\trans{q}{r})}$
+  \item associativity: $(p : x = y)\ (q : y = z)\ (r : z = w) \to \trans{(\trans{p}{q})}{r} = \trans{p}{(\trans{q}{r})}$
   \item left identity: $(p : x = y) \to \trans{\refl_x}{p} = p$
   \item right identity: $(p : x = y) \to \trans{p}{\refl_y} = p$
   \item left inverse: $(p : x = y) \to \trans{\sym{p}}{p} = \refl_y$
@@ -844,7 +844,7 @@ We will use the definition of category as in
          &&\times  &\ (comp : \{\ X\ Y\ Z : obj\ \} \to hom\ Y\ Z \to hom\ X\ Y \to hom\ X\ Z) \\
          &&\times  &\ (\identalt{left-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ (id\ Y)\ f = f) \\
          &&\times  &\ (\identalt{right-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ f\ (id\ X) = f) \\
-         &&\times  &\ (assoc : \{\ X\ Y\ Z\ W : obj\ \}\ (h : hom\ Z\ W) (g : hom\ Y\ Z) (f : hom\ X\ Y) \\
+         &&\times  &\ (assoc : \{\ X\ Y\ Z\ W : obj\ \}\ (h : hom\ Z\ W)\ (g : hom\ Y\ Z)\ (f : hom\ X\ Y) \\
          && &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \to comp\ (comp\ h\ g)\ f = comp\ h\ (comp\ g\ f))
   \end{align*}
 \end{definition}

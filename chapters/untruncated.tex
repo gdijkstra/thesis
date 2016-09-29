@@ -34,7 +34,7 @@ the case of associativity interacting with itself, it is as follows:
 \begin{definition}[Coherence condition for associativity]
   The witness of associativity
   $$
-  \assoc : (h : \Cc(Z,W)) (g : \Cc(Y,Z)) (f : \Cc(X,Y)) \to ((h \circ g) \circ f) = (h \circ (g \circ f))
+  \assoc : (h : \Cc(Z,W))\ (g : \Cc(Y,Z))\ (f : \Cc(X,Y)) \to ((h \circ g) \circ f) = (h \circ (g \circ f))
   $$
   is \emph{coherent} if for any composable arrows $i, h, g, f$ the
   following commutes:
@@ -415,12 +415,12 @@ $$
 \label{left-identity-calculation}
 \end{figure}
 
-\section{Untruncated $\Set$-sorted inductive-inductive definitions}
+\section{Untruncated $\TYPE$-sorted inductive-inductive definitions}
 
 In the previous section we have sketched how the category laws can be
 established in the untruncated dialgebra categories, assuming the
 codomain of the functors is a strict category. This means that it
-explains what we need from of a $\Set$-sorted inductive-inductive
+explains what we need from of a $\TYPE$-sorted inductive-inductive
 definition to be able to show that the resulting category of algebras
 does in fact satisfy the category laws: all the arguments functors
 have to preserve the category laws.
@@ -447,13 +447,13 @@ In the set truncated setting we could ignore the computation rules for
 path constructors, as all paths between equalities were trivial. In
 the untruncated setting they need to be accounted for. Suppose we have
 a category of algebras $\Cc$ with forgetful functor
-$U : \Func{\Cc}{\Set}$. A path constructor defined on this category is
-given by a functor $F : \Func{\Cc}{\Set}$ along with two natural
+$U : \Func{\Cc}{\TYPE}$. A path constructor defined on this category
+is given by a functor $F : \Func{\Cc}{\TYPE}$ along with two natural
 transformations $l,r : \Nat{F}{U}$. Let $X, Y : | \Cc |$, with
-$\theta : \ell_X = r_X$ and $\rho : \ell_Y = r_Y$. A morphism $f : X \to Y$
-preserves the algebra structures $\theta$ and $\rho$, if ``applying''
-the equality $\theta$ first and then the morphism yields the same
-equality as first applying the morphism and then the equality
+$\theta : \ell_X = r_X$ and $\rho : \ell_Y = r_Y$. A morphism
+$f : X \to Y$ preserves the algebra structures $\theta$ and $\rho$, if
+``applying'' the equality $\theta$ first and then the morphism yields
+the same equality as first applying the morphism and then the equality
 $\rho$. We would like to say:
 $$
 U f \circ \theta = \rho \circ F f
