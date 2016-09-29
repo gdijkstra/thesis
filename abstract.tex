@@ -1,22 +1,13 @@
 \chapter*{Abstract}
 
-In type theory defining new types is often done by giving an inductive
-definition. Many variants of inductive definitions have been invented
-over the years, ranging from ordinary definitions such as the natural
-numbers to inductive definitions that are defined mutually with other
-inductive definitions as well as functions, as used to describe the
-syntax of type theory itself. In the recent years, higher inductive
-types have been proposed as a means to inductively define types in
-homotopy type theory with non-trivial higher structure. The innovation
-of higher inductive types is to also consider constructors that create
-equations, or paths, in the inductive type.
-
 In this thesis we present a theory of \emph{quotient
   inductive-inductive definitions}, which are inductive-inductive
-definitions extended with path constructors, truncated to sets. The
-resulting theory is an improvement over previous treatments of
+definitions extended with constructors for equations. The resulting
+theory is an improvement over previous treatments of
 inductive-inductive and indexed inductive definitions in that it
-unifies and generalises these into a single framework.
+unifies and generalises these into a single framework. The framework
+can also be seen as a first approximation towards a theory of higher
+inductive types, but done in a set truncated setting.
 
 We give the type of specifications of quotient inductive-inductive
 definitions mutually with its interpretation as categories of
@@ -31,11 +22,5 @@ The existence of initial objects in the categories of algebras
 associated to quotient inductive-inductive definitions is established
 for a class of definitions. This is done by a colimit construction
 that can be carried out in type theory itself in the presence of
-natural numbers, coproducts and quotients or equivalently,
+natural numbers, sum types and quotients or equivalently,
 coequalisers.
-
-Finally, we look at the problems we run into when trying to generalise
-our theory to one of higher inductive types.
-
-
-
