@@ -35,8 +35,8 @@ classes of inductive definitions.
 In \cref{describing} we give the formal specification of quotient
 inductive- inductive definitions, which is given simultaneously with
 its interpretation as categories of algebras: we characterise quotient
-inductive-inductive definitions roughly as iterated
-dialgebras. Dealing with dependent sorts means that ordinary
+inductive-inductive definitions roughly as iterated dialgebras
+(\cref{qiids-spec}). Dealing with dependent sorts means that ordinary
 dialgebras do not suffice: the categories of dialgebras are fibred
 over all sorts below the sort of the current constructor. Dealing with
 this means we define the category of algebras as an equaliser category
@@ -63,27 +63,28 @@ sequential colimits.
 
 \Cref{induction} is devoted to the correspondence between initiality
 and induction in the context of quotient inductive-inductive
-definitions. We first give a categorical characterisation of the
-induction principle as the section principle: every algebra fibration
-has a section. We then go on to show that in the presence of binary
-products and equalisers this principle is logically equivalent to
-initiality. This proof follows what one would intuitively do in type
-theory if one shows that some induction principle implies initiality:
-you first show that weak initiality holds for which we need to produce
-a constant algebra family (this is the construction of
-products). Establishing that the resulting morphism is unique can be
-done by employing the induction principle again with the motive being
-the pointwise equivalence of the two morphisms. Giving the methods
-then amounts to given the equaliser of the two morphisms. Since we
-already know the categorical structure of the algebras, proving that
-the section principle and initiality coincide then amounts to giving
-constructions products and equalisers. This approach saves us from
-first having to come up with an induction principle.
+definitions (\cref{initiality-section-thm}). We first give a
+categorical characterisation of the induction principle as the section
+principle: every algebra fibration has a section. We then go on to
+show that in the presence of binary products and equalisers this
+principle is logically equivalent to initiality. This proof follows
+what one would intuitively do in type theory if one shows that some
+induction principle implies initiality: you first show that weak
+initiality holds for which we need to produce a constant algebra
+family (this is the construction of products). Establishing that the
+resulting morphism is unique can be done by employing the induction
+principle again with the motive being the pointwise equivalence of the
+two morphisms. Giving the methods then amounts to given the equaliser
+of the two morphisms. Since we already know the categorical structure
+of the algebras, proving that the section principle and initiality
+coincide then amounts to giving constructions products and
+equalisers. This approach saves us from first having to come up with
+an induction principle.
 
-Interesting to note is that while initiality is a property of a
-category that requires us only to have the objects and morphisms at
-hand, the section principle requires the full categorical structure,
-\ie we need composition, identity morphisms and laws and
+Interesting to note is that while initiality is a property of an
+object that requires us only to have the objects and morphisms of the
+category at hand, the section principle requires the full categorical
+structure, \ie we need composition, identity morphisms and laws and
 associativity. Initiality is an attractive property in the light of
 working in an untruncated setting, \ie working with hom-types as
 opposed to hom-sets, as we do not have to bother with the category
@@ -110,23 +111,24 @@ inductive-inductive definitions subsume ordinary inductive types in
 the sense of providing an endofunctor on $\SET$, we can consider the
 double powerset functor which does not have an initial algebra. We
 therefore need to make sure that our definitions are \emph{strictly
-  positive}. There are several ways to define what strict positivity
-means: we can look at the syntactic expression of the functor and
-check whether the arguments do not occur to the left of an arrow. For
-endofunctors on $\SET$, there is the semantic characterisation of
-strictly positive functors as \emph{containers}. We give a
+  positive}. 
+
+We give constructions of initial algebras for a class of $\SET$-sorted
+quotient inductive-inductive definitions where the functors are
+$\omega$-cocontinuous (\cref{initial-objects-qits}). These
+constructions can be performed inside the type theory, which gives us
+the result that having natural numbers and coequalisers/quotients is
+enough to be able to construct a wide range of quotient
+inductive-inductive definitions.
+
+In \cref{containers} we present some preliminary work on
+characterising strictly positive functors for quotient
+inductive-inductive definitions, by generalising containers. We give a
 generalisation of these to functors from any category into $\SET$,
 which allows us to express the data needed for a $\SET$-sorted
 quotient inductive definition. We also present a generalisation of
 this to situations where the category of sorts is a presheaf category
-over $\SET$. 
-
-We give constructions of initial algebras for a class of $\SET$-sorted
-quotient inductive-inductive definitions where the functors are
-$\omega$-cocontinuous. These constructions can be performed inside the
-type theory, which gives us the result that having natural numbers and
-coequalisers/quotients is enough to be able to construct a wide range
-of quotient inductive-inductive definitions.
+over $\SET$.
 
 In \cref{untruncated} we try to lift the restriction to sets: instead
 of considering hom-sets in our categories of sorts and algebras, we
@@ -138,16 +140,15 @@ constructors. As opposed to moving to \inftycats straight away, we
 move from hom-sets to hom-types and go through all the constructions
 to see where we run into coherence issues. Somewhat surprisingly
 issues already show up when considering only point constructors for
-$\TYPE$-sorted definitions, \ie 0-HITs. The category of $F$-algebras
-for an endofunctor on $\TYPE$ is no longer a category that satisfies
-the category laws strictly, unlike $\TYPE$ itself. Even if $F$ happens
-to be a strict functor, we still do not end up with a strict
+$\TYPE$-sorted definitions. The category of $F$-algebras for an
+endofunctor on $\TYPE$ is no longer a category that satisfies the
+category laws strictly, unlike $\TYPE$ itself. Even if $F$ happens to
+be a strict functor, we still do not end up with a strict
 \inftycat. If we add a point constructor to this category of algebras,
 we increase the level of coherence needed. Therefore the number of
 coherence problems we have to deal with increases with the number of
 constructors, whether they are point constructors of path
-constructors. To uniformly deal with this, we need to move on to full
-\inftycats.
+constructors.
 
 \section{Future work}
 
@@ -178,9 +179,7 @@ object of $\Alg_s$ should have an isomorphic carrier to that of
 $\Alg_{s'}$. This is an important property that is used often to
 reason about equivalence of inductive definitions. For example, it
 implies that the definitions are invariant under reordering of
-constructors. In the wider setting of higher inductive types, such a
-property would allow us to formally prove the hub-spokes construction
-correct.
+constructors.
 
 \subsection{Generalised containers}
 

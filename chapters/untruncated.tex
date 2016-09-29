@@ -292,8 +292,8 @@ looks like. We can characterise it as follows:
   $(X,\theta) \to (Y,\rho)$ in $\dialgcat{F}{G}$, then we have the
   following equivalence of equalities:
   \begin{align*}
-    ((f,f_0) = (g,g_0)) &= &&(p : f = g)\\
-    &\times &&(p_0 : 
+    ((f,f_0) = (g,g_0)) =&\ (p : f = g)\\
+    \times&\ (p_0 : 
               \xymatrix{
               G\ f \circ \theta
               \ar@{-}[r]^{f_0}
@@ -320,7 +320,7 @@ looks like. We can characterise it as follows:
 To give a witness for the left identity law, we need to show given:
 \begin{itemize}
 \item objects $(X,\theta), (Y,\rho) : |\dialgcat{F}{G}|$
-\item with a morphism $(f,f_0) : (X,\theta) \to (Y,rho)$
+\item with a morphism $(f,f_0) : (X,\theta) \to (Y,\rho)$
 \end{itemize}
 that $\id_{\dialgcat{F}{G}}\ (Y,\rho) \circ_{\dialgcat{F}{G}} (f,f_0) = (f,f_0)$. Unfolding definitions this reduces to having to show that:
 $$
@@ -330,14 +330,14 @@ Applying \cref{morphism-equality} this is the same as giving a proof $p : \id_{\
 $$
 \xymatrix{
   G\ (\id_{\Cc}\ Y \circ f) \circ \theta
-  \ar@{-}[r]^{\id_0\ \rho \circ_0 f_0}
+  \ar@{-}[rr]^{\id_0 \rho \circ_0 f_0}
   \ar@{-}[d]_{G p \circ \theta}
-  &\rho \circ F\ (\id_{\Cc}\ Y \circ f)
+  &&\rho \circ F\ (\id_{\Cc}\ Y \circ f)
   \ar@{-}[d]^{\rho \circ F p}
   \\
   G\ f \circ \theta
-  \ar@{-}[r]_{f_0}
-  &\rho \circ F\ f
+  \ar@{-}[rr]_{f_0}
+  &&\rho \circ F\ f
 }
 $$
 We will work this out in detail, assuming the category $\Dd$ is
@@ -450,7 +450,7 @@ a category of algebras $\Cc$ with forgetful functor
 $U : \Func{\Cc}{\Set}$. A path constructor defined on this category is
 given by a functor $F : \Func{\Cc}{\Set}$ along with two natural
 transformations $l,r : \Nat{F}{U}$. Let $X, Y : | \Cc |$, with
-$\theta : l_X = r_X$ and $\rho : l_Y = r_Y$. A morphism $f : X \to Y$
+$\theta : \ell_X = r_X$ and $\rho : \ell_Y = r_Y$. A morphism $f : X \to Y$
 preserves the algebra structures $\theta$ and $\rho$, if ``applying''
 the equality $\theta$ first and then the morphism yields the same
 equality as first applying the morphism and then the equality
@@ -459,22 +459,22 @@ $$
 U f \circ \theta = \rho \circ F f
 $$
 but this does not type check as we have
-$U f \circ \theta : U f \circ l_X = U f \circ r_X$ and
-$\rho \circ Ff : l_Y \circ F f = r_Y \circ F f$. We have to appeal to
+$U f \circ \theta : U f \circ \ell_X = U f \circ r_X$ and
+$\rho \circ Ff : \ell_Y \circ F f = r_Y \circ F f$. We have to appeal to
 naturality in order for this equation to make sense. Let us denote for
-the witnesses of naturality as $l_f : Uf \circ l_X = l_Y \circ
+the witnesses of naturality as $\ell_f : Uf \circ \ell_X = \ell_Y \circ
 Ff$.
 For $f$ to be an algebra morphism requires us to have a witness of the
 following:
 $$
 \xymatrix{
-U f \circ l_X
+U f \circ \ell_X
 \ar@{-}[r]^{U f \circ \theta}
-\ar@{-}[d]_{l_f}
+\ar@{-}[d]_{\ell_f}
 &U f \circ r_X
 \ar@{-}[d]^{r_f}
 \\
-l_Y \circ Ff
+\ell_Y \circ Ff
 \ar@{-}[r]_{\rho \circ Ff}
 &r_Y \circ Ff
 }

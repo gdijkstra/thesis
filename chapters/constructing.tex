@@ -13,21 +13,23 @@ uninteresting if these models do not have quotient inductive-inductive
 types, which would make our results vacuously true.
 
 To start out we will address the issue of strict positivity in
-inductive definitions and see how we can generalise the notion of
-\emph{container} to fit our needs. In this light, we will examine what
-the associated generalisation of W-types would be for our inductive
-definitions.
+inductive definitions, showing that our previous specification of
+quotient inductive-inductive definitions includes definitions of which
+the category of algebras does not have an initial object.
 
-Starting from a more semantic point of view, we discuss in
-\cref{sequential-colimits} the usual construction of initial algebras
-for an endofunctor as a sequential colimit. We explore how this
-approach can be both internalised as well as adapted to construct
-initial algebras for certain classes of quotient inductive-inductive
-definitions. They key is here to not only construct an initial object
-but establish that there is a left adjoint to the forgetful functor
-$\Func{\Alg_{n+1}}{\Alg_{n}}$, which allows us to do the construction
-by induction on the length of the specification. We end up with a
-chain of adjunctions:
+For definitions with no constructors, the category of algebras is the
+category of sorts. We show that the categories of sorts always have an
+initial object (\cref{initial-obj-sorts}).
+
+We discuss in \cref{sequential-colimits} the usual construction of
+initial algebras for an endofunctor as a sequential colimit. We
+explore how this approach can be both internalised as well as adapted
+to construct initial algebras for certain classes of quotient
+inductive-inductive definitions. They key is here to not only
+construct an initial object but establish that there is a left adjoint
+to the forgetful functor $\Func{\Alg_{n+1}}{\Alg_{n}}$, which allows
+us to do the construction by induction on the length of the
+specification. We end up with a chain of adjunctions:
 $$
 \xymatrix{
 \SET \ar@/^/[r]^{L_0}
@@ -84,7 +86,8 @@ $$
 $$
 
 \begin{proposition}
-Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
+  \label{every-sort-adjoint-to-first-sort}
+  Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
 \end{proposition}
 
 \begin{proof}
@@ -100,15 +103,16 @@ Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
   $$
   which we can show by simple equational reasoning:
   \begin{align*}
-      &&S_{i+1}(u_i\ X , (Y,Q)) \\
-    &=& S_{i+1}((X,\lambda x . \unitty), (Y,Q)) \\
-    &=& (f : S_i(X,Y) \times (g : (a : R_{i+1} X) \to \unitty \to \unitty) \\
-    &=& S_i(X,Y)
+    S_{i+1}(u_i\ X , (Y,Q)) =&\ S_{i+1}((X,\lambda x . \unitty), (Y,Q)) \\
+    =&\ (f : S_i(X,Y) \times (g : (a : R_{i+1} X) \to \unitty \to \unitty) \\
+    =&\ S_i(X,Y)
   \end{align*}
 
 \end{proof}
 
 \begin{proposition}
+  \label{first-sort-adjoint-to-set}
+
   There exists an adjunction between $S_0$ and $\SET$
 \end{proposition}
 
@@ -129,9 +133,9 @@ Every forgetful functor $t_i : \Func{S_{i+1}}{S_i}$ has a left adjoint
   \end{align*}
   We then have for any $X : \Set$ and $P : A \to \Set$ the following equality
   \begin{align*}
-  S_0(LX , P) &=& (x : A) \to X \to P\ x \\
-    &=& X \to (x : A) \to P\ x \\
-    &=& X \to \Pi\ P
+    S_0(LX , P) =&\ (x : A) \to X \to P\ x \\
+    =&\ X \to (x : A) \to P\ x \\
+    =&\ X \to \Pi\ P
   \end{align*}
   Therefore we have that $K \dashv \Pi$.
 \end{proof}
@@ -150,8 +154,20 @@ $$
 &S_n \ar@/^/[l]^{t_n}
 }
 $$
-Since $\SET$ has an initial object, we get the initial object of any
-sort category $S_i$ by following the chain of left adjoints.
+
+\begin{theorem}
+  \label{initial-obj-sorts}
+
+  Given a sorts specification $\Ss : \sortsty$, every sort category
+  $\sortsin{S_i}{\SortCat{\Ss}}$ has an initial object.
+\end{theorem}
+
+\begin{proof}
+  Since $\SET$ has an initial object, we get the initial object of any
+  sort category $S_i$ by following the chain of left adjoints
+  constructed in \cref{every-sort-adjoint-to-first-sort} and
+  \cref{first-sort-adjoint-to-set}.
+\end{proof}
 
 \section{Initial objects via sequential colimits}
 \label{sequential-colimits}
@@ -282,14 +298,14 @@ inside type theory itself.
   Both the left hand and right hand side are cocone morphisms
   $(F X_\omega , F c_n) \to (Y , y_n)$:
   \begin{align*}
-    f \circ \theta \circ F c_n &=& f \circ c_{n+1} \\
-    &=&y_{n+1}
+    f \circ \theta \circ F c_n =&\ f \circ c_{n+1} \\
+    =&\ y_{n+1}
   \end{align*}
   and
   \begin{align*}
-    \rho \circ F f \circ F c_n &=& \rho \circ F (f \circ c_n) \\
-    &=&\rho \circ F y_n \\
-    &=&y_{n+1}
+    \rho \circ F f \circ F c_n =&\ \rho \circ F (f \circ c_n) \\
+    =&\ \rho \circ F y_n \\
+    =&\ y_{n+1}
   \end{align*}
   By the universal property of $F X_\omega$ they are indeed equal. The
   same line of reasoning can be used to established that if we have
@@ -569,13 +585,13 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   $\inln{\omega}$:
   %
   \begin{align*}
-    \inln{\omega} \circ \theta &=& c_0 \circ \inln{0} \circ \theta \\
-    &=& c_1 \circ a_0 \circ \theta \\
-    &=& c_1 \circ \inln{1} \circ \theta \\
-    &=& c_1 \circ \alpha_0 \circ F \inln{0} \\
-    &=&\alpha_{\omega} \circ F c_0 \circ F \inln{0} \\
-    &=&\alpha_{\omega} \circ F (c_0 \circ \inln{0}) \\
-    &=&\alpha_{\omega} \circ F \inln{\omega}
+    \inln{\omega} \circ \theta =&\ c_0 \circ \inln{0} \circ \theta \\
+    =&\ c_1 \circ a_0 \circ \theta \\
+    =&\ c_1 \circ \inln{1} \circ \theta \\
+    =&\ c_1 \circ \alpha_0 \circ F \inln{0} \\
+    =&\ \alpha_{\omega} \circ F c_0 \circ F \inln{0} \\
+    =&\ \alpha_{\omega} \circ F (c_0 \circ \inln{0}) \\
+    =&\ \alpha_{\omega} \circ F \inln{\omega}
   \end{align*}
   %
   By the same reasoning $\inr_{\omega}$ is an algebra morphism
@@ -658,10 +674,10 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   respectively. We can show this by performing the following
   computation:
   \begin{align*}
-    z_{\omega} \circ \inln{\omega} &=& z_{\omega} \circ c_0 \circ \inln{0} \\
-    &=&z_0 \circ \inln{0} \\
-    &=&\langle f , g \rangle \circ \inl \\
-    &=&f
+    z_{\omega} \circ \inln{\omega} =&\ z_{\omega} \circ c_0 \circ \inln{0} \\
+    =&\ z_0 \circ \inln{0} \\
+    =&\ \langle f , g \rangle \circ \inl \\
+    =&\ f
   \end{align*}
   Showing that $z_{\omega} \circ \inrn{\omega} = g$ can be done
   analogously.
@@ -910,9 +926,12 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
   $\rho : \ell_Y = \rho_Y$. By assumption, $\Cc$ has coproducts. The
   object $L' (\coproduct{X}{Y})$ is the coproduct of $(X,\theta)$ and $(Y,\rho)$,
   as we have for any $(Z,\zeta) : | \Cc' |$:
-  $$
-  \Cc'(L'(X+Y),(Z,\zeta)) = \Cc(X+Y,Z) = \Cc(X,Z) \times \Cc(Y,Z) = \Cc'((X,\theta),(Z,\zeta)) \times \Cc'((Y,\rho),(Z,\zeta))
-  $$
+  %
+  \begin{align*}
+  \Cc'(L'(X+Y),(Z,\zeta)) =&\ \Cc(X+Y,Z) \\
+    =&\ \Cc(X,Z) \times \Cc(Y,Z) \\
+    =&\ \Cc'((X,\theta),(Z,\zeta)) \times \Cc'((Y,\rho),(Z,\zeta))
+  \end{align*}
 
   Similarly for coequalisers, suppose that we again have
   $(X,\theta), (Y,\rho) : | \Cc' |$ with
@@ -989,33 +1008,41 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
 
 \subsection{Putting it all together}
 
+We can now put all the results together and show that we have initial
+algebras for $\SET$-sorted quotient inductive-inductive definitions
+where all the arguments functors preserve sequential colimits.
+
 \begin{theorem}
   \label{initial-objects-qits}
 
-  \todoi{something about having initial objects in alg cats}
+  Let $s : \specty$ be a specification of a $\SET$-sorted quotient
+  inductive-inductive definition. If all the arguments functors in
+  contained in the specification $s$ preserve sequential colimits,
+  then the category $\Alg_s$ has an initial object.
 \end{theorem}
 
 \begin{proof}
-  \todoi{just combine everything}
+  Using the results from the previous section, we can create a left
+  adjoint $L : \Func{\SET}{\Alg_s}$ to the forgetful functor
+  $U : \Func{\Alg_s}{\SET}$ by induction on $s$. Since left adjoints
+  preserve colimits, $L\ \emptyset$ is the initial object of $\Alg_s$.
 \end{proof}
 
 \section{Related work}
 
-In this chapter we have shown for some of the categories of algebras
-that they are finitely cocomplete. Our goal was to use these colimits
-to construct left adjoints. There are several different approaches to
-this problem.
-
-The obvious choice would be to look at the Freyd's adjoint functor
-theorem. This theorem gives us a left adjoint for a functor, given
-that its domain is complete, that the functor is continuous and that
-the solution set condition is satisfied. In
-\cref{limits-in-categories-of-algebras}, we have (almost) shown that
-the categories we are working with are finitely complete and that the
-forgetful functors are continuous. Extending this to completeness
-means that we have to show that they have terminal objects and
-generalise binary products to arbitrary ones. More difficult would be
-to show that the solution set condition is satisfied.
+A well-known result from category theory on constructing left adjoints
+is Freyd's adjoint functor theorem. This theorem gives us a left
+adjoint for a functor, given that its domain is complete, that the
+functor is continuous and that the solution set condition is
+satisfied. In \cref{limits-in-categories-of-algebras}, we have
+basically shown that the categories we are working with are finitely
+complete and that the forgetful functors are continuous. (We have not
+explicitly shown that the categories have a terminal object, but this
+is easy to show.)  Extending this to completeness means that we have
+to show that they have terminal objects and generalise binary products
+to arbitrary ones. More difficult would be to show that the solution
+set condition is satisfied. This seems to be as difficult as
+constructing the left adjoint itself in our case.
 
 As for showing cocompleteness of categories of monad algebras, there
 are several treatments of colimits of monad algebras
@@ -1024,3 +1051,19 @@ that, given that $\Cc$ is cocomplete, the category of monad algebras
 $\monalgcat{M}$ for a monad $M : \Func{\Cc}{\Cc}$ is cocomplete if and
 only if it has reflexive coequalisers. $\monalgcat{M}$ has reflexive
 coequalisers if $M$ preserves them.
+
+In \cite{Lumsdaine2013}, the authors use sequential colimits to
+construct the monads corresponding to the higher inductive types,
+using techniques from \cite{Kelly1980}. Evaluating these monads at the
+initial object yields the carrier of the initial algebra for the
+higher inductive type. The construction given by the authors is
+therefore not hugely dissimilar from ours. An important difference is
+that our construction is carried out in type theory itself.
+
+The construction of the initial object for path constructors can also
+be seen as a generalisation of the construction of propositional
+truncation as a sequential colimit \cite{Doorn2016}. Our construction
+is performed in a set truncated setting. However, seeing as the
+technique is very similar to the one used to construct propositional
+truncation, it seems that our result can be generalised to the
+untruncated setting.

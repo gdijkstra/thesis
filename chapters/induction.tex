@@ -51,15 +51,16 @@ of algebras defined over the algebra $(\natty, \natzero, \natsucc)$:
 
 \begin{definition}
   We define a type of algebra families for this particular category of
-  algebras as:
-%
-  \begin{alignat*}{2}
-    &\Fam_{\Alg_{\lambda X . 1 + X}} : | \Alg_{\lambda X . 1 + X} | \to \Set \\
-    &\Fam_{\Alg_{\lambda X . 1 + X}} (X , \theta_0, \theta_1) &\ddefeq& (P : X \to \Set) \\
-    &&\times& (m_0 : P\ \theta_0) \\
-    &&\times& (m_1 : (x : X) \to P\ x \to P\ (\theta_1\ x))
-  \end{alignat*}
-%
+  algebras as
+  $\Fam_{\Alg_{\lambda X . 1 + X}} : | \Alg_{\lambda X . 1 + X} | \to
+  \Set$ with:
+  % 
+  \begin{align*}
+    &&\Fam_{\Alg_{\lambda X . 1 + X}} (X , \theta_0, \theta_1) \ddefeq&\ (P : X \to \Set) \\
+    &&\times&\ (m_0 : P\ \theta_0) \\
+    &&\times&\ (m_1 : (x : X) \to P\ x \to P\ (\theta_1\ x))
+  \end{align*}
+  % 
 \end{definition}
 
 In order to see that this type does correspond to a notion of family,
@@ -172,6 +173,47 @@ working with, namely that finite limits exist, we can show that an
 object satisfies the section principle if and only if it is an initial
 object.
 
+To see that finite limits are exactly what we need, we will first
+sketch what the proof of the logical equivalence looks like for the
+natural numbers. Showing that initiality implies the induction
+principle means that we are given $X : \Set$ with $\theta_0 : X$ and
+$\theta_1 : X \to X$, forming an initial algebra. Given
+$P : X \to \Set$ with $m_0 : P\ \theta_0$ and
+$m_1 : (x : X) \to P\ x \to P\ (\theta_1\ x)$, we have to define a
+dependent function $s : (x : X) \to P\ x$. Using the function $\total$
+we get an algebra and hence a unique algebra morphism
+$(X,\theta_0,\theta_1) \to \total\ (P,m_0,m_1)$. This algebra morphism
+gives us a function $s : X \to (x : X) \times P\ x$ and using
+uniqueness of the algebra morphism, we get that
+$\pi_0 \circ s = \id_X$, hence we get a dependent function
+$(x : X) \to P\ x$. We furthermore have that this dependent function
+satisfies the computation rules, which follow from the computation
+rules satisfied by the algebra morphism.
+
+To establish that the induction principle gives us initiality, we will
+produce an algebra morphism and then show it is in fact
+unique. Suppose $X : \Set$ with $\theta_0 : X$ and
+$\theta_1 : X \to X$ satisfies the induction principle, then we have
+for any other algebra $(Y,\rho_0,\rho_1)$ the algebra family
+$(\lambda x . Y, \rho_0, \lambda x . \rho_1)$. This family is the
+family that is ``constantly $(Y,\rho_0,\rho_1)$''. In the categorical
+proof, this corresponds to constructing the product of
+$(X,\theta_0,\theta_1)$ with $(Y,\rho_0,\rho_1)$. We then get a
+function $f : X \to Y$, which is an algebra morphism thanks to the
+computation rules we get from the induction principle. We have to show
+that this function is unique: for any other $g : X \to Y$ which is an
+algebra morphism, we need to show that $f = g$. By employing function
+extensionality, this is equivalent to showing
+$(x : X) \to f\ x = g\ x$, which means we can use the induction
+principle to prove this. The motive of the induction is the family
+$\lambda x\ .\ f\ x = g\ x$ with the methods being of the types
+$f\ \theta_0 = g\ \theta_0$ and
+$(x : X) \to f\ x = g\ x \to f\ (\theta_1\ x) = g\ (\theta_1\ x)$.
+These methods can be defined using the computation rules of $f$ and
+$g$. In the categorical proof, constructing this algebra family
+corresponds to constructing the equaliser of the two algebra morphisms
+$f$ and $g$, which gives us a proof of $f = g$.
+
 \begin{lemma}
   \label{initiality-to-section}
   Let $\Cc: \Cat$. If $X : | \Cc |$ is initial, then $X$ satisfies the
@@ -237,17 +279,6 @@ order to show that initiality and the section principle coincide, we
 need even more structure: we need the identity \emph{laws} and
 associativity and the existence of certain limits.
 
-The proof of initiality shown here is intuitively very similar to what
-one would do if one had the concrete induction principle: we first
-have to define a ``constant algebra family'' for the given algebra. In
-the categorical setting this corresponds to forming the product and
-considering the projection morphism. From this we get an algebra
-morphism. Showing that this algebra morphism is unique can then be
-done by again appealing to the induction principle. The motive of this
-induction is then stating that the two morphisms are pointwise
-equal. Giving the methods for this motive, \ie giving the algebra
-family, corresponds to forming the equaliser.
-
 \section{Limits in categories of algebras}
 \label{limits-in-categories-of-algebras}
 
@@ -297,17 +328,17 @@ sorts. We will show that this category has the required limits:
   % 
   \begin{align*}
     &&&S_i((Z,T),(X \times Y, P \times Q)) \\
-    &=& &\reasontext{definition of products in $S_i$} \\
+    &&=&\ \reasontext{definition of products in $S_i$} \\
     &&& (f : S_{i-1}(Z,X \times Y)) \\
     &&& \times (g : (x : R_i Z) \to T\ x \to (P \times Q)\ (R_i\ f\ x)) \\
-    &=& &\reasontext{universal property of $X \times Y$ in $S_{i-1}$ and functoriality of $R_i$} \\
+    &&=&\ \reasontext{universal property of $X \times Y$ in $S_{i-1}$ and functoriality of $R_i$} \\
     &&& (f_0 : S_{i-1}(Z,X)) \times (f_1 : S_{i-1}(Z,Y)) \\
     &&& \times (g : (x : R_iZ) \to T\ x \to P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)) \\
-    &=& &\reasontext{universal property of $P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)$ in $\SET$} \\
+    &&=&\ \reasontext{universal property of $P\ (R_i\ f\ x) \times Q\ (R_i\ g\ x)$ in $\SET$} \\
     &&& (f_0 : S_{i-1}(Z,X)) \times (f_1 : S_{i-1}(Z,Y)) \\
     &&& \times (g_0 : (x : R_iZ) \to T\ x \to P\ (R_i\ f\ x)) \\
     &&& \times (g_1 : (x : R_iZ) \to T\ x \to Q\ (R_i\ g\ x)) \\
-    &=& &\reasontext{definition of products in $S_i$} \\
+    &&=&\ \reasontext{definition of products in $S_i$} \\
     &&& S_i((Z,T),(X,P)) \times S_i((Z,T),(Y,Q))
   \end{align*}
 \end{proof}
@@ -320,12 +351,12 @@ following proposition:
   Suppose $(f,f'), (g,g') : S_i((X,Y),(Z,W))$, then:
   % 
   \begin{align*}
-    ((f,f') = (g,g')) &=& &(p : f = g) \\
-                      &\times& &(p' : (x : X) (y : Y\ x) \to \pathover{W}{R_i\ p\ x}{f'\ x\ y}{g'\ x\ y})
+    &&((f,f') = (g,g')) =&\ (p : f = g) \\
+    &&\times&\ (p' : (x : X) (y : Y\ x) \to \pathover{W}{R_i\ p\ x}{f'\ x\ y}{g'\ x\ y})
   \end{align*}
   % 
   where we denote the action of $R_i$ on a proof of equality
-  $p : f = g$ by $R_i(p)\ x : R_i\ f\ x = R_i(g)\ x$. Since
+  $p : f = g$ by $R_i\ p\ x : R_i\ f\ x = R_i\ g\ x$. Since
   $f'\ x\ y : W\ (R_i\ f\ x)$ and $g'\ x\ y : W\ (R_i\ g\ x)$, we have
   to transport the left hand side of the equation along the equality
   $R_i\ p\ x$.
@@ -353,14 +384,16 @@ following proposition:
   $e : S_{i-1}(E,X)$. This equaliser comes equipped with a proof
   $p : f \circ e = g \circ e$. The equaliser is then defined as
   $(E,F)$ with:
+  %
   \begin{align*}
-    F\ x & \ddefeq (y : Y\ (R_i\ e\ x)) \\
-         & \times (\pathover{W}{R_i\ p\ x}{f'\ (R_i\ e\ x)\ y}{g'\ (R_i\ e\ x)\ y})
+    &&F\ x \ddefeq&\ (y : Y\ (R_i\ e\ x)) \\
+    && \times&\ (\pathover{W}{R_i\ p\ x}{f'\ (R_i\ e\ x)\ y}{g'\ (R_i\ e\ x)\ y})
   \end{align*}
+  %
   with $(e,e') : S_i((E,F),(X,Y))$ the projection morphism where
-  \[
-    e'\ x\ (y , p) \ddefeq y
-  \]
+  $$
+  e'\ x\ (y , p) \ddefeq y
+  $$
   Showing that $(f,f') \circ (e,e') = (g,g') \circ (e,e')$ is then
   straightforward. The universal property can be shown similarly to
   that of the product: we have to appeal to the universal properties
@@ -386,16 +419,17 @@ The assumptions for the following lemmata are:
 \item $\Ss : \sortsty$ is the definition of the sorts
 \item $s : \specty_\Ss$ is the specification of the previous constructors, hence
 \item $\Alg_s$ will have products and equalisers
-\item $U_s : \Func{\Alg_s}{\SortCat{\Ss}}$ preserves these
+\item $\Und_s : \Func{\Alg_s}{\SortCat{\Ss}}$ preserves these
 \item $\sortsin{S_i}{\Ss}$ is the sort of the constructor we are adding
 \end{itemize}
 
-The forgetful functor $U_s$ extends to
-$\bar{U_s} : \Func{\Alg_s}{S_i}$ since $S_i \in \Ss$. By
-\cref{forgetful-into-sorts} $\bar{U_s}$ also preserves products and
+The forgetful functor $\Und_s$ extends to
+$\extendfunc{\Und}_s : \Func{\Alg_s}{S_i}$ since $S_i \in \Ss$. By
+\cref{forgetful-into-sorts} $\extendfunc{\Und}_s$ also preserves products and
 equalisers.
 
-Note that $S_i \neq \unitty$.
+Note that $S_i \neq \termcat$, as this is prevented by the assumption
+that $\sortsin{S_i}{\SortCat{\Ss}}$.
 
 \subsubsection{Products}
 
@@ -404,11 +438,11 @@ Note that $S_i \neq \unitty$.
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying:
-  \item $t_i \circ F = t_i \circ \bar{U_s}$
+  \item $t_i \circ F = t_i \circ \extendfunc{\Und}_s$
   \end{itemize}
 
-  If $\Alg_s$ has products and $U_s$ preserves them, then the category
-  $\Alg_{s'}$ has products and its forgetful functor $U_{s'}$
+  If $\Alg_s$ has products and $\Und_s$ preserves them, then the category
+  $\Alg_{s'}$ has products and its forgetful functor $\Und_{s'}$
   preserves them.
 \end{lemma}
 
@@ -416,48 +450,48 @@ Note that $S_i \neq \unitty$.
   Suppose we have two algebras in $\Alg_{s'}$, \ie we have:
   \begin{itemize}
   \item $X, Y : | \Alg_s |$
-  \item $\theta : S_i(FX,\bar{U_s}X)$, $\rho : S_i(FY,\bar{U_s}Y)$
-  \item $t_i \theta = \id_{t_i (\bar{U_s} X)}$, $t_i \rho = \id_{t_i (\bar{U_s} Y)}$
+  \item $\theta : S_i(FX,\extendfunc{\Und}_sX)$, $\rho : S_i(FY,\extendfunc{\Und}_sY)$
+  \item $t_i \theta = \id_{t_i (\extendfunc{\Und}_s X)}$, $t_i \rho = \id_{t_i (\extendfunc{\Und}_s Y)}$
   \end{itemize}
 
   We will proceed by showing that $X \times Y : \Alg_s$ has an algebra
   structure. Let us define for $X, Y$ the morphism
-  $\phi_U : S_i(U(X \times Y), UX \times UY)$ as
-  $\phi_u \ddefeq \langle U \pi_0 , U \pi_1 \rangle$. Per assumption
-  $\phi_U$ has an inverse $\phi_U^{-1}$. We can then define the
+  $\phi_{\extendfunc{\Und}_s} : S_i(\extendfunc{\Und}_s(X \times Y), \extendfunc{\Und}_s X \times \extendfunc{\Und}_s X)$ as
+  $\phi_u \ddefeq \langle \extendfunc{\Und}_s \pi_0 , \extendfunc{\Und}_s \pi_1 \rangle$. Per assumption
+  $\phi_{\extendfunc{\Und}_s}$ has an inverse $\phi_{\extendfunc{\Und}_s}^{-1}$. We can then define the
   algebra structure $\zeta$ on $X \times Y$ as follows:
   $$
   \xymatrix{ 
     F(X \times Y) \ar[r]^{\phi_F}
     &FX \times FY \ar[r]^{\theta \times \rho} 
-    &\extendfunc{U}X \times \extendfunc{U}Y \ar[r]^{\phi_U^{-1}} 
-    &\extendfunc{U}(X \times Y) 
+    &\extendfunc{\Und}_sX \times \extendfunc{\Und}_sY \ar[r]^{\phi_{\extendfunc{\Und}_s}^{-1}} 
+    &\extendfunc{\Und}_s(X \times Y) 
   }
   $$
   where $\phi_F \ddefeq \langle F \pi_0 , F \pi_1 \rangle$.
   
   For this to be an algebra structure, we need to establish that
-  $t_i \zeta = \id_{t_i (\bar{U_s} (X \times Y))}$. This holds as
+  $t_i \zeta = \id_{t_i (\extendfunc{\Und}_s (X \times Y))}$. This holds as
   $t_i$ preserves products definitionally. We have:
   \begin{align*}
-    &t_i (\theta \times \rho) = t_i \langle \theta \circ \pi_0 , \rho \circ \pi_1 \rangle \\
-    &=  \langle t_i (\theta \circ \pi_0) , t_i (\rho \circ \pi_1) \rangle \\
-    &= \langle \pi_0 , \pi_1 \rangle \\
-    &= \id_{t_I (\bar{U_s} (X \times Y))}
+    &&t_i (\theta \times \rho) =&\ t_i \langle \theta \circ \pi_0 , \rho \circ \pi_1 \rangle \\
+    &&=&\ \langle t_i (\theta \circ \pi_0) , t_i (\rho \circ \pi_1) \rangle \\
+    &&=&\ \langle \pi_0 , \pi_1 \rangle \\
+    &&=&\ \id_{t_I (\extendfunc{\Und}_s (X \times Y))}
   \end{align*}
   and
   \begin{align*}
-    &t_i \phi_F = t_i \langle F \pi_0 , F \pi_1 \rangle \\
-    &= \langle t_i F \pi_0 , t_i F \pi_1 \rangle \\
-    &= \langle t_i U \pi_0 , t_i U \pi_1 \rangle \\
-    &= t_i \phi_U
+    &&t_i \phi_F =&\ t_i \langle F \pi_0 , F \pi_1 \rangle \\
+    &&=&\ \langle t_i F \pi_0 , t_i F \pi_1 \rangle \\
+    &&=&\ \langle t_i \extendfunc{\Und}_s \pi_0 , t_i \extendfunc{\Und}_s \pi_1 \rangle \\
+    &&=&\ t_i \phi_{\extendfunc{\Und}_s}
   \end{align*}
   Putting it all together, we get:
   \begin{align*}
-    &t_i \zeta = t_i (\phi_u^{-1} \circ \theta \times \rho \circ \phi_F) \\
-    &= t_i \phi_u^{-1} \circ t_i (\theta \times \rho) \circ t_i \phi_F \\
-    &= t_i \phi_U^{-1} \circ \id_{t_i (\bar{U_s} (X \times Y))} \circ t_i \phi_U \\
-    &= \id_{t_i (\bar{U_s} (X \times Y))}
+    &&t_i \zeta =&\ t_i (\phi_u^{-1} \circ \theta \times \rho \circ \phi_F) \\
+    &&=&\ t_i \phi_u^{-1} \circ t_i (\theta \times \rho) \circ t_i \phi_F \\
+    &&=&\ t_i \phi_{\extendfunc{\Und}_s}^{-1} \circ \id_{t_i (\extendfunc{\Und}_s (X \times Y))} \circ t_i \phi_{\extendfunc{\Und}_s} \\
+    &&=&\ \id_{t_i (\extendfunc{\Und}_s (X \times Y))}
   \end{align*}
 
   We furthermore have to check whether $\pi_0 : S_i (X \times Y, X)$
@@ -466,11 +500,11 @@ Note that $S_i \neq \unitty$.
   $$
   \xymatrix{
     F(X \times Y) \ar[r]^{\phi_F} \ar[d]_{F \pi_0}
-    &FX \times FY \ar[r]^{\theta \times \rho} \ar[dl]_{\pi_0}
-    &\extendfunc{U}X \times \extendfunc{U}Y \ar[r]^{\phi_U^{-1}} \ar[dr]_{\pi_0}
-    &\extendfunc{U}(X \times Y) \ar[d]_{U \pi_0}
+    &FX \times FY \ar[r]^{\theta \times \rho} \ar[dl]^{\pi_0}
+    &\extendfunc{\Und}X \times \extendfunc{\Und}Y \ar[r]^{\phi_{\Und}^{-1}} \ar[dr]_{\pi_0}
+    &\extendfunc{\Und}(X \times Y) \ar[d]_{\extendfunc{\Und}_s \pi_0}
     \\
-    FX \ar[rrr]_{\theta} &&&UX
+    FX \ar[rrr]_{\theta} &&&\extendfunc{\Und}_s X
   }
   $$
   The triangle on the left holds by definition of $\phi_F$. The square
@@ -478,13 +512,12 @@ Note that $S_i \neq \unitty$.
   $\theta \times \rho$. The triangle on the right can be established
   as follows: we have:
   \begin{align*}
-    &\pi_0 \circ \phi_U \\
-    &= U \pi_0 \\
-    &= U \pi_0 \circ \phi_U^{-1} \circ \phi_U
+    &&\pi_0 \circ \phi_{\extendfunc{\Und}_s} =&\ \extendfunc{\Und}_s \pi_0 \\
+    &&=&\ \extendfunc{\Und}_s \pi_0 \circ \phi_{\extendfunc{\Und}_s}^{-1} \circ \phi_{\extendfunc{\Und}_s}
   \end{align*}
-  Since $\phi_U$ is an isomorphism it is in particular a monomorphism,
+  Since $\phi_{\extendfunc{\Und}_s}$ is an isomorphism it is in particular a monomorphism,
   hence from this equation we get that
-  $\pi_0 = U \pi_0 \circ \phi_U{^-1}$. This shows that $\pi_0$ is an
+  $\pi_0 = \extendfunc{\Und}_s \pi_0 \circ \phi_{\extendfunc{\Und}_s}{^-1}$. This shows that $\pi_0$ is an
   algebra morphism $\zeta \to \theta$. The proof that $\pi_1$ is an
   algebra morphism $\zeta \to \rho$ goes along the same lines.
 
@@ -497,14 +530,14 @@ Note that $S_i \neq \unitty$.
   we have to show that the following commutes:
   $$
   \xymatrix{
-    FA \ar[rrr]_{\alpha} \ar[d]^{F \langle f , g \rangle} \ar[dr]_{\langle Ff , Fg \rangle}
-    &&&UA \ar[d]^{U \langle f , g \rangle}
-    \ar[dl]_{\langle Uf , Ug \rangle}
+    FA \ar[rrr]^{\alpha} \ar[d]_{F \langle f , g \rangle} \ar[dr]^{\langle Ff , Fg \rangle}
+    &&&\extendfunc{\Und}_s A \ar[d]^{\extendfunc{\Und}_s \langle f , g \rangle}
+    \ar[dl]_{\langle \extendfunc{\Und}_s f , \extendfunc{\Und}_s g \rangle}
     \\
-    F(X \times Y) \ar[r]^{\phi_F} 
-    &FX \times FY \ar[r]^{\theta \times \rho}
-    &\extendfunc{U}X \times \extendfunc{U}Y \ar[r]^{\phi_U^{-1}}
-    &\extendfunc{U}(X \times Y) 
+    F(X \times Y) \ar[r]_{\phi_F} 
+    &FX \times FY \ar[r]_-{\theta \times \rho}
+    &\extendfunc{\Und}_sX \times \extendfunc{\Und}_sY \ar[r]_-{\phi_{\extendfunc{\Und}_s}^{-1}}
+    &\extendfunc{\Und}_s(X \times Y) 
   }
   $$
   The left triangle holds by definition. The middle trapezoid holds as
@@ -512,15 +545,15 @@ Note that $S_i \neq \unitty$.
   $\alpha \to \rho$ respectively. The right triangle can be shown to
   hold by the following equational reasoning:
   \begin{align*}
-    &\phi_U \circ U \langle f , g \rangle = \langle U f , U g \rangle \\
-    &= \phi_U \circ \phi_U^{-1} \circ \langle U f , U g \rangle
+    &&\phi_{\extendfunc{\Und}_s} \circ \extendfunc{\Und}_s \langle f , g \rangle =&\ \langle \extendfunc{\Und}_s f , \extendfunc{\Und}_s g \rangle \\
+    &&=&\ \phi_{\extendfunc{\Und}_s} \circ \phi_{\extendfunc{\Und}_s}^{-1} \circ \langle \extendfunc{\Und}_s f , \extendfunc{\Und}_s g \rangle
   \end{align*}
-  Since $\phi_U$ is an isomorphism, it is also an epimorphism, which
+  Since $\phi_{\extendfunc{\Und}_s}$ is an isomorphism, it is also an epimorphism, which
   means we get
-  $U \langle f , g \rangle = \phi_U^{-1} \circ \langle U f , U g
+  $\extendfunc{\Und}_s \langle f , g \rangle = \phi_{\extendfunc{\Und}_s}^{-1} \circ \langle \extendfunc{\Und}_s f , \extendfunc{\Und}_s g
   \rangle$.
 
-  Note that by construction, $\extendfunc{U}_{s'}$ preserves products
+  Note that by construction, $\extendfunc{\Und}_{s'}$ preserves products
   definitionally.
 \end{proof}
 
@@ -528,41 +561,41 @@ Note that $S_i \neq \unitty$.
   Let $s' : \specty_\Ss$ be $s$ extended with a point constructor of sort
   $S_i$ as specified by:
   \begin{itemize}
-  \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
-  \item $l, r : \Nat{F}{\extendfunc{U}_s}$ satisfying
-    $t_i\ l = t_i\ r = \id_{t_i \circ \extendfunc{U}_s}$.
+  \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \extendfunc{\Und}_s$
+  \item $l, r : \Nat{F}{\extendfunc{\Und}_s}$ satisfying
+    $t_i\ l = t_i\ r = \id_{t_i \circ \extendfunc{\Und}_s}$.
   \end{itemize}
 
-  If $\Alg_s$ has products and $U_s$ preserves them, then the category
-  $\Alg_{s'}$ has products and its forgetful functor $U_{s'}$
+  If $\Alg_s$ has products and $\Und_s$ preserves them, then the category
+  $\Alg_{s'}$ has products and its forgetful functor $\Und_{s'}$
   preserves them.
 \end{lemma}
 
 \begin{proof}
   Suppose we have objects $X, Y : | \Alg_s |$ with algebra structures
-  $\theta : l_X = r_X$ and $\rho : l_Y = r_Y$. We will proceed by
+  $\theta : \ell_X = r_X$ and $\rho : \ell_Y = r_Y$. We will proceed by
   constructing an algebra on the object $X \times Y$.
 
-  Note that by naturality of $l$, the following commutes:
+  Note that by naturality of $\ell$, the following commutes:
   $$
   \xymatrix{
-    F(X \times Y) \ar[r]^{\phi_F} \ar[d]_{l_{X \times Y}} &FX \times FY \ar[d]^{l_X \times l_Y} \\
-    U(X \times Y) \ar[r]_{\phi_U} &UX \times UY
+    F(X \times Y) \ar[r]^{\phi_F} \ar[d]_{\ell_{X \times Y}} &FX \times FY \ar[d]^{\ell_X \times \ell_Y} \\
+    \extendfunc{\Und}_s(X \times Y) \ar[r]_{\phi_{\extendfunc{\Und}_s}} &\extendfunc{\Und}_s X \times \extendfunc{\Und}_s X
   }
   $$
-  Postcomposing with $\phi_U^{-1}$, we get the equation:
+  Postcomposing with $\phi_{\extendfunc{\Und}_s}^{-1}$, we get the equation:
   $$
-  l_{X \times Y} = \phi_U^{-1} \circ l_X \times l_Y \circ \phi_F
+  \ell_{X \times Y} = \phi_{\extendfunc{\Und}_s}^{-1} \circ \ell_X \times \ell_Y \circ \phi_F
   $$
-  Since we have $l_X = r_X$ and $l_Y = r_Y$, we also have
-  $l_{X \times Y} = r_{X \times Y}$.
+  Since we have $\ell_X = r_X$ and $\ell_Y = r_Y$, we also have
+  $\ell_{X \times Y} = r_{X \times Y}$.
 
   Now the category of algebras $\Alg_{s'}$ is a full subcategory of
   $\Alg_s$, hence we get automatically that the projections are
   algebra morphisms and that the universal property is satisfied.
 
   By construction of the products, the forgetful functor
-  $\extendfunc{U}_{s'}$ preserves products definitionally.
+  $\Und_{s'}$ preserves products definitionally.
 \end{proof}
 
 \subsubsection{Equalisers}
@@ -585,11 +618,11 @@ path constructor algebra morphisms.
   $S_i$ as specified by:
   \begin{itemize}
   \item $F : \Func{\Alg_s}{S_i}$, satisfying:
-  \item $t_i \circ F = t_i \circ \bar{U_s}$
+  \item $t_i \circ F = t_i \circ \extendfunc{\Und}_s$
   \end{itemize}
 
-  If $\Alg_s$ has equalisers and $U_s$ preserves them, then the category
-  $\Alg_{s'}$ has equalisers and its forgetful functor $U_{s'}$
+  If $\Alg_s$ has equalisers and $\Und_s$ preserves them, then the category
+  $\Alg_{s'}$ has equalisers and its forgetful functor $\Und_{s'}$
   preserves them.
 \end{lemma}
 
@@ -597,13 +630,13 @@ path constructor algebra morphisms.
   Suppose we have two algebras in $\Alg_{s'}$, \ie we have:
   \begin{itemize}
   \item $X, Y : | \Alg_s |$
-  \item $\theta : S_i(FX,\bar{U_s}X)$, $\rho : S_i(FY,\bar{U_s}Y)$
-  \item $t_i \theta = \id_{t_i (\bar{U_s} X)}$, $t_i \rho = \id_{t_i (\bar{U_s} Y)}$
+  \item $\theta : S_i(FX,\extendfunc{\Und}_sX)$, $\rho : S_i(FY,\extendfunc{\Und}_sY)$
+  \item $t_i \theta = \id_{t_i (\extendfunc{\Und}_s X)}$, $t_i \rho = \id_{t_i (\extendfunc{\Und}_s Y)}$
   \end{itemize}
   along with morphisms $f, g : \Alg_s(X,Y)$ satisfying:
   \begin{itemize}
-  \item $Uf \circ \theta = \rho \circ Ff$
-  \item $Ug \circ \theta = \rho \circ Fg$
+  \item $\extendfunc{\Und}_s f \circ \theta = \rho \circ Ff$
+  \item $\extendfunc{\Und}_s g \circ \theta = \rho \circ Fg$
   \end{itemize}
   \ie they are algebra morphisms $\theta \to \rho$.
 
@@ -616,22 +649,22 @@ path constructor algebra morphisms.
   $$
   \xymatrix{
     FE \ar[r]^{Fe} &FX \ar[d]_{\theta} \ar@<-.5ex>[r]_-{Ff} \ar@<.5ex>[r]^-{Fg} &FY \ar[d]^{\rho} \\
-    UE \ar[r]^{Ue} &UX \ar@<-.5ex>[r]_-{Uf} \ar@<.5ex>[r]^-{Ug} &UY
+    \extendfunc{\Und}_s E \ar[r]^{\extendfunc{\Und}_s e} &\extendfunc{\Und}_s X \ar@<-.5ex>[r]_-{\extendfunc{\Und}_s f} \ar@<.5ex>[r]^-{\extendfunc{\Und}_s g} &\extendfunc{\Und}_s X
   }
   $$
-  Since $U$ preserves equalisers, $UE$ is an equaliser, hence we get a
-  unique arrow $\epsilon : S_i(FE,UE)$. We need to check that we have
-  $t_i \epsilon = \id_{t_i (\extendfunc{U}_s E)}$. We know that the following
+  Since $\extendfunc{\Und}_s$ preserves equalisers, $\extendfunc{\Und}_s E$ is an equaliser, hence we get a
+  unique arrow $\epsilon : S_i(FE,\extendfunc{\Und}_s E)$. We need to check that we have
+  $t_i \epsilon = \id_{t_i (\extendfunc{\Und}_s E)}$. We know that the following
   commutes:
   $$
   \xymatrix{
     t_i (FE) \ar[r]^{t_i (Fe)} \ar[d]_{t_i \epsilon} &t_i (FX) \ar[d]^{t_i \theta} \\
-    t_i (UE) \ar[r]^{t_i (Ue)} &t_i (UX) \ar@<-.5ex>[r]_-{t_i Uf} \ar@<.5ex>[r]^-{t_i Ug} &t_i (UY)
+    t_i (\extendfunc{\Und}_s E) \ar[r]^{t_i (\extendfunc{\Und}_s e)} &t_i (\extendfunc{\Und}_s X) \ar@<-.5ex>[r]_-{t_i \extendfunc{\Und}_s f} \ar@<.5ex>[r]^-{t_i \extendfunc{\Und}_s g} &t_i (\extendfunc{\Und}_s X)
   }
   $$
-  Furthermore, $t_i \theta = \id_{t_i (\extendfunc{U}_s X)}$ and
-  $t_i (Fe) = t_i (Ue)$, and since $t_i$ preserves equalisers, we
-  necessarily have that $t_i \epsilon = \id_{t_i (\extendfunc{U}_s E)}$.
+  Furthermore, $t_i \theta = \id_{t_i (\extendfunc{\Und}_s X)}$ and
+  $t_i (Fe) = t_i (\extendfunc{\Und}_s e)$, and since $t_i$ preserves equalisers, we
+  necessarily have that $t_i \epsilon = \id_{t_i (\extendfunc{\Und}_s E)}$.
 
   We still have to establish that the universal property is
   satisfied. Suppose we have $(A, \alpha) : | \Alg_{s'} |$ along with
@@ -651,24 +684,24 @@ path constructor algebra morphisms.
     &FX
     \ar[d]^{\theta}
     \\
-    UA
-    \ar[r]_{Uh}
-    \ar@/_2pc/[rr]_{Ua}
-    &UE
-    \ar[r]_{Ue}
-    &UX
-    \ar@<-.5ex>[r]_-{Uf} \ar@<.5ex>[r]^-{Ug}
-    &UY
+    \extendfunc{\Und}_s A
+    \ar[r]_{\extendfunc{\Und}_s h}
+    \ar@/_2pc/[rr]_{\extendfunc{\Und}_s a}
+    &\extendfunc{\Und}_s E
+    \ar[r]_{\extendfunc{\Und}_s e}
+    &\extendfunc{\Und}_s X
+    \ar@<-.5ex>[r]_-{\extendfunc{\Und}_s f} \ar@<.5ex>[r]^-{\extendfunc{\Und}_s g}
+    &\extendfunc{\Und}_s X
   }
   $$
   We have yet to establish whether the left square commutes, the other
   subdiagrams have already been shown to commute. Observe that we have
-  two cones $(FA, \theta \circ Fa)$ and $(FA, Ua \circ \alpha)$ for
-  the fork $Uf, Ug$. Since $a$ is an algebra morphism, these two cones
+  two cones $(FA, \theta \circ Fa)$ and $(FA, \extendfunc{\Und}_s a \circ \alpha)$ for
+  the fork $\extendfunc{\Und}_s f, \extendfunc{\Und}_s g$. Since $a$ is an algebra morphism, these two cones
   are actually the same. Both $\epsilon \circ Fh$ and
-  $Uh \circ \alpha$ are then cone morphisms from this cone into
-  $(UE,Ue)$, which by the universal property of $UE$ means that
-  $Uh \circ \alpha = \epsilon \circ Fh$, which establishes the
+  $\extendfunc{\Und}_s h \circ \alpha$ are then cone morphisms from this cone into
+  $(\extendfunc{\Und}_s E,\extendfunc{\Und}_s e)$, which by the universal property of $\extendfunc{\Und}_s E$ means that
+  $\extendfunc{\Und}_s h \circ \alpha = \epsilon \circ Fh$, which establishes the
   commutativity of the left square and thereby the universal property
   of equalisers in $\Alg_{s'}$.
 \end{proof}
@@ -677,39 +710,39 @@ path constructor algebra morphisms.
   Let $s' : \specty_\Ss$ be $s$ extended with a path constructor of sort
   $S_i$ as specified by:
   \begin{itemize}
-  \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \bar{U_s}$
-  \item $l, r : \Nat{F}{\extendfunc{U}_s}$ satisfying
-    $t_i\ l = t_i\ r = \id_{t_i \circ \extendfunc{U}_s}$.
+  \item $F : \Func{\Alg_s}{S_i}$, satisfying $t_i \circ F = t_i \circ \extendfunc{\Und}_s$
+  \item $l, r : \Nat{F}{\extendfunc{\Und}_s}$ satisfying
+    $t_i\ l = t_i\ r = \id_{t_i \circ \extendfunc{\Und}_s}$.
   \end{itemize}
 
-  If $\Alg_s$ has equalisers and $U_s$ preserves them, then the category
-  $\Alg_{s'}$ has equalisers and its forgetful functor $U_{s'}$
+  If $\Alg_s$ has equalisers and $\Und_s$ preserves them, then the category
+  $\Alg_{s'}$ has equalisers and its forgetful functor $\Und_{s'}$
   preserves them.
 \end{lemma}
 
 \begin{proof}
   Suppose we have objects $X, Y : | \Alg_s |$ with algebra structures
-  $\theta : l_X = r_X$ and $\rho : l_Y = r_Y$ and morphisms
+  $\theta : \ell_X = r_X$ and $\rho : \ell_Y = r_Y$ and morphisms
   $f, g : \Alg_s(X,Y)$. We claim that the equaliser $E : \Alg_s$ of
   $f$ and $g$ has an algebra structure, \ie we can show that
-  $l_E = r_E$.
+  $\ell_E = r_E$.
 
-  Since $l_X = r_X$ and the naturality of $l$ and $r$, we have that
+  Since $\ell_X = r_X$ and the naturality of $l$ and $r$, we have that
   the following commutes:
   $$
   \xymatrix{
-    FE \ar[r]^{Fe} \ar[d]_{l_E} &FX \ar@<-.5ex>[d]_-{l_X} \ar@<.5ex>[d]^-{r_X} \\
-    UE \ar[r]^{Ue} &UX \ar@<-.5ex>[r]_-{Uf} \ar@<.5ex>[r]^-{Ug} &UY
+    FE \ar[r]^{Fe} \ar[d]_{\ell_E} &FX \ar@<-.5ex>[d]_-{\ell_X} \ar@<.5ex>[d]^-{r_X} \\
+    \extendfunc{\Und}_s E \ar[r]^{\extendfunc{\Und}_s e} &\extendfunc{\Und}_s X \ar@<-.5ex>[r]_-{\extendfunc{\Und}_s f} \ar@<.5ex>[r]^-{\extendfunc{\Und}_s g} &\extendfunc{\Und}_s X
   }
   $$
-  We observe that $(FE, l_X \circ Fe)$ is a cone for the fork
-  $Uf,Ug$. By $l_X = r_X$, $(FE, r_X \circ Fe)$ is the same fork. We
-  then have that by naturality, both $l_E$ and $r_E$ are cone
-  morphisms from $(FE, l_X \circ Fe)$ into the terminal cone
-  $(UE,Ue)$, hence by universality we get that $l_E = r_E$.
+  We observe that $(FE, \ell_X \circ Fe)$ is a cone for the fork
+  $\extendfunc{\Und}_s f,\extendfunc{\Und}_s g$. By $\ell_X = r_X$, $(FE, r_X \circ Fe)$ is the same fork. We
+  then have that by naturality, both $\ell_E$ and $r_E$ are cone
+  morphisms from $(FE, \ell_X \circ Fe)$ into the terminal cone
+  $(\extendfunc{\Und}_s E,\extendfunc{\Und}_s e)$, hence by universality we get that $\ell_E = r_E$.
 
   Since $\Alg_{s'}$ is a full subcategory of $\Alg_s$, $E$ with its
-  proof $\epsilon : l_E = r_E$ inherits its universal property
+  proof $\epsilon : \ell_E = r_E$ inherits its universal property
   directly from $\Alg_s$.
 \end{proof}
 
@@ -881,12 +914,12 @@ parts simplify.
 %
   \begin{itemize}
   \item $\Fam_{\Cc} : | \Cc | \to \Set$
-  \item $\total : (X : | \Cc |) \to \Fam_{\Cc}\ X \to | \Cc |$
+  \item $\total : \{ X : | \Cc | \} \to \Fam_{\Cc}\ X \to | \Cc |$
   \item
-    $\proj : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \Cc(\total\ P,
+    $\proj : \{ X : | \Cc | \}\ (P : \Fam_{\Cc}\ X) \to \Cc(\total\ P,
     X)$
   \item
-    $\preimage : (X : | \Cc |)\ (Y : | \Cc |)\ (p : \Cc(Y,X)) \to
+    $\preimage : \{ X : | \Cc | \}\ (Y : | \Cc |)\ (p : \Cc(Y,X)) \to
     \Fam_{\Cc}\ X$
   \end{itemize}
 %
@@ -895,16 +928,25 @@ parts simplify.
 %
   \begin{itemize}
   \item for any family $P : \Fam_{\Cc}\ X$,
-  $$\preimage\ X\ (\total\ P , \proj\ P) = P$$
+  $$\preimage\ X\ (\total\ P)\ (\proj\ P) = P$$
 \item for any object $Y : | \Cc |$ with $p : \Cc(Y,X)$,
   %
   \begin{align*}
-    &\ \ \ \ \ \ (\total\ X\ (\preimage\ X\ (Y,p)) , \proj\ X\ (\preimage\ X\ (Y,p))) \\
+    &\ \ \ \ \ \ (\total\ X\ (\preimage\ Y\ p) , \proj\ X\ (\preimage\ Y\ p)) \\
     &= (Y,p)
   \end{align*}
 \end{itemize}
 %
 \end{definition}
+
+A family structure as defined above gives us an equivalence
+$\Fam_{\Cc}\ X = (Y : | \Cc |) \times (p : \Cc(Y,X))$. We will
+sometimes explicitly define the operations $\total$, $\proj$ and
+$\preimage$, but sometimes only some of them and will give the
+definition of $\Fam_{\Cc}$ along with the equivalence reasoning that
+lead up to that definition. From this equivalence proof, we can
+reconstruct the operations.
+
 To define these operations for the sort and algebra categories, we can
 perform induction on the specification and apply the same techniques
 as we did to derive the notion of families in $\algcat{F}$.
@@ -918,8 +960,8 @@ functor $F : \Func{\Cc}{\Dd}$.
   $\Box_F : (X : | \Cc |) \to \Fam_{\Cc} \to \Fam_{\Dd}$ is defined
   as:
   $$
-  \Box_F\ X\ P \ddefeq \preimage_{\Dd}\ FX\ (F\ (\total_{\Cc}\ X\ P) ,
-  F\ (\proj_{\Cc}\ X\ P))
+  \Box_F\ P \ddefeq \preimage_{\Dd}\ (F\ (\total_{\Cc}\ P) ,
+  F\ (\proj_{\Cc}\ P))
   $$
 \end{definition}
 
@@ -928,7 +970,7 @@ functor $F : \Func{\Cc}{\Dd}$.
   Given family structures $\Fam_{\Cc}$ and $\Fam_{\Dd}$, and
   $X : | \Cc |$ and $P : \Fam_{\Cc}\ X$, we have
   $$
-  F (\total_{\Cc}\ X\ P) = \total_{\Dd}\ (F X) (\Box_F\ P)
+  F (\total_{\Cc}\ P) = \total_{\Dd}\ (\Box_F\ P)
   $$
 \end{proposition}
 
@@ -936,11 +978,11 @@ functor $F : \Func{\Cc}{\Dd}$.
   This follows directly from the correctness condition of the family
   structure on $\Dd$:
   \begin{align*}
-    &&&F (\total_{\Cc}\ X\ P) \\
-    &=& &\reasontext{correctness condition of $\Fam_{\Dd}$} \\
-    &&&\total_{\Dd}\ (F X) (\preimage_{\Dd}\ (F X) (F (\total_{\Cc}\ X\ P), F (\proj_{\Cc}\ X\ P))) \\
-    &=& &\reasontext{definition of $\Box_F$} \\
-    &&&\total_{\Dd}\ (F X) (\Box_F\ P)
+    &&&F (\total_{\Cc}\ P) \\
+    &&=&\ \reasontext{correctness condition of $\Fam_{\Dd}$} \\
+    &&&\total_{\Dd}\ (\preimage_{\Dd}\ (F (\total_{\Cc}\ P), F (\proj_{\Cc}\ P))) \\
+    &&=&\ \reasontext{definition of $\Box_F$} \\
+    &&&\total_{\Dd}\ (\Box_F\ P)
   \end{align*}
 \end{proof}
 
@@ -965,8 +1007,8 @@ make it typecheck.
 \begin{definition}
   The type of \emph{sections} in a category $\Cc$ is defined as:
   \begin{align*}
-    &\Sect_{\Cc} : (X : | \Cc |) (Y : | \Cc |) (p : \Cc(Y,X)) \to \Set \\
-    &\Sect_{\Cc}\ X\ Y\ p \ddefeq (s : \Cc(X,Y)) \times (s_0 : p \circ s = \id_X)
+    &\Sect_{\Cc} : \{ X : | \Cc |\}\ (Y : | \Cc |)\ (p : \Cc(Y,X)) \to \Set \\
+    &\Sect_{\Cc}\ Y\ p \ddefeq (s : \Cc(X,Y)) \times (s_0 : p \circ s = \id_X)
   \end{align*}
 \end{definition}
 
@@ -977,64 +1019,64 @@ $\SET$:
 \begin{definition}[Dependent morphism structure]
   To generalise dependent morphisms to a category $\Cc$, we need a
   family
-  $\DepHom_{\Cc} : (X : | \Cc |)\ (P : \Fam_{\Cc}\ X) \to \Set$ along
+  $\DepHom_{\Cc} : \{ X : | \Cc |\}\ (P : \Fam_{\Cc}\ X) \to \Set$ along
   with the following operations, given an object $X : | \Cc |$ and a
   family $P : \Fam_{\Cc}\ X$:
 %
   \begin{itemize}
   \item
-    $\grph : \DepHom\ X\ P \to \Sect\ X\ (\total\ P,\proj\ P)$
+    $\grph : \DepHom\ P \to \Sect\ (\total\ P,\proj\ P)$
   \item
-    $\snd : \Sect\ X\ (\total\ P,\proj\ P) \to \DepHom_{\Cc}\ X\
+    $\snd : \Sect\ (\total\ P,\proj\ P) \to \DepHom_{\Cc}\ X\
     P$
   \end{itemize}
 %
   The correctness conditions are:
 %
   \begin{itemize}
-  \item for any $f : \DepHom_{\Cc}\ X\ P$,
-  $$\snd\ X\ P\ s\ (\grph\ X\ P\ f) = f$$
-\item for any $s : \Sect\ X\ (\total\ P, \proj\ P)$,
-  $$\grph\ X\ P\ (\snd\ X\ P\ s) = s$$
+  \item for any $f : \DepHom_{\Cc}\ P$,
+  $$\snd\ P\ s\ (\grph\ P\ f) = f$$
+\item for any $s : \Sect\ (\total\ P, \proj\ P)$,
+  $$\grph\ P\ (\snd\ P\ s) = s$$
 \end{itemize}
 %
 \end{definition}
 
 Note that the correctness conditions give us an equivalence
 $$
-\DepHom_{\Cc}\ X\ P = \Sect_{\Cc}\ (\total_{\Cc}\ X\ P)\ X\ (\proj_{\Cc}\ X\ P)
+\DepHom_{\Cc}\ P = \Sect_{\Cc}\ X\ (\proj_{\Cc}\ P)
 $$
 
 Similar to the action of a functor $F$ on families, we can use this
 structure to define the action of functors on dependent
 morphisms. Given a functor $F : \Func{\Cc}{\Dd}$, we can define:
 $$
-\liftdephom{F} : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \DepHom_{\Cc}\ X\ P \to \DepHom_{\Cc}\ FX\ (\Box_F\ X\ P)
+\liftdephom{F} : (X : | \Cc |) (P : \Fam_{\Cc}\ X) \to \DepHom_{\Cc}\ P \to \DepHom_{\Cc}\ FX\ (\Box_F\ P)
 $$
 If $F$ happens to be an endofunctor on $\SET$, this simplifies to:
 $$
-\liftdephom{F} : (X : \Set) (P : X \to \Set) \to ((x : X) \to P\ x) \to (x : F X) \to \Box_F\ X\ P\ x
+\liftdephom{F} : (X : \Set) (P : X \to \Set) \to ((x : X) \to P\ x) \to (x : F X) \to \Box_F\ P\ x
 $$
 Before we define $\liftdephom{F}$, observe that we can easily define a function:
 $$
-\Sect_{\Cc}\ X\ (s , p) \to \Sect_{\Dd}\ FX\ (F s , F p)
+\Sect_{\Cc} (s , p) \to \Sect_{\Dd}\ (F s , F p)
 $$
 $\liftdephom{F}$ can then be defined as the composite:
 $$
 \xymatrix{
-\DepHom_{\Cc}\ X\ P
+\DepHom_{\Cc}\ P
 \ar[d]^{\grph}
 \\
-\Sect_{\Cc}\ X\ (\total_{\Cc}\ X\ P, \proj_{\Cc}\ X\ P)
+\Sect_{\Cc}\ (\total_{\Cc}\ P, \proj_{\Cc}\ P)
 \ar[d] 
 \\
-\Sect_{\Dd}\ FX\ (F (\total_{\Cc}\ X\ P), F\ (\proj_{\Cc}\ X\ P))
+\Sect_{\Dd}\ (F (\total_{\Cc}\ P), F\ (\proj_{\Cc}\ P))
 \ar[d]^{\phi}
 \\
-\Sect_{\Dd}\ FX\ (\total_{\Dd}\ FX (\Box_F\ X\ P), \proj_{\Dd}\ FX\ (\Box_F\ X\ P))
+\Sect_{\Dd}\ (\total_{\Dd}\ (\Box_F\ P), \proj_{\Dd}\ (\Box_F\ P))
 \ar[d]^{\snd}
 \\
-\DepHom_{\Dd}\ FX\ (\Box_F\ X\ P)
+\DepHom_{\Dd}\ (\Box_F\ P)
 }
 $$
 The map $\phi$ we get from the equivalence given in \cref{box-thm}.
@@ -1086,14 +1128,14 @@ results of the induction principle applied to the context at hand.
 
 The methods are as follows:
 \begin{align*}
-  &m_{\ttnil} &&: &&P\ \ttnil \\
-  &m_{\ttcons{\_}{\_}} &&: &&(\Gamma : \ttconty)\ (x : P\ \Gamma) \\
-  &&&&&(A : \tttyty\ \Gamma)\ (y : Q\ \Gamma\ x\ A)  \\
-  &&&&&\to P\ (\ttcons{\Gamma}{A}) \\
-  &m_{\ttpi} &&: &&(\Gamma : \ttconty)\ (x : P\ \Gamma) \\
-  &&&&&(A : \tttyty\ \Gamma)\ (y : Q\ \Gamma\ x\ A) \\
-  &&&&&(B : \tttyty\ (\ttcons{\Gamma}{A}))\ (z : Q\ (\ttcons{\Gamma}{A})\ (m_{\ttcons{\_}{\_}}\ \Gamma\ x\ A\ y)\ B) \\
-  &&&&&\to Q\ \Gamma\ x\ (\ttpi\ \Gamma\ A\ B)
+  &&m_{\ttnil} :&\ P\ \ttnil \\
+  &&m_{\ttcons{\_}{\_}} :&\ (\Gamma : \ttconty)\ (x : P\ \Gamma) \\
+  &&&\ (A : \tttyty\ \Gamma)\ (y : Q\ \Gamma\ x\ A)  \\
+  &&&\ \to P\ (\ttcons{\Gamma}{A}) \\
+  &&m_{\ttpi} :&\ (\Gamma : \ttconty)\ (x : P\ \Gamma) \\
+  &&&\ (A : \tttyty\ \Gamma)\ (y : Q\ \Gamma\ x\ A) \\
+  &&&\ (B : \tttyty\ (\ttcons{\Gamma}{A}))\ (z : Q\ (\ttcons{\Gamma}{A})\ (m_{\ttcons{\_}{\_}}\ \Gamma\ x\ A\ y)\ B) \\
+  &&&\ \to Q\ \Gamma\ x\ (\ttpi\ \Gamma\ A\ B)
 \end{align*}
 
 The method for the constructor $\ttnil$ is unsurprising. For
@@ -1178,16 +1220,16 @@ We derive the definition by taking the right hand side of the above
 equation and performing the following equational reasoning:
 \begin{align*}
   &&&(Y : | \FAM |) \times \FAM(Y,X) \\
-  &=& &\reasontext{definition of objects and morphisms in $\FAM$} \\
+  &&=&\ \reasontext{definition of objects and morphisms in $\FAM$} \\
   &&&(Y : \Set) \times (Q : Y \to \Set) \times (p : Y \to X) \\
   &&&\times (q : (y : Y) \to Q\ y \to P\ (p\ y)) \\
-  &=& &\reasontext{combining $Y$ and $P$ using the family structure on $\SET$} \\
+  &&=&\ \reasontext{combining $Y$ and $P$ using the family structure on $\SET$} \\
   &&&(V : X \to \Set) \times (Q : (x : X) \times V\ x \to \Set) \\
   &&&\times (q : (y : (x : X) \times V\ x) \to Q\ y \to P\ (\pi_1\ y)) \\
-  &=& &\reasontext{currying} \\
+  &&=&\ \reasontext{currying} \\
   &&&(V : X \to \Set) \times (Q : (x : X) \to V\ x \to \Set) \\
   &&&\times (q : (x : X) \to (y : V\ x) \to Q\ x\ y \to P\ x) \\
-  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\SET$} \\
+  &&=&\ \reasontext{combining $Q$ and $q$ using family structure on $\SET$} \\
   &&&(V : X \to \Set) \times (W : (x : X) \to V\ x \to P\ x \to \Set)
 \end{align*}
 What we ended up with does match with what a motive for $(\ttconty,\tttyty)$
@@ -1204,9 +1246,9 @@ We then give the following definitions:
 %
 \begin{align*}
   \Fam_{\FAM}\ (X , P) &\ddefeq (V : X \to \Set) \times (W : (x : X) \to P\ x \to V\ x \to \Set) \\
-  \total_{\FAM}\ (X , P)\ (V , W) &\ddefeq ((x : X) \times V\ x , (\lambda (x , z) . (y : P\ x) \times W\ x\ y\ z)) \\
-  \proj_{\FAM}\ (X, P)\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) \to z) \\
-  \preimage_{\FAM}\ (X, P)\ ((C,D),(p, q)) &\ddefeq (\lambda a . (c : C) \times p\ c = a , \lambda  x y (z, z') . (w : D\ z) \times (\pathover{P}{z'}{q\ z\ w}{y}))
+  \total_{\FAM}\ \{ X , P \}\ (V , W) &\ddefeq ((x : X) \times V\ x , (\lambda (x , z) . (y : P\ x) \times W\ x\ y\ z)) \\
+  \proj_{\FAM}\ \{ X , P \}\ (V, W) &\ddefeq (\lambda (x , y) . x , \lambda (x , y) (z , w) \to z) \\
+  \preimage_{\FAM}\ \{ X , P \}\ ((C,D),(p, q)) &\ddefeq (\lambda a . (c : C) \times p\ c = a , \lambda  x y (z, z') . (w : D\ z) \times (\pathover{P}{z'}{q\ z\ w}{y}))
 \end{align*}
 %
 Now we have a family structure on $\FAM$, we need to define what
@@ -1227,7 +1269,8 @@ $\tttyty$.
 
 We can derive this formulation by the following equational reasoning:
 \begin{align*}
-  &&&(s : \Fam_{\FAM}((X,P),(\total_{\FAM}\ (X , P)\ (V, W)))) \times (s_0 : \proj_{\FAM}\ (X, P)\ (V, W) \circ_{\FAM} s = \id_{\FAM}\ (X,P)) \\
+  &&&(s : \Fam_{\FAM}((X,P),(\total_{\FAM}\ (X , P)\ (V, W)))) \\
+  &&&\times (s_0 : \proj_{\FAM}\ (X, P)\ (V, W) \circ_{\FAM} s = \id_{\FAM}\ (X,P)) \\
   &=&& \reasontext{definition of morphisms in $\FAM$, equality of pairs is pair of equalities} \\
   &&&(s : X \to (x : X) \times V\ x) \\
   &&&\times (t : (x : X) \to P\ x \to (y : P (\pi_0\ (s\ x))) \times (W\ (\pi_0\ (s\ x))\ y\ (\pi_1\ (s\ x)))) \\
@@ -1240,16 +1283,10 @@ We can derive this formulation by the following equational reasoning:
 \end{align*}
 
 The dependent morphism structure on $\FAM$ is then:
-$$
-\DepHom_{\FAM}\ (X , P)\ (V , W) \ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x))
-$$
-%
-% \begin{align*}
-%   \DepHom_{\FAM}\ (X , P)\ (V , W) &\ddefeq (f : (x : X) \to V\ x) \times (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x)) \\
-%   \grph_{\FAM}\ (X , P)\ (V , W)\ (f , g) &\ddefeq ((\lambda x . (x , f\ x) , \lambda x\ y . y , (g\ x\ y)) , \refl) \\
-%   \snd_{\FAM}\ (X , P)\ (V , W)\ ((s , t) , s_0) &\ddefeq ?
-% \end{align*}
-%
+\begin{align*}
+&&\DepHom_{\FAM}\ \{ X , P \}\ (V , W) \ddefeq&\ (f : (x : X) \to V\ x) \\
+&&\times&\ (g : (x : X) \to (y : P\ x) \to W\ x\ y\ (f\ x))
+\end{align*}
 \subsubsection{Sort categories}
 
 The family structure on a sort category can be given by induction on
@@ -1269,15 +1306,15 @@ We can perform the following equational reasoning on the right hand
 side of the equation above:
 \begin{align*}
   &&&(Y : | S_i |) \times (p : S_i(Y,(X,P))) \\
-  &=& &\reasontext{definition of $S_i$} \\
+  &&=&\ \reasontext{definition of $S_i$} \\
   &&&(Y : | S_{i-1} |) \times (Q : R_i Y \to \Set) \times (p : S_{i-1}(Y,X)) \times (q : (x : R_i Y) \to Q\ x \to P\ (R_i\ p\ x)) \\
-  &=& &\reasontext{combining $Y$ and $p$ using family structure on $S_{i-1}$} \\
+  &&=&\ \reasontext{combining $Y$ and $p$ using family structure on $S_{i-1}$} \\
   &&&(V : \Fam_{S_{i-1}}\ X) \times (Q : R_i (\total_{S_{i-1}}\ X\ V) \to \Set) \\
   &&&\times (q : (x : R_i (\total_{S_{i-1}}\ X\ V)) \to Q\ x \to P\ (R_i (\proj_{S_{i-1}}\ X\ V)\ x)) \\
-  &=& &\reasontext{rewrite $R_i (\total_{S_{i-1}}\ X\ V)$ with $\Box_{R_i}$} \\
+  &&=&\ \reasontext{rewrite $R_i (\total_{S_{i-1}}\ X\ V)$ with $\Box_{R_i}$} \\
   &&&(V : \Fam_{S_{i-1}}\ X) \times (Q : (x : R_i X) \times \Box_{R_i}\ X\ V\ x \to \Set) \\
   &&&\times (q : (x : R_i X) \times (y : \Box_{R_i}\ X\ V\ x) \to Q\ (x , y) \to P\ x)) \\
-  &=& &\reasontext{combining $Q$ and $q$ using family structure on $\SET$} \\
+  &&=&\ \reasontext{combining $Q$ and $q$ using family structure on $\SET$} \\
   &&&(V : \Fam_{S_{i-1}} X) \times (W : (x : R_i X) \times \Box_{R_i}\ X\ V\ x \to P\ x \to \Set)
 \end{align*}
 
@@ -1288,8 +1325,8 @@ $$
 with
 %
 \begin{align*}
-  \total_{S_i}\ (X , P)\ (V , W) &\ddefeq (\total_{S_{i-1}}\ X\ V, \lambda x . (y : P\ (R_i\ (\proj_{S_{i-1}}\ X\ V)\ x)) \times (W (\phi\ x)\ y)) \\
-  \proj_{S_i}\ (X, P)\ (V, W) &\ddefeq (\proj_{S_{i-1}}\ X\ V, \lambda x (y , z) . y)
+  \total_{S_i}\ \{ X , P \}\ (V , W) &\ddefeq (\total_{S_{i-1}}\ X\ V, \lambda x . (y : P\ (R_i\ (\proj_{S_{i-1}}\ X\ V)\ x)) \times (W (\phi\ x)\ y)) \\
+  \proj_{S_i}\ \{ X , P \}\ (V, W) &\ddefeq (\proj_{S_{i-1}}\ X\ V, \lambda x (y , z) . y)
 \end{align*}
 %
 where
@@ -1299,9 +1336,10 @@ is the isomorphism we get from the definition of $\Box$.
 
 The dependent morphism structure on $S_i$ can be derived in a similar
 way that of $\DepHom_{\FAM}$, arriving at:
-$$
-  \DepHom_{S_i}\ (X , P)\ (V , W) \ddefeq (f : \DepHom_{S_{i-1}}\ X\ V) \times (g : (x : R_i\ X)\ (y : P\ x) \to W\ (x , \bar{R}_i\ f\ x)\ y)\\
-$$
+\begin{align*}
+  &&\DepHom_{S_i}\ \{ X , P \}\ (V , W) \ddefeq&\ (f : \DepHom_{S_{i-1}}\ X\ V)\\
+  &&\times&\ (g : (x : R_i\ X)\ (y : P\ x) \to W\ (x , \bar{R}_i\ f\ x)\ y)
+\end{align*}
 
 \subsubsection{Point constructors}
 
@@ -1316,16 +1354,16 @@ arbitrary sort, we will consider $\SET$-sorted point constructors. Let
 $\Alg_s$ be a category of algebras of some specification
 $s : \specty$. A $\SET$-sorted constructor on $\Alg_s$ is given by a
 functor $F : \Func{\Alg_s}{\SET}$ and the new category of algebras is
-$\dialgcat{F}{U}$ with $U : \Func{\Alg_s}{\SET}$ the forgetful
+$\dialgcat{F}{\Und_s}$ with $\Und_s : \Func{\Alg_s}{\SET}$ the forgetful
 functor. Following a similar derivation to that of the family
 structure on $\algcat{F}$ for endofunctors $F$ on $\SET$, we arrive
 at:
 $$
-\Fam_{\dialgcat{F}{U}}\ (X,\theta) \ddefeq (P : \Fam_{\Alg_s}\ X)
-\times (m : (x : FX) \times \Box_F\ P\ x \to \Box_U\ P\ (\theta\ x))
+\Fam_{\dialgcat{F}{\Und_s}}\ (X,\theta) \ddefeq (P : \Fam_{\Alg_s}\ X)
+\times (m : (x : FX) \times \Box_F\ P\ x \to \Box_{\Und_s}\ P\ (\theta\ x))
 $$
 We can recover $\Fam_{\algcat{F}}$ from this if $\Alg_s = \SET$ and
-$U$ is the identity functor, as $\Box_{\id_{\SET}}\ P = P$.
+$\Und_s$ is the identity functor, as $\Box_{\id_{\SET}}\ P = P$.
 
 Moving on to the fully general point constructor case, we have the
 following data:
@@ -1333,14 +1371,14 @@ following data:
 \begin{itemize}
 \item $\Ss : \sortsty$ with $s : \specty_{\Ss}$
 \item $S_i : \Cat$ with $p : \sortsin{S_i}{\Ss}$
-\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \extendfunc{U}_s$
+\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \extendfunc{\Und}_s$
 \end{itemize}
 
-We start out by investigating what $\Box_F$ and $\Box_{\extendfunc{U}_s}$ look
+We start out by investigating what $\Box_F$ and $\Box_{\extendfunc{\Und}_s}$ look
 like. Recall that we can split the functor $F : \Func{\Alg_s}{S_i}$
 into two operations, which are both functorial:
 \begin{itemize}
-\item $F^0 : | \Cc | \to |S_{i-1}|$, which we know to be equal to $\extendfunc{U}^0_s$
+\item $F^0 : | \Cc | \to |S_{i-1}|$, which we know to be equal to $\extendfunc{\Und}^0_s$
 \item
   $F^1 : (X : | \Cc |) \to (x : R_i (F^0 X)) \to F^1\ X\ x \to \Set$
 \end{itemize}
@@ -1361,7 +1399,7 @@ second projections of this $\Box_{F^0}$ and $\Box_{F^1}$ respectively:
 %
 Since the $\Box$ operation is functorial, we will use
 $\Box_{R_i \circ F^0}$ instead of the nested variant. Also since
-$F^0 = \extendfunc{U}^0_s$, we will use $\Box_{R_i \circ \extendfunc{U}^0_s}$.
+$F^0 = \extendfunc{\Und}^0_s$, we will use $\Box_{R_i \circ \extendfunc{\Und}^0_s}$.
 
 Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
 specification, which is $s$ extended with the point constructor given
@@ -1370,37 +1408,41 @@ category $\Alg_{s'}$ (see \cref{point-constr-fam-deriv}) and arrive at
 the following:
 %
 \begin{align*}
-\Fam_{\Alg_{s'}}\ (X, \theta) \ddefeq &(m : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \\
-& \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
-& \to \Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
+&&\Fam_{\Alg_{s'}}\ (X, \theta) \ddefeq&\ (P : \Fam_{\Alg_s}\ X)\\
+&&&\ \times (m : (x : R_i (\extendfunc{\Und}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{\Und}^0_s}\ P\ x) \\
+&&&\ \ \ \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+&&&\ \ \ \to \Box_{\extendfunc{\Und}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
 \end{align*}
 %
 \begin{figure}\centering
   \begin{align*}
     &&&(Y : | \Alg_s |) \\
-    &&&\times (\rho : S_i(FY, \extendfunc{U}_s Y)) \times (t_i \rho = \id_{t_i (\extendfunc{U}_s X)}) \\
+    &&&\times (\rho : S_i(FY, \extendfunc{\Und}_s Y)) \times (t_i \rho = \id_{t_i (\extendfunc{\Und}_s X)}) \\
     &&&\times (\Alg_{s'} ((Y,\rho),(X,\theta)) \\
     &=&&\reasontext{unfold definition of $\Alg_{s'}$} \\
-    &&&(Y : | \Alg_s |) \times (\rho : S_i(FY, \extendfunc{U}_s Y)) \times (t_i \rho = \id_{t_i (\extendfunc{U}_s Y)}) \\
-    &&&\times (p : \Alg_s(Y,X)) \times (p_0 : \extendfunc{U}_s p \circ \rho = \theta \circ F p) \\
+    &&&(Y : | \Alg_s |) \times (\rho : S_i(FY, \extendfunc{\Und}_s Y)) \times (t_i \rho = \id_{t_i (\extendfunc{\Und}_s Y)}) \\
+    &&&\times (p : \Alg_s(Y,X)) \times (p_0 : \extendfunc{\Und}_s p \circ \rho = \theta \circ F p) \\
     &=&&\reasontext{combine $Y$ and $p$ using $\Fam$ structure on $\Alg_s$} \\
-    &&&(P : \Fam_{\Alg_s}\ X) \times (\rho : S_i(F(\total\ P), \extendfunc{U}_s (\total\ P))) \times (t_i \rho = \id_{t_i (\extendfunc{U}_s (\total\ P))}) \\
-    &&&\times (p_0 : \extendfunc{U}_s(\proj\ P) \circ \rho = \theta \circ F (\proj\ P)) \\
+    &&&(P : \Fam_{\Alg_s}\ X) \times (\rho : S_i(F(\total\ P), \extendfunc{\Und}_s (\total\ P))) \times (t_i \rho = \id_{t_i (\extendfunc{\Und}_s (\total\ P))}) \\
+    &&&\times (p_0 : \extendfunc{\Und}_s(\proj\ P) \circ \rho = \theta \circ F (\proj\ P)) \\
     &=&&\reasontext{unfold definition $S_i$ and expand $p_0$} \\
     &&&(P : \Fam_{\Alg_s}\ X) \\
-    &&&\times (\rho : (x : R_i (\extendfunc{U}^0_s (\total\ P))) \to F^1 (\total\ P)\ x \to \extendfunc{U}^1_s (\total\ P)\ x) \\
-    &&&\times (p_0 : (x : R_i (\extendfunc{U}^0_s (\total\ P)))\ (y : F^1 (\total\ P)\ x) \\
-    &&&\ \ \ \ \to \extendfunc{U}^1_s (\proj\ P)\ x (\rho\ x\ y) = \theta\ (R_i\ (\extendfunc{U}^0_s (\proj\ P) x)\ (F^1\ (\proj\ P)\ x\ y))) \\
+    &&&\times (\rho : (x : R_i (\extendfunc{\Und}^0_s (\total\ P))) \to F^1 (\total\ P)\ x \to \extendfunc{\Und}^1_s (\total\ P)\ x) \\
+    &&&\times (p_0 : (x : R_i (\extendfunc{\Und}^0_s (\total\ P)))\ (y : F^1 (\total\ P)\ x) \\
+    &&&\ \ \ \ \to \extendfunc{\Und}^1_s (\proj\ P)\ x (\rho\ x\ y) = \theta\ (R_i\ (\extendfunc{\Und}^0_s (\proj\ P) x)\ (F^1\ (\proj\ P)\ x\ y))) \\
     &=&&\reasontext{rewriting using $\Box$ notation} \\
     &&&(P : \Fam_{\Alg_s}\ X) \\
-    &&&\times (\rho : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
-    &&&\ \ \ \ \to (z : \extendfunc{U}^1_s\ X\ x) \times \Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ z) \\
-    &&&\times(p_0 : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+    &&&\times (\rho : (x : R_i (\extendfunc{\Und}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{\Und}^0_s}\ P\ x) \\
+    &&&\ \ \ \ \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+    &&&\ \ \ \ \to (z : \extendfunc{\Und}^1_s\ X\ x) \times \Box_{\extendfunc{\Und}^1_s}\ P\ (x,x')\ z) \\
+    &&&\times(p_0 : (x : R_i (\extendfunc{\Und}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{\Und}^0_s}\ P\ x) \\
+    &&&\ \ \ \ \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
     &&&\ \ \ \ \to \pi_0\ (\rho\ (x,x')\ (y,y')) = \theta\ x\ y) \\
     &=&&\reasontext{singleton contraction} \\
     &&&(P : \Fam_{\Alg_s}\ X) \\
-    &&&\times (m : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
-    &&&\ \ \ \ \to \Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
+    &&&\times (m : (x : R_i (\extendfunc{\Und}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{\Und}^0_s}\ P\ x) \\
+    &&&\ \ \ \ \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+    &&&\ \ \ \ \to \Box_{\extendfunc{\Und}^1_s}\ P\ (x,x')\ (\theta\ x\ y))
   \end{align*}
   
   \caption{Derivation of the family structure for point constructors}
@@ -1411,23 +1453,23 @@ What we get out as the definition of algebra families for point
 constructors looks a bit daunting at first glance. However, we can
 also see how it is a generalisation of the original situation in
 $\algcat{F}$ for endofunctors on $\SET$. The first part,
-$(x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\
+$(x : R_i (\extendfunc{\Und}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{\Und}^0_s}\
 P\ x)$,
 gives us the induction hypotheses for all the sorts ``below'' the sort
 of the current constructors. The second part,
 $(y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y)$, gives us
 the induction hypothesis for the recursive arguments, which looks very
 similar to the $\algcat{F}$ case. Finally, the result type is
-$\Box_{\extendfunc{U}^1_s}\ P\ (x,x')\ (\theta\ x\ y)$, which is the
+$\Box_{\extendfunc{\Und}^1_s}\ P\ (x,x')\ (\theta\ x\ y)$, which is the
 dialgebra counterpart of what we had before.
 
 For dependent morphisms, the $\SET$-sorted case again follows the
 $\algcat{F}$ for endofunctors $F$ on $\SET$ in a straightforward
 way. Suppose we have $F : \Func{\Alg_s}{\SET}$, along with
-$(X,\theta) : | \dialgcat{F}{U} |$ and
-$(P,m) : \Fam_{\dialgcat{F}{U}}\ (X,\theta)$, we have:
+$(X,\theta) : | \dialgcat{F}{\Und_s} |$ and
+$(P,m) : \Fam_{\dialgcat{F}{\Und_s}}\ (X,\theta)$, we have:
 $$
-\DepHom_{\dialgcat{F}{U}}\ (P, m) \ddefeq (\sss : \DepHom_{\Alg_s}\ P) \times (\sss_0 : (x : FX) \to \liftdephom{U}\ \sss\ (\theta\ x) = m\ x\ (\liftdephom{F}\ \sss\ x))
+\DepHom_{\dialgcat{F}{\Und_s}}\ (P, m) \ddefeq (\sss : \DepHom_{\Alg_s}\ P) \times (\sss_0 : (x : FX) \to \liftdephom{\Und_s}\ \sss\ (\theta\ x) = m\ x\ (\liftdephom{F}\ \sss\ x))
 $$
 Generalising to the arbitrarily sorted point constructors follows the
 same steps as we took to derive the notion of algebra family for point
@@ -1449,8 +1491,8 @@ $(P,m) : \Fam_{\Alg_{s'}}\ (X,\theta)$:
 \begin{align*}
   &\DepHom_{\Alg_{s'}}\ (P, m) \ddefeq \\
   &\ \ (\sss : \DepHom_{\Alg_s}\ P) \\
-  &\ \ \times (\sss_0 : (x : R_i (\extendfunc{U}^0_s X)) (y : F^1\ X\ x)\\
-  &\ \ \ \ \ \ \to \liftdephom{U}^1_s\ \sss\ x\ (\theta\ x\ y) = m\ (x , \liftdephom{R_i \circ \extendfunc{U}^0_s}\ \sss\ x)\ (y , \liftdephom{F}^1\ \sss\ x\ y))
+  &\ \ \times (\sss_0 : (x : R_i (\extendfunc{\Und}^0_s X)) (y : F^1\ X\ x)\\
+  &\ \ \ \ \ \ \to \liftdephom{\Und}^1_s\ \sss\ x\ (\theta\ x\ y) = m\ (x , \liftdephom{R_i \circ \extendfunc{\Und}^0_s}\ \sss\ x)\ (y , \liftdephom{F}^1\ \sss\ x\ y))
 \end{align*}
 %
 
@@ -1459,7 +1501,7 @@ $(P,m) : \Fam_{\Alg_{s'}}\ (X,\theta)$:
 Let us first consider $\SET$-sorted path constructors. Suppose we have
 $\Alg_s$ for some specification $s : \specty$ and
 $F : \Func{\Alg_s}{\SET}$ describing the arguments and
-$\ell, r : \Nat{F}{U}$ the end points of the path constructor. Let
+$\ell, r : \Nat{F}{\Und_s}$ the end points of the path constructor. Let
 $s' : \specty$ be $s$ extend with the path constructor described by
 these data. Since $\Alg_{s'}$ is a full subcategory of $\Alg_{s}$, we
 have that $\Fam_{\Alg_{s'}}\ (X, \theta)$ for $X : \Alg_s$ and
@@ -1468,7 +1510,7 @@ $$
 (P : \Fam_{\Alg_s}) \times (\rho : \ell_{\total\ P} = r_{\total\ P})
 $$
 We can simplify this a bit further. We can define
-$\ell_P : (x : FX) \times \Box_F\ P\ x \to (y : UX) \times \Box_U\ P\ y$
+$\ell_P : (x : FX) \times \Box_F\ P\ x \to (y : \Und_s X) \times \Box_{\Und_s}\ P\ y$
 as $\ell_{\total\ P}$ with the defining equivalences of $\Box_F$ and
 $\Box_u$ plugged in at the right places. We furthermore will use the
 notation $\ell_P^0$ and $\ell_P^1$ to indicate first and second projections
@@ -1482,15 +1524,15 @@ following equational reasoning to simplify the expression:
   &=&&\reasontext{definition of $\ell_P$ and $r_P$} \\
   &&&(\ell_P = r_P) \\
   &=&&\reasontext{equality of pairs is a pair of equalities} \\
-  &&&(\rho_0 : \pi_0 \circ \ell_P = r_P) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &&&(\rho_0 : \pi_0 \circ \ell_P = r_P) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_{\Und_s} P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
   &=&&\reasontext{by definition and naturality of $\ell_P$ and $r_P$} \\
-  &&&(\rho_0 : \ell_X = r_X) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &&&(\rho_0 : \ell_X = r_X) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_{\Und_s} P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
   &=&&\reasontext{by uniqueness of identity proofs, we can multiply by $(\rho_0 = \theta)$} \\
-  &&&(\rho_0 : \ell_X = r_X) \times (\rho_0 = \theta) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &&&(\rho_0 : \ell_X = r_X) \times (\rho_0 = \theta) \times (\rho_1 : \pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_{\Und_s} P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
   &=&&\reasontext{singleton contraction} \\
-  &&&(\pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_U P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
+  &&&(\pathover{\lambda f . (x : FX) \times \Box_F P x \to \Box_{\Und_s} P (f x)}{\rho_0}{\pi_1 \circ \ell_P}{\pi_1 \circ r_P}) \\
   &=&&\reasontext{function extensionality} \\
-  &&&(x : FX) \times (y : \Box_F\ P\ x) \to \pathover{\Box_U P}{\theta x}{l^1_P\ (x , y)}{r^1_P\ (x , y)}
+  &&&(x : FX) \times (y : \Box_F\ P\ x) \to \pathover{\Box_{\Und_s} P}{\theta x}{l^1_P\ (x , y)}{r^1_P\ (x , y)}
 \end{align*}
 %
 
@@ -1500,15 +1542,15 @@ constructor:
 \begin{itemize}
 \item $\Ss : \sortsty$ with $s : \specty_{\Ss}$
 \item $S_i : \Cat$ with $p : \sortsin{S_i}{\Ss}$
-\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \extendfunc{U}_s$
-\item $l , r : \Nat{F}{\extendfunc{U}_s}$ such that $t_i l = t_i r = \id$
+\item $F : \Func{\Alg_s}{S_i}$ such that $t_i \circ F = t_i \circ \extendfunc{\Und}_s$
+\item $l , r : \Nat{F}{\extendfunc{\Und}_s}$ such that $t_i l = t_i r = \id$
 \end{itemize}
 
 Define $s' \ddefeq \specsnoc\ s\ (S_i,p,F) : \specty$ to be the new
 specification, which is $s$ extended with the path constructor given
 by the data above. Let $(X,\theta) : | \Alg_{s'}|$, \ie:
 $$
-\theta :  (x : R_i (\extendfunc{U}^0_s X)) \to (y : F^1\ X\ x) \to \ell^1_X\ x\ y = r^1_X\ x\ y
+\theta :  (x : R_i (\extendfunc{\Und}^0_s X)) \to (y : F^1\ X\ x) \to \ell^1_X\ x\ y = r^1_X\ x\ y
 $$
 Deriving the family structure $\Alg_{s'}$ follows both our
 $\SET$-sorted situation described above as well as the derivation for
@@ -1516,10 +1558,10 @@ arbitrarily sorted point constructors. The family structure on
 $\Alg_{s'}$ is then:
 %
 \begin{align*}
-\Fam_{\Alg_{s'}}\ (X, \theta) \ddefeq & (P : \Fam_{\Alg_s}\ X)\\
-&(m : (x : R_i (\extendfunc{U}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{U}^0_s}\ P\ x) \\
-& \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
-& \to \pathover{\Box_{\extendfunc{U}_s^1 P (x,x')}}{\theta\ x\ y}{\ell^1_P\ (x,x')\ (y,y')}{r^1_P\ (x,x')\ (y,y')})
+&&\Fam_{\Alg_{s'}}\ (X, \theta) \ddefeq&\ (P : \Fam_{\Alg_s}\ X)\\
+&&&\ (m : (x : R_i (\extendfunc{\Und}^0_s X)) \times (x' : \Box_{R_i \circ \extendfunc{\Und}^0_s}\ P\ x) \\
+&&&\ \to (y : F^1\ X\ x) \times (y' : \Box_{F^1}\ P\ (x, x')\ y) \\
+&&&\ \to \pathover{\Box_{\extendfunc{\Und}_s^1 P (x,x')}}{\theta\ x\ y}{\ell^1_P\ (x,x')\ (y,y')}{r^1_P\ (x,x')\ (y,y')})
 \end{align*}
 %
 Since $\Alg_{s'}$ is a full subcategory of $\Alg_s$, the dependent
@@ -1527,3 +1569,29 @@ morphisms are simply inherited from $\Alg_s$:
 $$
 \DepHom_{\Alg_{s'}}\ (P,m) \ddefeq \DepHom_{\Alg_s}\ P
 $$
+
+\subsection{Putting it all together}
+
+In the last subsection, we have seen what the induction principles of
+quotient inductive-inductive definitions look like. Given a
+specification $s : \specty$ with sorts $\Ss : \sortsty$, we can
+construct the family and dependent morphism structure on $\Alg_s$ by
+induction on $s$. We have seen that for $\SET$-sorted definitions it
+is a rather straightforward generalisation of the situation for
+$F$-algebras with $F$ an endofunctor on $\SET$. The fully general case
+where we may have arbitrary sorts is a bit more involved, but if we
+squint our eyes we can still see that the induction principle is of
+the same form as the principle for $\SET$-sorted definitions.
+
+\section{Related work}
+
+The treatment of induction for ordinary inductive types presented here
+is loosely based on the approach given in \cite{Ghani2010}.
+
+In \cite{NordvallForsberg2013}, the induction principle for
+inductive-inductive definitions is constructed by first considering
+the induction principle for ordinary inductive types and using the
+categories with families \cite{Dybjer1995} framework to generalise
+this construction to inductive-inductive definitions. In this chapter,
+we do not make use of the categories with families framework, but the
+constructions are quite similar nonetheless.
