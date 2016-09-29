@@ -39,14 +39,14 @@ need to give two points. Since every function in type theory is a
 congruence, \ie we have $\ap$, these two points need to be equal to
 eachother. The recursion principle is therefore as follows:
 $$
-\intrec : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone})
+\intrec : (A : \Type)\ (a_{\intzero} : A)\ (a_{\intone} : A)\ (a_{\intseg} : a_{\intzero} = a_{\intone})
 \to \intty \to A
 $$
 which comes with the computation rules:
 %
 \begin{align*}
-  \intrecbetazero : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero = a_{\intzero} \\
-  \intrecbetaone : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone = a_{\intone}
+  &\intrecbetazero : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero = a_{\intzero} \\
+  &\intrecbetaone : \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone = a_{\intone}
 \end{align*}
 
 \subsubsection{Definitional versus propositional computation rules}
@@ -77,12 +77,12 @@ the following square:
 $$
 \xymatrix{
   \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero 
-  \ar@{-}^{\ap\ (\intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg})\ \intseg}[rr]
+  \ar@{-}^{\ap\ (\intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg})\ \intseg}[rrrr]
   \ar@{-}_{\intrecbetazero}[d]
-  &&\intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone
+  &&&&\intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone
   \ar@{-}^{\intrecbetaone}[d]
   \\
-  a_{\intzero} \ar@{-}_{a_{\intseg}}[rr] &&a_{\intone}
+  a_{\intzero} \ar@{-}_{a_{\intseg}}[rrrr] &&&&a_{\intone}
 }
 $$
 A path computation rule gives us an equation between paths in type we
@@ -104,19 +104,18 @@ that they can be related by transporting along $\intseg$, so we end up
 having to give a dependent path as the method for $\intseg$:
 %
 \begin{align*}
-&\intind : \\
-&\ \ \ \ \ \ \ (P : \intty \to \Type) \\
-&\ \ \ \ \ \ \ (m_{\intzero} : P\ \intzero) \\
-&\ \ \ \ \ \ \ (m_{\intone} : P\ \intone) \\
-&\ \ \ \ \ \ \ (m_{\intseg} : \pathover{P}{\intseg}{\intzero}{\intone}) \\
-&\ \ \ \ \ \ \ \ \ \to (x : \intty) \to P\ x
+&&\intind : &\ (P : \intty \to \Type) \\
+&&&\ (m_{\intzero} : P\ \intzero) \\
+&&&\ (m_{\intone} : P\ \intone) \\
+&&&\ (m_{\intseg} : \pathover{P}{\intseg}{\intzero}{\intone}) \\
+&&&\ \to (x : \intty) \to P\ x
 \end{align*}
 
 As with the recursion principle, we of course have computation rules:
 %
 \begin{align*}
-  \intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intzero = m_{\intzero} \\
-  \intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intone = m_{\intone}
+  &\intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intzero = m_{\intzero} \\
+  &\intind\ P\ m_{\intzero}\ m_{\intone}\ m_{\intseg}\ \intone = m_{\intone}
 \end{align*}
 
 \subsubsection{Function extensionality}
@@ -171,11 +170,10 @@ The elimination principle of the quotient $\quotty{A}{R}$ is as
 follows:
 %
 \begin{align*}
-&\quotind{A}{R} : \\
-&(P : \quotty{A}{R} \to \Type) \\
-&(m_{\quotproj{\_}} : (a : A) \to P\ \quotproj{a}) \\
-&(m_{\quoteq} : (x\ y : A) (p : R\ x\ y) \to \pathover{P}{\quoteq\ x\ y\ p}{m_{\quotproj{\_}}\ x}{m_{\quotproj{\_}}\ y})\\
-&\to (x : \quotty{A}{R}) \to P\ x
+&&\quotind{A}{R} : &\ (P : \quotty{A}{R} \to \Type) \\
+&&&\ (m_{\quotproj{\_}} : (a : A) \to P\ \quotproj{a}) \\
+&&&\ (m_{\quoteq} : (x\ y : A)\ (p : R\ x\ y) \to \pathover{P}{\quoteq\ x\ y\ p}{m_{\quotproj{\_}}\ x}{m_{\quotproj{\_}}\ y})\\
+&&&\ \to (x : \quotty{A}{R}) \to P\ x
 \end{align*}
 %
 Unlike with the interval types, whether we truncate or not does make a
@@ -242,11 +240,10 @@ type. Given types $A, B$ with functions $f, g : A \to B$, we define:
 which comes with the following elimination principle:
 %
 \begin{align*}
-  &\coeqind{f}{g} : \\
-  &(P : \coeqind{f}{g} \to \Type) \\
-  &(m_{\coeqproj} : (b : B) \to P\ (\coeqproj\ b)) \\
-  &(m_{\coeqeq} : (a : A) \to \pathover{P}{\coeqeq\ a}{m_{\coeqproj}\ (f\ a)}{m_{\coeqproj}\ (g\ a)}) \\
-  &(x : \coeqind{f}{g}) \to P\ x
+  &&\coeqind{f}{g} : &\ (P : \coeqind{f}{g} \to \Type) \\
+  &&&\ (m_{\coeqproj} : (b : B) \to P\ (\coeqproj\ b)) \\
+  &&&\ (m_{\coeqeq} : (a : A) \to \pathover{P}{\coeqeq\ a}{m_{\coeqproj}\ (f\ a)}{m_{\coeqproj}\ (g\ a)}) \\
+  &&&\ \to (x : \coeqind{f}{g}) \to P\ x
 \end{align*}
 %
 Given a type $A : \Type$ and a relation $R : A \to A \to \Type$, we
@@ -293,7 +290,7 @@ constructor $\treeperm$:
 with the relation defined inductively as:
 %
 \begin{datatype}{\treerelty{\_}{\_}}{\pretreety \to \pretreety \to \Set}
-  \constr{\treerelnode}{(f : \natty \to \pretreety) (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treerelty{\pretreenode\ f}{\pretreenode\ (f \circ \phi)}}  
+  \constr{\treerelnode}{(f : \natty \to \pretreety)\ (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treerelty{\pretreenode\ f}{\pretreenode\ (f \circ \phi)}}  
 \end{datatype}
 %
 Note that the relation as defined here is not an equivalence
@@ -306,8 +303,8 @@ relation as defined above is sufficient for our purposes.
 If we then look at the ``constructors'' of the quotient $\quotty{\pretreety}{\treerel}$, we have the following:
 %
 \begin{align*}
-  \quotproj{\pretreeleaf} : \quotty{\pretreety}{\treerel} \\
-  \quotproj{\_} \circ \pretreenode : (\natty \to \pretreety) \to \quotty{\pretreety}{\treerel}
+  &\quotproj{\pretreeleaf} : \quotty{\pretreety}{\treerel} \\
+  &\quotproj{\_} \circ \pretreenode : (\natty \to \pretreety) \to \quotty{\pretreety}{\treerel}
 \end{align*}
 %
 The latter does not have the same type as $\treenode$. With the
@@ -409,7 +406,7 @@ simultaneously.
   \constr{\realratlimeq}{(q : \ratty)\ (y : \ratty^+ \to \realty)\ (\epsilon\ \delta : \ratty^+)\ (t : (\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{y\ \delta}{y\ \epsilon}) \\
     &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon - \delta}{\realrat\ q}{y\ \delta} \\
     &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon}{\realrat\ q}{\reallim\ y\ t}} \\
-  \constr{\reallimrateq}{(x : \ratty^+ \to \realty)\ (r : \ratty)\ (\epsilon\ \delta : \ratty^+) (s : (\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{x\ \delta}{x\ \epsilon}) \\
+  \constr{\reallimrateq}{(x : \ratty^+ \to \realty)\ (r : \ratty)\ (\epsilon\ \delta : \ratty^+)\ (s : (\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{x\ \delta}{x\ \epsilon}) \\
     &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon - \delta}{x\ \delta}{\realrat\ r} \\
     &\ \ \ \ \ \ \ \ \ \ \ \ \to \realrel{\epsilon}{\reallim\ x\ s}{\realrat\ r}} \\
   \constr{\reallimlimeq}{(x\ y : \ratty^+ \to \realty)\ (\epsilon\ \delta\ \eta : \ratty^+) \\
@@ -457,7 +454,7 @@ type $B$ in the extended context $\ttcons{\Gamma}{A}$:
   \constr{\ttzero}{(\Gamma : \ttconty) \to \tttyty\ \Gamma} \\
   \constr{\ttone}{(\Gamma : \ttconty) \to \tttyty\ \Gamma} \\
   \constrdots \\
-  \constr{\ttpi}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) \to \tttyty\ (\ttcons{\Gamma}{A}) \to \tttyty\ \Gamma} \\
+  \constr{\ttpi}{(\Gamma : \ttconty)\ (A : \tttyty\ \Gamma) \to \tttyty\ (\ttcons{\Gamma}{A}) \to \tttyty\ \Gamma} \\
   \constrdots
 \end{datatype}
 %
@@ -480,9 +477,9 @@ For example, the constructors for lambda terms and the application of
 one term to another may be given as follows:
 \begin{datatype}{\tttmty}{}
   \constrdots \\
-  \constr{\ttapp}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
+  \constr{\ttapp}{(\Gamma : \ttconty)\ (A : \tttyty\ \Gamma)\ (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
     \tttmty\ \Gamma\ (\ttpi\ A\ B) \to \tttmty\ (\ttcons{\Gamma}{A})\ B} \\
-  \constr{\ttlam}{(\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
+  \constr{\ttlam}{(\Gamma : \ttconty)\ (A : \tttyty\ \Gamma)\ (B : \tttyty\ (\ttcons{\Gamma}{A})) \to %
     \tttmty\ (\ttcons{\Gamma}{A}) B \to \tttmty\ \Gamma\ (\ttpi\ A\ B)} \\
   \constrdots
 \end{datatype}
@@ -498,8 +495,8 @@ simply add the equations as path constructors, as is done in
 following constructor to $\tttmty$ as a witness of $\beta$-equality
 for $\lambda$-terms:
 \begin{align*}
-&\ttpibeta &:& (\Gamma : \ttconty) (A : \tttyty\ \Gamma) (B : \tttyty\ (\ttcons{\Gamma}{A})) \\ 
-&&&\to (t : \tttmty\ (\ttcons{\Gamma}{A})\ B) \to \ttapp\ \Gamma\ A\ B\ (\ttlam\ \Gamma\ A\ B\ t) = t
+&&\ttpibeta :&\ (\Gamma : \ttconty)\ (A : \tttyty\ \Gamma)\ (B : \tttyty\ (\ttcons{\Gamma}{A})) \\ 
+&&&\ \to (t : \tttmty\ (\ttcons{\Gamma}{A})\ B) \to \ttapp\ \Gamma\ A\ B\ (\ttlam\ \Gamma\ A\ B\ t) = t
 \end{align*}
 
 \section{Implementation}
@@ -545,11 +542,11 @@ Using these, a type such as the interval can be
   &\ \ \ \ \intzero : \intty \\
   &\ \ \ \ \intone : \intty \\
   &\ \ \ \ \intseg : \intzero = \intone \\
-  &\ \ \ \ \intrec : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone}) \\
+  &\ \ \ \ \intrec : (A : \Type)\ (a_{\intzero} : A)\ (a_{\intone} : A)\ (a_{\intseg} : a_{\intzero} = a_{\intone}) \\
   &\ \ \ \ \ \ \ \ \to \intty \to A \\
-  &\ \ \ \ \intrecbetazero : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone}) \\
+  &\ \ \ \ \intrecbetazero : (A : \Type)\ (a_{\intzero} : A)\ (a_{\intone} : A)\ (a_{\intseg} : a_{\intzero} = a_{\intone}) \\
   &\ \ \ \ \ \ \ \ \to \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intzero = a_{\intzero} \\
-  &\ \ \ \ \intrecbetaone : (A : \Type) (a_{\intzero} : A) (a_{\intone} : A) (a_{\intseg} : a_{\intzero} = a_{\intone})  \\
+  &\ \ \ \ \intrecbetaone : (A : \Type)\ (a_{\intzero} : A)\ (a_{\intone} : A)\ (a_{\intseg} : a_{\intzero} = a_{\intone})  \\
   &\ \ \ \ \ \ \ \ \to \intrec\ A\ a_{\intzero}\ a_{\intone}\ a_{\intseg}\ \intone = a_{\intone}\\
 \end{align*}
 We can turn the $\beta$-equalities for the recursion principle into
@@ -579,11 +576,17 @@ implementation \verb+cubicaltt+\footnote{See
   \url{https://github.com/mortberg/cubicaltt}}. This implementation
 has some support for higher inductive types.
 
-\section{Related concepts}
+\section{Related work}
 
-As mentioned, quotient inductive-inductive definitions are related to
-quotient types. Quotient types have been studied in several forms in
-type theory \cite{Hofmann1995,Altenkirch2011ii,Nuo2015}.
+As mentioned in this chapter, quotient inductive-inductive definitions
+are related to quotient types. Quotient types have been studied in
+several forms in type theory
+\cite{Hofmann1995,Altenkirch2011ii,Nuo2015}.
+
+Quotient inductive-inductive definitions are furthermore an extension
+of inductive-inductive definitions \cite{Altenkirch2011} as well as a
+restricted, \ie set truncated, form of higher inductive types of
+\cite{Lumsdaine2013}.
 
 Inductive definitions with equalities have been studied in Miranda
 \cite{Turner1985} under the name of ``data types with laws''

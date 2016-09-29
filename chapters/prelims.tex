@@ -837,15 +837,15 @@ We will use the definition of category as in
   We define the type $\Cat : \Type$ as the following $\Sigma$-type:
   %
   \begin{align*}
-    \Cat &\ddefeq &&(obj : \Type) \\
-         &\times &&(hom : obj \to obj \to \Type) \\
-         &\times &&(\identalt{hom-is-set} : (X\ Y : obj) \to \isset (hom\ X\ Y)) \\
-         &\times &&(id : (X : obj) \to hom\ X\ X) \\
-         &\times &&(comp : \{\ X\ Y\ Z : obj\ \} \to hom\ Y\ Z \to hom\ X\ Y \to hom\ X\ Z) \\
-         &\times &&(\identalt{left-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ (id\ Y)\ f = f) \\
-         &\times &&(\identalt{right-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ f\ (id\ X) = f) \\
-         &\times &&(assoc : \{\ X\ Y\ Z\ W : obj\ \}\ (h : hom\ Z\ W) (g : hom\ Y\ Z) (f : hom\ X\ Y) \\
-         & &&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \to comp\ (comp\ h\ g)\ f = comp\ h\ (comp\ g\ f))
+    &&\Cat \ddefeq &\ (obj : \Type) \\
+         &&\times  &\ (hom : obj \to obj \to \Type) \\
+         &&\times  &\ (\identalt{hom-is-set} : (X\ Y : obj) \to \isset (hom\ X\ Y)) \\
+         &&\times  &\ (id : (X : obj) \to hom\ X\ X) \\
+         &&\times  &\ (comp : \{\ X\ Y\ Z : obj\ \} \to hom\ Y\ Z \to hom\ X\ Y \to hom\ X\ Z) \\
+         &&\times  &\ (\identalt{left-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ (id\ Y)\ f = f) \\
+         &&\times  &\ (\identalt{right-id} : \{\ X\ Y : obj\ \}\ (f : hom\ X\ Y) \to comp\ f\ (id\ X) = f) \\
+         &&\times  &\ (assoc : \{\ X\ Y\ Z\ W : obj\ \}\ (h : hom\ Z\ W) (g : hom\ Y\ Z) (f : hom\ X\ Y) \\
+         && &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \to comp\ (comp\ h\ g)\ f = comp\ h\ (comp\ g\ f))
   \end{align*}
 \end{definition}
 
@@ -869,11 +869,11 @@ $\Cc(X,Y)$.
   to $\Dd$ as the following $\Sigma$-type:
   %
   \begin{align*}
-    \Func{\Cc}{\Dd} &\ddefeq &&(obj : | \Cc | \to | \Dd |) \\
-    &\times &&(hom : \{\ X\ Y : | \Cc |\ \} \to \Cc(X,Y) \to \Cc(obj\ X, obj\ Y)) \\
-    &\times &&(id : \{\ X : | \Cc |\ \} \to hom\ (\id_{\Cc}\ X) = \id_{\Dd}\ (obj\ X)) \\
-    &\times &&(comp : \{\ X\ Y\ Z : | \Cc |\ \}\ (g : \Cc(Y,Z))\ (h : \Cc(X,Y)) \\
-    &&&\ \ \to hom\ (g \circ_{\Cc} f) = hom\ g \circ_{\Dd} hom\ f)
+    &&\Func{\Cc}{\Dd} \ddefeq &\ (obj : | \Cc | \to | \Dd |) \\
+                    &&\times  &\ (hom : \{\ X\ Y : | \Cc |\ \} \to \Cc(X,Y) \to \Cc(obj\ X, obj\ Y)) \\
+                    &&\times  &\ (id : \{\ X : | \Cc |\ \} \to hom\ (\id_{\Cc}\ X) = \id_{\Dd}\ (obj\ X)) \\
+                    &&\times  &\ (comp : \{\ X\ Y\ Z : | \Cc |\ \}\ (g : \Cc(Y,Z))\ (h : \Cc(X,Y)) \\
+                    &&&\ \ \ \to hom\ (g \circ_{\Cc} f) = hom\ g \circ_{\Dd} hom\ f)
   \end{align*}
 \end{definition}
 

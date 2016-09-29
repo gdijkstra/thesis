@@ -96,17 +96,18 @@ positive}. If we were to have an inductive type:
   \constr{\Ta}{(\Tty \to \Tty) \to \Tty}
 \end{datatype}
 then we can define:
+%
 \begin{align*}
-  &uh : T \to \emptyty \\
-  &uh\ (\Ta\ f) \ddefeq uh\ (f\ (\lambda x . x)) \\
+  &\uh : \Tty \to \emptyty \\
+  &\uh\ (\Ta\ f) \ddefeq \uh\ (f\ (\lambda x . x)) \\
   \\
-  &oh : T \\
-  &oh \ddefeq \Ta\ (\lambda x . x)
+  &\oh : \Tty \\
+  &\oh \ddefeq \Ta\ (\lambda x . x)
 \end{align*}
 %
 Since $f\ (\lambda x . x)$ is structurally smaller than $\Ta\ f$, the
-definition of $uh$ is structurally recursive. However, it does give us
-a term that does not have a normal form, namely $uh\ oh$.
+definition of $\uh$ is structurally recursive. However, it does give us
+a term that does not have a normal form, namely $\uh\ \oh$.
 
 Algebraic data types allow us to specify types or a family of types
 parametrised by type variables. As these are \emph{parameters}, we are
@@ -454,7 +455,29 @@ we work with sets instead.
 
 \section{Related work}
 
-\todoi{Fix!}
+The work in this thesis builds on the work on inductive-inductive
+types \cite{Altenkirch2011}. The framework we present extends the work
+in that paper in several dimensions: as opposed to having one
+constructor of sort $\SET$ and one constructor of sort $\FAM$, our
+framework supports a larger class of sorts and any number of
+constructors. Apart from that, our framework also introduces support
+for path constructors.
+
+The notion of path constructors comes from the concept of higher
+inductive types, as used in \cite{UFP2013}. A first attempt at
+describing the semantics of higher inductive types has been done in
+\cite{Lumsdaine2013}, working at the level of model categories. This
+approach has inspired \cite{Capriotti2014ii} and
+\cite{Altenkirch2015ii}, which both have led to the work presented in
+this thesis.
+
+Furthermore, as the title of the thesis suggests, the work on
+quotients in type theory, most notably \cite{Nuo2015} and
+\cite{Hofmann1995}, is related to what we present here. Quotient
+inductive-inductive definitions combine a quotienting mechanism with
+inductive types in the sense that the quotienting happens ``at the
+same time'' as the induction. The benefit over ordinary quotients will
+be discussed in \cref{qits}.
 
 \section{Overview of the thesis and contributions}
 
@@ -482,32 +505,34 @@ The thesis is organised as follows:
 \item In \cref{constructing} we give some preliminary results on
   constructing quotient inductive-inductive definitions given some
   reasonable assumptions on the type theory.
+\item The last chapter, \cref{conclusion}, presents the conclusions of
+  the thesis along with a discussion of the presented results. We also
+  point out several avenues for future work.
 \item \Cref{untruncated} is about what the difficulties are when
   moving from a set-based setting to the untruncated case. Here we go
   into detail about the coherence issues we face and how some of these
   can be solved in an ad-hoc manner.
-\item The last chapter, \cref{conclusion}, presents the conclusions of
-  the thesis along with a discussion of the presented results. We also
-  point out several avenues for future work.
+\item \Cref{containers} discusses some ways to generalise containers
+  to accommodate the kind of functors we need in our framework.
 \end{itemize}
 
 \subsection{List of main contributions}
-
-\todoi{Fix!}
 
 The main contributions of this thesis are:
 
 \begin{itemize}
 \item a formal specification of quotient inductive-inductive
   definitions, alongside with their categorical interpretation, given
-  in type theory: def. blablba
+  in type theory: \cref{qiids-spec} gives the general scheme of the
+  specification with the details of point constructors in
+  \cref{data-point-constructor} and \cref{algebras-point-constructor}
+  and the details of path constructors in \cref{data-path-constructor}
+  and \cref{algebras-path-constructor}.
 \item a proof of the logical equivalence of initiality and the
-  category theoretic induction principle: thm blabla
+  category theoretic induction principle:
+  \cref{initiality-section-thm}.
 \item a derivation of the type theoretic induction principle from the
-  category theoretic one
-\item construction of initial algebras for a class of quotient inductive types
+  category theoretic one: \cref{induction-for-qiids}.
+\item construction of initial algebras for a class of quotient
+  inductive types: \cref{initial-objects-qits}.
 \end{itemize}
-
-\section{Declaration of authorship}
-
-\todoi{Declare authorship}
