@@ -167,7 +167,9 @@ $$
 \Arec\ X\ \theta\ (\Ac\ x) = \theta\ (F\ (\Arec\ X\ \theta)\ x)
 $$
 The type $\Aty$ along with its constructor $\Ac$ and the $X$ and
-$\theta$ in the recursion principle are both $F$-algebras:
+$\theta$ in the recursion principle are both $F$-algebras, where $F$
+is an endofunctor on $\Set$. The notion of $F$-algebra can be defined
+for any category $\Cc$:
 
 \begin{definition}
   Given an endofunctor $F$ on $\Cc$, an \emph{$F$-algebra} is an
@@ -205,7 +207,7 @@ morphisms: algebras form a category:
 Given an endofunctor $F$ on $\SET$, we can consider its \emph{free
   monad} $F^*$, which is defined pointwise as the carrier of the
 initial algebra of the functor $\bar{F}_X Y \ddefeq X + FY$. Note that
-free monad need not exist: $F$ is required to be an strictly positive
+free monad need not exist: $F$ is required to be a strictly positive
 functor for $\bar{F}_X$ to be strictly positive as well. 
 
 We can write the functor $F^*$ down as a parametrised inductive type,
@@ -269,8 +271,8 @@ endofunctor is. To this end, let us first recall the definition of
 \emph{monad algebras}:
 
 \begin{definition}
-  Given a monad $M : \Func{\Cc}{\Cc}$ with $\eta : \Nat{1_{\Cc},M}$
-  its unit and $\mu : \Nat{M^2,M}$ is multiplication, a monad algebra
+  Given a monad $M : \Func{\Cc}{\Cc}$ with $\eta : \Nat{1_{\Cc}}{M}$
+  its unit and $\mu : \Nat{M^2}{M}$ is multiplication, a monad algebra
   on $M$ is an object $X : | \Cc |$ and a morphism
   $\theta : \Cc(MX,X)$ such that it respects the monad operations, \ie
   the following commutes:
@@ -314,7 +316,7 @@ external to type theory.
 
 As opposed to constructing the monads directly, we will first define
 the categories of algebras in this chapter. The reason for this is
-twofold. In the case of algebras of of an endofunctor we have fewer
+twofold. In the case of algebras of an endofunctor we have fewer
 equations to work with: they only pop up in the definition algebra
 morphisms. The definition of monads already requires us to talk about
 functors that satisfy certain equalities. Monad algebras also come
@@ -324,8 +326,8 @@ more coherence issues.
 
 The other reason why we chose to do it this way is that it allows us
 to talk about algebras (the ``syntax'') separately from their
-existence (``semantics''). This chapter we talk give a definition of
-the algebras and in \cref{constructing} we show how one can construct
+existence (``semantics''). In this chapter we give a definition of the
+algebras and in \cref{constructing} we show how one can construct
 initial algebras and left adjoints to the forgetful functors of
 categories of algebras.
 
@@ -402,7 +404,7 @@ $(\Tty,\Ta) : \algcat{F_0}$.
   of the algebra.
 \end{remark}
 
-Recall the example $\Tty$ with constructors $\Ta$ and $\Tb$, where
+Recall the example $\Tty$ with constructors $\Ta$ and $\Tb$, where we
 have given functors $F_0 : \Func{\SET}{\SET}$ and
 $F_1 : \Func{\algcat{F_0}}{\SET}$. We have a forgetful functor
 $V_1 : \dialgcat{F_1}{U_0} \to \algcat{F_0}$ which we can compose with
@@ -410,9 +412,9 @@ the forgetful functor $U_0 : \Func{\algcat{F_0}}{\SET}$, which we will
 denote as $U_1$. If we were to add a third and a fourth constructor,
 we would have to define a functors
 $F_2 : \Func{\dialgcat{F_1}{U_0}}{\SET}$ and
-$F_3 : \Func{\dialgcat{F_2}{U_1}}{\SET}$ to describe their arguments. The
-objects we are interested in are \emph{iterated} dialgebras. For the
-situation described above we have:
+$F_3 : \Func{\dialgcat{F_2}{U_1}}{\SET}$ to describe their
+arguments. The objects we are interested in are \emph{iterated}
+dialgebras. For the situation described above we have:
 $$
 \xymatrix@!C{
 \SET 
@@ -448,10 +450,10 @@ simultaneously:
 %
 \begin{definition}
   \label{type-sorted-spec}
-  The specification of a $\SET$-sorted inductive-inductive definition
-  and its category of algebras and underlying carrier functor is given
-  by the following inductive-recursive
-  definition of
+  The type $\specty$ of specifications of a $\SET$-sorted
+  inductive-inductive definition and its category of algebras ($\Alg$)
+  and underlying carrier functor $(\Und)$ is given by the following
+  inductive-recursive definition of
   %
   \begin{sorts}
     \sortnamety{\specty}{\Set} \\
@@ -713,14 +715,20 @@ $$
 where $\sortsin{\Cc}{\Ss}$ means that $\Cc$ is one of the $S_i$ in the
 chain ${S_0 \leftarrow \ldots \leftarrow S_n}$. We do not want
 $\sortsin{\termcat}{\Ss}$, as adding a constructor of that sort does
-not add anything to the inductive definition. We formalise the
-membership relation as the following inductive type:
+not add anything to the inductive definition. 
+
+\begin{definition}[Sort membership]
+  We formalise the membership relation as the following inductive
+  type:
 %
-\begin{datatype}{\sortsin{\_}{\_}}{\Cat \to \sortsty \to \Set}
-  \constr{\sortsinhere}{(\Ss : \sortsty)\ (R : \Func{\SortCat{\Ss}}{\SET}) \to \sortsin{\SortCat{\sortssnoc\ \Ss\ R}}{\sortssnoc\ \Ss\ R}} \\
-  \constr{\sortsinthere}{(\Ss : \sortsty)\ (R : \Func{\SortCat{\Ss}}{\SET})\ (\Cc : \Cat) \to \sortsin{\Cc}{\Ss} \to \sortsin{\Cc}{\sortssnoc\ \Ss\ R}}
-\end{datatype}
-%
+  \begin{datatype}{\sortsin{\_}{\_}}{\Cat \to \sortsty \to \Set}
+    \constr{\sortsinhere}{(\Ss : \sortsty)\ (R : \Func{\SortCat{\Ss}}{\SET}) \to \sortsin{\SortCat{\sortssnoc\ \Ss\ R}}{\sortssnoc\ \Ss\ R}} \\
+    \constr{\sortsinthere}{(\Ss : \sortsty)\ (R :
+      \Func{\SortCat{\Ss}}{\SET})\ (\Cc : \Cat) \to \sortsin{\Cc}{\Ss}
+      \to \sortsin{\Cc}{\sortssnoc\ \Ss\ R}}
+  \end{datatype}
+\end{definition}
+
 \begin{example}
   Consider the specification of $\REL$ (\cref{rel-sorts}). If we want
   to say that $\sortsin{\SortCat{[R_0]}}{[R_0,R_1]}$ (recall that

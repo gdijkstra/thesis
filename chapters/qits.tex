@@ -119,7 +119,6 @@ As with the recursion principle, we of course have computation rules:
 \end{align*}
 
 \subsubsection{Function extensionality}
-\label{int:funext}
 
 Even though the interval is equivalent to the unit type, it has the
 surprising property that it implies function extensionality. Having an
@@ -134,6 +133,7 @@ This is like the universal property for the interval with equivalence
 weakened to logical equivalence.
 
 \begin{proposition}[\cite{Hofmann1995,Shulman2011ii}]
+  \label{int:funext}
   The interval type implies function extensionality.
 \end{proposition}
 
@@ -151,8 +151,9 @@ weakened to logical equivalence.
   This assumes that the computation rules of $\intrec$ hold
   definitionally and that the type theory satisfies the $\eta$-law for
   functions definitionally. However, the proof can be easily modified
-  to also work when these equations hold only up to propositional
-  equality.
+  to also work when the $\eta$-law holds only up to propositional
+  equality. It is however essential to this proof that the computation
+  laws for $\intrec$ hold definitionally.
 \end{proof}
 
 \subsection{Quotients and colimits}
@@ -584,9 +585,13 @@ several forms in type theory
 \cite{Hofmann1995,Altenkirch2011ii,Nuo2015}.
 
 Quotient inductive-inductive definitions are furthermore an extension
-of inductive-inductive definitions \cite{Altenkirch2011} as well as a
-restricted, \ie set truncated, form of higher inductive types of
-\cite{Lumsdaine2013}.
+of inductive-inductive definitions \cite{Altenkirch2011}. The idea of
+path constructors comes from the notion of higher inductive types, of
+which the semantics are described in \cite{Lumsdaine2013}. As we only
+consider set truncated types, the definitions we describe are in some
+sense a restriction of the higher inductive types described in that
+note. However, the authors do not consider the combination of higher
+inductive and inductive-inductive definitions.
 
 Inductive definitions with equalities have been studied in Miranda
 \cite{Turner1985} under the name of ``data types with laws''

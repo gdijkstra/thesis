@@ -42,10 +42,10 @@ the natural numbers as a given and building upon this and quotienting
 where needed, as opposed to giving an inductive definition
 directly. For example, the rational numbers can be constructed as
 $\natty \times \natty$ quotiented by the relation
-$(a , b) \sim (c , d)$ if and only $ad = bc$. When quotienting
-infinite sets is not always unproblematic. The usual construction of
-the real numbers as a quotient of Cauchy sequences of rational numbers
-requires the axiom of choice to show that it forms a complete metric
+$(a , b) \sim (c , d)$ if and only $ad = bc$. Quotienting infinite
+sets is not always unproblematic. The usual construction of the real
+numbers as a quotient of Cauchy sequences of rational numbers requires
+the axiom of choice to show that it forms a complete metric
 space. Direct inductive definitions (with equations) can avoid such
 problems, as we will see in \cref{cauchy-reals}.
 
@@ -89,20 +89,20 @@ ourselves to \emph{structurally} recursive definitions: recursive
 calls may only be done on subterms of the patterns on the left hand
 side of the pattern matching clause. This is however not enough to
 ensure termination of definitions. The inductive types themselves also
-have to be of the right shape:: they have to be \emph{strictly
-positive}. If we were to have an inductive type:
+have to be of the right shape: they have to be \emph{strictly
+  positive}. If we were to have an inductive type:
 %
 \begin{datatype}{\Tty}{\Type}
   \constr{\Ta}{(\Tty \to \Tty) \to \Tty}
 \end{datatype}
-then we can define:
+then we could define:
 %
 \begin{align*}
-  &\uh : \Tty \to \emptyty \\
-  &\uh\ (\Ta\ f) \ddefeq \uh\ (f\ (\lambda x . x)) \\
-  \\
   &\oh : \Tty \\
   &\oh \ddefeq \Ta\ (\lambda x . x)
+  \\
+  &\uh : \Tty \to \emptyty \\
+  &\uh\ (\Ta\ f) \ddefeq \uh\ (f\ \oh)
 \end{align*}
 %
 Since $f\ (\lambda x . x)$ is structurally smaller than $\Ta\ f$, the
