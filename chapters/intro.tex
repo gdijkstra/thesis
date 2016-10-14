@@ -451,17 +451,18 @@ simplicial sets in type theory. However, we want to work with
 extending type theory with a strict equality
 \cite{Altenkirch2016ii,Altenkirch2016iii}. In this thesis, we will
 deal with the coherences by simply working with the truncated types:
-we work with sets instead.
+we work with sets instead, \ie types that satisfy uniqueness of
+identity proofs.
 
 \section{Related work}
 
 The work in this thesis builds on the work on inductive-inductive
-types \cite{Altenkirch2011}. The framework we present extends the work
-in that paper in several dimensions: as opposed to having one
-constructor of sort $\SET$ and one constructor of sort $\FAM$, our
-framework supports a larger class of sorts and any number of
-constructors. Apart from that, our framework also introduces support
-for path constructors.
+types \cite{NordvallForsberg2013,Altenkirch2011}. The framework we
+present extends the work in that paper in several dimensions: as
+opposed to having one constructor of sort $\SET$ and one constructor
+of sort $\FAM$, our framework supports a larger class of sorts and any
+number of constructors. Apart from that, our framework also introduces
+support for path constructors.
 
 The notion of path constructors comes from the concept of higher
 inductive types, as used in \cite{UFP2013}. A first attempt at
@@ -508,12 +509,12 @@ The thesis is organised as follows:
 \item The last chapter, \cref{conclusion}, presents the conclusions of
   the thesis along with a discussion of the presented results. We also
   point out several avenues for future work.
+\item \Cref{containers} discusses some ways to generalise containers
+  to accommodate the kind of functors we need in our framework.
 \item \Cref{untruncated} is about what the difficulties are when
   moving from a set-based setting to the untruncated case. Here we go
   into detail about the coherence issues we face and how some of these
   can be solved in an ad-hoc manner.
-\item \Cref{containers} discusses some ways to generalise containers
-  to accommodate the kind of functors we need in our framework.
 \end{itemize}
 
 \subsection{List of main contributions}
