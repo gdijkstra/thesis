@@ -218,6 +218,10 @@ with $X : \Set$ as its parameter:
   \constr{\Fstarc}{F (F^* X) \to F^* X}
 \end{datatype}
 
+Note that if we want to write down the abovementioned definition in
+Agda, we have to make sure that $F$ is a strictly positive functor. We
+cannot have the definition be parametric in the functor $F$.
+
 \begin{proposition}
   \label{free-monad-thm}
   $F^*$, if it exists, is a monad on $\SET$
@@ -743,16 +747,24 @@ not add anything to the inductive definition.
 Suppose we have a chain of sorts
 $S_0 \from S_1 \from \hdots \from S_n$ and a functor
 $\Und : \Func{\Cc}{S_n}$, then naturally we can extend this functor to
-$\extendfunc{\Und} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by composing
-with the forgetful functors. We can implement this operation with sort
-membership, \ie for every specification $\Ss : \sortsty$ with a
-functor $\Und : \Func{\Cc}{\SortCat{\Ss}}$, we can define the function:
-$$
-\extendfunc{\Und} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to \Func{\Cc}{S_i}
-$$
-This function is defined by induction over the proof of
-$\sortsin{S_i}{\SortCat{\Ss}}$. We will usually just write
-$\extendfunc{\Und} X$, leaving the membership proof implicit.
+$\extendfunc{\Und} : \Func{\Cc}{S_i}$ for any $S_i$ in the chain by
+composing with the forgetful functors. We can implement this operation
+with our inductive definition of sort membership:
+
+\begin{definition}[Extending functors along sort membership]
+  For every specification $\Ss : \sortsty$ with a functor
+  $\Und : \Func{\Cc}{\SortCat{\Ss}}$, we define the function:
+  $$
+  \extendfunc{\Und} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to
+  \Func{\Cc}{S_i}
+  $$
+  This function is defined by induction over the proof of
+  $\sortsin{S_i}{\SortCat{\Ss}}$. 
+
+  For the action of $\extendfunc{\Und}$ on objects and morphisms we
+  will usually leave the membership proof argument implicit, \eg we
+  just write $\extendfunc{\Und} X$ and $\extendfunc{\Und} f$.
+\end{definition}
 
 \subsection{Makkai's dependent sorts}
 
@@ -802,9 +814,14 @@ on a \emph{direct category}.
 Intuitively this means that all the arrows go in the ``same
 direction'' and that there are no non-trivial automorphisms.
 
-There is also no finiteness restriction on this, so one could also
-talk about presheaves from the simplex category, without the
-degeneracies, $\Delta^+$:
+If a category $\Cc$ is such that $\opcat{\Cc}$ is direct, then $\Cc$
+is an \emph{inverse category}. Considering presheaves on a direct
+category is the same as considering functors of an inverse category
+into $\SET$.
+
+There is also no finiteness restriction on direct categories, so one
+could also talk about presheaves from the simplex category, without
+the degeneracies, $\Delta^+$:
 $$
 \xymatrix{
 \cdot     
@@ -1639,6 +1656,45 @@ constructors:
 We cannot alternate between the sorts in Agda, which prevents us from
 defining types as the one given above. Our framework has no such
 restriction.
+
+Furthermore, Agda allows for certain negative inductive
+definitions. Its positivity checker only checks whether the recursive
+occurrences referring to the type being defined are in strictly
+positive positions. It does not check whether references to previous
+\emph{constructors} are in strictly positive positions. For example,
+the following definition is accepted:
+%
+\begin{datatype}{\Aty}{\Set}
+  \constr{\Aco}{\Aty} \\
+  \constr{\Aci}{((\Aco = \Aco) \to \Aty) \to \Aty}
+\end{datatype}
+%
+The operation $\lambda (X,\theta) . (\theta = \theta) \to \Aty$ is not
+functorial, so we cannot represent this example in our framework. As
+of yet, it is unclear whether this is a bug in Agda's positivity
+checker, \ie we have not found a way yet to use this to prove falsity.
+
+Similarly, Agda allows for sorts which are not positive. For example,
+Agda accepts the following definition:
+%
+\begin{sorts}
+    \sortnamety{\Aty}{\Set} \\
+    \sortnamety{\Bty}{(\Aty \to \Aty) \to \Set}  
+\end{sorts}
+%
+\begin{datatype}{\Aty}{}
+  \constr{\Aco}{\Aty}
+\end{datatype}
+%
+\begin{datatype}{\Bty}{}
+  \constr{\Bci}{\Bty\ (\lambda x . x)}
+\end{datatype}
+%
+We cannot define definition of this shape in our framework, as the
+operation $\lambda X . (X \to X)$ is not functorial, hence we cannot
+define its dependent sorts. As with the previous example, it is as of
+yet unclear to us whether definitions of these form may lead to
+inconsistencies.
 
 \subsection{Higher inductive types}
 
