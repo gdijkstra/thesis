@@ -239,7 +239,7 @@ cannot have the definition be parametric in the functor $F$.
   $$
   \algcat{F}(L X , (Y,\rho)) = (X \to Y)
   $$
-  using the following equational reasoning in \cref{f-star-monad}:
+  using the equational reasoning in \cref{f-star-monad}.
 
   This shows that $L \dashv U$ and since $UL = F^*$, that therefore
   $F^*$ is a monad.
@@ -307,12 +307,12 @@ $M$.
 \end{theorem}
 
 This theorem shows us that we can think of the class free monads being
-the same as the class of ordinary inductive types. A generalisation of
-ordinary inductive types would then be similar to considering a larger
-class of monads than just free monads. In \cite{Shulman2011} the
-author proposes that higher inductive type should correspond to a
-notion of \emph{presented monad}, \ie a monad that is defined in terms
-of generators and relations, or in HIT terminology: point and path
+the same as the class of ordinary inductive types. This suggests that
+generalising ordinary inductive types amounts to carving out a class
+of monads that includes free monads. In \cite{Shulman2011} the author
+proposes that higher inductive type should correspond to a notion of
+\emph{presented monad}, \ie a monad that is defined in terms of
+generators and relations, or in HIT terminology: point and path
 constructors. In \cite{Lumsdaine2013}, the authors give semantics of
 HITs by constructing these presented monads. As these constructions
 are done in a wide class of model categories, it is a construction
@@ -510,8 +510,23 @@ as $[F_0,F_1]$.
     &F_1\ (X,\theta_0) \ddefeq X
   \end{align*}
 
-  The category of algebras for the natural numbers definition is then
-  $\Alg_{[F_0,F_1]}$.
+  Unfolding definitions, we have
+  $\Alg_{[F_0,F_1]} = \dialgcat{F_1}{\Und_{[F_0]}}$ and
+  $\Alg_{[F_0]} = \dialgcat{F_0}{\id} = \algcat{F_0}$. The objects of
+  $\Alg_{[F_0,F_1]}$ are then:
+  %
+  \begin{align*}
+    \Alg_{[F_0,F_1]} =&\ (X : | \Alg_{[F_0]} |) \times (\theta : F_1 X \to \Und_{[F_0]} X)  \\
+    =&\ (X : \Set) \times (\theta_0 : \unitty \to X) \times (\theta_1 : X \to X)
+  \end{align*}
+  %
+  For the morphisms of $\Alg_{[F_0,F_1]}$, we have for algebras
+  $(X,\theta_0,\theta_1), (Y,\rho_0,\rho_1)$:
+  \begin{align*}
+    &\ \Alg_{[F_0,F_1]}((X,\theta_0,\theta_1),(Y,\rho_0,\rho_1))  \\
+    =&\ (f : \Alg_{[F_0]}((X,\theta_0),(Y,\rho_0))) \times (f_1 : \Und_{[F_0]} f \circ \theta_1 = \rho_1 \circ F_1 f) \\
+    =&\ (f : X \to Y) \times (f_0 : f \circ \theta_0 = \rho_0) \times (f_1 : f \circ \theta_1 = \rho_1 \circ f)
+  \end{align*}
 \end{example}
 
 \subsection{Avoiding induction-recursion}

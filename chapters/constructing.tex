@@ -359,6 +359,31 @@ does not help us much as constructing coproducts in categories of
 algebras is rather involved, and already involves sequential colimits
 themselves.
 
+\subsubsection{Moving beyond $\omega$}
+
+In \cref{infinitely-branching-trees}, we hinted at the possibility of
+constructing quotient inductive types where the recursive positions
+are in some sense \emph{finitary}. In this situation it seems we can
+construct the ordinary inductive part first and then quotient it once
+and get what we want. When we have an inductive definition with
+\emph{infinitary} recursive occurrences, such as the example of the
+infinitely branching trees given in \cref{infinitely-branching-trees},
+then this construction does not work. In that situation it is
+essential that the quotienting happens at the same time as the
+construction of the ordinary inductive parts.
+
+In this chapter we consider such a construction with sequential
+colimits. However, everything we present in this chapter is about
+sequential colimits of length $\omega$ and with all the functors
+involved preserving $\omega$-colimits. This means that the functors
+are finitary, which would then imply that there exists a construction
+where we only need to quotient once. However, the constructions given
+here do not make essential use of the fact that the cochains are of
+length $\omega$ and therefore should carry over to cochains of
+arbitrary length. Making this precise is not a trivial matter however,
+as we would first have to come up with an appropriate formalisation of
+ordinals, which we defer to future work.
+
 \subsection{Constructing $\SET$-sorted quotient inductive-inductive definitions}
 
 In this section we will look at the simplified setting of $\SET$-sorted quotient
@@ -1028,6 +1053,15 @@ where all the arguments functors preserve sequential colimits.
   $U : \Func{\Alg_s}{\SET}$ by induction on $s$. Since left adjoints
   preserve colimits, $L\ \emptyset$ is the initial object of $\Alg_s$.
 \end{proof}
+
+Making the theorem work for arbitrary quotient inductive-inductive
+definitions means generalising in two dimensions. We have to be able to deal with:
+\begin{itemize}
+\item arbitrary sorts: the constructions given in this chapter only work for $\SET$-sorted definitions
+\item cochains of arbitrary length: our construction works with
+  colimits of length $\omega$. In general we will need longer
+  cochains.
+\end{itemize}
 
 \section{Related work}
 
