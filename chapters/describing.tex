@@ -212,12 +212,12 @@ functor for $\bar{F}_X$ to be strictly positive as well.
 
 We can write the functor $F^*$ down as a parametrised inductive type,
 with $X : \Set$ as its parameter:
-
+%
 \begin{datatype}{F^* X}{\Set}
   \constr{\Fstareta}{X \to F^* X} \\
   \constr{\Fstarc}{F (F^* X) \to F^* X}
 \end{datatype}
-
+%
 Note that if we want to write down the abovementioned definition in
 Agda, we have to make sure that $F$ is a strictly positive functor. We
 cannot have the definition be parametric in the functor $F$.
