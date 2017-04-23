@@ -4,7 +4,7 @@
 In this thesis we set out to develop a theory of \emph{quotient
   inductive-inductive definitions}, which are inductive-inductive
 definitions \cite{NordvallForsberg2013} extended with path
-constructors. This first chapter we will give some context of the
+constructors. In this first chapter we will give some context of the
 problem and discuss prior art and related concepts. The chapter is
 concluded by an overview of the thesis and a list of contributions.
 
@@ -12,14 +12,14 @@ concluded by an overview of the thesis and a list of contributions.
 In mathematics, induction is an important proof technique. The most
 common and perhaps oldest form of induction is induction on the
 natural numbers, dating back to at least Plato
-\cite{Acerbi2000}. Induction on the natural numbers gives us a way
-want to prove that a formula $\phi(n)$ holds for any $n \in \natty$:
-we have to prove $\phi(0)$ and prove that for any $n \in \natty$ that
-$\phi(n)$ implies $\phi(n+1)$. In fact, the fact that the natural
-numbers satisfy this property can be seen as one of the defining
-properties of the natural numbers. This was first written down
-formally by Guiseppe Peano \cite{Peano1889}. He defined the natural
-numbers to be a set $\natty$ with the properties such as:
+\cite{Acerbi2000}. Induction on the natural numbers gives us a way to
+prove that a formula $\phi(n)$ holds for any $n \in \natty$: we have
+to prove $\phi(0)$ and prove that for any $n \in \natty$, $\phi(n)$
+implies $\phi(n+1)$. That the natural numbers satisfy this property
+can be seen as one of the defining properties of the natural
+numbers. This was first written down formally by Guiseppe Peano
+\cite{Peano1889}. He defined the natural numbers to be a set $\natty$
+with properties such as:
 \begin{itemize}
 \item $0 \in \natty$
 \item for any $n \in \natty$, $\natsucc(n) \in \natty$.
@@ -29,11 +29,11 @@ The remaining axioms describe the equality relation on the natural
 numbers and postulate the injectivity of the $\natsucc$ function
 symbol and that $\natzero \neq \natsucc\ n$ for all $n \in \natty$.
 
-A consequence of the induction principle for natural numbers, is that
+A consequence of the induction principle for natural numbers is that
 we can define functions $\natty \to X$, for some set $X$,
 \emph{recursively}: it suffices to define $f\ 0$ and
 $f\ (\natsucc(n))$, where we may refer to $f\ n$. We can use this to
-define addition $n + m$ on the natural numbers, by recursion on the
+define addition $n + m$ on the natural numbers by recursion on the
 second argument $m$, \ie we define $n + 0 \ddefeq n$ and
 $n + \natsucc(m) \ddefeq \natsucc(n+m)$.
 
@@ -105,9 +105,11 @@ then we could define:
   &\uh\ (\Ta\ f) \ddefeq \uh\ (f\ \oh)
 \end{align*}
 %
-Since $f\ (\lambda x . x)$ is structurally smaller than $\Ta\ f$, the
-definition of $\uh$ is structurally recursive. However, it does give us
-a term that does not have a normal form, namely $\uh\ \oh$.
+where $\emptyty$ denotes the empty type.
+
+Since $f\ \oh$ is structurally smaller than $\Ta\ f$, the definition
+of $\uh$ is structurally recursive. However, it does give us a term
+that does not have a normal form, namely $\uh\ \oh$.
 
 Algebraic data types allow us to specify types or a family of types
 parametrised by type variables. As these are \emph{parameters}, we are
@@ -161,7 +163,7 @@ these dependent pattern matching definitions can be translated to ones
 using only elimination principles \cite{Goguen2006}. The restrictions
 on the type of equality used can be relaxed in certain cases
 \cite{Cockx2014}, giving us a form of dependent pattern matching which
-is compatible with homotopy type theory.
+is compatible with homotopy type theory \cite{UFP2013}.
 
 In Agda, apart from inductive families, we can also define inductive
 types mutually with other inductive types/families or functions,
@@ -191,7 +193,7 @@ to guide us to appropriate generalisations.
 \subsection{In type theory}
 \label{in-type-theory}
 Extending a type theory with a particular inductive definition means
-that we have the extend the theory with four sets of inference rules:
+that we have to extend the theory with four sets of inference rules:
 %
 \begin{itemize}
 \item \emph{type formation rules} ($\natty$ is a type)
@@ -209,8 +211,8 @@ this notion of equality and given that we have a universe of types
 available, one can derive that the constructors are disjoint and
 injective.
 
-The declaration of an inductive definition involves given rules in all
-these classes. However, as observed by Backhouse et
+The declaration of an inductive definition involves giving rules in
+all these classes. However, as observed by Backhouse et
 al. \cite{Backhouse1989}, it is enough to give the type formation
 rules and introduction rules: the elimination principle along with its
 computation rules can be derived from them. This fact is also
@@ -279,10 +281,11 @@ The equality defined above is usually referred to as
 \emph{propositional} equality. This name comes from the idea that
 equality is propositional, \ie any two terms of that type are
 equal. If we normalise a closed term of an identity type $x = y$, it
-normalises to $\refl$, hence it gives us that $x \equiv y$. As such,
-one would expect that if we have two terms $p, q : x = y$, then also
-$p = q$, \ie we have \emph{uniqueness of identity proofs}. Using
-dependent pattern matching this is easy to prove:
+normalises to $\refl$, hence it gives us a definitional equality
+$x \equiv y$. As such, one would expect that if we have two terms
+$p, q : x = y$, then also $p = q$, \ie we have \emph{uniqueness of
+  identity proofs}. Using dependent pattern matching this is easy to
+prove:
 %
 \begin{align*}
   &\uip : (A : \Type)\ (x\ y : A)\ (p\ q : x = y) \to p = q \\
@@ -310,7 +313,7 @@ topological spaces up to homotopy. Types can therefore be thought of
 as \inftygrpds \cite{VanDenBerg2011,Lumsdaine2009} and therefore also
 as topological spaces up to homotopy. This correspondence leads to a
 geometric intuition for type theory: types can be seen as spaces with
-its identity types as the paths in said type.
+their identity types as their path spaces.
 
 One important axiom that is considered in homotopy type theory, is the
 univalence axiom, which roughly tells us that isomorphic types are
