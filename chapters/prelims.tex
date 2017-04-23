@@ -51,23 +51,31 @@ pairs/products. The type formation rule is similar to that of
 $\Pi$-types: if we have a type $A$ such that if we have $a : A$ in our
 context, the term $B\ a$ is a type, then we have that the following is a type:
 $$
-(x : A) \times B\ a
+(a : A) \times B\ a
 $$
-This is traditionally written as $\Sigma (x : A) . B\ a$ or
+This is traditionally written as $\Sigma (a : A) . B\ a$ or
 $\Sigma A . B$, but we are using a notation here which mirrors Agda's
 notation for $\Pi$-types.
 
-The type $(x : A) \times B\ x$ comes with two projection functions:
+If we have $a : A$ and $B\ a$, then we can form the term:
+$$
+(a, b) : (a : A) \times B\ a
+$$
+
+The type $(a : A) \times B\ a$ comes with two projection functions:
 \begin{itemize}
-\item $\pi_0 : (x : A) \times B\ x \to A$
-\item $\pi_1 : (a : (x : A) \times B\ x) \to B\ (\pi_1\ a)$
+\item $\pi_0 : (a : A) \times B\ a \to A$
+\item $\pi_1 : (x : (a : A) \times B\ a) \to B\ (\pi_0\ x)$
 \end{itemize}
 Since we are explicitly giving a name to the first element of the
 pair, we can also use the following notation, where we let the scope
-of $x$ range over the whole expression after its introduction:
+of $a$ range over the whole expression after its introduction:
 $$
-\pi_1 : (x : A) \times B\ x \to B\ x
+\pi_1 : (a : A) \times B\ a \to B\ a
 $$
+The projection functions have as $\beta$-laws: for every $a : A$ and
+$b : B\ a$, $\pi_0\ (a,b) \defeq a$ and $\pi_1\ (a,b) \defeq b$.
+
 The $\eta$-law for $\Sigma$-types gives us the following definitional
 equality for every pair $z : \Sigma A B$:
 $$
@@ -191,7 +199,7 @@ ordinary inductive types as well as indexed inductive types.
 In this thesis, the inductive definitions we need to formalise the
 theory of quotient inductive-inductive types, can all be written using
 W-types. However, for sake of convenience and presentational clarity,
-we will use Agda its notation to present these. We will also sometimes
+we will use Agda notation to present these. We will also sometimes
 give function definitions by pattern matching, but these can be
 trivially rewritten using just the eliminators.
 
@@ -222,6 +230,11 @@ equality between terms in the type theory itself, referred to as
   \J\ A\ P\ m\ x\ x\ (\refl\ x) \defeq m\ x
   $$
 \end{definition}
+
+\begin{remark}
+  The elimination principle for identity types is also referred to as
+  the \emph{path induction} principle.
+\end{remark}
 
 \begin{remark}
   While it is called \emph{propositional} equality, the type $x = y$
@@ -265,7 +278,8 @@ equality between terms in the type theory itself, referred to as
   \item left inverse: $(p : x = y) \to \trans{\sym{p}}{p} = \refl_y$
   \item right inverse: $(p : x = y) \to \trans{p}{\sym{p}} = \refl_x$
   \end{itemize}
-  These can all be shown to hold by straightforward path induction.
+  These can all be shown to hold by performing path induction on the
+  paths.
 \end{proof}
 
 \begin{remark}
@@ -298,7 +312,7 @@ be \emph{transported} to inhabitants of $B\ y$:
   Given $A : \Type$ and $B : A \to \Type$, we define:
   \begin{align*}
     &\transport\ B : (p : x = y) \to B\ x \to B\ y \\
-    &\transport\ B\ p\ a \ddefeq J\ A\ (\lambda x\ y\ q . B\ x \to B\ y)\ (\lambda x\ a . a)\ p\ a
+    &\transport\ B\ p\ a \ddefeq J\ A\ (\lambda x\ y\ q . B\ x \to B\ y)\ (\lambda x\ a . a)\ x\ y\ p\ a
   \end{align*}
 \end{definition}
 
@@ -327,7 +341,7 @@ The equality relation is a congruence: it is preserved by any function.
   paths) by path induction:
   \begin{align*}
     &\ap : (f : X \to Y) \to x = y \to f\ x = f\ y \\
-    &\ap\ f\ p \ddefeq \J\ (\lambda x\ y\ p . f\ x = f\ y)\ (\lambda x . \refl_{f\ x})\ x\ y\ p
+    &\ap\ f\ p \ddefeq \J\ X\ (\lambda x\ y\ p . f\ x = f\ y)\ (\lambda x . \refl_{f\ x})\ x\ y\ p
   \end{align*}
 \end{proof}
 
@@ -400,16 +414,16 @@ non-dependent ones, which are easier to manipulate and reason about.
 
 \begin{remark}
   When we are dealing with equalities between compositions of paths
-  such as in the above proposition, then it makes sense to denote this
-  as a commutative diagram. The above example translates to the
+  such as in the above proposition, then it makes sense to represent
+  this as a commutative diagram. The above example translates to the
   following diagram:
   $$
   \xymatrix{
     f\ x 
     \ar@{-}[r]^{p}
-    \ar@{-}[d]_{\ap f r}
+    \ar@{-}[d]_{\ap\ f\ r}
     &g\ x
-    \ar@{-}[d]^{\ap g r}
+    \ar@{-}[d]^{\ap\ g\ r}
     \\
     f\ y
     \ar@{-}[r]_{q}
@@ -442,7 +456,10 @@ of stating that a type is equivalent to the unit type is that it is
 We can show that the identity types for a contractible type are again
 contractible: $\iscontr\ A \to (x\ y : A) \to \iscontr\ (x = y)$. The
 level at which the identity types vanish is the so called
-\emph{truncation level} or \emph{h-level} of the type:
+\emph{truncation level} or \emph{h-level} of the type. The level is
+indicated using natural numbers, but starting at $-2$ instead of $0$,
+denoted as $\natty_{-2}$:
+
 \begin{definition}
   A type has truncation level $n : \natty_{-2}$, if we have a proof of
   $\istrunc{n}\ A$ where $\istrunc{n}$ is defined recursively over $n$:
@@ -477,6 +494,9 @@ The next truncation level, level $0$, are the so called sets:
 \begin{definition}
   A type is a \emph{set} if it has truncation level $0$, \ie for all
   $x, y : A$, $x = y$ is propositional.
+  $$
+  \isset\ X \ddefeq \istrunc{0}\ X
+  $$
 \end{definition}
 The property of being a set is also called ``uniqueness of identity
 proofs''.
@@ -511,7 +531,7 @@ A very weak notion of types being equal is ``logical equivalence'':
 With logical equivalence we do not have any requirements on the two
 functions between the two types, just that there exist any. There
 being a logical equivalence is also not a proposition: the type
-$\boolty \logequiv \boolty$ has two distinct inhabitants:
+$\boolty \logequiv \boolty$ has at least two distinct inhabitants:
 $(\id_{\boolty} , \id_{\boolty})$ and $(\boolnot , \boolnot)$.
 
 The notion of isomorphism also requires the two functions to be
@@ -581,15 +601,15 @@ equivalences furthermore satisfy the groupoid laws.
 We have seen that we can formulate an appropriate notion of equality
 between types, but now we have two different ways of stating equality
 on the universe of types: equivalence and identity types. All the
-things we prove about identity types, have to proven again for
-equivalences. 
+things we have proven about identity types, have to proven again for
+equivalences.
 
 While identity types come with the path induction principle,
 equivalences do not enjoy such an induction principle. Even though we
 lack such a principle, we still can show that equivalences form an
 equivalence relation and also satisfy the groupoid laws. Once we try
 to show that equivalence gives us a congruence relation, we get
-stuck. In other words: we do not have a prove of the statement that
+stuck. In other words: we do not have a proof of the statement that
 every construction in type theory is invariant under equivalence.
 
 \begin{definition}
@@ -646,10 +666,10 @@ two dependent functions $f, g : (x : X) \to P\ x$:
   &\happly\ f\ g\ p = \lambda x . \ap\ (\lambda h . h\ x)\ p
 \end{align*}
 %
-Function extensionality is not something that is provable in ordinary
-\mltt. However, it does follow from univalence and as we will see, it
-also follows from having quotients. In fact, these imply we have
-\emph{strong function extensionality}:
+Function extensionality is not provable in ordinary \mltt. However, it
+does follow from univalence and as we will see, it also follows from
+having quotients. In fact, these imply we have \emph{strong function
+  extensionality}:
 
 \begin{proposition}[Strong function extensionality]
   For any two functions $f, g : (x : X) \to P\ x$, we have a witness of:
@@ -664,9 +684,9 @@ A proof of this statement can be found in \cite{UFP2013}.
 
 We often work with nested $\Sigma$-types and have to provide
 equivalences between them. There are basic equivalences that we often
-use to build up our bigger equivalences of.
+use to build up our bigger equivalences.
 
-For non-dependent products, we can show that it satisfies laws of a
+For the non-dependent product, we can show that it satisfies laws of a
 commutative monoid using univalence (these do not hold
 definitionally):
 \begin{itemize}
