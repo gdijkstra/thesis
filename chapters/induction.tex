@@ -25,7 +25,7 @@ requires us to have defined the objects and morphisms:
   $Y : | \Cc |$ the set $\Cc(X,Y)$ is contractible.
 \end{definition}
 
-From this definition it also immediate that being initial is
+From this definition it is also immediate that being initial is
 propositional.
 
 \section{Categorical characterisation of induction}
@@ -33,7 +33,7 @@ propositional.
 The induction principle of an inductive type $\Tty$ gives us a way to
 construct dependent functions for families defined on $\Tty$. The
 family $P$ which we are eliminating into is also called the
-\emph{motive} of the inductive. By providing \emph{methods} for every
+\emph{motive} of the induction. By providing \emph{methods} for every
 constructor for this motive, the induction principle gives us a
 function $(x : \Tty) \to P\ x$. Recall that in the case of the natural
 numbers, the methods we have to supply have the following types:
@@ -139,19 +139,20 @@ dependent function along with computation rules, \ie everything we get
 from the induction principle:
 
 \begin{definition}
-  Given an algebra family $(P,m_0,m_1)$, a \emph{dependent algebra
+  Given an algebra family $(P,m_{\natzero},m_{\natsucc})$, a \emph{dependent algebra
     morphism} is a dependent function $s : (x : X) \to P\ x$ equipped
   with the computation rules:
   % 
   \begin{itemize}
   \item $s_{\natzero} : s\ \natzero = m_{\natzero}$
+
   \item $s_{\natsucc} : (n : \natty) \to s\ (\natsucc\ n) = m_{\natsucc}\ n\ (s\ n)$
   \end{itemize}
 \end{definition}
 
 As the definitions of function into $X$ and section only refer to the
 category structure, this generalises to any category. The induction
-principle that gives us a dependent morphism for any family can be
+principle that gives us a dependent morphism for any family can
 therefore be phrased abstractly as follows:
 
 \begin{definition}
@@ -458,7 +459,7 @@ that $\sortsin{S_i}{\SortCat{\Ss}}$.
   We will proceed by showing that $X \times Y : \Alg_s$ has an algebra
   structure. Let us define for $X, Y$ the morphism
   $\phi_{\extendfunc{\Und}_s} : S_i(\extendfunc{\Und}_s(X \times Y), \extendfunc{\Und}_s X \times \extendfunc{\Und}_s X)$ as
-  $\phi_u \ddefeq \langle \extendfunc{\Und}_s \pi_0 , \extendfunc{\Und}_s \pi_1 \rangle$. Per assumption
+  $\phi_{\extendfunc{\Und}_s} \ddefeq \langle \extendfunc{\Und}_s \pi_0 , \extendfunc{\Und}_s \pi_1 \rangle$. Per assumption
   $\phi_{\extendfunc{\Und}_s}$ has an inverse $\phi_{\extendfunc{\Und}_s}^{-1}$. We can then define the
   algebra structure $\zeta$ on $X \times Y$ as follows:
   $$
@@ -502,7 +503,7 @@ that $\sortsin{S_i}{\SortCat{\Ss}}$.
   \xymatrix{
     F(X \times Y) \ar[r]^{\phi_F} \ar[d]_{F \pi_0}
     &FX \times FY \ar[r]^{\theta \times \rho} \ar[dl]^{\pi_0}
-    &\extendfunc{\Und}X \times \extendfunc{\Und}Y \ar[r]^{\phi_{\Und}^{-1}} \ar[dr]_{\pi_0}
+    &\extendfunc{\Und}X \times \extendfunc{\Und}Y \ar[r]^{\phi_{\extendfunc{\Und}}^{-1}} \ar[dr]_{\pi_0}
     &\extendfunc{\Und}(X \times Y) \ar[d]_{\extendfunc{\Und}_s \pi_0}
     \\
     FX \ar[rrr]_{\theta} &&&\extendfunc{\Und}_s X
@@ -819,6 +820,10 @@ the type $\tau$:
 &= ((Y,\rho) : | \algcat{F} |) \times ((p,p_0) : \algcat{F}((Y,\rho),(X,\theta)))  
 \end{align*}
 %
+The idea here is that we want to determine the hypotheses needed to
+prove $(x : X) \to P\ x$. The type $\tau$ that we will derive below,
+is the type of hypotheses.
+
 We set $Y$ to $(x : X) \times P\ x$ and $p$ to $\pi_0$. We then have
 to simplify the type
 $(\rho : F ((x : X) \times P\ x)) \times (p_0 : \pi_0\ \circ \rho =
@@ -840,11 +845,11 @@ holds for all values of type $X$ ``contained'' in $x$.
 
 Now that we know what the algebra families are, we want to go on and
 derive the dependent algebra morphisms. Let
-$(X,\theta) : | \algcat{F}$ with an algebra family $P : X \to \Set$,
+$(X,\theta) : | \algcat{F} |$ with an algebra family $P : X \to \Set$,
 $m : (x : FX) \times \Box_F\ P\ x \to P\ (\theta\ x)$. Our goal is to
 find a type $\tau$ such that the following equivalence holds:
 $$
-(s : (x : X) \to P\ x) \times \tau = (f : \algcat{F}((X,\theta),(\Sigma X . P , \tilde{m}))) \times (\issection\ f)
+((s : (x : X) \to P\ x) \times \tau) = (f : \algcat{F}((X,\theta),(\Sigma X . P , \tilde{m}))) \times (\issection\ f)
 $$
 where $(\Sigma X . P , \tilde{m})$ is the total space of the family of
 algebras $(P,m)$, where $\tilde{m}$ is given as the composite:
@@ -1215,7 +1220,7 @@ here.
 Our first goal is to derive a family $\Fam_{\FAM} : | \FAM | \to \Set$
 that satisfies, for any $X : | \FAM |$:
 $$
-\Fam_{\FAM} = (Y : | \FAM |) \times \FAM(Y,X)
+\Fam_{\FAM}\ X = (Y : | \FAM |) \times \FAM(Y,X)
 $$
 We derive the definition by taking the right hand side of the above
 equation and performing the following equational reasoning:
@@ -1389,8 +1394,8 @@ $P : \Fam_{\Alg_s}\ X$ $\Box_F\ P$ has the following type:
 $$
 \Box_F\ P : (V : \Fam_{S_{i-1}}\ F^0X) \times (W : (x : R_i (F^0 X)) \to \Box_{R_i}\ V\ x \to F^1\ X\ x \to \Set)
 $$
-Splitting this in its constituents will turn out to be useful, just as
-we have done with the functors itself. Let us call the first and
+Splitting this into its constituents will turn out to be useful, just
+as we have done with the functors itself. Let us call the first and
 second projections of this $\Box_{F^0}$ and $\Box_{F^1}$ respectively:
 %
 \begin{align*}
