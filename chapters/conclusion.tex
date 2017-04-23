@@ -17,11 +17,12 @@ entails that we have to consider only the point and first path
 constructors, as anything higher will be trivial. 
 
 In the examples of \cref{qits}, we uncovered that quotient
-inductive-inductive definitions set itself apart from ordinary
+inductive-inductive definitions set themselves apart from ordinary
 inductive definitions in the following regards:
 %
 \begin{itemize}
-\item apart from defining a single type, we have a collection of \emph{dependent sorts}
+\item instead of defining a single type, we may have a collection of
+  \emph{dependent sorts}
 \item any constructor may \emph{refer to any previous constructor}
 \item the result type of a constructor may be an \emph{equation} in
   any of the sorts, \ie we allow for \emph{path constructors}
@@ -74,10 +75,10 @@ initiality holds for which we need to produce a constant algebra
 family (this is the construction of products). Establishing that the
 resulting morphism is unique can be done by employing the induction
 principle again with the motive being the pointwise equivalence of the
-two morphisms. Giving the methods then amounts to given the equaliser
+two morphisms. Giving the methods then amounts to giving the equaliser
 of the two morphisms. Since we already know the categorical structure
 of the algebras, proving that the section principle and initiality
-coincide then amounts to giving constructions products and
+coincide then amounts to giving constructions of products and
 equalisers. This approach saves us from first having to come up with
 an induction principle.
 
@@ -89,9 +90,8 @@ associativity. Initiality is an attractive property in the light of
 working in an untruncated setting, \ie working with hom-types as
 opposed to hom-sets, as we do not have to bother with the category
 laws and hence do not have to deal with any further coherence
-laws. However, it seems that as soon as we want to do something useful
-with the algebras, we need to have all category structure and laws
-available.
+laws. However, comparing it to the section principle requires us to
+use more category structure and laws.
 
 The second part of \cref{induction} gives a derivation of the
 induction principle for quotient inductive-inductive
@@ -156,7 +156,7 @@ constructors.
 
 Given that our definition of quotient inductive-inductive types can be
 formulated inside type theory, one avenue for future work would be
-applying this definition to generic programming ideas. Having this
+applying this definition to generic programming ideas. Having these
 definitions as the basis of the implementation of inductive
 definitions in your theory is useful when one wants to use
 metaprogramming techniques to define programs abstracting over data
@@ -223,4 +223,6 @@ also argue that the naive approach gets unworkable very quickly. To
 adequately describe a theory of higher inductive types, one has to
 turn to \inftycats. Defining \inftycats in type theory is ongoing work
 and seems to require extending the type theory with an internal notion
-of strict equality \cite{Altenkirch2016,Altenkirch2016iii}.
+of strict equality, which allows us to talk about definitional
+equalities in the type theory itself, as well as propositional
+equality \cite{Altenkirch2016,Altenkirch2016iii}.

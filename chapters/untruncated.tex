@@ -40,9 +40,9 @@ the case of associativity interacting with itself, it is as follows:
   following commutes:
   $$
   \xymatrix{
-    &(i \circ (h \circ g)) \circ f \ar@{-}[dr]^{\assoc i (h \circ g) f} &\\
-    ((i \circ h) \circ g) \circ f \ar@{-}[ur]^{(\assoc i h g) \circ f} \ar@{-}[d]_{\assoc (i \circ h) g f}  &&i \circ ((h \circ g) \circ f) \ar@{-}[d]^{i \circ \assoc h g f}\\
-    (i \circ h) \circ (g \circ f) \ar@{-}[rr]_{\assoc i h (g \circ f)} &&i \circ (h \circ (g \circ f))
+    &(i \circ (h \circ g)) \circ f \ar@{-}[dr]^{\assoc\ i\ (h \circ g)\ f} &\\
+    ((i \circ h) \circ g) \circ f \ar@{-}[ur]^{(\assoc\ i\ h\ g)\ \circ f} \ar@{-}[d]_{\assoc\ (i \circ h)\ g\ f}  &&i \circ ((h \circ g) \circ f) \ar@{-}[d]^{i\ \circ\ \assoc\ h\ g\ f}\\
+    (i \circ h) \circ (g \circ f) \ar@{-}[rr]_{\assoc\ i\ h\ (g \circ f)} &&i \circ (h \circ (g \circ f))
   }
   $$
 \end{definition}
@@ -70,7 +70,7 @@ definition. In \cite{Cranch2013}, the author shows essentially that we
 cannot find a definition of the category of pointed types that
 satisfies the category laws strictly. Since pointed types are a
 special case of $F$-algebras, we therefore cannot hope to find a nice
-of $\algcat{F}$ that is strict.
+definition of $\algcat{F}$ that is strict.
 
 The way to deal with coherences is by considering \inftycats
 \cite{Camarena2013}. The usual definitions/models of \inftycats are
@@ -152,8 +152,8 @@ algebras.
 \section{Sort categories}
 \label{coherence-sort-categories}
 
-The categories $\Type$ and $\Fam$ are satisfy the category laws and
-their (higher) coherences definitionally. Whether a sorts category
+The categories $\Type$ and $\Fam$ satisfy the category laws and their
+(higher) coherences definitionally. Whether a sorts category
 $\SortCat{\Ss}$ given by a $\Ss : \sortsty$ depends on the functors in
 the list $\Ss$. Looking at the definition of the sorts categories, if
 all the functors involved satisfy the functor laws definitionally then
