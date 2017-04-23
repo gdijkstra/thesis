@@ -72,9 +72,9 @@ While the recursion principle can be straightforwardly recovered from
 initiality, the induction principle is another story. Formulating the
 induction principle requires a bit more machinery, as does showing its
 logical equivalence to initiality. This is covered in
-\cref{induction}. In this chapter we will concern ourselves uncovering
-what a description of a quotient inductive-inductive definition ought
-to be in a formal way.
+\cref{induction}. In this chapter we will concern ourselves with
+uncovering what a description of a quotient inductive-inductive
+definition ought to be in a formal way.
 
 We have seen in the examples in \cref{qits} that quotient
 inductive-inductive definitions differ from ordinary inductive
@@ -101,11 +101,11 @@ quotient inductive-inductive definitions. In
 declarations of quotient inductive-inductive definitions is given as a
 form of iterated dialgebras with equations. In this formal definition,
 we only consider certain functors for the result type of the
-functors. In \cref{other-forms-of-constructors} and \cref{positivity}
-we discuss the consequences of working with dialgebras, both the
-limitations as well as the opportunities for generalising the current
-definitions. Finally in \cref{describing-related-work} we discuss
-related work.
+constructors. In \cref{other-forms-of-constructors} and
+\cref{positivity} we discuss the consequences of working with
+dialgebras, both the limitations as well as the opportunities for
+generalising the current definitions. Finally in
+\cref{describing-related-work} we discuss related work.
 
 \section{Algebraic semantics}
 \label{algebraic-semantics}
@@ -144,11 +144,11 @@ additional structure on $X$. Intuitively we need to specify for every
 constructor what the corresponding ``constructor'' in the target type
 of the recursion is. For example, for the natural numbers we have:
 $$
-\natrec : (A : \Set)\ (\theta_0 : A)\ (\theta_1 : A \to A) \to \natty \to A
+\natrec : (X : \Set)\ (\theta_0 : A)\ (\theta_1 : X \to X) \to \natty \to X
 $$
 with computation rules giving us equalities
-$\natrec\ A\ \theta_0\ \theta_1\ \natzero = \theta_0$ and
-$\natrec\ A\ \theta_0\ \theta_1\ (\natsucc\ n) = \theta_1\ (\natrec\
+$\natrec\ X\ \theta_0\ \theta_1\ \natzero = \theta_0$ and
+$\natrec\ X\ \theta_0\ \theta_1\ (\natsucc\ n) = \theta_1\ (\natrec\
 A\ \theta_0\ \theta_1\ n)$.
 These rules tell us that applying $\natrec$ to constructors of
 $\natty$ is the same as first applying $\natrec$ to the recursive
@@ -198,7 +198,7 @@ Algebra morphisms can be composed and we have identity algebra
 morphisms: algebras form a category:
 
 \begin{definition}
-  The category $\algcat{F}$ is the category with as $F$-algebras as
+  The category $\algcat{F}$ is the category with $F$-algebras as
   objects and $F$-algebra morphisms as morphisms.
 \end{definition}
 
@@ -207,8 +207,8 @@ morphisms: algebras form a category:
 Given an endofunctor $F$ on $\SET$, we can consider its \emph{free
   monad} $F^*$, which is defined pointwise as the carrier of the
 initial algebra of the functor $\bar{F}_X Y \ddefeq X + FY$. Note that
-free monad need not exist: $F$ is required to be a strictly positive
-functor for $\bar{F}_X$ to be strictly positive as well. 
+the free monad need not exist: $F$ is required to be a strictly
+positive functor for $\bar{F}_X$ to be strictly positive as well.
 
 We can write the functor $F^*$ down as a parametrised inductive type,
 with $X : \Set$ as its parameter:
@@ -233,7 +233,7 @@ cannot have the definition be parametric in the functor $F$.
   $U (X , \theta) \ddefeq X$. We define the left adjoint
   $L : \Func{\SET}{\algcat{F}}$ as follows:
   $$
-  L X \ddefeq (F^* X , \Fstarc_x)
+  L X \ddefeq (F^* X , \Fstarc_X)
   $$
   We then show that for any $X : \Set$ and $(Y,\rho) : | \algcat{F} |$ that
   $$
@@ -252,9 +252,9 @@ cannot have the definition be parametric in the functor $F$.
     &&=&\ \reasontext{initiality of $F^* X$} \\
     &&&(p : X \to Y) \times \algcat{\bar{F}_X}((F^* X , \Fstarc_X , \Fstareta_X),(Y,\rho,p)) \\
     &&=&\ \reasontext{definition $\bar{F}_X$-algebra morphism} \\
-    &&&(p : X \to Y) \times (f : F^* X \to Y) \times (f_0 : f \circ \Fstarc_x = \rho \circ Ff) \times (f_1 : f \circ \Fstareta_x = p) \\
+    &&&(p : X \to Y) \times (f : F^* X \to Y) \times (f_0 : f \circ \Fstarc_X = \rho \circ Ff) \times (f_1 : f \circ \Fstareta_X = p) \\
     &&=&\ \reasontext{singleton contraction of $p$ and $f_1$} \\
-    &&&(f : F^* X \to Y) \times (f_0 : f \circ \Fstarc_x = \rho \circ Ff) \\
+    &&&(f : F^* X \to Y) \times (f_0 : f \circ \Fstarc_X = \rho \circ Ff) \\
     &&=&\ \reasontext{definition of $F$-algebra morphisms and $L$} \\
     &&&\algcat{F}(L X , (Y,\rho))
   \end{align*}
@@ -310,7 +310,7 @@ This theorem shows us that we can think of the class free monads being
 the same as the class of ordinary inductive types. This suggests that
 generalising ordinary inductive types amounts to carving out a class
 of monads that includes free monads. In \cite{Shulman2011} the author
-proposes that higher inductive type should correspond to a notion of
+proposes that a higher inductive type should correspond to a notion of
 \emph{presented monad}, \ie a monad that is defined in terms of
 generators and relations, or in HIT terminology: point and path
 constructors. In \cite{Lumsdaine2013}, the authors give semantics of
@@ -321,7 +321,7 @@ external to type theory.
 As opposed to constructing the monads directly, we will first define
 the categories of algebras in this chapter. The reason for this is
 twofold. In the case of algebras of an endofunctor we have fewer
-equations to work with: they only pop up in the definition algebra
+equations to work with: they only pop up in the definition of algebra
 morphisms. The definition of monads already requires us to talk about
 functors that satisfy certain equalities. Monad algebras also come
 with equations. Generalising from the endofunctor situation, we hope
@@ -345,12 +345,12 @@ this phenomenon are:
 %
 \begin{itemize}
 \item the constructor $\intseg : \intzero = \intone$ of the interval
-  type, $\intty$, which refers to both its previous constructor,
+  type, $\intty$, which refers to both its previous constructors,
 \item the constructor
   $\ttpi : (\Gamma : \ttconty)\ (A : \tttyty\ \Gamma) \to \tttyty\
   (\ttcons{\Gamma}{A}) \to \tttyty\ \Gamma$,
   which refers to the previous constructor
-  $\ttcons{\_}{\_} : \Gamma : \ttconty) \to \tttyty\ \Gamma \to
+  $\ttcons{\_}{\_} : (\Gamma : \ttconty) \to \tttyty\ \Gamma \to
   \ttconty$.
 \end{itemize}
 
@@ -396,7 +396,7 @@ $(\Tty,\Ta) : \algcat{F_0}$.
   $$
   \xymatrix{
   F X \ar[r]^{\theta} \ar[d]_{F f} &G X \ar[d]^{G f} \\
-  G X \ar[r]^{\rho}  &G Y
+  F Y \ar[r]^{\rho}  &G Y
   }
   $$
 \end{definition}
@@ -414,7 +414,7 @@ $F_1 : \Func{\algcat{F_0}}{\SET}$. We have a forgetful functor
 $V_1 : \dialgcat{F_1}{U_0} \to \algcat{F_0}$ which we can compose with
 the forgetful functor $U_0 : \Func{\algcat{F_0}}{\SET}$, which we will
 denote as $U_1$. If we were to add a third and a fourth constructor,
-we would have to define a functors
+we would have to define functors
 $F_2 : \Func{\dialgcat{F_1}{U_0}}{\SET}$ and
 $F_3 : \Func{\dialgcat{F_2}{U_1}}{\SET}$ to describe their
 arguments. The objects we are interested in are \emph{iterated}
@@ -487,7 +487,7 @@ simultaneously:
 \end{definition}
 
 As $\specty$ is essentially a list type, we will use list notation for
-its values, \eg we denote $\specsnoc\ (\specsnoc\ F_0\ \specnil)\ F_1$
+its values, \eg we denote $\specsnoc\ (\specsnoc\ \specnil\ F_0)\ F_1$
 as $[F_0,F_1]$.
 
 \begin{example}
@@ -568,7 +568,7 @@ is correct:
   %
   \begin{align*}
     &\specaltiscorrect\ \specaltnil \ddefeq \unitty \\
-    &\specaltiscorrect\ (\specaltsnoc\ s\ \Cc\ F) \ddefeq (p : \specaltiscorrect) \times (\Cc = \Algalt_{(s,p)})
+    &\specaltiscorrect\ (\specaltsnoc\ s\ \Cc\ F) \ddefeq (p : \specaltiscorrect\ s) \times (\Cc = \Algalt_{(s,p)})
   \end{align*}
   %
   The definitions of $\Alg'$ and $\Und'$ are similar to the previous
@@ -607,7 +607,7 @@ in the example of contexts and type in a context in
 $A : \natty \to \natty \to \Set, B : (x : \natty) \to A\ n\ n \to
 \Set$.
 
-Describing how a sort depends the previous sorts can be done by
+Describing how a sort depends on the previous sorts can be done by
 providing a functor of the previous category of sorts into $\SET$. A
 complete description is then a snoc-list of functors, which can be
 formalised inductive-recursively together with the function that
@@ -615,7 +615,7 @@ interprets the list as a category.
 % 
 \begin{definition}
   The specification of sorts and their interpretation as a
-  categories is given by the following inductive-recursive
+  category is given by the following inductive-recursive
   definition
   % 
   \begin{sorts}
@@ -634,12 +634,12 @@ interprets the list as a category.
   the category $\SortCat{\sortssnoc\ \Ss\ R}$ has:
   % 
   \begin{itemize}
-  \item objects: $(X : | \SortCat{\Ss} |) \times (R X \to \Set))$,
+  \item objects: $(X : | \SortCat{\Ss} |) \times (R X \to \Set)$,
   \item morphisms $(X,Z) \to (Y,W)$ consist of
     \begin{itemize}
     \item a morphism $f : \SortCat{\Ss}(X,Y)$
     \item a dependent function
-      $g : (x : R X) \to Y\ x \to W\ (R\ f\ x)$.
+      $g : (x : R X) \to Z\ x \to W\ (R\ f\ x)$.
     \end{itemize}
   \end{itemize}
 \end{definition}
@@ -672,10 +672,10 @@ specification the list $[R_0]$ with $R_0\ x \ddefeq \natty$.
   represented by the list $[R_0, R_1]$ with
   \begin{itemize}
   \item $R_0 : \Func{\termcat}{\SET}$, $R_0\ x \ddefeq \unitty$
-  \item $R_1 : \Func{\SortCat{R_0}}{\SET}$, $R_0 (x, A) \ddefeq A\ x$
+  \item $R_1 : \Func{\SortCat{R_0}}{\SET}$, $R_1 (x, A) \ddefeq A\ x$
   \end{itemize}
   The category $\SortCat{R_0,R_1}$ has objects
-  $(x : \unitty) \times (A : \unitty \to \SET) \times (B : A\ x \to
+  $(x : \unitty) \times (A : \unitty \to \Set) \times (B : A\ x \to
   \Set)$.
   We see that this category is equivalent to the category $\FAM$ of
   families of sets.
@@ -687,7 +687,7 @@ specification the list $[R_0]$ with $R_0\ x \ddefeq \natty$.
   $[R_0, R_1]$ with
   \begin{itemize}
   \item $R_0 : \Func{\termcat}{\SET}$, $R_0\ x \ddefeq 1$
-  \item $R_1 : \Func{\SortCat{R_0}}{\SET}$, $R_0 (x, A) \ddefeq A\ x \times A\ x$
+  \item $R_1 : \Func{\SortCat{R_0}}{\SET}$, $R_1 (x, A) \ddefeq A\ x \times A\ x$
   \end{itemize}
   We see that $\SortCat{R_0,R_1}$ is equivalent to the category with
   objects $(X : \Set, R : X \to X \to \Set)$ and morphisms
@@ -710,7 +710,7 @@ $\Ss = [R_0, \ldots, R_n] : \sortsty$ therefore defines a chain of
 categories:
 $$
 \xymatrix{
-\termcat &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_i}
+\termcat &S_0 \ar[l]_{t_0} &S_1 \ar[l]_{t_1} &\hdots \ar[l]_{t_2} &S_n \ar[l]_{t_n}
 }
 $$
 where $n$ is the number of functors in the list and
@@ -770,11 +770,11 @@ with our inductive definition of sort membership:
   For every specification $\Ss : \sortsty$ with a functor
   $\Und : \Func{\Cc}{\SortCat{\Ss}}$, we define the function:
   $$
-  \extendfunc{\Und} : (S_i : \Cat) \to \sortsin{S_i}{\SortCat{\Ss}} \to
+  \extendfunc{\Und} : (S_i : \Cat) \to \sortsin{S_i}{\Ss} \to
   \Func{\Cc}{S_i}
   $$
   This function is defined by induction over the proof of
-  $\sortsin{S_i}{\SortCat{\Ss}}$. 
+  $\sortsin{S_i}{\Ss}$. 
 
   For the action of $\extendfunc{\Und}$ on objects and morphisms we
   will usually leave the membership proof argument implicit, \eg we
@@ -866,7 +866,7 @@ example the sorts:
 \end{itemize}
 With the $\sortsty$ datatype, we are allowed to use arbitrary
 functors, so this readily translates to that setting. In the presheaf
-setting, there is not such a straightforward translation possible.
+setting, there is no such a straightforward translation possible.
 
 We have chosen our specific definition of sorts in this way as it
 follows our syntax closely. Most importantly, the sort membership
@@ -907,7 +907,7 @@ $S_2 = \SET \downarrow R_2$.
 \label{categories-of-algebras}
 
 Now that we have a way of specifying the type formation rules of an
-inductive definitions, we can talk about the introduction rules. We
+inductive definition, we can talk about the introduction rules. We
 have also seen how to deal with constructors referring to previous
 constructors in a $\SET$-sorted setting. We move on to the final two
 pieces of the puzzle: constructors of arbitrary sort and path
@@ -961,7 +961,7 @@ The category of sorts is the category $\REL$ of (proof-relevant)
 relations. In \cref{rel-sorts} we saw how this can be represented as a
 list of functors. This category is also the first category of
 algebras, \ie the algebras with no constructors, and will as such also
-be referred to as $\Alg_0$. It is important to note that we a the
+be referred to as $\Alg_0$. It is important to note that we have the
 forgetful functor $t_1 : \Func{\REL}{\SET}$, giving us the underlying
 set of a relation.
 
@@ -1071,7 +1071,7 @@ as we will elucidate later on in \cref{point-constructors}.
 
 \subsubsection{Fourth constructor: $\Bciii : (n : \natty) \to \Bcii\ n = \Bcii\ (n+1)$}
 
-The fourth constructor $\Bciii$ is a path constructor, hence do we not
+The fourth constructor $\Bciii$ is a path constructor, hence we not
 only need to supply a functor $F_3 : \Func{\Alg_3}{\Alg_0}$ to specify
 the arguments, but we also need to specify the endpoints of the
 path. Just as for $\Bcii$, we will first need to rewrite the type of
@@ -1119,7 +1119,7 @@ specification of a quotient inductive-inductive definition.
 A quotient inductive-inductive definition is given by a specification
 of its sorts $\Ss : \sortsty$ plus a list of constructors, which may
 be point or path constructors, each of which has a sort
-$\sortsin{\Aa}{\SortCat{\Ss}}$ and builds upon the category of
+$\sortsin{\Aa}{\Ss}$ and builds upon the category of
 algebras of the previous constructors. We can formalise this as
 follows:
 
@@ -1133,7 +1133,7 @@ underlying carrier functor is given by the following
 inductive-recursive definition of
 \begin{sorts}
   \sortnamety{\specty}{\Set} \\
-  \functy{\Constr}{(s : \specty)\ (\Aa: \Cat) \to \sortsin{\Aa}{\SortCat{\Ss}} \to \Set} \\
+  \functy{\Constr}{(s : \specty)\ (\Aa: \Cat) \to \sortsin{\Aa}{\Ss} \to \Set} \\
   \functy{\Alg}{\specty \to \Cat} \\
   \functy{\Und}{(s : \specty) \to \Func{\Alg_s}{\SortCat{\Ss}}} \\
 \end{sorts}
@@ -1278,7 +1278,7 @@ A morphism $(X,\theta) \to (Y,\rho)$ consists of a morphism
 $f : \Alg_s(X,Y)$ along with a ``computation rule'':
 \begin{multline*}
 f_0 : (x : R_i \ (\extendfunc{\Und}^0\ X))\ (y : F^1\ X\ x) \to \\ 
-\extendfunc{\Und}^1\ f\ x\ (\theta\ x\ y) = \rho\ (R_i(\extendfunc{\Und}^0\ f\ x)\ (F^1\ f\ x\ y)
+\extendfunc{\Und}^1\ f\ x\ (\theta\ x\ y) = \rho\ (R_i(\extendfunc{\Und}^0\ f\ x)\ (F^1\ f\ x\ y))
 \end{multline*}
 This category of algebras look similar to
 $\dialgcat{F}{\extendfunc{\Und}_s}$. However, as we have seen previously, the
@@ -1351,7 +1351,7 @@ isomorphism of objects, hence this is not an issue in our setting.
   \end{align*}
   The category of algebras containing only the first constructor is
   $\dialgcat{F_0}{V}$ where $V : \Func{\FAM}{\SET}$ is the forgetful
-  functor. The second constructor $\Bci$ , which does not add anything
+  functor. The second constructor $\Bci$, which does not add anything
   to the inductive type, can be described by the functor:
   \begin{align*}
     &F_1 : \Func{\dialgcat{F_0}{V}}{\FAM} \\
@@ -1384,8 +1384,8 @@ isomorphism of objects, hence this is not an issue in our setting.
 
 Specifying the arguments for a path constructor is done in exactly the
 same way as for a point constructor, while the endpoints of the path
-is given by natural transformations. Suppose $s : \specty$, then a path
-constructor structure of sort $\sortsin{S_i}{\Ss}$ on an object
+are given by natural transformations. Suppose $s : \specty$, then a
+path constructor structure of sort $\sortsin{S_i}{\Ss}$ on an object
 $(X_0, \hdots, X_n, \theta_0,\hdots,\theta_m) : | \Alg_s |$ is of the
 form:
 \begin{align*}
@@ -1418,12 +1418,12 @@ path constructor specification:
   Given a specification $s : \specty$, a path constructor of sort
   $\sortsin{S_i}{\Ss}$ is specified by a functor $F : \Alg_s \to S_i$
   satisfying $t_i \circ F = t_i \circ \extendfunc{\Und}_s$ and two natural
-  transformations $\ell, r : F \to \extendfunc{\Und}_s$ satisfying
+  transformations $\ell, r : \Nat{F}{\extendfunc{\Und}_s}$ satisfying
   $t_i\ \ell = t_i\ r = \id_{t_i \circ \extendfunc{\Und}_s}$, \ie:
 \begin{align*}
   \Constr_{\ident{path}}\ s\ S_i\ p \ddefeq (F : \Alg_s \to S_i) &\times (p : t_i \circ F = t_i \circ \extendfunc{\Und}_s) \\ 
-  \times (\ell : F \to \extendfunc{\Und}_s) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \extendfunc{\Und}_s}) \\ 
-  \times (r : F \to \extendfunc{\Und}_s) &\times (q_r : t_i\ r = \id_{t_i \circ \extendfunc{\Und}_s}) \enspace .
+  \times (\ell : \Nat{F}{\extendfunc{\Und}_s}) &\times (q_\ell : t_i\ \ell = \id_{t_i \circ \extendfunc{\Und}_s}) \\ 
+  \times (r : \Nat{F}{\extendfunc{\Und}_s}) &\times (q_r : t_i\ r = \id_{t_i \circ \extendfunc{\Und}_s}) \enspace .
 \end{align*}
 \end{definition}
 
@@ -1578,7 +1578,7 @@ $$
 In our presentation, we consider dialgebras where the functor
 describing the target of the constructor is usually a forgetful
 functor. As such, we are forced to have all our constructors in
-curried form, \eg the above case would be $K \times L \to \Aty$. To
+uncurried form, \eg the above case would be $K \times L \to \Aty$. To
 describe the curried constructor $\Ac$, we can see it as a
 $(F,G)$-dialgebra with $F X \ddefeq K$ and $G X \ddefeq (L \to X)$.
 This approach does not always work, if we were to consider instead the
@@ -1705,10 +1705,10 @@ Agda accepts the following definition:
   \constr{\Bci}{\Bty\ (\lambda x . x)}
 \end{datatype}
 %
-We cannot define definition of this shape in our framework, as the
+We cannot formalise definitions of this shape in our framework, as the
 operation $\lambda X . (X \to X)$ is not functorial, hence we cannot
 define its dependent sorts. As with the previous example, it is as of
-yet unclear to us whether definitions of these form may lead to
+yet unclear to us whether definitions of this form may lead to
 inconsistencies.
 
 \subsection{Higher inductive types}
