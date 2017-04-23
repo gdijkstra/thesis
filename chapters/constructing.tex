@@ -26,11 +26,11 @@ We discuss in \cref{sequential-colimits} the usual construction of
 initial algebras for an endofunctor as a sequential colimit. We
 explore how this approach can be both internalised as well as adapted
 to construct initial algebras for certain classes of quotient
-inductive-inductive definitions. They key is here to not only
-construct an initial object but establish that there is a left adjoint
-to the forgetful functor $\Func{\Alg_{n+1}}{\Alg_{n}}$, which allows
-us to do the construction by induction on the length of the
-specification. We end up with a chain of adjunctions:
+inductive-inductive definitions. The key is here to not only construct
+an initial object but establish that there is a left adjoint to the
+forgetful functor $\Func{\Alg_{n+1}}{\Alg_{n}}$, which allows us to do
+the construction by induction on the length of the specification. We
+end up with a chain of adjunctions:
 $$
 \xymatrix{
 \SET \ar@/^/[r]^{L_0}
@@ -44,7 +44,7 @@ $$
 &\Alg_n \ar@/^/[l]^{U_n}
 }
 $$
-Since left adjoints preserve colimits, in particular initial objects
+Since left adjoints preserve colimits, in particular initial objects,
 and $\SET$ has an initial object $\emptyty$,
 $(L_n \circ \hdots \circ L_0)\ \emptyty$ gives us the initial algebra
 in $\Alg_n$ we are after.
@@ -309,7 +309,7 @@ inside type theory itself.
     =&\ y_{n+1}
   \end{align*}
   By the universal property of $F X_\omega$ they are indeed equal. The
-  same line of reasoning can be used to established that if we have
+  same line of reasoning can be used to establish that if we have
   another algebra morphism $f' : (X_\omega,\theta) \to (Y,\rho)$, then
   $f = f'$, which shows initiality of $(X_\omega,\theta)$.
 \end{proof}
@@ -396,7 +396,7 @@ $\Alg_s$ extended with a point or path constructor, we need to have
 sequential colimits, coequalisers and binary coproducts in $\Alg_s$.
 
 $\SET$ satisfies all these conditions, so the base case of the
-induction holds. In the next two sections we will to the inductive
+induction holds. In the next two sections we will do the inductive
 step for point and path constructors respectively.
 
 \subsubsection{Point constructors}
@@ -626,7 +626,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   Finally we have to show that given an algebra $(Z,\zeta)$ with
   algebra morphisms $f : \theta \to \zeta$ and $g : \rho \to \zeta$,
   we get a unique algebra morphism $h : \alpha_{\omega} \to \zeta$
-  satisfying $h \circ \inln{\omega} = f$ and $h \circ \inrn{\omega}$.
+  satisfying $h \circ \inln{\omega} = f$ and $h \circ \inrn{\omega} = g$.
 
   Observe that $Z$ comes with a cocone for the cochain $(A,a)$ with
   $z_n : A_n \to Z$ defined inductively:
@@ -675,7 +675,7 @@ is an endofunctor on $\Cc$ preserving sequential colimits.
   The triangle on the left commutes as before. This means that the
   outer square is the cocone on $Z$ that defines $z_{n+1}$. By the
   universal property of $A_{n+1}$ we then get that $z_{n+1}$ and
-  $z_{n+1} \circ a_{n+1}$ are equal.
+  $z_{n+2} \circ a_{n+1}$ are equal.
   
   We therefore get a unique morphism $z_{\omega} : A_{\omega} \to Z$
   satisfying $z_{\omega} \circ c_n = z_n$. Showing that this is an
@@ -840,7 +840,7 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
   \begin{align*}
     &X : (n : \natty) \to | \Cc | \\
     &X\ 0 \ddefeq \initobj \\
-    &X\ (n+1) \ddefeq \coeqty{\phi \circ \ell_{X_n}}{\phi \circ r_{x_n}}
+    &X\ (n+1) \ddefeq \coeqty{\phi \circ \ell_{X_n}}{\phi \circ r_{X_n}}
   \end{align*}
   with $x_{n}$ the constructor of corresponding coequaliser.
 
@@ -864,7 +864,7 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
   $\omega$-cochain $(LFX_n,x_n)$ and therefore have:
   \begin{itemize}
   \item constructors $LFd_n : \Cc(LFX_n, LFX_\omega)$
-  \item satisfying $LFd_n = LFd_{n+1} \circ LFx_n)$
+  \item satisfying $LFd_n = LFd_{n+1} \circ LFx_n$
   \end{itemize}
 
   We define the $(LFX_n,LFx_n)$-cocone on $X_\omega$ with $z_n$ as the
@@ -902,7 +902,7 @@ with objects $X : | \Cc |$ satisfying $\ell_X = r_X$.
   }
   $$
   The left square holds by naturality of $\phi \circ \ell$, the right
-  square holds as $X_\omega$ is a colimit with $d_n$ is constructors.
+  square holds as $X_\omega$ is a colimit with $d_n$ its constructors.
   
   Now we have constructed a $(LFX_n,LFx_n)$-cocone structure on
   $X_\omega$, we need to check whether $\phi \circ \ell_{X_\omega}$ and
@@ -1042,7 +1042,7 @@ where all the arguments functors preserve sequential colimits.
   \label{initial-objects-qits}
 
   Let $s : \specty$ be a specification of a $\SET$-sorted quotient
-  inductive-inductive definition. If all the arguments functors in
+  inductive-inductive definition. If all the arguments functors
   contained in the specification $s$ preserve sequential colimits,
   then the category $\Alg_s$ has an initial object.
 \end{theorem}
@@ -1060,7 +1060,8 @@ definitions means generalising in two dimensions. We have to be able to deal wit
 \item arbitrary sorts: the constructions given in this chapter only work for $\SET$-sorted definitions
 \item cochains of arbitrary length: our construction works with
   colimits of length $\omega$. In general we will need longer
-  cochains.
+  cochains, \eg for infinitely branching trees, we need to consider
+  the colimit of a cochain of length $\omega + \omega$.
 \end{itemize}
 
 \section{Related work}
