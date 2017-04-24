@@ -53,10 +53,15 @@ which comes with the computation rules:
 
 For ordinary inductive types, the computation rules customarily hold
 definitionally, as they are called \emph{computation} rules after
-all. However, if we want to formalise the theory of inductive
-definitions in type theory, we only have propositional equality at our
-disposal. As such, in this thesis will only talk about computation
-rules holding propositionally.
+all. However, inside \mltt we can only talk about propositional
+equality. As such, our formalisation of quotient inductive-inductive
+types talks about computation rules holding propositionally.
+
+There is an avenue of research in type theory that considers adding
+syntax to talk about definitional (also called \emph{strict})
+equalities to the theory \cite{Cohen2015}. In such a system, we would
+be able to model the computation rules of inductive definitions as
+definitional equalities.
 
 \subsubsection{Path computation rules}
 \label{int:pathcomp}
@@ -85,8 +90,8 @@ $$
   a_{\intzero} \ar@{-}_{a_{\intseg}}[rrrr] &&&&a_{\intone}
 }
 $$
-A path computation rule gives us an equation between paths in type we
-are eliminating into. If that type happens to be a set, then these
+A path computation rule gives us an equation between paths in the type
+we are eliminating into. If that type happens to be a set, then these
 equations would be trivial. Hence path computation rules for
 \emph{quotient} inductive types do not add anything new and will be
 omitted.
@@ -107,7 +112,7 @@ having to give a dependent path as the method for $\intseg$:
 &&\intind : &\ (P : \intty \to \Type) \\
 &&&\ (m_{\intzero} : P\ \intzero) \\
 &&&\ (m_{\intone} : P\ \intone) \\
-&&&\ (m_{\intseg} : \pathover{P}{\intseg}{\intzero}{\intone}) \\
+&&&\ (m_{\intseg} : \pathover{P}{\intseg}{m_{\intzero}}{m_{\intone}}) \\
 &&&\ \to (x : \intty) \to P\ x
 \end{align*}
 
@@ -218,7 +223,7 @@ $$
   equational reasoning:
   %
   \begin{align*}
-    &&&(x\ y : B) \to (z : A) \times (f\ z = x) \times (y = g\ z) \to \quotproj{x} = \quotproj{y} \\
+    &&&(x\ y : B) \to (z : A) \times (x = f\ z) \times (y = g\ z) \to \quotproj{x} = \quotproj{y} \\
     &=& &\reasontext{currying and singleton contraction} \\
     &&& (z : A) \to \quotproj{f\ z} = \quotproj{g\ z} \\
     &=& &\reasontext{function extensionality} \\
@@ -241,10 +246,10 @@ type. Given types $A, B$ with functions $f, g : A \to B$, we define:
 which comes with the following elimination principle:
 %
 \begin{align*}
-  &&\coeqind{f}{g} : &\ (P : \coeqind{f}{g} \to \Type) \\
+  &&\coeqind{f}{g} : &\ (P : \coeqty{f}{g} \to \Type) \\
   &&&\ (m_{\coeqproj} : (b : B) \to P\ (\coeqproj\ b)) \\
   &&&\ (m_{\coeqeq} : (a : A) \to \pathover{P}{\coeqeq\ a}{m_{\coeqproj}\ (f\ a)}{m_{\coeqproj}\ (g\ a)}) \\
-  &&&\ \to (x : \coeqind{f}{g}) \to P\ x
+  &&&\ \to (x : \coeqty{f}{g}) \to P\ x
 \end{align*}
 %
 Given a type $A : \Type$ and a relation $R : A \to A \to \Type$, we
@@ -277,7 +282,7 @@ following inductive type:
   \constr{\treeperm}{(f : \natty \to \treety)\ (\phi : \natty \to \natty) \to \isequiv\ \phi \to \treenode\ f = \treenode\ (f \circ \phi)}
 \end{datatype}
 
-The $\treeperm$ constructor tells that two nodes
+The $\treeperm$ constructor says that two nodes
 $f, f' : \natty \to \treety$ are considered to be equal if there
 exists a permutation $\phi$ such that $f = f' \circ \phi$.
 
@@ -320,8 +325,8 @@ seems we need an inverse to the projection function
 $\quotproj{\_} : \pretreety \to \quotty{\pretreety}{\treerel}$, which
 we cannot expect to exist.
 
-Note however that if we had \emph{finitely} branching trees, we need
-not have such an inverse. In the finite case, we can apply the
+Note however that if we had \emph{finitely} branching trees, we would
+not need such an inverse. In the finite case, we can apply the
 recursion principle to each argument and then apply the $\pretreenode$
 and $\quotproj{\_}$ constructors.
 
@@ -425,7 +430,7 @@ the real numbers along with a closeness relation on it inductively and
 mutually:
 \begin{sorts}
   \sortnamety{\realty}{\Set} \\
-  \sortnamety{\realrel{\_}{\_}{\_}}{\ratty_+ \to \realty \to \realty \to \Set}
+  \sortnamety{\realrel{\_}{\_}{\_}}{\ratty^+ \to \realty \to \realty \to \Set}
 \end{sorts}
 
 Note that $\ratty^+$ denotes the type of positive rationals. The
@@ -435,7 +440,7 @@ following constructors:
 
 \begin{datatype}{\realty}{}
   \constr{\realrat}{\ratty \to \realty} \\
-  \constr{\reallim}{(f : \ratty^+ \to \realty) \to ((\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{x\ \delta}{x\ \epsilon}) \to \realty} \\
+  \constr{\reallim}{(f : \ratty^+ \to \realty) \to ((\delta\ \epsilon : \ratty^+) \to \realrel{\delta + \epsilon}{f\ \delta}{f\ \epsilon}) \to \realty} \\
   \constr{\realeq}{(u\ v : \realty) \to ((\epsilon : \ratty^+) \to \realrel{\epsilon}{u}{v}) \to u = v}
 \end{datatype}
 
@@ -555,16 +560,18 @@ we want to use it and not just define it, we will have to manually
 A first approximation to implement quotient inductive types (or any
 higher inductive type) in a more practical manner was discovered
 by~\cite{Licata2011}. The idea is to leverage the inductive type
-mechanism of Agda itself and add path constructors as postulates. One
-can then define the eliminator by pattern matching on the inductive
-type, adding the computation rule for the path constructors as
-postulates. Care has to be taken to not expose the constructors of the
-type in such a way that one can circumvent the eliminator and use
-pattern matching directly, in a possible unsound way.
+mechanism of Agda itself and add path constructors and their
+computation rules as postulates. One can then define the eliminator by
+pattern matching on the inductive type, adding the computation rule
+for the path constructors as postulates. Care has to be taken to not
+expose the constructors of the type in such a way that one can
+circumvent the eliminator and use pattern matching directly, in a
+possible unsound way.
 
 Having definitional computation rules for the point constructors is a
 big improvement over everything being propositional. However, the path
 computation rules still only hold propositionally.
+
 
 In order to experiment with higher inductive types and cubical type
 theory in Agda, rewrite rules have been introduced. We can denote any
@@ -607,7 +614,7 @@ and define functions that do not respect $\intseg$: $\intrec$ is our
 only way to write (non-trivial) functions out of the interval.
 
 As Agda does not perform checks on the rewrite rules, these rewrite
-pragmas are not safe in anyway: we can easily add rules that make the
+pragmas are not safe in any way: we can easily add rules that make the
 type checker loop or that allow us to inhabit the empty
 type. Nonetheless they provide a good platform for experimentation.
 
@@ -616,7 +623,7 @@ type. Nonetheless they provide a good platform for experimentation.
 As a way to study the computational behaviour of univalence and also
 higher inductive types, the cubical set model of type theory has been
 investigated \cite{Bezem2014}. Turning this model back into type
-theory has lead to cubical type theory \cite{Cohen2015}, which has an
+theory has led to cubical type theory \cite{Cohen2015}, which has an
 implementation \verb+cubicaltt+\footnote{See
   \url{https://github.com/mortberg/cubicaltt}}. This implementation
 has some support for higher inductive types.
