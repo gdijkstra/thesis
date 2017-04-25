@@ -101,9 +101,13 @@
 \newcommand{\isprop}{\AgdaFunction{\ident{is-prop}}}
 \newcommand{\iscontr}{\AgdaFunction{\ident{is-contr}}}
 \newcommand{\istrunc}[1]{\AgdaFunction{\ident{is-#1-trunc}}}
+\newcommand{\issurj}{\AgdaFunction{\ident{is-surjective}}}
+\newcommand{\axiomofchoice}{\AgdaFunction{\ident{axiom-of-choice}}}
 
 % Propositional truncation
 \newcommand{\proptrunc}[1]{\AgdaFunction{||} #1 \AgdaFunction{||}}
+\newcommand{\proptruncproj}[1]{\AgdaInductiveConstructor{[}\,#1\,\AgdaInductiveConstructor{]}}
+\newcommand{\proptrunctrunc}{\AgdaInductiveConstructor{\ident{trunc}}}
 
 % Equational reasoning
 \newcommand{\reasontext}[1]{\{\ \textsf{#1}\ \}}
