@@ -194,15 +194,32 @@ not always preserve definitional equalities \cite{McBride2006ii}.
 
 As opposed to adding inductive types to the theory in an ad hoc
 manner, one can add W-types as a primitive and define all inductive
-types in terms of this primitive. W-types are enough to give us
-ordinary inductive types as well as indexed inductive types.
+types in terms of this primitive. Suppose we have a type of
+\emph{shapes} $S : \Type$ and a type family of \emph{positions}
+$P : S \to \Type$, then the W-type defined by $S$ and $P$ is:
 
-In this thesis, the inductive definitions we need to formalise the
-theory of quotient inductive-inductive types, can all be written using
-W-types. However, for sake of convenience and presentational clarity,
-we will use Agda notation to present these. We will also sometimes
-give function definitions by pattern matching, but these can be
-trivially rewritten using just the eliminators.
+\begin{datatype}{\wty\ S\ P}{\Type}
+  \constr{\wsup}{(s : S) \times (P\ s \to W\ S\ P) \to W\ S\ P}
+\end{datatype}
+
+We can think of the shapes as the type giving the contexts for
+constructors. For example, for the type of lists containing natural
+numbers, we choose $S \ddefeq \coproduct{\unitty}{\natty}$: the
+$\listnil$ constructor has no context and the $\listcons$ constructor
+takes something of type $\natty$. The positions family gives us the
+recursive positions. For the $\listnil$ constructor we have zero
+recursive positions and for $\listcons$ we have exactly one, so we
+define $P$ with $P\ (\inl\ \unitval) \ddefeq \emptyty$ and
+$P\ (\inr\ n) \ddefeq \unitty$ for any $n : \natty$.
+
+W-types are enough to give us ordinary inductive types as well as
+indexed inductive types \cite{Morris2007}. In this thesis, the
+inductive definitions we need to formalise the theory of quotient
+inductive-inductive types, can all be written using W-types. However,
+for sake of convenience and presentational clarity, we will use Agda
+notation to present these. We will also sometimes give function
+definitions by pattern matching, but these can be trivially rewritten
+using just the eliminators.
 
 \section{Equality}
 
@@ -475,12 +492,16 @@ For our purposes, there are two important truncation levels, apart
 from contractibility:
 \begin{definition}
   A type is a \emph{proposition} or \emph{propositional} if it has
-  truncation level $-1$.
+  truncation level $-1$:
+  $$
+  \isprop\ X \ddefeq \istrunc{-1}\ X
+  $$
 \end{definition}
 
 A useful characterisation of propositions is given by the following
 proposition:
 \begin{proposition}
+  \label{prop:forall-prop}
   If the type $A$ satisfies $(x\ y : A) \to x = y$ then $A$ is
   propositional.
 \end{proposition}
@@ -1015,3 +1036,19 @@ as well. Naturally, how these coherence laws interact also has to
 adhere to additional higher coherence laws, ad infinitum. In
 \cref{untruncated} we will describe the problems and possible
 solutions in greater detail.
+
+\section{Core type theory}
+
+The type theory we are working with in this thesis can be reduced to a
+type theory containing the following primitives:
+%
+\begin{itemize}
+\item $\Pi$- and $\Sigma$-types
+\item The finite types $\emptyty$ (empty type), $\unitty$ (unit type),
+  and the booleans $\boolty$
+\item a hierarchy of universes $\Type_0$, $\Type_1$, $\Type_2$, $\hdots$
+\item W-types
+\item Identity types
+\item Univalence for the universes $\Type_0$, $\Type_1$, $\Type_2$, $\hdots$
+\end{itemize}
+%
