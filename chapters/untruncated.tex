@@ -40,9 +40,9 @@ the case of associativity interacting with itself, it is as follows:
   following commutes:
   $$
   \xymatrix{
-    &(i \circ (h \circ g)) \circ f \ar@{-}[dr]^{\assoc\ i\ (h \circ g)\ f} &\\
-    ((i \circ h) \circ g) \circ f \ar@{-}[ur]^{(\assoc\ i\ h\ g)\ \circ f} \ar@{-}[d]_{\assoc\ (i \circ h)\ g\ f}  &&i \circ ((h \circ g) \circ f) \ar@{-}[d]^{i\ \circ\ \assoc\ h\ g\ f}\\
-    (i \circ h) \circ (g \circ f) \ar@{-}[rr]_{\assoc\ i\ h\ (g \circ f)} &&i \circ (h \circ (g \circ f))
+    &(i \circ (h \circ g)) \circ f \ar@{-}[dr]^*+{\labelstyle \assoc\ i\ (h\ \circ\ g)\ f} &\\
+    ((i \circ h) \circ g) \circ f \ar@{-}[ur]^*+{\labelstyle (\assoc\ i\ h\ g)\ \circ f} \ar@{-}[d]_*+{\labelstyle \assoc\ (i\ \circ\ h)\ g\ f}  &&i \circ ((h \circ g) \circ f) \ar@{-}[d]^*+{\labelstyle i\ \circ\ \assoc\ h\ g\ f}\\
+    (i \circ h) \circ (g \circ f) \ar@{-}[rr]_*+{\labelstyle \assoc\ i\ h\ (g\ \circ\ f)} &&i \circ (h\ \circ\ (g\ \circ\ f))
   }
   $$
 \end{definition}
@@ -106,11 +106,14 @@ yield the same equality:
   left identity law of $\Cc$ if the following commutes for any $f : \Cc(X,Y)$:
   $$
   \xymatrix{
-    F (\id_{\Cc} Y \circ_{\Cc} f) \ar@{-}[rr]^{F (\leftid_{\Cc} f)} \ar@{-}[d]_{\Fcomp (\id_{\Cc} Y) f} &&F f \ar@{-}[d]^{\leftid_{\Dd} F f} \\
-    F (\id_{\Cc} Y) \circ_{\Dd} f \ar@{-}[rr]_{\Fid Y \circ_{\Dd} f} &&\id_{\Dd} (F Y) \circ_{\Dd} f
+    F (\id_{\Cc} Y \circ_{\Cc} f) \ar@{-}[rrr]^{F\ (\leftid_{\Cc}\ f)} \ar@{-}[d]_{\Fcomp\ (\id_{\Cc}\ Y)\ f} &&&F f \ar@{-}[d]^{\leftid_{\Dd}\ F\ f} \\
+    F (\id_{\Cc} Y) \circ_{\Dd} f \ar@{-}[rrr]_{\Fid\ Y\ \circ_{\Dd}\ f} &&&\id_{\Dd} (F Y) \circ_{\Dd} f
   }
   $$  
 \end{definition}
+
+where $\Fid$ and $\Fcomp$ are the witnesses of the functoriality of
+$F$.
 
 The coherence law for the right identity law is defined similarly.
 
@@ -125,9 +128,9 @@ The coherence law for the right identity law is defined similarly.
   the following commutes
   $$
   \xymatrix{
-    F ((h \circ g) \circ f) \ar@{-}[rr]^{F (\assoc_{\Cc} h g f)} \ar@{-}[d]_{\Fcomp (h \circ g) f} &&F (h \circ (g \circ f)) \ar@{-}[d]^{\Fcomp h (g \circ f)} \\
-    F (h \circ g) \circ F f \ar@{-}[d]_{\Fcomp h g \circ F f} &&F h \circ F (g \circ f) \ar@{-}[d]^{F h \circ \Fcomp g f} \\
-    (F h \circ F g) \circ F f  \ar@{-}[rr]_{\assoc_{\Dd} Fh Fg Ff} && F h \circ (F g \circ F f)
+    F ((h \circ g) \circ f) \ar@{-}[rrr]^{F\ (\assoc_{\Cc}\ h\ g\ f)} \ar@{-}[d]_{\Fcomp\ (h\ \circ\ g)\ f} &&&F (h \circ (g \circ f)) \ar@{-}[d]^{\Fcomp\ h\ (g\ \circ\ f)} \\
+    F (h \circ g) \circ F f \ar@{-}[d]_{\Fcomp\ h\ g\ \circ\ F\ f} &&&F h \circ F (g \circ f) \ar@{-}[d]^{F\ h\ \circ\ \Fcomp\ g\ f} \\
+    (F h \circ F g) \circ F f  \ar@{-}[rrr]_{\assoc_{\Dd}\ Fh\ Fg\ Ff} &&& F h \circ (F g \circ F f)
   }
   $$
 \end{definition}
@@ -154,13 +157,13 @@ algebras.
 
 The categories $\Type$ and $\Fam$ satisfy the category laws and their
 (higher) coherences definitionally. Whether a sorts category
-$\SortCat{\Ss}$ given by a $\Ss : \sortsty$ depends on the functors in
-the list $\Ss$. Looking at the definition of the sorts categories, if
-all the functors involved satisfy the functor laws definitionally then
-the resulting categories will be strict as well. This means that if we
-give all the functors in $\Ss$ as generalised containers, we end up
-with strict sort categories, which is quite a reasonable assumption to
-make.
+$\SortCat{\Ss}$ given by a $\Ss : \sortsty$ is strict, depends on the
+functors in the list $\Ss$. Looking at the definition of the sorts
+categories, if all the functors involved satisfy the functor laws
+definitionally then the resulting categories will be strict as
+well. This means that if we give all the functors in $\Ss$ as
+generalised containers, we end up with strict sort categories, which
+is quite a reasonable assumption to make.
 
 \section{Categories of dialgebras}
 
@@ -190,10 +193,10 @@ $$
 \xymatrix{
 G\ \id_\Cc \circ \theta
 \ar@{-}[rr]^{\id_0}
-\ar@{-}[d]_{\Gid \circ \theta}
+\ar@{-}[d]_{\Gid\ \circ\ \theta}
 &
 &\theta \circ F\ \id_\Cc
-\ar@{-}[d]^{\theta \circ \Fid}
+\ar@{-}[d]^{\theta\ \circ\ \Fid}
 \\
 \id_\Dd \circ \theta
 \ar@{-}[dr]_{\leftid_{\Dd}}
@@ -245,10 +248,10 @@ The (vertical) composition of the squares $g_0 \circ_0 f_0$ is defined as the co
 $$
 \xymatrix{
 G\ (g \circ f) \circ \theta
-\ar@{-}[r]^{g_0 \circ_0 f_0}
-\ar@{-}[d]_{\Gcomp g f \circ \theta}
+\ar@{-}[r]^{g_0\ \circ_0\ f_0}
+\ar@{-}[d]_{\Gcomp\ g\ f\ \circ\ \theta}
 &\zeta \circ F(g \circ f)
-\ar@{-}[d]^{\zeta \circ \Fcomp g f}
+\ar@{-}[d]^{\zeta\ \circ\ \Fcomp\ g\ f}
 \\
 (G\ g \circ G\ f) \circ \theta
 \ar@{-}[d]_{\assoc_{\Dd}}
@@ -256,9 +259,9 @@ G\ (g \circ f) \circ \theta
 \ar@{-}[d]^{\assoc_{\Dd}}
 \\
 G\ g \circ (G\ f \circ \theta)
-\ar@{-}[d]_{G g \circ f_0}
+\ar@{-}[d]_{G\ g\ \circ\ f_0}
 &(\zeta \circ F\ g) \circ F\ f
-\ar@{-}[d]^{g_0 \circ F f}
+\ar@{-}[d]^{g_0\ \circ\ F\ f}
 \\
 G\ g \circ (\rho \circ F\ f)
 \ar@{-}[r]_{\assoc_{\Dd}}
@@ -297,9 +300,9 @@ looks like. We can characterise it as follows:
               \xymatrix{
               G\ f \circ \theta
               \ar@{-}[r]^{f_0}
-              \ar@{-}[d]_{G p \circ \theta}
+              \ar@{-}[d]_{G\ p\ \circ\ \theta}
               &\rho \circ F\ f
-              \ar@{-}[d]^{\rho \circ F p}
+              \ar@{-}[d]^{\rho\ \circ\ F\ p}
               \\
               G\ g \circ \theta
               \ar@{-}[r]_{g_0}
@@ -311,7 +314,7 @@ looks like. We can characterise it as follows:
 \begin{proof}
   Using the fact that an equality of dependent pairs is a dependent pair of equalities, we get that
   $$
-  ((f,f_0) = (g,g_0)) = (p : f = g) \times (p_0 : \pathover{\lambda h . G h \circ \theta = \rho \circ F h}{p}{f_0}{g_0}
+  ((f,f_0) = (g,g_0)) = (p : f = g) \times (p_0 : \pathover{\lambda h . G\ h\ \circ\ \theta = \rho\ \circ\ F\ h}{p}{f_0}{g_0}
   $$
   Having a path $p_0$ over a family of equalities is equivalent to the
   square by the usual reasoning.
@@ -330,10 +333,10 @@ Applying \cref{morphism-equality} this is the same as giving a proof $p : \id_{\
 $$
 \xymatrix{
   G\ (\id_{\Cc}\ Y \circ f) \circ \theta
-  \ar@{-}[rr]^{\id_0 \rho \circ_0 f_0}
-  \ar@{-}[d]_{G p \circ \theta}
+  \ar@{-}[rr]^{\id_0\ \rho\ \circ_0\ f_0}
+  \ar@{-}[d]_{G\ p\ \circ\ \theta}
   &&\rho \circ F\ (\id_{\Cc}\ Y \circ f)
-  \ar@{-}[d]^{\rho \circ F p}
+  \ar@{-}[d]^{\rho\ \circ\ F\ p}
   \\
   G\ f \circ \theta
   \ar@{-}[rr]_{f_0}
@@ -351,15 +354,15 @@ F (\leftid_{\Cc}\ f) = \trans{\Fcomp\ (\id_{\Cc}\ Y)\ f}{\Fid\ Y \circ Ff}
 $$
 and similarly for $G$. The diagram we end up with is the one shown in
 \cref{left-identity-calculation}, where the double lines indicate a
-$\refl$ path. What we end up with is having to establish that the
-following square commutes:
+$\refl$ path. The non-trivial part of the diagram is the following
+square:
 $$
 \xymatrix{
 G (\id_{\Cc} Y) \circ Gf \circ \theta
-\ar@{-}[rr]^{G (\id_{\Cc} Y) \circ f_0}
-\ar@{-}[d]_{\Gid Y \circ G f \circ \theta}
+\ar@{-}[rr]^{G\ (\id_{\Cc}\ Y)\ \circ\ f_0}
+\ar@{-}[d]_{\Gid\ Y\ \circ\ G\ f\ \circ\ \theta}
 &&G (\id_{\Cc} Y) \circ \rho \circ Ff
-\ar@{-}[d]^{\Gid Y \circ \rho \circ Ff}
+\ar@{-}[d]^{\Gid\ Y\ \circ\ \rho\ \circ\ Ff}
 \\
 Gf \circ \theta
 \ar@{-}[rr]_{f_0}
@@ -380,32 +383,32 @@ laws that are preserved by the functors $F$ and $G$.
   $$
 \xymatrix@!C@!R{
 G f \circ \theta % C
-\ar@{-}[r]^{\Gid Y \circ Gf \circ \theta}
-\ar@{-}[ddddd]_{f_0}
+\ar@{-}[r]^-*+{\labelstyle \Gid\ Y\ \circ\ Gf\ \circ\ \theta}
+\ar@{-}[ddddd]_-{f_0}
 &
 G (\id_{\Cc} Y) \circ Gf \circ \theta % B
-\ar@{-}[r]^{\Gcomp (\id_{\Cc} Y) f \circ \theta}
+\ar@{-}[r]^-*+{\labelstyle \Gcomp\ (\id_{\Cc}\ Y)\ f\ \circ\ \theta}
 \ar@{=}[rd]
 &G (\id_{\Cc} Y \circ f) \circ \theta % A
-\ar@{-}[d]^{\Gcomp (\id_{\Cc} Y) f \circ \theta}
+\ar@{-}[d]^-{\Gcomp\ (\id_{\Cc}\ Y)\ f\ \circ\ \theta}
 \\
 &&G (\id_{\Cc} Y) \circ Gf \circ \theta % D
-\ar@{-}[d]^{G (\id_{\Cc} Y) \circ f_0}
+\ar@{-}[d]^-{G\ (\id_{\Cc}\ Y)\ \circ\ f_0}
 \\
 &&G (\id_{\Cc} Y) \circ \rho \circ Ff % E
-\ar@{-}[d]^{\Gid Y \circ \rho \circ Ff}
+\ar@{-}[d]^-{\Gid\ Y\ \circ\ \rho\ \circ\ Ff}
 \\
 &&\rho \circ Ff % F
-\ar@{-}[d]^{\rho \circ \Fid Y \circ Ff}
+\ar@{-}[d]^-{\rho\ \circ\ \Fid\ Y\ \circ\ Ff}
 \\
 &&\rho \circ F (\id_{\Cc} Y) \circ Ff % G
-\ar@{-}[d]^{\rho \circ \Fcomp (\id_{\Cc} Y) f}
+\ar@{-}[d]^-{\rho\ \circ\ \Fcomp\ (\id_{\Cc}\ Y)\ f}
 \\
 \rho \circ Ff % J
-\ar@{-}[r]_{\rho \circ \Fid Y \circ Ff}
+\ar@{-}[r]_-*+{\labelstyle \rho\ \circ\ \Fid\ Y\ \circ\ Ff}
 \ar@{=}[uurr]
 &\rho \circ F (\id_{\Cc}) \circ Ff % I
-\ar@{-}[r]_{\rho \circ \Fcomp (\id_{\Cc} Y) f}
+\ar@{-}[r]_-*+{\labelstyle \rho\ \circ\ \Fcomp\ (\id_{\Cc}\ Y)\ f}
 \ar@{=}[ur]
 &\rho \circ F (\id_{\Cc} Y \circ f) % H
 }
@@ -469,13 +472,13 @@ following:
 $$
 \xymatrix{
 U f \circ \ell_X
-\ar@{-}[r]^{U f \circ \theta}
-\ar@{-}[d]_{\ell_f}
+\ar@{-}[r]^-{U\ f\ \circ\ \theta}
+\ar@{-}[d]_-{\ell_f}
 &U f \circ r_X
-\ar@{-}[d]^{r_f}
+\ar@{-}[d]^-{r_f}
 \\
 \ell_Y \circ Ff
-\ar@{-}[r]_{\rho \circ Ff}
+\ar@{-}[r]_-{\rho\ \circ\ Ff}
 &r_Y \circ Ff
 }
 $$
