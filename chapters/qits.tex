@@ -162,7 +162,7 @@ weakened to logical equivalence.
 \end{proof}
 
 \subsection{Quotients and colimits}
-
+\label{quotients}
 Quotient types can be realised as a higher inductive type as follows:
 suppose we have a type $A : \Type$ equipped a binary relation
 $R : A \to A \to \Type$, we define:
@@ -267,14 +267,63 @@ $$
   $R$.
 \end{proposition}
 
+\subsection{Propositional truncation}
+\label{proposition-truncation}
+
+For any type $A : \Type$, the propositional truncation of $A$ is
+defined as the following quotient inductive type:
+%
+\begin{datatype}{\proptrunc{A}}{\Type}
+  \constr{\proptruncproj{\_}}{A \to \proptrunc{A}} \\
+  \constr{\proptrunctrunc}{(x\ y : \proptrunc{A}) \to x = y}
+\end{datatype}
+
+It can be shown that we indeed have $\isprop\ \proptrunc{A}$ for all
+types $A$, using \cref{prop:forall-prop}.
+
+With propositional truncation we can define the notion of
+surjectiveness. Suppose we have a function $f : X \to Y$, then we define:
+$$
+  \issurj\ f \ddefeq (y : Y) \to \proptrunc{(x : X) \times f\ x = y}
+$$
+If we take the definition of $\issurj$ without the propositional
+truncation, then we can retrieve the inverse of $f$ from any proof of
+$\issurj\ f$. With the truncated version this is not possible in
+general.
+
+Using this definition of surjectivity, we can now also show that the
+projection function of quotients ($\quotproj{\_} : A \to \quotty{A}{R}$)
+as defined in \cref{quotients} are surjections. We cannot in general
+show that we have inverses of the projection functions.
+
+Using propositional truncation, we can formulate the following form of
+the axiom of choice:
+\begin{definition}[Axiom of choice]
+Every surjection has a right inverse:
+%
+\begin{align*}
+\axiomofchoice &\ddefeq &&(X\ Y: \Type)\ (f: X \to Y) \\
+  &\to &&\issurj\ f \to \proptrunc{(g : Y \to X) \times ((y : Y) \to f\ (g\ y) = y)}
+\end{align*}
+\end{definition}
+
+The above form of choice with truncation is not provable in type
+theory, as opposed to the untruncated version.
+
+Note that if $A$ is a set, we can quotient it by the trivial relation
+and we get something equivalent to $\proptrunc{A}$. However, if $A$ is
+not a set, this no longer holds. Instead, one has to repeatedly take
+quotients \cite{Doorn2016, Kraus2015}.
+
 \subsection{Infinitely branching trees}
 \label{infinitely-branching-trees}
 
-The examples we have seen so far seem to be expressible quotients of
-ordinary inductive types. Not all quotient inductive types have this
-property. One example where we can observe a difference is with the
-type of infinitely branching trees modulo permutation. We define the
-following inductive type:
+Except for the propositional truncation, the examples we have seen so
+far seem to be expressible as quotients of ordinary inductive
+types. Another example where we can observe a difference, even if we
+restrict ourself to the realm of sets, is with the type of infinitely
+branching trees modulo permutation. We define the following inductive
+type:
 %
 \begin{datatype}{\treety}{\Set}
   \constr{\treeleaf}{\treety} \\
