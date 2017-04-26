@@ -381,35 +381,40 @@ laws that are preserved by the functors $F$ and $G$.
 \begin{figure}
   \centering
   $$
-\xymatrix@!C@!R{
+\xymatrix@C+=6em@!R{
 G f \circ \theta % C
 \ar@{-}[r]^-*+{\labelstyle \Gid\ Y\ \circ\ Gf\ \circ\ \theta}
-\ar@{-}[ddddd]_-{f_0}
+\ar@{-}[dddddddddd]_-{f_0}
 &
 G (\id_{\Cc} Y) \circ Gf \circ \theta % B
 \ar@{-}[r]^-*+{\labelstyle \Gcomp\ (\id_{\Cc}\ Y)\ f\ \circ\ \theta}
-\ar@{=}[rd]
+\ar@{=}[rdd]
 &G (\id_{\Cc} Y \circ f) \circ \theta % A
-\ar@{-}[d]^-{\Gcomp\ (\id_{\Cc}\ Y)\ f\ \circ\ \theta}
+\ar@{-}[dd]^-{\Gcomp\ (\id_{\Cc}\ Y)\ f\ \circ\ \theta}
+\\
 \\
 &&G (\id_{\Cc} Y) \circ Gf \circ \theta % D
-\ar@{-}[d]^-{G\ (\id_{\Cc}\ Y)\ \circ\ f_0}
+\ar@{-}[dd]^-{G\ (\id_{\Cc}\ Y)\ \circ\ f_0}
+\\
 \\
 &&G (\id_{\Cc} Y) \circ \rho \circ Ff % E
-\ar@{-}[d]^-{\Gid\ Y\ \circ\ \rho\ \circ\ Ff}
+\ar@{-}[dd]^-{\Gid\ Y\ \circ\ \rho\ \circ\ Ff}
+\\
 \\
 &&\rho \circ Ff % F
-\ar@{-}[d]^-{\rho\ \circ\ \Fid\ Y\ \circ\ Ff}
+\ar@{-}[dd]^-{\rho\ \circ\ \Fid\ Y\ \circ\ Ff}
+\\
 \\
 &&\rho \circ F (\id_{\Cc} Y) \circ Ff % G
-\ar@{-}[d]^-{\rho\ \circ\ \Fcomp\ (\id_{\Cc}\ Y)\ f}
+\ar@{-}[dd]^-{\rho\ \circ\ \Fcomp\ (\id_{\Cc}\ Y)\ f}
+\\
 \\
 \rho \circ Ff % J
 \ar@{-}[r]_-*+{\labelstyle \rho\ \circ\ \Fid\ Y\ \circ\ Ff}
-\ar@{=}[uurr]
+\ar@{=}[uuuurr]
 &\rho \circ F (\id_{\Cc}) \circ Ff % I
 \ar@{-}[r]_-*+{\labelstyle \rho\ \circ\ \Fcomp\ (\id_{\Cc}\ Y)\ f}
-\ar@{=}[ur]
+\ar@{=}[uur]
 &\rho \circ F (\id_{\Cc} Y \circ f) % H
 }
 $$
