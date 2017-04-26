@@ -668,6 +668,7 @@ choice allows us to have the first sort be indexed by some other type,
 specification the list $[R_0]$ with $R_0\ x \ddefeq \natty$.
 
 \begin{example}
+  \label{fam-sorts}
   The sort of the context and types example $(\ttconty, \tttyty)$ can be
   represented by the list $[R_0, R_1]$ with
   \begin{itemize}
@@ -749,6 +750,7 @@ not add anything to the inductive definition.
 \end{definition}
 
 \begin{example}
+  \label{sortsin-example}
   Consider the specification of $\REL$ (\cref{rel-sorts}). If we want
   to say that $\sortsin{\SortCat{[R_0]}}{[R_0,R_1]}$ (recall that
   $\SortCat{[R_0]}$ is equivalent to $\SET$), then we can do so by
@@ -1476,6 +1478,81 @@ The forgetful functor $\Und_{s'} : \Alg_s' \to \SortCat{\Ss}$ is defined as the 
 }
 \]
 \end{definition}
+
+\subsection{Worked example}
+
+In this section we will work out the description of the
+$(\ttconty, \tttyty)$ type family of contexts and types in a context
+as described in \cref{syntax-of-type-theory}. First of all, notice
+that it is a $\FAM$-sorted definition. In \cref{fam-sorts}, we have
+seen that these can be described with the following functors:
+%
+\begin{itemize}
+\item $R_{\ttconty} : \Func{\termcat}{\SET}$, $R_{\ttconty}\ x \ddefeq \unitty$
+\item $R_{\tttyty} : \Func{\SortCat{R_{\ttconty}}}{\SET}$, $R_{\tttyty} (x, A) \ddefeq A\ x$
+\end{itemize}
+%
+This gives us the sorts category $\SortCat{R_0,R_1}$ with:
+\begin{itemize}
+\item objects:
+  $(x : \unitty) \times (A : \unitty \to \Set) \times (B : A\ x \to
+  \Set)$
+\item morphisms $(x, A, B) \to (y, C, D)$:
+  $(f : \unitty \to \unitty) \times (g : (x : \unitty) \to A\ x \to C\
+  (f\ x)) \times (h : (a : A\ x) \to B\ a \to D\ (g\ x\ a))$
+\end{itemize}
+To not clutter things too much with terms of type $\unitty$, we will
+leave these out of the sorts part of the definition. The
+inductive-inductive definition we are trying to fit into the framework
+we just presented is as follows, massaged a bit to see more directly
+how it fits in the framework:
+%
+\begin{sorts}
+  \sortnamety{\ttconty}{\unitty \to \Set} \\
+  \sortnamety{\tttyty}{\ttconty\ \unitval \to \Set}
+\end{sorts}
+%
+\begin{datatype}{\ttconty}{}
+  \constr{\ttnil}{\unitty \to \ttconty\ \unitval} \\
+  \constr{\ttcons{\_}{\_}}{(\Gamma : \ttconty\ \unitval) \times (\tau : \tttyty\ \Gamma) \to \ttconty\ \unitval}
+\end{datatype}
+%
+\begin{datatype}{\tttyty}{}
+  \constr{\ttzero}{(\Gamma : \ttconty\ \unitval) \to \unitty \to \tttyty\ \Gamma} \\
+  \constr{\ttone}{(\Gamma : \ttconty\ \unitval) \to \unitty \to \tttyty\ \Gamma} \\
+  \constr{\ttpi}{(\Gamma : \ttconty\ \unitval) \to (A : \tttyty\ \Gamma) \times \tttyty\ (\ttcons{\Gamma}{A}) \to \tttyty\ \Gamma}
+\end{datatype}
+
+The specification $s_{(\ttconty,\tttyty)} : \specty$ is a list of five
+elements, all containing a point constructor. Of the point
+constructors, the first two are of the first sort, $\unitty \to \Set$,
+and the last three of sort $\ttconty\ \unitval \to \Set$. The
+following functors describe the point constructors:
+\begin{itemize}
+\item $F_{\ttnil}\ (A, B) \ddefeq (\lambda \_ . \unitty)$
+\item $F_{\ttcons{\_}{\_}}\ ((A,B),\theta_{\ttnil}) \ddefeq (\lambda \_ . (\Gamma : A\ \unitval) \times (\tau : B\ \Gamma))$
+\item $F_{\ttzero}\ ((A,B),\theta_{\ttnil},\theta_{\ttcons{\_}{\_}}) \ddefeq (A, \lambda \_ . \unitty)$
+\item $F_{\ttone}\ ((A,B),\theta_{\ttnil},\theta_{\ttcons{\_}{\_}},\theta_{\ttzero}) \ddefeq (A, \lambda \_ . \unitty)$
+\item $F_{\ttpi}\ ((A,B),\theta_{\ttnil},\theta_{\ttcons{\_}{\_}},\theta_{\ttzero},\theta_{\ttone}) \ddefeq (A, \lambda \Gamma . (X : B\ \Gamma) \times B\ (\theta_{\ttcons{\_}{\_}}\ (\Gamma, X)))$
+\end{itemize}
+The algebras we end up with look as follows:
+%
+\begin{align*}
+&&&\ (A : \unitty \to \Set) \times (B : A\ \unitval \to \Set) \\
+&&\times&\ (\theta_{\ttnil} : \unitty \to A\ \unitval) \\
+&&\times&\ (\theta_{\ttcons{\_}{\_}} : (\Gamma : A\ \unitval) \times B\ \Gamma \to A\ \unitval) \\
+&&\times&\ (\theta_{\ttzero} : (\Gamma : A\ \unitval) \to \unitty \to B\ \Gamma) \\
+&&\times&\ (\theta_{\ttone} : (\Gamma : A\ \unitval) \to \unitty \to B\ \Gamma) \\
+&&\times&\ (\theta_{\ttpi} : (\Gamma : A\ \unitval) \to (X : B\ \Gamma) \times B\ (\theta_{\ttcons{\_}{\_}}\ (\Gamma, X)) \to B\ \Gamma)
+\end{align*}
+%
+If we squint our eyes a bit, we see that the algebras indeed coincide
+with the constructors we wanted to give a specification of.
+
+The pieces of the specification we have left out here for notational
+clarity, are the sort membership proofs. An example of these proofs
+has been given in \cref{sortsin-example}, also for the same sorts
+specification as the one we use here.
 
 \section{Other forms of constructors}
 \label{other-forms-of-constructors}
